@@ -1,4 +1,4 @@
-package ssh
+package sshkeys
 
 import (
 	serverscom "github.com/serverscom/serverscom-go-client/pkg"

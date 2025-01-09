@@ -1,4 +1,4 @@
-package ssh
+package sshkeys
 
 import (
 	"errors"
@@ -15,7 +15,7 @@ import (
 
 var (
 	testFingerprint = "00:11:22:33:44:55:66:77:88:99"
-	fixtureBasePath = filepath.Join("..", "..", "..", "testdata", "ssh")
+	fixtureBasePath = filepath.Join("..", "..", "..", "testdata", "ssh-keys")
 	fixedTime       = time.Date(2025, 1, 1, 12, 0, 0, 0, time.UTC)
 	testSSHKey      = serverscom.SSHKey{
 		Name:        "test-key",
@@ -26,7 +26,7 @@ var (
 	}
 )
 
-func TestAddSSHCmd(t *testing.T) {
+func TestAddSSHKeysCmd(t *testing.T) {
 	testCases := []struct {
 		name           string
 		output         string
@@ -75,7 +75,7 @@ func TestAddSSHCmd(t *testing.T) {
 
 			sshCmd := NewCmd(testCmdContext)
 
-			args := []string{"ssh", "add"}
+			args := []string{"ssh-keys", "add"}
 			if tc.args != nil && len(tc.args) > 0 {
 				args = append(args, tc.args...)
 			}
@@ -101,7 +101,7 @@ func TestAddSSHCmd(t *testing.T) {
 	}
 }
 
-func TestGetSSHCmd(t *testing.T) {
+func TestGetSSHKeysCmd(t *testing.T) {
 	testCases := []struct {
 		name           string
 		fingerprint    string
@@ -157,7 +157,7 @@ func TestGetSSHCmd(t *testing.T) {
 
 			sshCmd := NewCmd(testCmdContext)
 
-			args := []string{"ssh", "get", tc.fingerprint}
+			args := []string{"ssh-keys", "get", tc.fingerprint}
 			if tc.output != "" {
 				args = append(args, "--output", tc.output)
 			}
@@ -180,7 +180,7 @@ func TestGetSSHCmd(t *testing.T) {
 	}
 }
 
-func TestListSSHCmd(t *testing.T) {
+func TestListSSHKeysCmd(t *testing.T) {
 	testKey1 := testSSHKey
 	testKey2 := testSSHKey
 	testKey2.Name = "test-key 2"
@@ -261,7 +261,7 @@ func TestListSSHCmd(t *testing.T) {
 
 			sshCmd := NewCmd(testCmdContext)
 
-			args := []string{"ssh", "list"}
+			args := []string{"ssh-keys", "list"}
 			if tc.args != nil && len(tc.args) > 0 {
 				args = append(args, tc.args...)
 			}
@@ -287,7 +287,7 @@ func TestListSSHCmd(t *testing.T) {
 	}
 }
 
-func TestUpdateSSHCmd(t *testing.T) {
+func TestUpdateSSHKeysCmd(t *testing.T) {
 	newSSHKey := testSSHKey
 	newSSHKey.Name = "new-ssh-key"
 	newSSHKey.Labels = map[string]string{"new": "label"}
@@ -349,7 +349,7 @@ func TestUpdateSSHCmd(t *testing.T) {
 
 			sshCmd := NewCmd(testCmdContext)
 
-			args := []string{"ssh", "update", tc.fingerprint}
+			args := []string{"ssh-keys", "update", tc.fingerprint}
 			if tc.args != nil && len(tc.args) > 0 {
 				args = append(args, tc.args...)
 			}
@@ -375,7 +375,7 @@ func TestUpdateSSHCmd(t *testing.T) {
 	}
 }
 
-func TestDeleteSSHCmd(t *testing.T) {
+func TestDeleteSSHKeysCmd(t *testing.T) {
 	testCases := []struct {
 		name        string
 		fingerprint string
@@ -415,7 +415,7 @@ func TestDeleteSSHCmd(t *testing.T) {
 
 			sshCmd := NewCmd(testCmdContext)
 
-			args := []string{"ssh", "delete", tc.fingerprint}
+			args := []string{"ssh-keys", "delete", tc.fingerprint}
 
 			builder := testutils.NewTestCommandBuilder().
 				WithCommand(sshCmd).

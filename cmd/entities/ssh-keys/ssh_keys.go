@@ -1,4 +1,4 @@
-package ssh
+package sshkeys
 
 import (
 	"github.com/serverscom/srvctl/cmd/base"
@@ -7,7 +7,7 @@ import (
 
 func NewCmd(cmdContext *base.CmdContext) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:               "ssh",
+		Use:               "ssh-keys",
 		Short:             "Manage ssh keys",
 		PersistentPreRunE: base.CheckEmptyContexts(cmdContext),
 	}

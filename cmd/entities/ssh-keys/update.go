@@ -1,4 +1,4 @@
-package ssh
+package sshkeys
 
 import (
 	"log"
@@ -9,14 +9,15 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func newAddCmd(cmdContext *base.CmdContext) *cobra.Command {
-	var path string
+func newUpdateCmd(cmdContext *base.CmdContext) *cobra.Command {
+	var name string
+	var labels []string
 
 	cmd := &cobra.Command{
-		Use:   "add --input <path>",
-		Short: "Add an ssh key",
-		Long:  "Add a new SSH key to account",
-		Args:  cobra.ExactArgs(0),
+		Use:   "update <fingerprint>",
+		Short: "Update an ssh key",
+		Long:  "Update an ssh key by fingerprint",
+		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			manager := cmdContext.GetManager()
 
@@ -25,13 +26,19 @@ func newAddCmd(cmdContext *base.CmdContext) *cobra.Command {
 
 			base.SetupProxy(cmd, manager)
 
-			input := &serverscom.SSHKeyCreateInput{}
-			if err := base.ReadInputJSON(path, cmd.InOrStdin(), input); err != nil {
-				return err
+			labelsMap, err := base.ParseLabels(labels)
+			if err != nil {
+				log.Fatal(err)
+			}
+			input := serverscom.SSHKeyUpdateInput{
+				Name:   name,
+				Labels: labelsMap,
 			}
 
 			scClient := cmdContext.GetClient().SetVerbose(manager.GetVerbose(cmd)).GetScClient()
-			sshKey, err := scClient.SSHKeys.Create(ctx, *input)
+
+			fingerprint := args[0]
+			sshKey, err := scClient.SSHKeys.Update(ctx, fingerprint, input)
 			if err != nil {
 				return err
 			}
@@ -45,10 +52,8 @@ func newAddCmd(cmdContext *base.CmdContext) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&path, "input", "i", "", "/path/to/create-file.json or '-' to read from stdin")
-	if err := cmd.MarkFlagRequired("input"); err != nil {
-		log.Fatal(err)
-	}
+	cmd.Flags().StringVarP(&name, "name", "n", "", "string")
+	cmd.Flags().StringArrayVarP(&labels, "labels", "l", []string{}, "string in JSON format")
 
 	return cmd
 }

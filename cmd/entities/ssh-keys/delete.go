@@ -1,4 +1,4 @@
-package ssh
+package sshkeys
 
 import (
 	"github.com/serverscom/srvctl/cmd/base"
