@@ -76,7 +76,7 @@ func TestAddSSHKeysCmd(t *testing.T) {
 			sshCmd := NewCmd(testCmdContext)
 
 			args := []string{"ssh-keys", "add"}
-			if tc.args != nil && len(tc.args) > 0 {
+			if len(tc.args) > 0 {
 				args = append(args, tc.args...)
 			}
 			if tc.output != "" {
@@ -262,7 +262,7 @@ func TestListSSHKeysCmd(t *testing.T) {
 			sshCmd := NewCmd(testCmdContext)
 
 			args := []string{"ssh-keys", "list"}
-			if tc.args != nil && len(tc.args) > 0 {
+			if len(tc.args) > 0 {
 				args = append(args, tc.args...)
 			}
 			if tc.output != "" {
@@ -350,7 +350,7 @@ func TestUpdateSSHKeysCmd(t *testing.T) {
 			sshCmd := NewCmd(testCmdContext)
 
 			args := []string{"ssh-keys", "update", tc.fingerprint}
-			if tc.args != nil && len(tc.args) > 0 {
+			if len(tc.args) > 0 {
 				args = append(args, tc.args...)
 			}
 			if tc.output != "" {

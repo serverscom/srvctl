@@ -69,7 +69,7 @@ func TestConfigFinalCmd(t *testing.T) {
 			configCmd := NewCmd(testCmdContext)
 
 			args := []string{"config", "final"}
-			if tc.args != nil && len(tc.args) > 0 {
+			if len(tc.args) > 0 {
 				args = append(args, tc.args...)
 			}
 			if tc.output != "" {
@@ -126,7 +126,7 @@ func TestConfigGlobalUpdateCmd(t *testing.T) {
 			configCmd := NewCmd(testCmdContext)
 
 			args := []string{"config", "global", "update"}
-			if tc.args != nil && len(tc.args) > 0 {
+			if len(tc.args) > 0 {
 				args = append(args, tc.args...)
 			}
 
@@ -181,7 +181,7 @@ func TestConfigContextUpdateCmd(t *testing.T) {
 			configCmd := NewCmd(testCmdContext)
 
 			args := []string{"config", "context", "update"}
-			if tc.args != nil && len(tc.args) > 0 {
+			if len(tc.args) > 0 {
 				args = append(args, tc.args...)
 			}
 

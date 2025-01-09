@@ -7,14 +7,6 @@ import (
 
 var (
 	KnownConfigFlags = []string{"proxy", "http-timeout", "verbose", "output"}
-
-	globalCmd = &cobra.Command{
-		Use: "global",
-	}
-
-	contextCmd = &cobra.Command{
-		Use: "context",
-	}
 )
 
 func NewCmd(cmdContext *base.CmdContext) *cobra.Command {

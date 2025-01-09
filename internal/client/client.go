@@ -2,8 +2,6 @@ package client
 
 import (
 	"context"
-	"fmt"
-	"runtime"
 
 	serverscom "github.com/serverscom/serverscom-go-client/pkg"
 )
@@ -44,8 +42,4 @@ func (c *Client) GetScClient() *serverscom.Client {
 func (c *Client) SetVerbose(verbose bool) *Client {
 	c.scClient.SetVerbose(verbose)
 	return c
-}
-
-func userAgent() string {
-	return fmt.Sprintf("srvctl/%s (%s %s)", "1.0.0", runtime.GOOS, runtime.GOARCH)
 }

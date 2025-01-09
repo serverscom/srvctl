@@ -75,7 +75,7 @@ func TestContextListCmd(t *testing.T) {
 			contextCmd := NewCmd(testCmdContext)
 
 			args := []string{"context", "list"}
-			if tc.args != nil && len(tc.args) > 0 {
+			if len(tc.args) > 0 {
 				args = append(args, tc.args...)
 			}
 
@@ -129,7 +129,7 @@ func TestContextUpdateCmd(t *testing.T) {
 			contextCmd := NewCmd(testCmdContext)
 
 			args := []string{"context", "update"}
-			if tc.args != nil && len(tc.args) > 0 {
+			if len(tc.args) > 0 {
 				args = append(args, tc.args...)
 			}
 
@@ -196,7 +196,7 @@ func TestContextDeleteCmd(t *testing.T) {
 			contextCmd := NewCmd(testCmdContext)
 
 			args := []string{"context", "delete"}
-			if tc.args != nil && len(tc.args) > 0 {
+			if len(tc.args) > 0 {
 				args = append(args, tc.args...)
 			}
 

@@ -96,7 +96,7 @@ func TestLoginCmd(t *testing.T) {
 			loginCmd := NewCmd(testCmdContext, testClientFactory)
 
 			args := []string{"login"}
-			if tc.args != nil && len(tc.args) > 0 {
+			if len(tc.args) > 0 {
 				args = append(args, tc.args...)
 			}
 

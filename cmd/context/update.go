@@ -30,7 +30,9 @@ func newUpdateCmd(cmdContext *base.CmdContext) *cobra.Command {
 				oldName := ctx.Name
 				ctx.Name = name
 				if oldName == manager.GetDefaultContextName() {
-					manager.SetDefaultContext(name)
+					if err := manager.SetDefaultContext(name); err != nil {
+						return err
+					}
 				}
 			}
 
