@@ -1,0 +1,2 @@
+NAME   ENDPOINT           DEFAULT
+test   https://test.com   

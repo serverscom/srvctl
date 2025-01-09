@@ -11,16 +11,23 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+type ManagerInterface interface {
+	Save() error
+}
+
 // Manager handles config operations
 type Manager struct {
 	config     *Config
 	configPath string
 }
 
-func NewManager() (*Manager, error) {
-	configPath, err := getConfigPath()
-	if err != nil {
-		return nil, err
+func NewManager(configPath string) (*Manager, error) {
+	if configPath == "" {
+		var err error
+		configPath, err = getConfigPath()
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	m := &Manager{
@@ -34,9 +41,22 @@ func NewManager() (*Manager, error) {
 	return m, nil
 }
 
+func NewTestManager(config *Config) *Manager {
+	if config == nil {
+		return &Manager{
+			configPath: "/dev/null",
+			config:     &Config{},
+		}
+	}
+	return &Manager{
+		configPath: "/dev/null",
+		config:     config,
+	}
+}
+
 func (m *Manager) GetContexts() []Context {
 	if m.config == nil {
-		return nil
+		return []Context{}
 	}
 	return m.config.Contexts
 }
@@ -260,7 +280,7 @@ func (m *Manager) GetResolvedStringValue(cmd *cobra.Command, flagName string) (s
 		if v, ok := configValue.(string); ok {
 			return v, nil
 		}
-		fmt.Printf("can't parse config value %q for %q as string, use default\n", configValue, flagName)
+		cmd.Printf("can't parse config value %q for %q as string, use default\n", configValue, flagName)
 	}
 	return cmd.Flags().GetString(flagName)
 }
@@ -275,7 +295,7 @@ func (m *Manager) GetResolvedIntValue(cmd *cobra.Command, flagName string) (int,
 		if v, ok := configValue.(int); ok {
 			return v, nil
 		}
-		fmt.Printf("can't parse config value %q for %q as int, use default\n", configValue, flagName)
+		cmd.Printf("can't parse config value %q for %q as int, use default\n", configValue, flagName)
 	}
 	return cmd.Flags().GetInt(flagName)
 }
@@ -290,7 +310,7 @@ func (m *Manager) GetResolvedBoolValue(cmd *cobra.Command, flagName string) (boo
 		if v, ok := configValue.(bool); ok {
 			return v, nil
 		}
-		fmt.Printf("can't parse config value %q for %q as bool, use default\n", configValue, flagName)
+		cmd.Printf("can't parse config value %q for %q as bool, use default\n", configValue, flagName)
 	}
 	return cmd.Flags().GetBool(flagName)
 }
@@ -302,4 +322,9 @@ func (m *Manager) GetVerbose(cmd *cobra.Command) bool {
 		log.Fatal(err)
 	}
 	return v
+}
+
+// SetConfig sets config for manager
+func (m *Manager) SetConfig(config *Config) {
+	m.config = config
 }

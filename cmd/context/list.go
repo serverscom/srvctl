@@ -1,24 +1,21 @@
 package context
 
 import (
-	"github.com/serverscom/srvctl/internal/config"
+	"github.com/serverscom/srvctl/cmd/base"
 	"github.com/serverscom/srvctl/internal/output"
 	"github.com/spf13/cobra"
 )
 
-func newListCmd() *cobra.Command {
+func newListCmd(cmdContext *base.CmdContext) *cobra.Command {
 	var showDefault bool
 	var showNonDefault bool
 
 	cmd := &cobra.Command{
-		Use:     "ls",
-		Aliases: []string{"list"},
+		Use:     "list",
+		Aliases: []string{"ls"},
 		Short:   "List contexts",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			manager, err := config.NewManager()
-			if err != nil {
-				return err
-			}
+			manager := cmdContext.GetManager()
 
 			contexts := manager.GetContexts()
 			defaultContext := manager.GetDefaultContextName()
@@ -29,7 +26,8 @@ func newListCmd() *cobra.Command {
 				contexts = output.FilterDefaultContexts(contexts, defaultContext, false)
 			}
 
-			return output.FormatContexts(contexts, defaultContext)
+			formatter := output.NewFormatter(cmd.OutOrStdout())
+			return formatter.FormatContexts(contexts, defaultContext)
 		},
 	}
 

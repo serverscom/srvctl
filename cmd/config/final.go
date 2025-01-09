@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"slices"
 
+	"github.com/serverscom/srvctl/cmd/base"
 	"github.com/serverscom/srvctl/internal/config"
 	"github.com/serverscom/srvctl/internal/output"
 
@@ -11,7 +12,7 @@ import (
 	"github.com/spf13/pflag"
 )
 
-func newFinalCmd() *cobra.Command {
+func newFinalCmd(cmdContext *base.CmdContext) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "final",
 		Short: "Show final configuration",
@@ -21,11 +22,9 @@ func newFinalCmd() *cobra.Command {
 - Context-level configurations
 - CLI-level arguments`,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			manager, err := config.NewManager()
-			if err != nil {
-				return fmt.Errorf("failed to create config manager: %w", err)
-			}
+			manager := cmdContext.GetManager()
 
+			var err error
 			currentContext := manager.GetDefaultContextName()
 			if cmd.Flags().Changed("context") {
 				currentContext, err = cmd.Flags().GetString("context")
@@ -40,14 +39,15 @@ func newFinalCmd() *cobra.Command {
 
 			finalConfig := buildFinalConfig(cmd, manager)
 
-			result := output.ContextInfo{
+			cfgInfo := output.ConfigInfo{
 				Context:  currentContext,
 				Endpoint: ctx.Endpoint,
 				Config:   finalConfig,
 			}
 
 			outputFormat, _ := manager.GetResolvedStringValue(cmd, "output")
-			return output.Format(result, outputFormat)
+			formatter := output.NewFormatter(cmd.OutOrStdout())
+			return formatter.Format(cfgInfo, outputFormat)
 		},
 	}
 

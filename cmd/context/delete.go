@@ -3,11 +3,11 @@ package context
 import (
 	"fmt"
 
-	"github.com/serverscom/srvctl/internal/config"
+	"github.com/serverscom/srvctl/cmd/base"
 	"github.com/spf13/cobra"
 )
 
-func newDeleteCmd() *cobra.Command {
+func newDeleteCmd(cmdContext *base.CmdContext) *cobra.Command {
 	var force bool
 
 	cmd := &cobra.Command{
@@ -15,13 +15,9 @@ func newDeleteCmd() *cobra.Command {
 		Short: "Delete a context",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
+			manager := cmdContext.GetManager()
+
 			contextName := args[0]
-
-			manager, err := config.NewManager()
-			if err != nil {
-				return err
-			}
-
 			isDefault, err := manager.IsDefaultContext(contextName)
 			if err != nil {
 				return err

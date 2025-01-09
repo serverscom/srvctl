@@ -5,21 +5,18 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/serverscom/srvctl/internal/config"
+	"github.com/serverscom/srvctl/cmd/base"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 )
 
-func newUpdateCmd() *cobra.Command {
+func newUpdateCmd(cmdContext *base.CmdContext) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "update",
 		Short: "Update configuration",
 		Args:  cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			manager, err := config.NewManager()
-			if err != nil {
-				return err
-			}
+			manager := cmdContext.GetManager()
 
 			configOptions := make(map[string]interface{})
 

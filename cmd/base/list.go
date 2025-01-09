@@ -4,7 +4,6 @@ import (
 	"strings"
 
 	serverscom "github.com/serverscom/serverscom-go-client/pkg"
-	"github.com/serverscom/srvctl/internal/config"
 	"github.com/serverscom/srvctl/internal/output"
 	"github.com/spf13/cobra"
 )
@@ -23,14 +22,16 @@ type listOptions struct {
 }
 
 // NewListCmd base list command for different collections
-func NewListCmd[T any](entityName string, colFactory CollectionFactory[T], manager *config.Manager) *cobra.Command {
+func NewListCmd[T any](entityName string, colFactory CollectionFactory[T], cmdContext *CmdContext) *cobra.Command {
 	opts := &listOptions{}
 
 	cmd := &cobra.Command{
-		Use:     "ls",
-		Aliases: []string{"list"},
+		Use:     "list",
+		Aliases: []string{"ls"},
 		Short:   "List " + entityName,
 		RunE: func(cmd *cobra.Command, args []string) error {
+			manager := cmdContext.GetManager()
+
 			ctx, cancel := SetupContext(cmd, manager)
 			defer cancel()
 
@@ -66,7 +67,8 @@ func NewListCmd[T any](entityName string, colFactory CollectionFactory[T], manag
 			}
 
 			outputFormat, _ := manager.GetResolvedStringValue(cmd, "output")
-			return output.Format(items, outputFormat)
+			formatter := output.NewFormatter(cmd.OutOrStdout())
+			return formatter.FormatList(items, outputFormat)
 		},
 	}
 

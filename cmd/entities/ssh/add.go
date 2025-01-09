@@ -5,13 +5,11 @@ import (
 
 	serverscom "github.com/serverscom/serverscom-go-client/pkg"
 	"github.com/serverscom/srvctl/cmd/base"
-	"github.com/serverscom/srvctl/internal/client"
-	"github.com/serverscom/srvctl/internal/config"
 	"github.com/serverscom/srvctl/internal/output"
 	"github.com/spf13/cobra"
 )
 
-func newAddCmd() *cobra.Command {
+func newAddCmd(cmdContext *base.CmdContext) *cobra.Command {
 	var path string
 
 	cmd := &cobra.Command{
@@ -20,10 +18,7 @@ func newAddCmd() *cobra.Command {
 		Long:  "Add a new SSH key to account",
 		Args:  cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			manager, err := config.NewManager()
-			if err != nil {
-				log.Fatal(err)
-			}
+			manager := cmdContext.GetManager()
 
 			ctx, cancel := base.SetupContext(cmd, manager)
 			defer cancel()
@@ -31,15 +26,11 @@ func newAddCmd() *cobra.Command {
 			base.SetupProxy(cmd, manager)
 
 			input := &serverscom.SSHKeyCreateInput{}
-			if err := base.LoadInputFromFile(path, input); err != nil {
-				log.Fatal(err)
+			if err := base.ReadInputJSON(path, cmd.InOrStdin(), input); err != nil {
+				return err
 			}
 
-			scClient := client.NewClient(
-				manager.GetToken(),
-				manager.GetEndpoint(),
-			).SetVerbose(manager.GetVerbose(cmd)).GetScClient()
-
+			scClient := cmdContext.GetClient().SetVerbose(manager.GetVerbose(cmd)).GetScClient()
 			sshKey, err := scClient.SSHKeys.Create(ctx, *input)
 			if err != nil {
 				return err
@@ -47,13 +38,14 @@ func newAddCmd() *cobra.Command {
 
 			if sshKey != nil {
 				outputFormat, _ := manager.GetResolvedStringValue(cmd, "output")
-				return output.Format([]serverscom.SSHKey{*sshKey}, outputFormat)
+				formatter := output.NewFormatter(cmd.OutOrStdout())
+				return formatter.Format([]serverscom.SSHKey{*sshKey}, outputFormat)
 			}
 			return nil
 		},
 	}
 
-	cmd.Flags().StringVarP(&path, "input", "i", "", "/path/to/create-file.json")
+	cmd.Flags().StringVarP(&path, "input", "i", "", "/path/to/create-file.json or '-' to read from stdin")
 	if err := cmd.MarkFlagRequired("input"); err != nil {
 		log.Fatal(err)
 	}

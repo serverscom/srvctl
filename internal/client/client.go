@@ -2,7 +2,6 @@ package client
 
 import (
 	"context"
-	"fmt"
 
 	serverscom "github.com/serverscom/serverscom-go-client/pkg"
 )
@@ -23,13 +22,16 @@ func NewClient(token string, endpoint string) *Client {
 	}
 }
 
+func NewWithClient(client *serverscom.Client) *Client {
+	return &Client{
+		scClient: client,
+	}
+}
+
 // VerifyCredentials checks that token is valid by executing /hosts
 func (c *Client) VerifyCredentials(ctx context.Context) error {
 	_, err := c.scClient.Hosts.Collection().List(ctx)
-	if err != nil {
-		return fmt.Errorf("invalid API token: %w", err)
-	}
-	return nil
+	return err
 }
 
 func (c *Client) GetScClient() *serverscom.Client {

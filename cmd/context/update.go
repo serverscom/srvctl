@@ -1,12 +1,12 @@
 package context
 
 import (
-	"github.com/serverscom/srvctl/internal/config"
+	"github.com/serverscom/srvctl/cmd/base"
 	"github.com/serverscom/srvctl/internal/validator"
 	"github.com/spf13/cobra"
 )
 
-func newUpdateCmd() *cobra.Command {
+func newUpdateCmd(cmdContext *base.CmdContext) *cobra.Command {
 	var name string
 	var setDefault bool
 
@@ -15,13 +15,9 @@ func newUpdateCmd() *cobra.Command {
 		Short: "Update a context",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
+			manager := cmdContext.GetManager()
+
 			contextName := args[0]
-
-			manager, err := config.NewManager()
-			if err != nil {
-				return err
-			}
-
 			ctx, err := manager.GetContext(contextName)
 			if err != nil {
 				return err
@@ -31,7 +27,11 @@ func newUpdateCmd() *cobra.Command {
 				if err := validator.ValidateContextName(name); err != nil {
 					return err
 				}
+				oldName := ctx.Name
 				ctx.Name = name
+				if oldName == manager.GetDefaultContextName() {
+					manager.SetDefaultContext(name)
+				}
 			}
 
 			if setDefault {

@@ -1,37 +1,27 @@
 package ssh
 
 import (
-	"log"
-
 	serverscom "github.com/serverscom/serverscom-go-client/pkg"
 	"github.com/serverscom/srvctl/cmd/base"
-	"github.com/serverscom/srvctl/internal/client"
-	"github.com/serverscom/srvctl/internal/config"
 	"github.com/serverscom/srvctl/internal/output"
 	"github.com/spf13/cobra"
 )
 
-func newGetCmd() *cobra.Command {
+func NewGetCmd(cmdContext *base.CmdContext) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "get <fingerprint>",
 		Short: "Get an ssh key",
 		Long:  "Get an ssh key by fingerprint",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			manager, err := config.NewManager()
-			if err != nil {
-				log.Fatal(err)
-			}
+			manager := cmdContext.GetManager()
 
 			ctx, cancel := base.SetupContext(cmd, manager)
 			defer cancel()
 
 			base.SetupProxy(cmd, manager)
 
-			scClient := client.NewClient(
-				manager.GetToken(),
-				manager.GetEndpoint(),
-			).SetVerbose(manager.GetVerbose(cmd)).GetScClient()
+			scClient := cmdContext.GetClient().SetVerbose(manager.GetVerbose(cmd)).GetScClient()
 
 			fingerprint := args[0]
 			sshKey, err := scClient.SSHKeys.Get(ctx, fingerprint)
@@ -41,7 +31,8 @@ func newGetCmd() *cobra.Command {
 
 			if sshKey != nil {
 				outputFormat, _ := manager.GetResolvedStringValue(cmd, "output")
-				return output.Format([]serverscom.SSHKey{*sshKey}, outputFormat)
+				formatter := output.NewFormatter(cmd.OutOrStdout())
+				return formatter.Format([]serverscom.SSHKey{*sshKey}, outputFormat)
 			}
 			return nil
 		},

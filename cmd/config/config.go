@@ -17,19 +17,26 @@ var (
 	}
 )
 
-func NewCmd() *cobra.Command {
+func NewCmd(cmdContext *base.CmdContext) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:              "config",
-		Short:            "Manage configuration",
-		Long:             `Manage global and context-specific configurations`,
-		PersistentPreRun: base.CheckEmptyContexts,
+		Use:               "config",
+		Short:             "Manage configuration",
+		Long:              `Manage global and context-specific configurations`,
+		PersistentPreRunE: base.CheckEmptyContexts(cmdContext),
 	}
 
-	globalCmd.AddCommand(newUpdateCmd())
-	contextCmd.AddCommand(newUpdateCmd())
+	globalCmd := &cobra.Command{
+		Use: "global",
+	}
+	contextCmd := &cobra.Command{
+		Use: "context",
+	}
+
+	globalCmd.AddCommand(newUpdateCmd(cmdContext))
+	contextCmd.AddCommand(newUpdateCmd(cmdContext))
 
 	cmd.AddCommand(
-		newFinalCmd(),
+		newFinalCmd(cmdContext),
 		globalCmd,
 		contextCmd,
 	)

@@ -1,0 +1,2 @@
+Successfully logged in with context "test-context"
+Context "test-context" set as default

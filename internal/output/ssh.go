@@ -2,21 +2,18 @@ package output
 
 import (
 	"fmt"
-	"os"
 	"text/tabwriter"
 
 	serverscom "github.com/serverscom/serverscom-go-client/pkg"
 )
 
-func formatSSHKeys(keys []serverscom.SSHKey) error {
-	w := tabwriter.NewWriter(os.Stdout, 0, 0, 3, ' ', 0)
-
+func (f *Formatter) formatSSHKeys(keys []serverscom.SSHKey) error {
+	w := tabwriter.NewWriter(f.writer, 0, 0, 3, ' ', 0)
 	fmt.Fprintln(w, "NAME\tFINGERPRINT\tLABELS\tCREATED\tUPDATED")
 
 	var created, updated string
 	for _, key := range keys {
 		labels := formatLabels(key.Labels)
-
 		created = key.Created.Format("2006-01-02 15:04:05")
 		updated = key.Updated.Format("2006-01-02 15:04:05")
 
@@ -35,6 +32,5 @@ func formatSSHKeys(keys []serverscom.SSHKey) error {
 			updated,
 		)
 	}
-
 	return w.Flush()
 }

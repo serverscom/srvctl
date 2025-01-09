@@ -1,8 +1,9 @@
-package cmd
+package login
 
 import (
 	"bufio"
 	"fmt"
+	"io"
 	"log"
 	"os"
 	"os/signal"
@@ -18,7 +19,7 @@ import (
 	"golang.org/x/term"
 )
 
-func newLoginCmd() *cobra.Command {
+func NewCmd(cmdContext *base.CmdContext, clientFactory client.ClientFactory) *cobra.Command {
 	var (
 		force      bool
 		endpoint   string
@@ -32,10 +33,7 @@ func newLoginCmd() *cobra.Command {
 Example: srvctl login context-name`,
 		Args: cobra.MaximumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			manager, err := config.NewManager()
-			if err != nil {
-				return err
-			}
+			manager := cmdContext.GetManager()
 
 			var contextName string
 			if len(args) > 0 {
@@ -60,7 +58,7 @@ Example: srvctl login context-name`,
 				return err
 			}
 
-			token, err := readSecureInput()
+			token, err := readSecureInput(cmd.InOrStdin())
 			if err != nil {
 				return fmt.Errorf("failed to read token: %w", err)
 			}
@@ -70,7 +68,7 @@ Example: srvctl login context-name`,
 
 			base.SetupProxy(cmd, manager)
 
-			apiClient := client.NewClient(token, endpoint)
+			apiClient := clientFactory.NewClient(token, endpoint)
 			if err := apiClient.VerifyCredentials(ctx); err != nil {
 				return fmt.Errorf("failed to verify credentials: %w", err)
 			}
@@ -96,9 +94,9 @@ Example: srvctl login context-name`,
 				return fmt.Errorf("failed to save config: %w", err)
 			}
 
-			fmt.Printf("Successfully logged in with context %q\n", contextName)
+			cmd.Printf("Successfully logged in with context %q\n", contextName)
 			if setDefault {
-				fmt.Printf("Context %q set as default\n", contextName)
+				cmd.Printf("Context %q set as default\n", contextName)
 			}
 
 			return nil
@@ -112,7 +110,7 @@ Example: srvctl login context-name`,
 	return cmd
 }
 
-func readSecureInput() (string, error) {
+func readSecureInput(in io.Reader) (string, error) {
 	if term.IsTerminal(int(syscall.Stdin)) {
 		stdin := int(syscall.Stdin)
 		oldState, err := term.GetState(stdin)
@@ -140,7 +138,7 @@ func readSecureInput() (string, error) {
 	}
 
 	// if not terminal read as usual
-	reader := bufio.NewReader(os.Stdin)
+	reader := bufio.NewReader(in)
 	token, err := reader.ReadString('\n')
 	if err != nil {
 		return "", err

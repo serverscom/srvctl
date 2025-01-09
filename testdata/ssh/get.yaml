@@ -1,0 +1,6 @@
+name: test-key
+fingerprint: 00:11:22:33:44:55:66:77:88:99
+labels:
+    foo: bar
+created: 2025-01-01T12:00:00Z
+updated: 2025-01-01T12:00:00Z

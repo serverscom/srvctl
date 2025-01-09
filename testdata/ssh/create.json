@@ -1,0 +1,7 @@
+{
+    "name": "test-key",
+    "public_key": "ssh-rsa AAA",
+    "labels": {
+        "foo": "bar"
+    }
+}
