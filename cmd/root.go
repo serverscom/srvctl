@@ -10,7 +10,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func NewRootCmd() *cobra.Command {
+func NewRootCmd(version string) *cobra.Command {
 	cobra.EnableTraverseRunHooks = true
 
 	cmdContext := &base.CmdContext{}
@@ -19,6 +19,7 @@ func NewRootCmd() *cobra.Command {
 		Use:               "srvctl",
 		Short:             "CLI tool for servers.com API",
 		Long:              `A command line interface for managing servers.com resources`,
+		Version:           version,
 		PersistentPreRunE: base.InitCmdContext(cmdContext),
 	}
 

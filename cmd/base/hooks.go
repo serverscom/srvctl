@@ -25,6 +25,8 @@ func InitCmdContext(cmdContext *CmdContext) func(cmd *cobra.Command, args []stri
 			m.GetToken(),
 			m.GetEndpoint(),
 		)
+		version := cmd.Root().Version
+		c.SetUserAgent(userAgent(version))
 
 		cmdContext.manager = m
 		cmdContext.client = c

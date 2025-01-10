@@ -7,6 +7,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"runtime"
 	"strings"
 	"time"
 
@@ -122,4 +123,9 @@ func ParseLabels(labels []string) (map[string]string, error) {
 	}
 
 	return labelsMap, nil
+}
+
+// userAgent returns user agent string
+func userAgent(version string) string {
+	return fmt.Sprintf("srvctl/%s (%s %s)", version, runtime.GOOS, runtime.GOARCH)
 }

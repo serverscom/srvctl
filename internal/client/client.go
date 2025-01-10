@@ -43,3 +43,9 @@ func (c *Client) SetVerbose(verbose bool) *Client {
 	c.scClient.SetVerbose(verbose)
 	return c
 }
+
+// SetUserAgent sets new user agent for client
+func (c *Client) SetUserAgent(agent string) *Client {
+	c.scClient.SetupUserAgent(agent)
+	return c
+}
