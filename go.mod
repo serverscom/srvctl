@@ -4,7 +4,7 @@ go 1.23.0
 
 require (
 	github.com/onsi/gomega v1.36.2
-	github.com/serverscom/serverscom-go-client v1.0.9
+	github.com/serverscom/serverscom-go-client v1.0.10
 	github.com/spf13/cobra v1.8.1
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.19.0
