@@ -1,0 +1,3 @@
+NAME      ENDPOINT              DEFAULT
+default   https://default.com   *
+test      https://test.com      

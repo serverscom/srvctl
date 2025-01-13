@@ -1,0 +1,8 @@
+Context:    test
+Endpoint:   https://test.com
+
+Configuration:
+http-timeout:   99
+output:         text
+proxy:          https://test-proxy.com
+verbose:        false
