@@ -18,7 +18,7 @@ func newUpdateCmd(cmdContext *base.CmdContext) *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			manager := cmdContext.GetManager()
 
-			configOptions := make(map[string]interface{})
+			configOptions := make(map[string]any)
 
 			cmd.Flags().Visit(func(f *pflag.Flag) {
 				fillConfigOptions(cmd, f, configOptions)
@@ -53,7 +53,7 @@ func newUpdateCmd(cmdContext *base.CmdContext) *cobra.Command {
 }
 
 // fillConfigOptions adds cmd flag to configOptions only if flag exists in KnownConfigFlags
-func fillConfigOptions(cmd *cobra.Command, f *pflag.Flag, configOptions map[string]interface{}) {
+func fillConfigOptions(cmd *cobra.Command, f *pflag.Flag, configOptions map[string]any) {
 	if strings.HasPrefix(f.Name, "no-") {
 		optionName := strings.TrimPrefix(f.Name, "no-")
 		configOptions[optionName] = nil

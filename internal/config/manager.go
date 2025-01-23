@@ -11,16 +11,13 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-type ManagerInterface interface {
-	Save() error
-}
-
-// Manager handles config operations
+// Manager represents a configuration manager
 type Manager struct {
 	config     *Config
 	configPath string
 }
 
+// NewManager creates a new Manager
 func NewManager(configPath string) (*Manager, error) {
 	if configPath == "" {
 		var err error
@@ -41,6 +38,7 @@ func NewManager(configPath string) (*Manager, error) {
 	return m, nil
 }
 
+// NewTestManager returns a new Manager for testing purposes
 func NewTestManager(config *Config) *Manager {
 	if config == nil {
 		return &Manager{
@@ -54,6 +52,7 @@ func NewTestManager(config *Config) *Manager {
 	}
 }
 
+// GetContexts returns all contexts from the config
 func (m *Manager) GetContexts() []Context {
 	if m.config == nil {
 		return []Context{}
@@ -61,6 +60,7 @@ func (m *Manager) GetContexts() []Context {
 	return m.config.Contexts
 }
 
+// GetDefaultContextName returns the name of the default context
 func (m *Manager) GetDefaultContextName() string {
 	if m.config.DefaultContext != "" {
 		return m.config.DefaultContext
@@ -71,6 +71,7 @@ func (m *Manager) GetDefaultContextName() string {
 	return ""
 }
 
+// GetContext returns a context by name
 func (m *Manager) GetContext(name string) (*Context, error) {
 	for i := range m.config.Contexts {
 		if m.config.Contexts[i].Name == name {
@@ -80,11 +81,13 @@ func (m *Manager) GetContext(name string) (*Context, error) {
 	return nil, fmt.Errorf("context %q not found", name)
 }
 
+// IsDefaultContext checks if the given context is the default context
 func (m *Manager) IsDefaultContext(name string) (bool, error) {
 	defaultName := m.GetDefaultContextName()
 	return defaultName == name, nil
 }
 
+// SetDefaultContext sets the default context
 func (m *Manager) SetDefaultContext(name string) error {
 	if _, err := m.GetContext(name); err != nil {
 		return err
@@ -93,6 +96,7 @@ func (m *Manager) SetDefaultContext(name string) error {
 	return nil
 }
 
+// DeleteContext deletes a context by name.
 func (m *Manager) DeleteContext(name string) error {
 	for i := range m.config.Contexts {
 		if m.config.Contexts[i].Name == name {
@@ -137,6 +141,7 @@ func (m *Manager) Load() error {
 	return nil
 }
 
+// Save saves current config to file
 func (m *Manager) Save() error {
 	if m.config == nil {
 		return fmt.Errorf("no config loaded")
@@ -169,6 +174,7 @@ func (m *Manager) SetContext(ctx Context) error {
 	return nil
 }
 
+// GetGlobalConfig returns global config options
 func (m *Manager) GetGlobalConfig() ConfigOptions {
 	if m.config == nil || m.config.GlobalConfig == nil {
 		return make(ConfigOptions)
@@ -176,6 +182,7 @@ func (m *Manager) GetGlobalConfig() ConfigOptions {
 	return m.config.GlobalConfig
 }
 
+// UpdateGlobalConfig updates global config
 func (m *Manager) UpdateGlobalConfig(configOptions ConfigOptions) {
 	if m.config.GlobalConfig == nil {
 		m.config.GlobalConfig = make(ConfigOptions)
@@ -246,7 +253,7 @@ func (m *Manager) GetEndpoint() string {
 }
 
 // GetConfigValue returns config value for default context or global value
-func (m *Manager) GetConfigValue(key string) interface{} {
+func (m *Manager) GetConfigValue(key string) any {
 	ctx := m.config.DefaultContext
 
 	if ctx == "" && len(m.config.Contexts) > 0 {
@@ -313,6 +320,21 @@ func (m *Manager) GetResolvedBoolValue(cmd *cobra.Command, flagName string) (boo
 		cmd.Printf("can't parse config value %q for %q as bool, use default\n", configValue, flagName)
 	}
 	return cmd.Flags().GetBool(flagName)
+}
+
+// GetResolvedStringSliceValue returns resolved slice of string value for a given config key.
+// By resolved means value is taken from command line flag if provided or else from config file or default value.
+func (m *Manager) GetResolvedStringSliceValue(cmd *cobra.Command, flagName string) ([]string, error) {
+	if cmd.Flags().Changed(flagName) {
+		return cmd.Flags().GetStringArray(flagName)
+	}
+	if configValue := m.GetConfigValue(flagName); configValue != nil {
+		if v, ok := configValue.([]string); ok {
+			return v, nil
+		}
+		cmd.Printf("can't parse config value %q for %q as slice of string, use default\n", configValue, flagName)
+	}
+	return cmd.Flags().GetStringArray(flagName)
 }
 
 // GetVerbose reads verbose flag from cmd or from config

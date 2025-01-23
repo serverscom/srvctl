@@ -45,17 +45,16 @@ func newFinalCmd(cmdContext *base.CmdContext) *cobra.Command {
 				Config:   finalConfig,
 			}
 
-			outputFormat, _ := manager.GetResolvedStringValue(cmd, "output")
-			formatter := output.NewFormatter(cmd.OutOrStdout())
-			return formatter.Format(cfgInfo, outputFormat)
+			formatter := cmdContext.GetOrCreateFormatter(cmd)
+			return formatter.Format(cfgInfo)
 		},
 	}
 
 	return cmd
 }
 
-func buildFinalConfig(cmd *cobra.Command, manager *config.Manager) map[string]interface{} {
-	finalConfig := make(map[string]interface{})
+func buildFinalConfig(cmd *cobra.Command, manager *config.Manager) map[string]any {
+	finalConfig := make(map[string]any)
 
 	cmd.Flags().VisitAll(func(f *pflag.Flag) {
 		if !slices.Contains(KnownConfigFlags, f.Name) {

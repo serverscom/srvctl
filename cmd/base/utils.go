@@ -13,30 +13,15 @@ import (
 
 	"github.com/serverscom/srvctl/internal/client"
 	"github.com/serverscom/srvctl/internal/config"
+	"github.com/serverscom/srvctl/internal/output"
 	"github.com/spf13/cobra"
 )
 
+// CmdContext represents the context for a command
 type CmdContext struct {
-	manager *config.Manager
-	client  *client.Client
-}
-
-func (c *CmdContext) SetManagerConfig(config *config.Config) {
-	c.manager.SetConfig(config)
-}
-
-func (c *CmdContext) GetManager() *config.Manager {
-	if c.manager != nil {
-		return c.manager
-	}
-	return &config.Manager{}
-}
-
-func (c *CmdContext) GetClient() *client.Client {
-	if c.client != nil {
-		return c.client
-	}
-	return &client.Client{}
+	manager   *config.Manager
+	client    *client.Client
+	formatter *output.Formatter
 }
 
 // NewCmdContext creates new cmd context with specified manager and client
@@ -45,6 +30,36 @@ func NewCmdContext(manager *config.Manager, client *client.Client) *CmdContext {
 		manager: manager,
 		client:  client,
 	}
+}
+
+// SetManagerConfig sets manager config
+func (c *CmdContext) SetManagerConfig(config *config.Config) {
+	c.manager.SetConfig(config)
+}
+
+// GetManager returns the manager from cmd context
+func (c *CmdContext) GetManager() *config.Manager {
+	if c.manager != nil {
+		return c.manager
+	}
+	return &config.Manager{}
+}
+
+// GetOrCreateFormatter returns formatter for the command
+func (c *CmdContext) GetOrCreateFormatter(cmd *cobra.Command) *output.Formatter {
+	if c.formatter != nil {
+		return c.formatter
+	}
+	c.formatter = output.NewFormatter(cmd, c.manager)
+	return c.formatter
+}
+
+// GetClient returns the client from cmd context
+func (c *CmdContext) GetClient() *client.Client {
+	if c.client != nil {
+		return c.client
+	}
+	return &client.Client{}
 }
 
 // SetupContext returns context with timeout based on 'http-timeout' from config or cli flag
@@ -73,7 +88,7 @@ func SetupProxy(cmd *cobra.Command, manager *config.Manager) {
 
 // ReadInputJSON reads input from file and unmarshals it into the given struct.
 // If path is "-", it reads from stdin.
-func ReadInputJSON(path string, in io.Reader, input interface{}) error {
+func ReadInputJSON(path string, in io.Reader, input any) error {
 	var inputReader io.Reader
 
 	if path != "" && path != "-" {

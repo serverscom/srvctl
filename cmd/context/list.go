@@ -26,7 +26,7 @@ func newListCmd(cmdContext *base.CmdContext) *cobra.Command {
 				contexts = output.FilterDefaultContexts(contexts, defaultContext, false)
 			}
 
-			formatter := output.NewFormatter(cmd.OutOrStdout())
+			formatter := cmdContext.GetOrCreateFormatter(cmd)
 			return formatter.FormatContexts(contexts, defaultContext)
 		},
 	}

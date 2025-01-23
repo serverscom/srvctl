@@ -63,7 +63,6 @@ func TestAddSSHKeysCmd(t *testing.T) {
 
 	scClient := serverscom.NewClientWithEndpoint("", "")
 	scClient.SSHKeys = sshServiceHandler
-	testCmdContext := testutils.NewTestCmdContext(scClient)
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
@@ -73,6 +72,7 @@ func TestAddSSHKeysCmd(t *testing.T) {
 				tc.configureMock(sshServiceHandler)
 			}
 
+			testCmdContext := testutils.NewTestCmdContext(scClient)
 			sshCmd := NewCmd(testCmdContext)
 
 			args := []string{"ssh-keys", "add"}
@@ -141,7 +141,6 @@ func TestGetSSHKeysCmd(t *testing.T) {
 
 	scClient := serverscom.NewClientWithEndpoint("", "")
 	scClient.SSHKeys = sshServiceHandler
-	testCmdContext := testutils.NewTestCmdContext(scClient)
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
@@ -155,6 +154,7 @@ func TestGetSSHKeysCmd(t *testing.T) {
 				Get(gomock.Any(), testFingerprint).
 				Return(&testSSHKey, err)
 
+			testCmdContext := testutils.NewTestCmdContext(scClient)
 			sshCmd := NewCmd(testCmdContext)
 
 			args := []string{"ssh-keys", "get", tc.fingerprint}
@@ -249,7 +249,6 @@ func TestListSSHKeysCmd(t *testing.T) {
 
 	scClient := serverscom.NewClientWithEndpoint("", "")
 	scClient.SSHKeys = sshServiceHandler
-	testCmdContext := testutils.NewTestCmdContext(scClient)
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
@@ -259,6 +258,7 @@ func TestListSSHKeysCmd(t *testing.T) {
 				tc.configureMock(collectionHandler)
 			}
 
+			testCmdContext := testutils.NewTestCmdContext(scClient)
 			sshCmd := NewCmd(testCmdContext)
 
 			args := []string{"ssh-keys", "list"}
@@ -306,7 +306,7 @@ func TestUpdateSSHKeysCmd(t *testing.T) {
 			fingerprint:    testFingerprint,
 			output:         "json",
 			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "update.json")),
-			args:           []string{"--name", newSSHKey.Name, "--labels", "new=label"},
+			args:           []string{"--name", newSSHKey.Name, "--label", "new=label"},
 			configureMock: func(mock *mocks.MockSSHKeysService) {
 				mock.EXPECT().
 					Update(gomock.Any(), testFingerprint, serverscom.SSHKeyUpdateInput{
@@ -337,7 +337,6 @@ func TestUpdateSSHKeysCmd(t *testing.T) {
 
 	scClient := serverscom.NewClientWithEndpoint("", "")
 	scClient.SSHKeys = sshServiceHandler
-	testCmdContext := testutils.NewTestCmdContext(scClient)
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
@@ -347,6 +346,7 @@ func TestUpdateSSHKeysCmd(t *testing.T) {
 				tc.configureMock(sshServiceHandler)
 			}
 
+			testCmdContext := testutils.NewTestCmdContext(scClient)
 			sshCmd := NewCmd(testCmdContext)
 
 			args := []string{"ssh-keys", "update", tc.fingerprint}
@@ -399,7 +399,6 @@ func TestDeleteSSHKeysCmd(t *testing.T) {
 
 	scClient := serverscom.NewClientWithEndpoint("", "")
 	scClient.SSHKeys = sshServiceHandler
-	testCmdContext := testutils.NewTestCmdContext(scClient)
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
@@ -413,6 +412,7 @@ func TestDeleteSSHKeysCmd(t *testing.T) {
 				Delete(gomock.Any(), testFingerprint).
 				Return(err)
 
+			testCmdContext := testutils.NewTestCmdContext(scClient)
 			sshCmd := NewCmd(testCmdContext)
 
 			args := []string{"ssh-keys", "delete", tc.fingerprint}
