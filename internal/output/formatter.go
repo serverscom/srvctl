@@ -2,6 +2,7 @@ package output
 
 import (
 	"encoding/json"
+	"html/template"
 	"io"
 
 	"github.com/serverscom/srvctl/internal/config"
@@ -13,7 +14,8 @@ import (
 type Formatter struct {
 	writer       io.Writer
 	output       string
-	template     string
+	templateStr  string
+	template     *template.Template
 	pageView     bool
 	fieldsToShow []string
 	fieldList    bool
@@ -30,7 +32,7 @@ func NewFormatter(cmd *cobra.Command, manager *config.Manager) *Formatter {
 	return &Formatter{
 		writer:       cmd.OutOrStdout(),
 		output:       output,
-		template:     template,
+		templateStr:  template,
 		pageView:     pageView,
 		fieldsToShow: fields,
 		fieldList:    fieldList,
@@ -40,6 +42,16 @@ func NewFormatter(cmd *cobra.Command, manager *config.Manager) *Formatter {
 // GetOutput returns output type
 func (f *Formatter) GetOutput() string {
 	return f.output
+}
+
+// GetTemplateStr returns template string
+func (f *Formatter) GetTemplateStr() string {
+	return f.templateStr
+}
+
+// SetTemplate sets template
+func (f *Formatter) SetTemplate(t *template.Template) {
+	f.template = t
 }
 
 // Format formats data according to format

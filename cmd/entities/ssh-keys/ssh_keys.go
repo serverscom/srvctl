@@ -18,7 +18,7 @@ func NewCmd(cmdContext *base.CmdContext) *cobra.Command {
 		Use:   "ssh-keys",
 		Short: "Manage ssh keys",
 		PersistentPreRunE: base.CombinePreRunE(
-			base.CheckFields(cmdContext, sshEntity),
+			base.CheckFormatterFlags(cmdContext, sshEntity),
 			base.CheckEmptyContexts(cmdContext),
 		),
 		// empty RunE to support flags for ssh-keys command itself

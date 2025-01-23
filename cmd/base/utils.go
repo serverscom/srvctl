@@ -110,18 +110,6 @@ func ReadInputJSON(path string, in io.Reader, input any) error {
 	return nil
 }
 
-// CheckEmptyContexts returns error if no contexts found
-func CheckEmptyContexts(cmdContext *CmdContext) func(cmd *cobra.Command, args []string) error {
-	return func(cmd *cobra.Command, args []string) error {
-		manager := cmdContext.GetManager()
-
-		if len(manager.GetContexts()) == 0 {
-			return fmt.Errorf("no contexts found")
-		}
-		return nil
-	}
-}
-
 // ParseLabels parses slice of labels and returns map
 // expects that slice element would be: "foo=bar"
 func ParseLabels(labels []string) (map[string]string, error) {

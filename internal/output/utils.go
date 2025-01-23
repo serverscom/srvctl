@@ -84,6 +84,10 @@ func (f *Formatter) formatText(v any) error {
 		return err
 	}
 
+	if f.template != nil {
+		return f.template.Execute(f.writer, v)
+	}
+
 	defaultFields := entity.GetDefaultFields()
 
 	if len(f.fieldsToShow) > 0 {

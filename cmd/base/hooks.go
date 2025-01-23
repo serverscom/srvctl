@@ -2,7 +2,9 @@ package base
 
 import (
 	"fmt"
+	"html/template"
 	"os"
+	"strings"
 
 	"github.com/serverscom/srvctl/internal/client"
 	"github.com/serverscom/srvctl/internal/config"
@@ -51,16 +53,31 @@ func InitCmdContext(cmdContext *CmdContext) func(cmd *cobra.Command, args []stri
 	}
 }
 
-// CheckFields checks if the field list is enabled and lists entity fields if so
-func CheckFields(cmdContext *CmdContext, entity entities.EntityInterface) func(cmd *cobra.Command, args []string) error {
+// CheckFormatterFlags checks flags related to formatter
+func CheckFormatterFlags(cmdContext *CmdContext, entity entities.EntityInterface) func(cmd *cobra.Command, args []string) error {
 	return func(cmd *cobra.Command, args []string) error {
 		if entity == nil {
 			return fmt.Errorf("entity is not initialized")
 		}
 		manager := cmdContext.GetManager()
 		formatter := cmdContext.GetOrCreateFormatter(cmd)
+
 		output := formatter.GetOutput()
 		if output == "json" || output == "yaml" {
+			return nil
+		}
+
+		tmpl := formatter.GetTemplateStr()
+		if tmpl != "" {
+			tmpl = strings.Trim(tmpl, " ")
+			r := strings.NewReplacer(`\t`, "\t", `\n`, "\n")
+			tmpl = r.Replace(tmpl)
+
+			t, err := template.New("").Parse(tmpl)
+			if err != nil {
+				return err
+			}
+			formatter.SetTemplate(t)
 			return nil
 		}
 
@@ -84,6 +101,18 @@ func CheckFields(cmdContext *CmdContext, entity entities.EntityInterface) func(c
 			}
 		}
 
+		return nil
+	}
+}
+
+// CheckEmptyContexts returns error if no contexts found
+func CheckEmptyContexts(cmdContext *CmdContext) func(cmd *cobra.Command, args []string) error {
+	return func(cmd *cobra.Command, args []string) error {
+		manager := cmdContext.GetManager()
+
+		if len(manager.GetContexts()) == 0 {
+			return fmt.Errorf("no contexts found")
+		}
 		return nil
 	}
 }
