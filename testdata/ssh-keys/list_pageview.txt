@@ -1,0 +1,11 @@
+Name:         test-key
+Fingerprint:  00:11:22:33:44:55:66:77:88:99
+Labels:       foo=bar
+Created At:   2025-01-01 12:00:00
+Updated At:   2025-01-01 12:00:00
+---
+Name:         test-key 2
+Fingerprint:  00:00:00:00:00:00:00:00:00:00
+Labels:       foo=bar
+Created At:   2025-01-01 12:00:00
+Updated At:   2025-01-01 12:00:00

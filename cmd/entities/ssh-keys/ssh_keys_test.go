@@ -221,6 +221,32 @@ func TestListSSHKeysCmd(t *testing.T) {
 			},
 		},
 		{
+			name:           "list ssh keys with template",
+			args:           []string{"--template", "{{range .}}Name: {{.Name}}\n{{end}}"},
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_template.txt")),
+			configureMock: func(mock *mocks.MockCollection[serverscom.SSHKey]) {
+				mock.EXPECT().
+					List(gomock.Any()).
+					Return([]serverscom.SSHKey{
+						testKey1,
+						testKey2,
+					}, nil)
+			},
+		},
+		{
+			name:           "list ssh keys with pageView",
+			args:           []string{"--page-view"},
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_pageview.txt")),
+			configureMock: func(mock *mocks.MockCollection[serverscom.SSHKey]) {
+				mock.EXPECT().
+					List(gomock.Any()).
+					Return([]serverscom.SSHKey{
+						testKey1,
+						testKey2,
+					}, nil)
+			},
+		},
+		{
 			name:        "list ssh keys with error",
 			expectError: true,
 			configureMock: func(mock *mocks.MockCollection[serverscom.SSHKey]) {
