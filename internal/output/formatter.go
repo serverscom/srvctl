@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"html/template"
 	"io"
+	"reflect"
 
 	"github.com/serverscom/srvctl/internal/config"
 	"github.com/spf13/cobra"
@@ -12,13 +13,22 @@ import (
 
 // Formatter represents formatter struct with custom io.Writer
 type Formatter struct {
-	writer       io.Writer
-	output       string
-	templateStr  string
-	template     *template.Template
-	pageView     bool
-	fieldsToShow []string
-	fieldList    bool
+	writer           io.Writer
+	output           string
+	templateStr      string
+	template         *template.Template
+	pageView         bool
+	fieldsToShow     []string
+	fieldList        bool
+	rendererHandlers map[reflect.Type]Renderer
+}
+
+// Renderer represents custom renderer function
+type Renderer func(v interface{}, f *Formatter, indent int) error
+
+// RegisterHandler registers a renderer for a custom type
+func (f *Formatter) RegisterHandler(t reflect.Type, r Renderer) {
+	f.rendererHandlers[t] = r
 }
 
 // NewFormatter creates new formatter with specified io.Writer
