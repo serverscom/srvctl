@@ -82,8 +82,9 @@ func (e *Entity) GetHeader(field Field) string {
 		jsonTag := f.Tag.Get("json")
 		if jsonTag == "" {
 			header = field.Name
+		} else {
+			header = strings.Split(jsonTag, ",")[0]
 		}
-		header = strings.Split(jsonTag, ",")[0]
 	}
 	return utils.Humanize(header)
 }
