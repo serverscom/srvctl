@@ -1,13 +1,11 @@
 package sshkeys
 
 import (
-	serverscom "github.com/serverscom/serverscom-go-client/pkg"
 	"github.com/serverscom/srvctl/cmd/base"
-	"github.com/serverscom/srvctl/internal/output"
 	"github.com/spf13/cobra"
 )
 
-func NewGetCmd(cmdContext *base.CmdContext) *cobra.Command {
+func newGetCmd(cmdContext *base.CmdContext) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "get <fingerprint>",
 		Short: "Get an ssh key",
@@ -30,9 +28,8 @@ func NewGetCmd(cmdContext *base.CmdContext) *cobra.Command {
 			}
 
 			if sshKey != nil {
-				outputFormat, _ := manager.GetResolvedStringValue(cmd, "output")
-				formatter := output.NewFormatter(cmd.OutOrStdout())
-				return formatter.Format([]serverscom.SSHKey{*sshKey}, outputFormat)
+				formatter := cmdContext.GetOrCreateFormatter(cmd)
+				return formatter.Format(sshKey)
 			}
 			return nil
 		},

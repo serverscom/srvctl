@@ -3,13 +3,16 @@ module github.com/serverscom/srvctl
 go 1.23.0
 
 require (
+	github.com/jmespath/go-jmespath v0.4.0
 	github.com/onsi/gomega v1.36.2
 	github.com/serverscom/serverscom-go-client v1.0.10
 	github.com/spf13/cobra v1.8.1
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.19.0
+	github.com/stoewer/go-strcase v1.3.0
 	go.uber.org/mock v0.5.0
 	golang.org/x/term v0.27.0
+	golang.org/x/text v0.21.0
 	gopkg.in/yaml.v3 v3.0.1
 )
 
@@ -33,6 +36,5 @@ require (
 	golang.org/x/exp v0.0.0-20230905200255-921286631fa9 // indirect
 	golang.org/x/net v0.33.0 // indirect
 	golang.org/x/sys v0.28.0 // indirect
-	golang.org/x/text v0.21.0 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 )

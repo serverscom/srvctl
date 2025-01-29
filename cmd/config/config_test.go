@@ -58,12 +58,11 @@ func TestConfigFinalCmd(t *testing.T) {
 		},
 	}
 
-	testCmdContext := testutils.NewTestCmdContext(nil)
-
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			g := NewWithT(t)
 
+			testCmdContext := testutils.NewTestCmdContext(nil)
 			testCmdContext.SetManagerConfig(&tc.config)
 
 			configCmd := NewCmd(testCmdContext)

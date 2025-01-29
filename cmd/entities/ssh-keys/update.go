@@ -5,7 +5,6 @@ import (
 
 	serverscom "github.com/serverscom/serverscom-go-client/pkg"
 	"github.com/serverscom/srvctl/cmd/base"
-	"github.com/serverscom/srvctl/internal/output"
 	"github.com/spf13/cobra"
 )
 
@@ -44,16 +43,15 @@ func newUpdateCmd(cmdContext *base.CmdContext) *cobra.Command {
 			}
 
 			if sshKey != nil {
-				outputFormat, _ := manager.GetResolvedStringValue(cmd, "output")
-				formatter := output.NewFormatter(cmd.OutOrStdout())
-				return formatter.Format([]serverscom.SSHKey{*sshKey}, outputFormat)
+				formatter := cmdContext.GetOrCreateFormatter(cmd)
+				return formatter.Format(sshKey)
 			}
 			return nil
 		},
 	}
 
 	cmd.Flags().StringVarP(&name, "name", "n", "", "string")
-	cmd.Flags().StringArrayVarP(&labels, "labels", "l", []string{}, "string in JSON format")
+	cmd.Flags().StringArrayVarP(&labels, "label", "l", []string{}, "string in key=value format")
 
 	return cmd
 }

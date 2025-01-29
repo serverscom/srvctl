@@ -1,2 +1,2 @@
-NAME       FINGERPRINT                     LABELS    CREATED               UPDATED
-test-key   00:11:22:33:44:55:66:77:88:99   foo=bar   2025-01-01 12:00:00   2025-01-01 12:00:00
+Name       Fingerprint                     Created                Updated
+test-key   00:11:22:33:44:55:66:77:88:99   2025-01-01T12:00:00Z   2025-01-01T12:00:00Z

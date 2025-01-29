@@ -4,7 +4,6 @@ import (
 	"strings"
 
 	serverscom "github.com/serverscom/serverscom-go-client/pkg"
-	"github.com/serverscom/srvctl/internal/output"
 	"github.com/spf13/cobra"
 )
 
@@ -66,9 +65,8 @@ func NewListCmd[T any](entityName string, colFactory CollectionFactory[T], cmdCo
 				return err
 			}
 
-			outputFormat, _ := manager.GetResolvedStringValue(cmd, "output")
-			formatter := output.NewFormatter(cmd.OutOrStdout())
-			return formatter.FormatList(items, outputFormat)
+			formatter := cmdContext.GetOrCreateFormatter(cmd)
+			return formatter.Format(items)
 		},
 	}
 

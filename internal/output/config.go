@@ -7,9 +7,9 @@ import (
 )
 
 type ConfigInfo struct {
-	Context  string                 `json:"context" yaml:"context"`
-	Endpoint string                 `json:"endpoint" yaml:"endpoint"`
-	Config   map[string]interface{} `json:"config" yaml:"config"`
+	Context  string         `json:"context" yaml:"context"`
+	Endpoint string         `json:"endpoint" yaml:"endpoint"`
+	Config   map[string]any `json:"config" yaml:"config"`
 }
 
 func (f *Formatter) formatConfig(cfgInfo ConfigInfo) error {

@@ -5,8 +5,10 @@ import (
 	"path/filepath"
 )
 
-type ConfigOptions = map[string]interface{}
+// ConfigOptions represents a map of configuration options
+type ConfigOptions = map[string]any
 
+// Context manages srvctl configuration
 type Context struct {
 	Name     string        `yaml:"name"`
 	Endpoint string        `yaml:"endpoint"`
@@ -14,6 +16,7 @@ type Context struct {
 	Config   ConfigOptions `yaml:"config"`
 }
 
+// Config represents srvctl configuration
 type Config struct {
 	GlobalConfig   ConfigOptions `yaml:"globalConfig"`
 	DefaultContext string        `yaml:"defaultContext"`

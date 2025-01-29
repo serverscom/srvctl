@@ -77,7 +77,7 @@ Example: srvctl login context-name`,
 				Name:     contextName,
 				Endpoint: endpoint,
 				Token:    token,
-				Config:   make(map[string]interface{}),
+				Config:   make(map[string]any),
 			}
 
 			if err := manager.SetContext(cfgCtx); err != nil {
