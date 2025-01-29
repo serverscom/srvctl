@@ -2,11 +2,8 @@ package entities
 
 import (
 	"fmt"
+	"io"
 	"reflect"
-	"strings"
-	"time"
-
-	"github.com/serverscom/srvctl/internal/output/utils"
 )
 
 var (
@@ -24,26 +21,32 @@ type EntityRegistry map[reflect.Type]EntityInterface
 
 // EntityInterface represents the interface for an entity
 type EntityInterface interface {
-	GetHeader(Field) string
 	GetType() reflect.Type
-	GetDefaultFields() []Field
-	GetAvailableFields() []Field
-	GetFieldsToShow() []Field
+	GetDefaultFields() []string
+	GetFields() []Field
 	Validate([]string) error
-	AddFieldToShow(...Field)
 }
 
 // Entity represents the base entity structure
 type Entity struct {
-	defaultFields []Field
-	fieldsToShow  []Field
-	eType         reflect.Type
+	fields []Field
+	eType  reflect.Type
 }
+
+type HandlerFunc func(io.Writer, any)
 
 // Field represents an entity field
 type Field struct {
-	Name   string
-	Header string
+	ID                  string
+	Name                string
+	Path                string
+	ListHandlerFunc     HandlerFunc
+	PageViewHandlerFunc HandlerFunc
+	Default             bool
+}
+
+func (f *Field) GetName() string {
+	return f.Name
 }
 
 // Register registers an entity in the registry
@@ -69,88 +72,40 @@ func (r *EntityRegistry) GetEntityFromValue(v any) (EntityInterface, error) {
 	return nil, fmt.Errorf("entity is not registered: %s", t)
 }
 
-// GetHeader returns the header for a given field.
-// If Header is not specified, it returns humanized json tag or field name itself.
-func (e *Entity) GetHeader(field Field) string {
-	if field.Header != "" {
-		return field.Header
-	}
-
-	var header string
-
-	if f, ok := e.eType.FieldByName(field.Name); ok {
-		jsonTag := f.Tag.Get("json")
-		if jsonTag == "" {
-			header = field.Name
-		} else {
-			header = strings.Split(jsonTag, ",")[0]
-		}
-	}
-	return utils.Humanize(header)
-}
-
 // GetType returns the type of the entity
 func (e *Entity) GetType() reflect.Type {
 	return e.eType
 }
 
 // GetDefaultFields returns the default fields for an entity
-func (e *Entity) GetDefaultFields() []Field {
-	return e.defaultFields
-}
-
-// GetFieldsToShow returns the fields to show for an entity
-func (e *Entity) GetFieldsToShow() []Field {
-	return e.fieldsToShow
-}
-
-// AddFieldToShow adds fields to show for an entity
-func (e *Entity) AddFieldToShow(f ...Field) {
-	if e.fieldsToShow == nil {
-		e.fieldsToShow = make([]Field, 0)
+func (e *Entity) GetDefaultFields() []string {
+	result := make([]string, 0)
+	for _, field := range e.fields {
+		if field.Default {
+			result = append(result, field.ID)
+		}
 	}
-	e.fieldsToShow = append(e.fieldsToShow, f...)
+	return result
 }
 
 // GetAvailableFields returns the available fields for an entity
-func (e *Entity) GetAvailableFields() []Field {
-	timeType := reflect.TypeOf(time.Time{})
-	fields := make([]Field, 0, e.eType.NumField())
-	for i := 0; i < e.eType.NumField(); i++ {
-		v := e.eType.Field(i)
-		t := v.Type
-
-		if t.Kind() == reflect.Ptr {
-			t = t.Elem()
-		}
-
-		if t.Kind() == reflect.Slice {
-			t = t.Elem()
-			if t.Kind() == reflect.Ptr {
-				t = t.Elem()
-			}
-		}
-
-		// skip nested structs
-		if t.Kind() == reflect.Struct && t != timeType {
-			continue
-		}
-		fields = append(fields, Field{Name: v.Name})
-	}
-	return fields
+func (e *Entity) GetFields() []Field {
+	return e.fields
 }
 
 // Validate checks that all fields match available ones
 func (e *Entity) Validate(fields []string) error {
-	availableFields := e.GetAvailableFields()
-
-	fieldMap := make(map[string]struct{})
-	for _, f := range availableFields {
-		fieldMap[f.Name] = struct{}{}
-	}
+	availableFields := e.GetFields()
 
 	for _, f := range fields {
-		if _, exists := fieldMap[f]; !exists {
+		found := false
+		for _, af := range availableFields {
+			if af.ID == f {
+				found = true
+				break
+			}
+		}
+		if !found {
 			return fmt.Errorf("field %s is not found, try --field-list to get available fields", f)
 		}
 	}

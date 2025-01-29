@@ -87,7 +87,7 @@ func CheckFormatterFlags(cmdContext *CmdContext, entity entities.EntityInterface
 		}
 
 		if fieldList {
-			formatter.ListEntityFields(entity.GetAvailableFields())
+			formatter.ListEntityFields(entity.GetFields())
 			os.Exit(0)
 		}
 
