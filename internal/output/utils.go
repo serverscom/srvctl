@@ -139,30 +139,33 @@ func (f *Formatter) formatPageView(v any, entity entities.EntityInterface) error
 	orderedFields := f.getOrderedFields(entity)
 	value := reflect.ValueOf(v)
 
-	var itemCount int
 	if value.Kind() == reflect.Ptr {
 		value = value.Elem()
 	}
-	if value.Kind() == reflect.Slice {
-		itemCount = value.Len()
+
+	w := tabwriter.NewWriter(f.writer, 0, 0, 1, ' ', 0)
+	defer w.Flush()
+
+	switch value.Kind() {
+	case reflect.Slice:
+		for i := 0; i < value.Len(); i++ {
+			if err := f.formatPageViewItem(w, value.Index(i).Interface(), orderedFields); err != nil {
+				return err
+			}
+			if i < value.Len()-1 {
+				fmt.Fprintln(w, "---")
+				w.Flush()
+			}
+		}
+	default:
+		return f.formatPageViewItem(w, v, orderedFields)
 	}
 
-	return processValue(value, func(item interface{}) error {
-		err := f.formatPageViewItem(item, orderedFields)
-		if err != nil {
-			return err
-		}
-
-		itemCount--
-		if itemCount > 0 {
-			fmt.Fprintln(f.writer, "---")
-		}
-		return nil
-	})
+	return nil
 }
 
 // formatPageViewItem formats a single item for the page view mode.
-func (f *Formatter) formatPageViewItem(item interface{}, fields []entities.Field) error {
+func (f *Formatter) formatPageViewItem(w io.Writer, item interface{}, fields []entities.Field) error {
 	for _, field := range fields {
 		fieldValue, err := getFieldValue(item, field.Path)
 		if err != nil {
@@ -175,7 +178,7 @@ func (f *Formatter) formatPageViewItem(item interface{}, fields []entities.Field
 		}
 
 		field.PageViewHandlerFunc(&buf, fieldValue)
-		fmt.Fprintf(f.writer, "%s: %s\n", field.Name, buf.String())
+		fmt.Fprintf(w, "%s:\t%s\n", field.Name, buf.String())
 	}
 	return nil
 }
