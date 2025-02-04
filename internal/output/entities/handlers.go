@@ -15,6 +15,10 @@ const (
 )
 
 func stringHandler(w io.Writer, v any, indent string, _ *Field) error {
+	// to avoid extra indent between field name and value for nested structs fields
+	if indent != "" {
+		indent = "\t"
+	}
 	if v == nil {
 		fmt.Fprintf(w, "%s<none>", indent)
 		return nil
@@ -35,6 +39,9 @@ func stringHandler(w io.Writer, v any, indent string, _ *Field) error {
 }
 
 func timeHandler(w io.Writer, v any, indent string, _ *Field) error {
+	if indent != "" {
+		indent = "\t"
+	}
 	switch v := v.(type) {
 	case time.Time:
 		if v.IsZero() {
@@ -79,7 +86,7 @@ func mapHandler(w io.Writer, v interface{}, indent string, _ *Field) error {
 
 func structPVHandler(w io.Writer, v interface{}, indent string, f *Field) error {
 	if v == nil {
-		fmt.Fprintf(w, "%s<none>", indent)
+		fmt.Fprintf(w, "\t<none>")
 		return nil
 	}
 
