@@ -7,11 +7,12 @@ import (
 )
 
 func newListCmd(cmdContext *base.CmdContext) *cobra.Command {
-
 	factory := func(verbose bool) serverscom.Collection[serverscom.SSHKey] {
 		scClient := cmdContext.GetClient().SetVerbose(verbose).GetScClient()
 		return scClient.SSHKeys.Collection()
 	}
 
-	return base.NewListCmd("SSH Keys", factory, cmdContext)
+	opts := &base.BaseListOptions[serverscom.SSHKey]{}
+
+	return base.NewListCmd("SSH Keys", factory, cmdContext, opts)
 }

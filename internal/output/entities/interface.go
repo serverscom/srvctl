@@ -6,10 +6,6 @@ import (
 	"reflect"
 )
 
-var (
-	Registry = make(EntityRegistry)
-)
-
 // RegistryInterface represents the interface for the EntityRegistry
 type RegistryInterface interface {
 	Register(entity EntityInterface) error
@@ -33,7 +29,8 @@ type Entity struct {
 	eType  reflect.Type
 }
 
-type HandlerFunc func(io.Writer, any)
+// HandlerFunc represents a handler function for rendering fields
+type HandlerFunc func(w io.Writer, v any, indent string, f *Field) error
 
 // Field represents an entity field
 type Field struct {
@@ -43,10 +40,31 @@ type Field struct {
 	ListHandlerFunc     HandlerFunc
 	PageViewHandlerFunc HandlerFunc
 	Default             bool
+	Parent              *Field
+	ChildFields         []Field
 }
 
+// PageViewRender renders the field as a page view
+func (f *Field) PageViewRender(w io.Writer, v any, indent string) error {
+	return f.PageViewHandlerFunc(w, v, indent, f)
+}
+
+// ListRender renders the field as a list item
+func (f *Field) ListRender(w io.Writer, v any) error {
+	return f.ListHandlerFunc(w, v, "", f)
+}
+
+// GetName returns the name of the field
 func (f *Field) GetName() string {
 	return f.Name
+}
+
+// GetPath returns the path of the field with its parent path
+func (f *Field) GetPath() string {
+	if f.Parent != nil {
+		return fmt.Sprintf("%s.%s", f.Parent.GetPath(), f.Path)
+	}
+	return f.Path
 }
 
 // Register registers an entity in the registry
@@ -100,7 +118,7 @@ func (e *Entity) Validate(fields []string) error {
 	for _, f := range fields {
 		found := false
 		for _, af := range availableFields {
-			if af.ID == f {
+			if af.ID == f || e.fieldInChildFields(af.ChildFields, f) {
 				found = true
 				break
 			}
@@ -111,4 +129,14 @@ func (e *Entity) Validate(fields []string) error {
 	}
 
 	return nil
+}
+
+// fieldInChildFields checks if a field is in the list of child fields
+func (e *Entity) fieldInChildFields(childFields []Field, fieldID string) bool {
+	for _, child := range childFields {
+		if child.ID == fieldID || e.fieldInChildFields(child.ChildFields, fieldID) {
+			return true
+		}
+	}
+	return false
 }

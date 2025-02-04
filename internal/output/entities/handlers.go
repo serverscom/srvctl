@@ -6,63 +6,104 @@ import (
 	"reflect"
 	"strings"
 	"time"
+
+	"github.com/serverscom/srvctl/internal/output/utils"
 )
 
 const (
 	timeFormat = time.RFC3339
 )
 
-func stringHandler(w io.Writer, v any) {
-	fmt.Fprint(w, v)
-}
-
-func timeHandler(w io.Writer, v any) {
-	t := v.(time.Time)
-	fmt.Fprintf(w, "%s", t.Format(timeFormat))
-}
-
-func mapListHandler(w io.Writer, v any) {
+func stringHandler(w io.Writer, v any, indent string, _ *Field) error {
 	if v == nil {
-		fmt.Fprint(w, "<none>")
-		return
+		fmt.Fprintf(w, "%s<none>", indent)
+		return nil
 	}
 
-	mapVals, ok := v.(map[string]string)
-	if !ok || len(mapVals) == 0 {
-		fmt.Fprint(w, "<empty>")
-		return
+	val := reflect.ValueOf(v)
+	if val.Kind() == reflect.Ptr {
+		if val.IsNil() {
+			fmt.Fprintf(w, "%s<none>", indent)
+			return nil
+		}
+		fmt.Fprintf(w, "%s%v", indent, val.Elem().Interface())
+		return nil
 	}
 
-	pairs := make([]string, 0, len(mapVals))
-	for k, val := range mapVals {
-		pairs = append(pairs, fmt.Sprintf("%s=%v", k, val))
-	}
-
-	fmt.Fprint(w, strings.Join(pairs, ", "))
+	fmt.Fprintf(w, "%s%v", indent, v)
+	return nil
 }
 
-func mapPageHandler(w io.Writer, v interface{}) {
+func timeHandler(w io.Writer, v any, indent string, _ *Field) error {
+	switch v := v.(type) {
+	case time.Time:
+		if v.IsZero() {
+			_, err := fmt.Fprintf(w, "%s<none>", indent)
+			return err
+		}
+		_, err := fmt.Fprintf(w, "%s%s", indent, v.Format(timeFormat))
+		return err
+	case *time.Time:
+		if v == nil {
+			_, err := fmt.Fprintf(w, "%s<none>", indent)
+			return err
+		}
+		_, err := fmt.Fprintf(w, "%s%s", indent, v.Format(timeFormat))
+		return err
+	default:
+		return fmt.Errorf("unsupported type: %T", v)
+	}
+}
+
+func mapHandler(w io.Writer, v interface{}, indent string, _ *Field) error {
 	if v == nil {
-		fmt.Fprint(w, "<none>")
-		return
+		_, err := fmt.Fprintf(w, "%s<none>", indent)
+		return err
 	}
 
 	m, ok := v.(map[string]string)
-	if !ok {
-		fmt.Fprint(w, "<none>")
-		return
-	}
-
-	if len(m) == 0 {
-		fmt.Fprint(w, "<empty>")
-		return
+	if !ok || len(m) == 0 {
+		_, err := fmt.Fprintf(w, "%s<empty>", indent)
+		return err
 	}
 
 	pairs := make([]string, 0, len(m))
 	iter := reflect.ValueOf(m).MapRange()
 	for iter.Next() {
-		pairs = append(pairs, fmt.Sprintf("%v=%v", iter.Key(), iter.Value()))
+		pairs = append(pairs, fmt.Sprintf("%s%v=%v", indent, iter.Key(), iter.Value()))
 	}
 
-	fmt.Fprint(w, strings.Join(pairs, "\n\t"))
+	_, err := fmt.Fprint(w, strings.Join(pairs, "\n\t"))
+	return err
+}
+
+func structPVHandler(w io.Writer, v interface{}, indent string, f *Field) error {
+	if v == nil {
+		fmt.Fprintf(w, "%s<none>", indent)
+		return nil
+	}
+
+	fmt.Fprintln(w)
+
+	for i, childField := range f.ChildFields {
+		fieldValue, err := utils.GetFieldValue(v, childField.Path)
+		if err != nil {
+			return err
+		}
+
+		if childField.PageViewHandlerFunc == nil {
+			return fmt.Errorf("no PageViewHandlerFunc defined for field %s", childField.Name)
+		}
+
+		fmt.Fprintf(w, "%s%s:", indent, childField.Name)
+
+		if err := childField.PageViewRender(w, fieldValue, indent+"\t"); err != nil {
+			return err
+		}
+		if i < len(f.ChildFields)-1 {
+			fmt.Fprintln(w)
+		}
+	}
+
+	return nil
 }

@@ -10,3 +10,10 @@ func AddGlobalFlags(cmd *cobra.Command) {
 	cmd.PersistentFlags().BoolP("verbose", "v", false, "verbose output")
 	cmd.PersistentFlags().StringP("output", "o", "text", "output format (text/json/yaml)")
 }
+
+func AddFormatFlags(cmd *cobra.Command) {
+	cmd.PersistentFlags().StringArrayP("field", "f", []string{}, "output only these fields, can be specified multiple times")
+	cmd.PersistentFlags().Bool("field-list", false, "list available fields")
+	cmd.PersistentFlags().Bool("page-view", false, "use page view format")
+	cmd.PersistentFlags().StringP("template", "t", "", "go template string to output in specified format")
+}
