@@ -15,6 +15,7 @@ type HostType struct {
 	entityName string
 	typeFlag   string
 	getter     HostGetter
+	creator    HostCreator
 	extraCmds  []func(*base.CmdContext) *cobra.Command
 }
 
@@ -31,6 +32,7 @@ func NewCmd(cmdContext *base.CmdContext) *cobra.Command {
 			entityName: "Dedicated servers",
 			typeFlag:   "dedicated_server",
 			getter:     &DedicatedServerGetter{},
+			creator:    &DedicatedServerCreator{},
 			extraCmds:  []func(*base.CmdContext) *cobra.Command{},
 		},
 		{
@@ -46,6 +48,7 @@ func NewCmd(cmdContext *base.CmdContext) *cobra.Command {
 			entityName: "Scalable baremetal servers",
 			typeFlag:   "sbm_server",
 			getter:     &SBMServerGetter{},
+			creator:    &SBMServerCreator{},
 		},
 	}
 
@@ -86,42 +89,16 @@ func newHostTypeCmd(cmdContext *base.CmdContext, hostType HostType) *cobra.Comma
 	hostCmd.AddCommand(newListCmd(cmdContext, &hostType))
 	hostCmd.AddCommand(newGetCmd(cmdContext, &hostType))
 
+	if hostType.creator != nil {
+		hostCmd.AddCommand(newAddCmd(cmdContext, &hostType))
+	}
+
 	for _, cmdFunc := range hostType.extraCmds {
 		hostCmd.AddCommand(cmdFunc(cmdContext))
 	}
 
 	return hostCmd
 }
-
-// func newHostTypeCmd(cmdContext *base.CmdContext, hostType string, shortDesc string, entityName string, typeFlag string) *cobra.Command {
-// 	hostCmd := &cobra.Command{
-// 		Use:   hostType,
-// 		Short: shortDesc,
-// 		RunE: func(cmd *cobra.Command, args []string) error {
-// 			return cmd.Help()
-// 		},
-// 	}
-
-// 	listCmd := newListCmd(cmdContext, entityName)
-// 	if err := listCmd.Flags().Set("type", typeFlag); err != nil {
-// 		log.Fatal(err)
-// 	}
-
-// 	hostCmd.AddCommand(listCmd)
-
-// 	switch hostType {
-// 	case "ds":
-// 		hostCmd.AddCommand(newGetDsCmd(cmdContext))
-// 	case "kbm":
-// 		hostCmd.AddCommand(newGetKbmCmd(cmdContext))
-// 	case "sbm":
-// 		hostCmd.AddCommand(newGetSbmCmd(cmdContext))
-// 	default:
-// 		log.Fatalf("Unknown host type: %s", hostType)
-// 	}
-
-// 	return hostCmd
-// }
 
 func getHostsEntities() (map[string]entities.EntityInterface, error) {
 	result := make(map[string]entities.EntityInterface)
