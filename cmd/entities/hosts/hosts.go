@@ -30,7 +30,7 @@ func NewCmd(cmdContext *base.CmdContext) *cobra.Command {
 			shortDesc:  "Manage dedicated servers",
 			entityName: "Dedicated servers",
 			typeFlag:   "dedicated_server",
-			getter:     &DedicatedServerGetter{client: cmdContext.GetClient().GetScClient()},
+			getter:     &DedicatedServerGetter{},
 			extraCmds:  []func(*base.CmdContext) *cobra.Command{},
 		},
 		{
@@ -38,14 +38,14 @@ func NewCmd(cmdContext *base.CmdContext) *cobra.Command {
 			shortDesc:  "Manage kubernetes baremetal nodes",
 			entityName: "Kubernetes baremetal nodes",
 			typeFlag:   "kubernetes_baremetal_node",
-			getter:     &KubernetesBaremetalNodeGetter{client: cmdContext.GetClient().GetScClient()},
+			getter:     &KubernetesBaremetalNodeGetter{},
 		},
 		{
 			use:        "sbm",
 			shortDesc:  "Manage scalable baremetal servers",
 			entityName: "Scalable baremetal servers",
 			typeFlag:   "sbm_server",
-			getter:     &SBMServerGetter{client: cmdContext.GetClient().GetScClient()},
+			getter:     &SBMServerGetter{},
 		},
 	}
 

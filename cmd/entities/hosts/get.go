@@ -10,31 +10,25 @@ import (
 )
 
 type HostGetter interface {
-	Get(ctx context.Context, id string) (interface{}, error)
+	Get(ctx context.Context, client *serverscom.Client, id string) (interface{}, error)
 }
 
-type DedicatedServerGetter struct {
-	client *serverscom.Client
+type DedicatedServerGetter struct{}
+
+func (g *DedicatedServerGetter) Get(ctx context.Context, client *serverscom.Client, id string) (interface{}, error) {
+	return client.Hosts.GetDedicatedServer(ctx, id)
 }
 
-func (g *DedicatedServerGetter) Get(ctx context.Context, id string) (interface{}, error) {
-	return g.client.Hosts.GetDedicatedServer(ctx, id)
+type KubernetesBaremetalNodeGetter struct{}
+
+func (g *KubernetesBaremetalNodeGetter) Get(ctx context.Context, client *serverscom.Client, id string) (interface{}, error) {
+	return client.Hosts.GetKubernetesBaremetalNode(ctx, id)
 }
 
-type KubernetesBaremetalNodeGetter struct {
-	client *serverscom.Client
-}
+type SBMServerGetter struct{}
 
-func (g *KubernetesBaremetalNodeGetter) Get(ctx context.Context, id string) (interface{}, error) {
-	return g.client.Hosts.GetKubernetesBaremetalNode(ctx, id)
-}
-
-type SBMServerGetter struct {
-	client *serverscom.Client
-}
-
-func (g *SBMServerGetter) Get(ctx context.Context, id string) (interface{}, error) {
-	return g.client.Hosts.GetSBMServer(ctx, id)
+func (g *SBMServerGetter) Get(ctx context.Context, client *serverscom.Client, id string) (interface{}, error) {
+	return client.Hosts.GetSBMServer(ctx, id)
 }
 
 func newGetCmd(cmdContext *base.CmdContext, hostType *HostType) *cobra.Command {
@@ -49,9 +43,10 @@ func newGetCmd(cmdContext *base.CmdContext, hostType *HostType) *cobra.Command {
 			defer cancel()
 
 			base.SetupProxy(cmd, manager)
+			scClient := cmdContext.GetClient().SetVerbose(manager.GetVerbose(cmd)).GetScClient()
 
 			id := args[0]
-			entity, err := hostType.getter.Get(ctx, id)
+			entity, err := hostType.getter.Get(ctx, scClient, id)
 			if err != nil {
 				return err
 			}
@@ -65,102 +60,3 @@ func newGetCmd(cmdContext *base.CmdContext, hostType *HostType) *cobra.Command {
 	}
 	return cmd
 }
-
-// func newGetDsCmd(cmdContext *base.CmdContext) *cobra.Command {
-// 	cmd := &cobra.Command{
-// 		Use:   "get <id>",
-// 		Short: "Get a dedicated server",
-// 		Long:  "Get a dedicated server by id",
-// 		Args:  cobra.ExactArgs(1),
-// 		RunE: func(cmd *cobra.Command, args []string) error {
-// 			manager := cmdContext.GetManager()
-
-// 			ctx, cancel := base.SetupContext(cmd, manager)
-// 			defer cancel()
-
-// 			base.SetupProxy(cmd, manager)
-
-// 			scClient := cmdContext.GetClient().SetVerbose(manager.GetVerbose(cmd)).GetScClient()
-
-// 			id := args[0]
-// 			ds, err := scClient.Hosts.GetDedicatedServer(ctx, id)
-// 			if err != nil {
-// 				return err
-// 			}
-
-// 			if ds != nil {
-// 				formatter := cmdContext.GetOrCreateFormatter(cmd)
-// 				return formatter.Format(ds)
-// 			}
-// 			return nil
-// 		},
-// 	}
-
-// 	return cmd
-// }
-
-// func newGetKbmCmd(cmdContext *base.CmdContext) *cobra.Command {
-// 	cmd := &cobra.Command{
-// 		Use:   "get <id>",
-// 		Short: "Get a kubernetes baremetal node",
-// 		Long:  "Get a kubernetes baremetal node by id",
-// 		Args:  cobra.ExactArgs(1),
-// 		RunE: func(cmd *cobra.Command, args []string) error {
-// 			manager := cmdContext.GetManager()
-
-// 			ctx, cancel := base.SetupContext(cmd, manager)
-// 			defer cancel()
-
-// 			base.SetupProxy(cmd, manager)
-
-// 			scClient := cmdContext.GetClient().SetVerbose(manager.GetVerbose(cmd)).GetScClient()
-
-// 			id := args[0]
-// 			kbm, err := scClient.Hosts.GetKubernetesBaremetalNode(ctx, id)
-// 			if err != nil {
-// 				return err
-// 			}
-
-// 			if kbm != nil {
-// 				formatter := cmdContext.GetOrCreateFormatter(cmd)
-// 				return formatter.Format(kbm)
-// 			}
-// 			return nil
-// 		},
-// 	}
-
-// 	return cmd
-// }
-
-// func newGetSbmCmd(cmdContext *base.CmdContext) *cobra.Command {
-// 	cmd := &cobra.Command{
-// 		Use:   "get <id>",
-// 		Short: "Get a scalable baremetal server",
-// 		Long:  "Get a scalable baremetal server by id",
-// 		Args:  cobra.ExactArgs(1),
-// 		RunE: func(cmd *cobra.Command, args []string) error {
-// 			manager := cmdContext.GetManager()
-
-// 			ctx, cancel := base.SetupContext(cmd, manager)
-// 			defer cancel()
-
-// 			base.SetupProxy(cmd, manager)
-
-// 			scClient := cmdContext.GetClient().SetVerbose(manager.GetVerbose(cmd)).GetScClient()
-
-// 			id := args[0]
-// 			sbm, err := scClient.Hosts.GetSBMServer(ctx, id)
-// 			if err != nil {
-// 				return err
-// 			}
-
-// 			if sbm != nil {
-// 				formatter := cmdContext.GetOrCreateFormatter(cmd)
-// 				return formatter.Format(sbm)
-// 			}
-// 			return nil
-// 		},
-// 	}
-
-// 	return cmd
-// }
