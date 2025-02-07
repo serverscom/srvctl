@@ -1,7 +1,6 @@
 package hosts
 
 import (
-	"fmt"
 	"log"
 
 	serverscom "github.com/serverscom/serverscom-go-client/pkg"
@@ -17,7 +16,7 @@ func newUpdateDSCmd(cmdContext *base.CmdContext) *cobra.Command {
 
 	cmd := &cobra.Command{
 		Use:   "update <id>",
-		Short: fmt.Sprint("Update dedicated server"),
+		Short: "Update dedicated server",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			manager := cmdContext.GetManager()
@@ -59,7 +58,7 @@ func newUpdateKBMCmd(cmdContext *base.CmdContext) *cobra.Command {
 
 	cmd := &cobra.Command{
 		Use:   "update <id>",
-		Short: fmt.Sprint("Update kubernetes baremetal node"),
+		Short: "Update kubernetes baremetal node",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			manager := cmdContext.GetManager()
@@ -101,7 +100,7 @@ func newUpdateSBMCmd(cmdContext *base.CmdContext) *cobra.Command {
 
 	cmd := &cobra.Command{
 		Use:   "update <id>",
-		Short: fmt.Sprint("Update scalable baremetal server"),
+		Short: "Update scalable baremetal server",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			manager := cmdContext.GetManager()

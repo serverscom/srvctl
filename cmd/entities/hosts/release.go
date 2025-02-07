@@ -1,8 +1,6 @@
 package hosts
 
 import (
-	"fmt"
-
 	"github.com/serverscom/srvctl/cmd/base"
 	"github.com/spf13/cobra"
 )
@@ -10,7 +8,7 @@ import (
 func newDSAbortReleaseCmd(cmdContext *base.CmdContext) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "abort-release <id>",
-		Short: fmt.Sprint("Abort release for a dedicated server"),
+		Short: "Abort release for a dedicated server",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			manager := cmdContext.GetManager()
@@ -42,7 +40,7 @@ func newDSScheduleReleaseCmd(cmdContext *base.CmdContext) *cobra.Command {
 
 	cmd := &cobra.Command{
 		Use:   "schedule-release <id>",
-		Short: fmt.Sprint("Schedule release for a dedicated server"),
+		Short: "Schedule release for a dedicated server",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			manager := cmdContext.GetManager()
@@ -74,7 +72,7 @@ func newDSScheduleReleaseCmd(cmdContext *base.CmdContext) *cobra.Command {
 func newSBMReleaseCmd(cmdContext *base.CmdContext) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "release <id>",
-		Short: fmt.Sprint("Release an SBM server"),
+		Short: "Release an SBM server",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			manager := cmdContext.GetManager()
