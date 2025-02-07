@@ -9,28 +9,27 @@ import (
 
 type ListOptions[T any] interface {
 	AddFlags(*cobra.Command)
-	ApplyToCollection(serverscom.Collection[T], *cobra.Command)
+	ApplyToCollection(serverscom.Collection[T])
 	AllPages() bool
 }
 
 // CollectionFactory is a function type that creates a typed resource collection
 // with configurable verbosity level
-type CollectionFactory[T any] func(verbose bool) serverscom.Collection[T]
+// type CollectionFactory[T any] func(verbose bool) serverscom.Collection[T]
+type CollectionFactory[T any] func(verbose bool, args ...string) serverscom.Collection[T]
 
 // BaseListOptions is a base options struct for list commands
 type BaseListOptions[T any] struct {
-	labelSelector string
-	perPage       int
-	page          int
-	sorting       string
-	direction     string
-	allPages      bool
+	perPage   int
+	page      int
+	sorting   string
+	direction string
+	allPages  bool
 }
 
 // AddFlags adds common list flags to the command
 func (o *BaseListOptions[T]) AddFlags(cmd *cobra.Command) {
 	flags := cmd.Flags()
-	flags.StringVar(&o.labelSelector, "label-selector", "", "Filter by label selector")
 	flags.IntVar(&o.perPage, "per-page", 0, "Number of items per page")
 	flags.IntVar(&o.page, "page", 0, "Page number")
 	flags.StringVar(&o.sorting, "sorting", "", "Sort field")
@@ -39,10 +38,8 @@ func (o *BaseListOptions[T]) AddFlags(cmd *cobra.Command) {
 }
 
 // ApplyToCollection applies the options to a collection
-func (o *BaseListOptions[T]) ApplyToCollection(collection serverscom.Collection[T], cmd *cobra.Command) {
-	if o.labelSelector != "" {
-		collection.SetParam("label_selector", o.labelSelector)
-	}
+func (o *BaseListOptions[T]) ApplyToCollection(collection serverscom.Collection[T]) {
+
 	if o.sorting != "" {
 		collection.SetParam("sort", o.sorting)
 	}
@@ -62,12 +59,37 @@ func (o *BaseListOptions[T]) AllPages() bool {
 	return o.allPages
 }
 
+// BaseLabelsListOptions is a base options struct for list commands with label selector option
+type BaseLabelsListOptions[T any] struct {
+	BaseListOptions[T]
+	labelSelector string
+}
+
+// AddFlags adds common list flags to the command
+func (o *BaseLabelsListOptions[T]) AddFlags(cmd *cobra.Command) {
+	o.BaseListOptions.AddFlags(cmd)
+	flags := cmd.Flags()
+	flags.StringVar(&o.labelSelector, "label-selector", "", "Filter by label selector")
+}
+
+// ApplyToCollection applies the options to a collection
+func (o *BaseLabelsListOptions[T]) ApplyToCollection(collection serverscom.Collection[T]) {
+	if o.labelSelector != "" {
+		collection.SetParam("label_selector", o.labelSelector)
+	}
+}
+
 // NewListCmd base list command for different collections
-func NewListCmd[T any](entityName string, colFactory CollectionFactory[T], cmdContext *CmdContext, opts ListOptions[T]) *cobra.Command {
+func NewListCmd[T any](use string, entityName string, colFactory CollectionFactory[T], cmdContext *CmdContext, opts ListOptions[T]) *cobra.Command {
+	aliases := []string{}
+	if use == "list" {
+		aliases = append(aliases, "ls")
+	}
 	cmd := &cobra.Command{
-		Use:     "list",
-		Aliases: []string{"ls"},
+		Use:     use,
+		Aliases: aliases,
 		Short:   "List " + entityName,
+		Args:    cobra.MaximumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			manager := cmdContext.GetManager()
 
@@ -76,8 +98,8 @@ func NewListCmd[T any](entityName string, colFactory CollectionFactory[T], cmdCo
 
 			SetupProxy(cmd, manager)
 
-			collection := colFactory(manager.GetVerbose(cmd))
-			opts.ApplyToCollection(collection, cmd)
+			collection := colFactory(manager.GetVerbose(cmd), args...)
+			opts.ApplyToCollection(collection)
 
 			var items []T
 			var err error
