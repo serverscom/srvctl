@@ -9,14 +9,20 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type HostType struct {
+type HostTypeCmd struct {
 	use        string
 	shortDesc  string
 	entityName string
 	typeFlag   string
-	getter     HostGetter
-	creator    HostCreator
+	managers   HostManagers
 	extraCmds  []func(*base.CmdContext) *cobra.Command
+}
+
+type HostManagers struct {
+	getMgr       HostGetter
+	createMgr    HostCreator
+	powerMgr     HostPowerer
+	reinstallMgr HostReinstaller
 }
 
 func NewCmd(cmdContext *base.CmdContext) *cobra.Command {
@@ -25,30 +31,55 @@ func NewCmd(cmdContext *base.CmdContext) *cobra.Command {
 		log.Fatal(err)
 	}
 
-	hostTypes := []HostType{
+	hostTypeCmds := []HostTypeCmd{
 		{
 			use:        "ds",
 			shortDesc:  "Manage dedicated servers",
 			entityName: "Dedicated servers",
 			typeFlag:   "dedicated_server",
-			getter:     &DedicatedServerGetter{},
-			creator:    &DedicatedServerCreator{},
-			extraCmds:  []func(*base.CmdContext) *cobra.Command{},
+			managers: HostManagers{
+				getMgr:       &DSGetMgr{},
+				createMgr:    &DSCreateMgr{},
+				powerMgr:     &DSPowerMgr{},
+				reinstallMgr: &DSReinstallMgr{},
+			},
+			extraCmds: []func(*base.CmdContext) *cobra.Command{
+				newUpdateDSCmd,
+				newListDSDriveSlotsCmd,
+				newListDSConnectionsCmd,
+				newListDSPTRCmd,
+				newDSAbortReleaseCmd,
+				newDSScheduleReleaseCmd,
+			},
 		},
 		{
 			use:        "kbm",
 			shortDesc:  "Manage kubernetes baremetal nodes",
 			entityName: "Kubernetes baremetal nodes",
 			typeFlag:   "kubernetes_baremetal_node",
-			getter:     &KubernetesBaremetalNodeGetter{},
+			managers: HostManagers{
+				getMgr:   &KBMGetMgr{},
+				powerMgr: &KBMPowerMgr{},
+			},
+			extraCmds: []func(*base.CmdContext) *cobra.Command{
+				newUpdateKBMCmd,
+			},
 		},
 		{
 			use:        "sbm",
 			shortDesc:  "Manage scalable baremetal servers",
 			entityName: "Scalable baremetal servers",
 			typeFlag:   "sbm_server",
-			getter:     &SBMServerGetter{},
-			creator:    &SBMServerCreator{},
+			managers: HostManagers{
+				getMgr:       &SBMGetMgr{},
+				createMgr:    &SBMCreateMgr{},
+				powerMgr:     &SBMPowerMgr{},
+				reinstallMgr: &SBMReinstallMgr{},
+			},
+			extraCmds: []func(*base.CmdContext) *cobra.Command{
+				newUpdateSBMCmd,
+				newSBMReleaseCmd,
+			},
 		},
 	}
 
@@ -68,7 +99,7 @@ func NewCmd(cmdContext *base.CmdContext) *cobra.Command {
 	// hosts list cmd
 	cmd.AddCommand(newListCmd(cmdContext, nil))
 
-	for _, ht := range hostTypes {
+	for _, ht := range hostTypeCmds {
 		cmd.AddCommand(newHostTypeCmd(cmdContext, ht))
 	}
 
@@ -77,23 +108,30 @@ func NewCmd(cmdContext *base.CmdContext) *cobra.Command {
 	return cmd
 }
 
-func newHostTypeCmd(cmdContext *base.CmdContext, hostType HostType) *cobra.Command {
+func newHostTypeCmd(cmdContext *base.CmdContext, hostTypeCmd HostTypeCmd) *cobra.Command {
 	hostCmd := &cobra.Command{
-		Use:   hostType.use,
-		Short: hostType.shortDesc,
+		Use:   hostTypeCmd.use,
+		Short: hostTypeCmd.shortDesc,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return cmd.Help()
 		},
 	}
 
-	hostCmd.AddCommand(newListCmd(cmdContext, &hostType))
-	hostCmd.AddCommand(newGetCmd(cmdContext, &hostType))
+	hostCmd.AddCommand(newListCmd(cmdContext, &hostTypeCmd))
+	hostCmd.AddCommand(newGetCmd(cmdContext, &hostTypeCmd))
 
-	if hostType.creator != nil {
-		hostCmd.AddCommand(newAddCmd(cmdContext, &hostType))
+	if hostTypeCmd.managers.getMgr != nil {
+		hostCmd.AddCommand(newAddCmd(cmdContext, &hostTypeCmd))
+	}
+	if hostTypeCmd.managers.powerMgr != nil {
+		hostCmd.AddCommand(newPowerCmd(cmdContext, &hostTypeCmd))
+		hostCmd.AddCommand(newListPowerFeedsCmd(cmdContext, &hostTypeCmd))
+	}
+	if hostTypeCmd.managers.reinstallMgr != nil {
+		hostCmd.AddCommand(newReinstallCmd(cmdContext, &hostTypeCmd))
 	}
 
-	for _, cmdFunc := range hostType.extraCmds {
+	for _, cmdFunc := range hostTypeCmd.extraCmds {
 		hostCmd.AddCommand(cmdFunc(cmdContext))
 	}
 

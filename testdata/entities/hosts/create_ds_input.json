@@ -1,0 +1,53 @@
+{
+    "server_model_id": 1234,
+    "location_id": 5678,
+    "ram_size": 16,
+    "uplink_models": {
+        "public": {
+            "id": 4321,
+            "bandwidth_model_id": 8765
+        },
+        "private": {
+            "id": 7890
+        }
+    },
+    "drives": {
+        "slots": [
+            {
+                "position": 1,
+                "drive_model_id": 3456
+            },
+            {
+                "position": 2,
+                "drive_model_id": 3456
+            }
+        ],
+        "layout": [
+            {
+                "slot_positions": [
+                    1,
+                    2
+                ],
+                "raid": 1,
+                "partitions": [
+                    {
+                        "target": "/boot",
+                        "size": 500,
+                        "fill": false,
+                        "fs": "ext4"
+                    }
+                ]
+            }
+        ]
+    },
+    "hosts": [
+        {
+            "hostname": "example.aa",
+            "public_ipv4_network_id": "PublicNet123",
+            "private_ipv4_network_id": "PrivateNet456",
+            "labels": {
+                "environment": "testing"
+            }
+        }
+    ]
+}

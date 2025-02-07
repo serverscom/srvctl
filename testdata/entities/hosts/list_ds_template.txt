@@ -1,0 +1,2 @@
+Title: example.aa  Type: dedicated_server
+Title: example.bb  Type: dedicated_server

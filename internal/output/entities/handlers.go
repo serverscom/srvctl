@@ -80,7 +80,7 @@ func mapHandler(w io.Writer, v interface{}, indent string, _ *Field) error {
 		pairs = append(pairs, fmt.Sprintf("%s%v=%v", indent, iter.Key(), iter.Value()))
 	}
 
-	_, err := fmt.Fprint(w, strings.Join(pairs, "\n\t"))
+	_, err := fmt.Fprint(w, strings.Join(pairs, "\n"))
 	return err
 }
 

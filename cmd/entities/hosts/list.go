@@ -9,7 +9,7 @@ import (
 )
 
 type hostListOptions struct {
-	base.BaseListOptions[serverscom.Host]
+	base.BaseLabelsListOptions[serverscom.Host]
 	rackID     string
 	locationID string
 }
@@ -27,8 +27,8 @@ func (o *hostListOptions) AddFlags(cmd *cobra.Command) {
 	}
 }
 
-func (o *hostListOptions) ApplyToCollection(collection serverscom.Collection[serverscom.Host], cmd *cobra.Command) {
-	o.BaseListOptions.ApplyToCollection(collection, cmd)
+func (o *hostListOptions) ApplyToCollection(collection serverscom.Collection[serverscom.Host]) {
+	o.BaseListOptions.ApplyToCollection(collection)
 
 	if o.rackID != "" {
 		collection.SetParam("rack_id", o.rackID)
@@ -38,8 +38,8 @@ func (o *hostListOptions) ApplyToCollection(collection serverscom.Collection[ser
 	}
 }
 
-func newListCmd(cmdContext *base.CmdContext, hostType *HostType) *cobra.Command {
-	factory := func(verbose bool) serverscom.Collection[serverscom.Host] {
+func newListCmd(cmdContext *base.CmdContext, hostType *HostTypeCmd) *cobra.Command {
+	factory := func(verbose bool, args ...string) serverscom.Collection[serverscom.Host] {
 		scClient := cmdContext.GetClient().SetVerbose(verbose).GetScClient()
 		collection := scClient.Hosts.Collection()
 
@@ -55,5 +55,5 @@ func newListCmd(cmdContext *base.CmdContext, hostType *HostType) *cobra.Command 
 		entityName = hostType.entityName
 	}
 
-	return base.NewListCmd(entityName, factory, cmdContext, &hostListOptions{})
+	return base.NewListCmd("list", entityName, factory, cmdContext, &hostListOptions{})
 }

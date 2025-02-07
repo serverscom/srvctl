@@ -1,0 +1,14 @@
+{
+    "sbm_flavor_model_id": 1234,
+    "location_id": 5678,
+    "hosts": [
+        {
+            "hostname": "example.aa",
+            "public_ipv4_network_id": "PublicNetTest123",
+            "private_ipv4_network_id": "PrivateNetTest456",
+            "labels": {
+                "environment": "testing"
+            }
+        }
+    ]
+}

@@ -76,3 +76,15 @@ func NewTestCmdContext(scClient *serverscom.Client) *base.CmdContext {
 	cli := client.NewWithClient(scClient)
 	return base.NewCmdContext(manager, cli)
 }
+
+func PtrInt64(i int64) *int64 {
+	return &i
+}
+
+func PtrInt(i int) *int {
+	return &i
+}
+
+func PtrString(s string) *string {
+	return &s
+}

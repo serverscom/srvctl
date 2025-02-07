@@ -11,13 +11,13 @@ import (
 )
 
 type HostCreator interface {
-	Create(ctx context.Context, client *serverscom.Client, input interface{}) (interface{}, error)
-	NewCreateInput() interface{}
+	Create(ctx context.Context, client *serverscom.Client, input any) (any, error)
+	NewCreateInput() any
 }
 
-type DedicatedServerCreator struct{}
+type DSCreateMgr struct{}
 
-func (c *DedicatedServerCreator) Create(ctx context.Context, client *serverscom.Client, input interface{}) (interface{}, error) {
+func (c *DSCreateMgr) Create(ctx context.Context, client *serverscom.Client, input any) (any, error) {
 	dsInput, ok := input.(*serverscom.DedicatedServerCreateInput)
 	if !ok {
 		return nil, fmt.Errorf("invalid input type for dedicated server")
@@ -25,13 +25,13 @@ func (c *DedicatedServerCreator) Create(ctx context.Context, client *serverscom.
 	return client.Hosts.CreateDedicatedServers(ctx, *dsInput)
 }
 
-func (c *DedicatedServerCreator) NewCreateInput() interface{} {
+func (c *DSCreateMgr) NewCreateInput() any {
 	return &serverscom.DedicatedServerCreateInput{}
 }
 
-type SBMServerCreator struct{}
+type SBMCreateMgr struct{}
 
-func (c *SBMServerCreator) Create(ctx context.Context, client *serverscom.Client, input interface{}) (interface{}, error) {
+func (c *SBMCreateMgr) Create(ctx context.Context, client *serverscom.Client, input any) (any, error) {
 	sbmInput, ok := input.(*serverscom.SBMServerCreateInput)
 	if !ok {
 		return nil, fmt.Errorf("invalid input type for SBM server")
@@ -39,16 +39,15 @@ func (c *SBMServerCreator) Create(ctx context.Context, client *serverscom.Client
 	return client.Hosts.CreateSBMServers(ctx, *sbmInput)
 }
 
-func (c *SBMServerCreator) NewCreateInput() interface{} {
+func (c *SBMCreateMgr) NewCreateInput() any {
 	return &serverscom.SBMServerCreateInput{}
 }
 
-func newAddCmd(cmdContext *base.CmdContext, hostType *HostType) *cobra.Command {
+func newAddCmd(cmdContext *base.CmdContext, hostType *HostTypeCmd) *cobra.Command {
 	var path string
 	cmd := &cobra.Command{
 		Use:   "add --input <path>",
-		Short: fmt.Sprintf("Create a new %s", hostType.entityName),
-		Long:  fmt.Sprintf("Create a new %s", hostType.entityName),
+		Short: fmt.Sprintf("Create a %s", hostType.entityName),
 		Args:  cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			manager := cmdContext.GetManager()
@@ -57,7 +56,7 @@ func newAddCmd(cmdContext *base.CmdContext, hostType *HostType) *cobra.Command {
 
 			base.SetupProxy(cmd, manager)
 
-			input := hostType.creator.NewCreateInput()
+			input := hostType.managers.createMgr.NewCreateInput()
 
 			if err := base.ReadInputJSON(path, cmd.InOrStdin(), input); err != nil {
 				return err
@@ -65,7 +64,7 @@ func newAddCmd(cmdContext *base.CmdContext, hostType *HostType) *cobra.Command {
 
 			scClient := cmdContext.GetClient().SetVerbose(manager.GetVerbose(cmd)).GetScClient()
 
-			server, err := hostType.creator.Create(ctx, scClient, input)
+			server, err := hostType.managers.createMgr.Create(ctx, scClient, input)
 			if err != nil {
 				return err
 			}
