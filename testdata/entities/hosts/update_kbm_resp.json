@@ -1,0 +1,32 @@
+{
+    "id": "testId",
+    "type": "kubernetes_baremetal_node",
+    "title": "example.aa",
+    "location_id": 0,
+    "location_code": "",
+    "status": "active",
+    "operational_status": "",
+    "power_status": "",
+    "configuration": "",
+    "private_ipv4_address": null,
+    "public_ipv4_address": null,
+    "scheduled_release_at": null,
+    "configuration_details": {
+        "ram_size": 0,
+        "server_model_id": null,
+        "server_model_name": null,
+        "public_uplink_id": null,
+        "public_uplink_name": null,
+        "private_uplink_id": null,
+        "private_uplink_name": null,
+        "bandwidth_id": null,
+        "bandwidth_name": null,
+        "operating_system_id": null,
+        "operating_system_full_name": null
+    },
+    "labels": {
+        "new": "label"
+    },
+    "created_at": "2025-01-01T12:00:00Z",
+    "updated_at": "2025-01-01T12:00:00Z"
+}

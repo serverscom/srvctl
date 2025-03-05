@@ -1,0 +1,30 @@
+{
+    "id": "testId",
+    "type": "dedicated_server",
+    "title": "example.aa",
+    "location_id": 0,
+    "location_code": "",
+    "status": "active",
+    "operational_status": "",
+    "power_status": "",
+    "configuration": "",
+    "private_ipv4_address": null,
+    "public_ipv4_address": null,
+    "scheduled_release_at": "2025-01-01T12:00:00Z",
+    "configuration_details": {
+        "ram_size": 0,
+        "server_model_id": null,
+        "server_model_name": null,
+        "public_uplink_id": null,
+        "public_uplink_name": null,
+        "private_uplink_id": null,
+        "private_uplink_name": null,
+        "bandwidth_id": null,
+        "bandwidth_name": null,
+        "operating_system_id": null,
+        "operating_system_full_name": null
+    },
+    "labels": null,
+    "created_at": "2025-01-01T12:00:00Z",
+    "updated_at": "2025-01-01T12:00:00Z"
+}

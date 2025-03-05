@@ -1,0 +1,27 @@
+id: testId
+type: sbm_server
+title: example.aa
+locationid: 0
+locationcode: ""
+status: active
+operationalstatus: ""
+powerstatus: ""
+configuration: ""
+privateipv4address: null
+publicipv4address: null
+scheduledrelease: null
+configurationdetails:
+    ramsize: 0
+    servermodelid: null
+    servermodelname: null
+    publicuplinkid: null
+    publicuplinkname: null
+    privateuplinkid: null
+    privateuplinkname: null
+    bandwidthid: null
+    bandwidthname: null
+    operatingsystemid: null
+    operatingsystemfullname: null
+labels: {}
+created: 2025-01-01T12:00:00Z
+updated: 2025-01-01T12:00:00Z

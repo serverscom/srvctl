@@ -14,6 +14,7 @@ import (
 	"github.com/serverscom/srvctl/internal/client"
 	"github.com/serverscom/srvctl/internal/config"
 	"github.com/serverscom/srvctl/internal/output"
+	"github.com/serverscom/srvctl/internal/output/entities"
 	"github.com/spf13/cobra"
 )
 
@@ -131,4 +132,16 @@ func ParseLabels(labels []string) (map[string]string, error) {
 // userAgent returns user agent string
 func userAgent(version string) string {
 	return fmt.Sprintf("srvctl/%s (%s %s)", version, runtime.GOOS, runtime.GOARCH)
+}
+
+// findEntity search entity by cmd name in entities map
+func findEntity(cmd *cobra.Command, entities map[string]entities.EntityInterface) entities.EntityInterface {
+	name := cmd.Name()
+	if entity, ok := entities[name]; ok {
+		return entity
+	}
+	if cmd.Parent() != nil {
+		return findEntity(cmd.Parent(), entities)
+	}
+	return nil
 }

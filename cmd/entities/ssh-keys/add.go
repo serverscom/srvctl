@@ -43,7 +43,7 @@ func newAddCmd(cmdContext *base.CmdContext) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&path, "input", "i", "", "/path/to/create-file.json or '-' to read from stdin")
+	cmd.Flags().StringVarP(&path, "input", "i", "", "path to input file or '-' to read from stdin")
 	if err := cmd.MarkFlagRequired("input"); err != nil {
 		log.Fatal(err)
 	}

@@ -14,16 +14,17 @@ func NewCmd(cmdContext *base.CmdContext) *cobra.Command {
 	if err != nil {
 		log.Fatal(err)
 	}
+	entitiesMap := make(map[string]entities.EntityInterface)
+	entitiesMap["ssh-keys"] = sshEntity
 	cmd := &cobra.Command{
 		Use:   "ssh-keys",
 		Short: "Manage ssh keys",
 		PersistentPreRunE: base.CombinePreRunE(
-			base.CheckFormatterFlags(cmdContext, sshEntity),
+			base.CheckFormatterFlags(cmdContext, entitiesMap),
 			base.CheckEmptyContexts(cmdContext),
 		),
-		// empty RunE to support flags for ssh-keys command itself
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return nil
+			return cmd.Help()
 		},
 	}
 
@@ -35,10 +36,7 @@ func NewCmd(cmdContext *base.CmdContext) *cobra.Command {
 		newDeleteCmd(cmdContext),
 	)
 
-	cmd.PersistentFlags().StringArrayP("field", "f", []string{}, "output only these fields, can be specified multiple times")
-	cmd.PersistentFlags().Bool("field-list", false, "list available fields")
-	cmd.PersistentFlags().Bool("page-view", false, "use page view format")
-	cmd.PersistentFlags().StringP("template", "t", "", "go template string to output in specified format")
+	base.AddFormatFlags(cmd)
 
 	return cmd
 }

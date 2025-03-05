@@ -54,10 +54,10 @@ func InitCmdContext(cmdContext *CmdContext) func(cmd *cobra.Command, args []stri
 }
 
 // CheckFormatterFlags checks flags related to formatter
-func CheckFormatterFlags(cmdContext *CmdContext, entity entities.EntityInterface) func(cmd *cobra.Command, args []string) error {
+func CheckFormatterFlags(cmdContext *CmdContext, entities map[string]entities.EntityInterface) func(cmd *cobra.Command, args []string) error {
 	return func(cmd *cobra.Command, args []string) error {
-		if entity == nil {
-			return fmt.Errorf("entity is not initialized")
+		if entities == nil {
+			return fmt.Errorf("entities is not initialized")
 		}
 		manager := cmdContext.GetManager()
 		formatter := cmdContext.GetOrCreateFormatter(cmd)
@@ -86,6 +86,10 @@ func CheckFormatterFlags(cmdContext *CmdContext, entity entities.EntityInterface
 			return err
 		}
 
+		entity := findEntity(cmd, entities)
+		if entity == nil {
+			return fmt.Errorf("can't find entity")
+		}
 		if fieldList {
 			formatter.ListEntityFields(entity.GetFields())
 			os.Exit(0)
