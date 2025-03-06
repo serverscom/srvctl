@@ -21,26 +21,26 @@ builds:
 dockers:
   - build_flag_templates: [--platform=linux/amd64]
     image_templates:
-      - "ghcr.io/serverscom/srvctl:{{ if not .IsSnapshot }}v{{ end }}{{ .Version }}-amd64"
-      - "ghcr.io/serverscom/srvctl:latest-amd64"
+      - "ghcr.io/serverscom/{{ .ProjectName }}:{{ if not .IsSnapshot }}v{{ end }}{{ .Version }}-amd64"
+      - "ghcr.io/serverscom/{{ .ProjectName }}:latest-amd64"
     dockerfile: Dockerfile
     use: buildx
   - build_flag_templates: [--platform=linux/arm64]
     image_templates:
-      - "ghcr.io/serverscom/srvctl:{{ if not .IsSnapshot }}v{{ end }}{{ .Version }}-arm64"
-      - "ghcr.io/serverscom/srvctl:latest-arm64"
+      - "ghcr.io/serverscom/{{ .ProjectName }}:{{ if not .IsSnapshot }}v{{ end }}{{ .Version }}-arm64"
+      - "ghcr.io/serverscom/{{ .ProjectName }}:latest-arm64"
     dockerfile: Dockerfile
     use: buildx
 
 docker_manifests:
-  - name_template: "ghcr.io/serverscom/srvctl:{{ if not .IsSnapshot }}v{{ end }}{{ .Version }}"
+  - name_template: "ghcr.io/serverscom/{{ .ProjectName }}:{{ if not .IsSnapshot }}v{{ end }}{{ .Version }}"
     image_templates:
-      - "ghcr.io/serverscom/srvctl:{{ if not .IsSnapshot }}v{{ end }}{{ .Version }}-amd64"
-      - "ghcr.io/serverscom/srvctl:{{ if not .IsSnapshot }}v{{ end }}{{ .Version }}-arm64"
-  - name_template: "ghcr.io/serverscom/srvctl:latest"
+      - "ghcr.io/serverscom/{{ .ProjectName }}:{{ if not .IsSnapshot }}v{{ end }}{{ .Version }}-amd64"
+      - "ghcr.io/serverscom/{{ .ProjectName }}:{{ if not .IsSnapshot }}v{{ end }}{{ .Version }}-arm64"
+  - name_template: "ghcr.io/serverscom/{{ .ProjectName }}:latest"
     image_templates:
-      - "ghcr.io/serverscom/srvctl:latest-amd64"
-      - "ghcr.io/serverscom/srvctl:latest-arm64"
+      - "ghcr.io/serverscom/{{ .ProjectName }}:latest-amd64"
+      - "ghcr.io/serverscom/{{ .ProjectName }}:latest-arm64"
 
 archives:
   - format: zip
