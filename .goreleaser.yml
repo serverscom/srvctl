@@ -17,6 +17,33 @@ builds:
     goarch:
       - amd64
       - arm64
+
+dockers:
+  - image_templates:
+      - "ghcr.io/{{ .RepoOwner }}/{{ .ProjectName }}:{{ if not .IsSnapshot }}v{{ end }}{{ .Version }}-amd64"
+      - "ghcr.io/{{ .RepoOwner }}/{{ .ProjectName }}:latest-amd64"
+    dockerfile: Dockerfile
+    use: buildx
+    build_flag:
+      - "--platform=linux/amd64"
+  - image_templates:
+      - "ghcr.io/{{ .RepoOwner }}/{{ .ProjectName }}:{{ if not .IsSnapshot }}v{{ end }}{{ .Version }}-arm64"
+      - "ghcr.io/{{ .RepoOwner }}/{{ .ProjectName }}:latest-arm64"
+    dockerfile: Dockerfile
+    use: buildx
+    build_flag:
+      - "--platform=linux/arm64"
+
+docker_manifests:
+  - name_template: "ghcr.io/{{ .RepoOwner }}/{{ .ProjectName }}:{{ if not .IsSnapshot }}v{{ end }}{{ .Version }}"
+    image_templates:
+      - "ghcr.io/{{ .RepoOwner }}/{{ .ProjectName }}:{{ if not .IsSnapshot }}v{{ end }}{{ .Version }}-amd64"
+      - "ghcr.io/{{ .RepoOwner }}/{{ .ProjectName }}:{{ if not .IsSnapshot }}v{{ end }}{{ .Version }}-arm64"
+  - name_template: "ghcr.io/{{ .RepoOwner }}/{{ .ProjectName }}:latest"
+    image_templates:
+      - "ghcr.io/{{ .RepoOwner }}/{{ .ProjectName }}:latest-amd64"
+      - "ghcr.io/{{ .RepoOwner }}/{{ .ProjectName }}:latest-arm64"
+
 archives:
   - format: zip
     name_template: >-
