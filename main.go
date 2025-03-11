@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 
 	"github.com/serverscom/srvctl/cmd"
 )
@@ -18,7 +17,5 @@ func main() {
 	}
 	rootCmd := cmd.NewRootCmd(version)
 
-	if err := rootCmd.Execute(); err != nil {
-		log.Fatal(err)
-	}
+	_ = rootCmd.Execute()
 }

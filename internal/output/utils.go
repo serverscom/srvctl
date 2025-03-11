@@ -118,7 +118,7 @@ func processValue(value reflect.Value, processor func(any) error) error {
 
 	switch value.Kind() {
 	case reflect.Slice:
-		for i := 0; i < value.Len(); i++ {
+		for i := range value.Len() {
 			if err := processor(value.Index(i).Interface()); err != nil {
 				return err
 			}
@@ -134,7 +134,7 @@ func (f *Formatter) formatRow(w io.Writer, item any, fields []entities.Field) er
 	values := make([]string, 0, len(fields))
 
 	for _, field := range fields {
-		fieldValue, err := utils.GetFieldValue(item, field.Path)
+		fieldValue, err := utils.GetFieldValue(item, field.GetPath())
 		if err != nil {
 			return err
 		}
@@ -169,7 +169,7 @@ func (f *Formatter) formatPageView(v any, entity entities.EntityInterface) error
 
 	switch value.Kind() {
 	case reflect.Slice:
-		for i := 0; i < value.Len(); i++ {
+		for i := range value.Len() {
 			if err := f.formatPageViewItem(w, value.Index(i).Interface(), orderedFields); err != nil {
 				return err
 			}
