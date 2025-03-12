@@ -23,9 +23,8 @@ func NewCmd(cmdContext *base.CmdContext) *cobra.Command {
 			base.CheckFormatterFlags(cmdContext, entitiesMap),
 			base.CheckEmptyContexts(cmdContext),
 		),
-		RunE: func(cmd *cobra.Command, args []string) error {
-			return cmd.Help()
-		},
+		Args: base.NoArgs,
+		Run:  base.UsageRun,
 	}
 
 	cmd.AddCommand(

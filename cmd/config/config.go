@@ -15,13 +15,19 @@ func NewCmd(cmdContext *base.CmdContext) *cobra.Command {
 		Short:             "Manage configuration",
 		Long:              `Manage global and context-specific configurations`,
 		PersistentPreRunE: base.CheckEmptyContexts(cmdContext),
+		Args:              base.NoArgs,
+		Run:               base.UsageRun,
 	}
 
 	globalCmd := &cobra.Command{
-		Use: "global",
+		Use:  "global",
+		Args: base.NoArgs,
+		Run:  base.UsageRun,
 	}
 	contextCmd := &cobra.Command{
-		Use: "context",
+		Use:  "context",
+		Args: base.NoArgs,
+		Run:  base.UsageRun,
 	}
 
 	globalCmd.AddCommand(newUpdateCmd(cmdContext))
