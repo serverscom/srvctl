@@ -90,6 +90,10 @@ func CheckFormatterFlags(cmdContext *CmdContext, entities map[string]entities.En
 		if entity == nil {
 			return fmt.Errorf("can't find entity")
 		}
+		if err := entity.SetCmdDefaultFields(cmd.Name()); err != nil {
+			return err
+		}
+
 		if fieldList {
 			formatter.ListEntityFields(entity.GetFields())
 			os.Exit(0)
