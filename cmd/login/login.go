@@ -35,7 +35,7 @@ Example: srvctl login context-name`,
 		Args: cobra.MaximumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if !term.IsTerminal(int(os.Stdout.Fd())) {
-				return errors.New("TTY required to enter the password.")
+				return errors.New("TTY required to enter the token.")
 			}
 			manager := cmdContext.GetManager()
 
