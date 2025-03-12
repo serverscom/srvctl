@@ -146,7 +146,7 @@ func findEntity(cmd *cobra.Command, entities map[string]entities.EntityInterface
 	return nil
 }
 
-func UsageRun(cmd *cobra.Command, args []string) { cmd.Usage() }
+func UsageRun(cmd *cobra.Command, args []string) { _ = cmd.Usage() }
 
 func NoArgs(cmd *cobra.Command, args []string) error {
 	if len(args) > 0 {
