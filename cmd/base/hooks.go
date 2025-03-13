@@ -7,7 +7,6 @@ import (
 	"strings"
 
 	"github.com/serverscom/srvctl/internal/client"
-	"github.com/serverscom/srvctl/internal/config"
 	"github.com/serverscom/srvctl/internal/output"
 	"github.com/serverscom/srvctl/internal/output/entities"
 	"github.com/spf13/cobra"
@@ -33,7 +32,7 @@ func InitCmdContext(cmdContext *CmdContext) func(cmd *cobra.Command, args []stri
 			return err
 		}
 
-		m, err := config.NewManager(configPath)
+		m, err := setupConfigManager(configPath)
 		if err != nil {
 			return fmt.Errorf("failed to initialize config manager: %w", err)
 		}
@@ -115,7 +114,7 @@ func CheckEmptyContexts(cmdContext *CmdContext) func(cmd *cobra.Command, args []
 		manager := cmdContext.GetManager()
 
 		if len(manager.GetContexts()) == 0 {
-			return fmt.Errorf("no contexts found")
+			return fmt.Errorf("no contexts found, log in first: 'srvctl login <context-name>'")
 		}
 		return nil
 	}

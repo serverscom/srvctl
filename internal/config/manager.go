@@ -38,8 +38,8 @@ func NewManager(configPath string) (*Manager, error) {
 	return m, nil
 }
 
-// NewTestManager returns a new Manager for testing purposes
-func NewTestManager(config *Config) *Manager {
+// NewManagerWithConfig returns a new Manager with specified config
+func NewManagerWithConfig(config *Config) *Manager {
 	if config == nil {
 		return &Manager{
 			configPath: "/dev/null",

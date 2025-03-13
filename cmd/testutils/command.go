@@ -65,7 +65,7 @@ func NewTestCmd() *cobra.Command {
 }
 
 func NewTestCmdContext(scClient *serverscom.Client) *base.CmdContext {
-	manager := config.NewTestManager(&config.Config{
+	manager := config.NewManagerWithConfig(&config.Config{
 		DefaultContext: "test",
 		Contexts: []config.Context{
 			{
