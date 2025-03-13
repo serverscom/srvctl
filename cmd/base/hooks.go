@@ -32,14 +32,24 @@ func InitCmdContext(cmdContext *CmdContext) func(cmd *cobra.Command, args []stri
 			return err
 		}
 
-		m, err := setupConfigManager(configPath)
+		context, err := cmd.Flags().GetString("context")
+		if err != nil {
+			return err
+		}
+
+		m, err := setupConfigManager(configPath, context)
 		if err != nil {
 			return fmt.Errorf("failed to initialize config manager: %w", err)
 		}
+		if context != "" {
+			if _, err := m.GetContext(context); err != nil {
+				return fmt.Errorf("context %q not found in config", context)
+			}
+		}
 
 		c := client.NewClient(
-			m.GetToken(),
-			m.GetEndpoint(),
+			m.GetToken(context),
+			m.GetEndpoint(context),
 		)
 		version := cmd.Root().Version
 		c.SetUserAgent(userAgent(version))
