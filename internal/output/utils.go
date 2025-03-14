@@ -98,11 +98,13 @@ func (f *Formatter) formatText(v any) error {
 
 	orderedFields := f.getOrderedFields(entity)
 
-	headers := make([]string, 0, len(orderedFields))
-	for _, field := range orderedFields {
-		headers = append(headers, field.GetName())
+	if f.header {
+		headers := make([]string, 0, len(orderedFields))
+		for _, field := range orderedFields {
+			headers = append(headers, field.GetName())
+		}
+		fmt.Fprintln(w, strings.Join(headers, "\t"))
 	}
-	fmt.Fprintln(w, strings.Join(headers, "\t"))
 
 	value := reflect.ValueOf(v)
 	return processValue(value, func(item any) error {
