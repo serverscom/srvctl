@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"reflect"
+	"slices"
 )
 
 // RegistryInterface represents the interface for the EntityRegistry
@@ -20,13 +21,15 @@ type EntityInterface interface {
 	GetType() reflect.Type
 	GetDefaultFields() []string
 	GetFields() []Field
-	Validate([]string) error
+	Validate(fields []string) error
+	SetCmdDefaultFields(cmd string) error
 }
 
 // Entity represents the base entity structure
 type Entity struct {
-	fields []Field
-	eType  reflect.Type
+	fields           []Field
+	cmdDefaultFields map[string][]string
+	eType            reflect.Type
 }
 
 // HandlerFunc represents a handler function for rendering fields
@@ -128,6 +131,28 @@ func (e *Entity) Validate(fields []string) error {
 		}
 	}
 
+	return nil
+}
+
+// SetCmdDefaultFields sets the default fields for an entity based on cmd
+func (e *Entity) SetCmdDefaultFields(cmd string) error {
+	if defaultFields, ok := e.cmdDefaultFields[cmd]; ok {
+		fieldSet := make(map[string]struct{}, len(e.fields))
+		for i, f := range e.fields {
+			e.fields[i].Default = false
+			fieldSet[f.ID] = struct{}{}
+		}
+
+		for _, df := range defaultFields {
+			if _, exists := fieldSet[df]; !exists {
+				return fmt.Errorf("can't find field %s in entity field set", df)
+			}
+		}
+
+		for i := range e.fields {
+			e.fields[i].Default = slices.Contains(defaultFields, e.fields[i].ID)
+		}
+	}
 	return nil
 }
 
