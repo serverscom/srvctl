@@ -145,3 +145,13 @@ func findEntity(cmd *cobra.Command, entities map[string]entities.EntityInterface
 	}
 	return nil
 }
+
+func UsageRun(cmd *cobra.Command, args []string) { _ = cmd.Usage() }
+
+func NoArgs(cmd *cobra.Command, args []string) error {
+	if len(args) > 0 {
+		helpStr := fmt.Sprintf("Run '%v --help' for usage.", cmd.CommandPath())
+		return fmt.Errorf("unknown command %q for %q\n%s", args[0], cmd.CommandPath(), helpStr)
+	}
+	return nil
+}

@@ -3,6 +3,7 @@ module github.com/serverscom/srvctl
 go 1.23.0
 
 require (
+	github.com/creack/pty v1.1.24
 	github.com/jmespath/go-jmespath v0.4.0
 	github.com/onsi/gomega v1.36.2
 	github.com/serverscom/serverscom-go-client v1.0.10
