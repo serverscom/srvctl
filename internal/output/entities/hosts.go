@@ -12,6 +12,10 @@ var (
 	DedicatedServerType         = reflect.TypeOf(serverscom.DedicatedServer{})
 	KubernetesBaremetalNodeType = reflect.TypeOf(serverscom.KubernetesBaremetalNode{})
 	SBMServerType               = reflect.TypeOf(serverscom.SBMServer{})
+	HostListDefaultFields       = []string{"ID", "Type", "Title", "Status"}
+	CmdDefaultFields            = map[string][]string{
+		"list": HostListDefaultFields,
+	}
 )
 
 func getConfigurationDetailsField() Field {
@@ -57,7 +61,8 @@ func RegisterHostDefinition() {
 			{ID: "Created", Name: "Created", Path: "Created", ListHandlerFunc: timeHandler, PageViewHandlerFunc: timeHandler, Default: true},
 			{ID: "Updated", Name: "Updated", Path: "Updated", ListHandlerFunc: timeHandler, PageViewHandlerFunc: timeHandler, Default: true},
 		},
-		eType: HostType,
+		cmdDefaultFields: CmdDefaultFields,
+		eType:            HostType,
 	}
 	if err := Registry.Register(hostEntity); err != nil {
 		log.Fatal(err)
@@ -84,7 +89,8 @@ func RegisterDedicatedServerDefinition() {
 			{ID: "Updated", Name: "Updated", Path: "Updated", ListHandlerFunc: timeHandler, PageViewHandlerFunc: timeHandler, Default: true},
 			getConfigurationDetailsField(),
 		},
-		eType: DedicatedServerType,
+		cmdDefaultFields: CmdDefaultFields,
+		eType:            DedicatedServerType,
 	}
 	if err := Registry.Register(serverEntity); err != nil {
 		log.Fatal(err)
@@ -111,7 +117,8 @@ func RegisterKubernetesBaremetalNodeDefinition() {
 			{ID: "Updated", Name: "Updated", Path: "Updated", ListHandlerFunc: timeHandler, PageViewHandlerFunc: timeHandler, Default: true},
 			getConfigurationDetailsField(),
 		},
-		eType: KubernetesBaremetalNodeType,
+		cmdDefaultFields: CmdDefaultFields,
+		eType:            KubernetesBaremetalNodeType,
 	}
 	if err := Registry.Register(serverEntity); err != nil {
 		log.Fatal(err)
@@ -138,7 +145,8 @@ func RegisterSBMServerDefinition() {
 			{ID: "Updated", Name: "Updated", Path: "Updated", ListHandlerFunc: timeHandler, PageViewHandlerFunc: timeHandler, Default: true},
 			getConfigurationDetailsField(),
 		},
-		eType: SBMServerType,
+		cmdDefaultFields: CmdDefaultFields,
+		eType:            SBMServerType,
 	}
 	if err := Registry.Register(serverEntity); err != nil {
 		log.Fatal(err)
