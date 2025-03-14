@@ -7,7 +7,6 @@ import (
 	"strings"
 
 	"github.com/serverscom/srvctl/internal/client"
-	"github.com/serverscom/srvctl/internal/config"
 	"github.com/serverscom/srvctl/internal/output"
 	"github.com/serverscom/srvctl/internal/output/entities"
 	"github.com/spf13/cobra"
@@ -33,14 +32,24 @@ func InitCmdContext(cmdContext *CmdContext) func(cmd *cobra.Command, args []stri
 			return err
 		}
 
-		m, err := config.NewManager(configPath)
+		context, err := cmd.Flags().GetString("context")
+		if err != nil {
+			return err
+		}
+
+		m, err := setupConfigManager(configPath, context)
 		if err != nil {
 			return fmt.Errorf("failed to initialize config manager: %w", err)
 		}
+		if context != "" {
+			if _, err := m.GetContext(context); err != nil {
+				return fmt.Errorf("context %q not found in config", context)
+			}
+		}
 
 		c := client.NewClient(
-			m.GetToken(),
-			m.GetEndpoint(),
+			m.GetToken(context),
+			m.GetEndpoint(context),
 		)
 		version := cmd.Root().Version
 		c.SetUserAgent(userAgent(version))
@@ -119,7 +128,7 @@ func CheckEmptyContexts(cmdContext *CmdContext) func(cmd *cobra.Command, args []
 		manager := cmdContext.GetManager()
 
 		if len(manager.GetContexts()) == 0 {
-			return fmt.Errorf("no contexts found")
+			return fmt.Errorf("no contexts found, log in first: 'srvctl login <context-name>'")
 		}
 		return nil
 	}

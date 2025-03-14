@@ -146,6 +146,34 @@ func findEntity(cmd *cobra.Command, entities map[string]entities.EntityInterface
 	return nil
 }
 
+func setupConfigManager(configPath string, context string) (*config.Manager, error) {
+	token := os.Getenv("SC_TOKEN")
+	endpoint := os.Getenv("SC_ENDPOINT")
+
+	if token != "" && context == "" {
+		if endpoint == "" {
+			endpoint = ENDPOINT
+		}
+		return config.NewManagerWithConfig(&config.Config{
+			DefaultContext: "default",
+			Contexts: []config.Context{
+				{
+					Name:     "default",
+					Token:    token,
+					Endpoint: endpoint,
+				},
+			},
+		}), nil
+	}
+
+	m, err := config.NewManager(configPath)
+	if err != nil {
+		return nil, fmt.Errorf("failed to initialize config manager: %w", err)
+	}
+
+	return m, nil
+}
+
 func UsageRun(cmd *cobra.Command, args []string) { _ = cmd.Usage() }
 
 func NoArgs(cmd *cobra.Command, args []string) error {

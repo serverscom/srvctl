@@ -45,7 +45,7 @@ Example: srvctl login context-name`,
 			} else {
 				contextName = manager.GetDefaultContextName()
 				if contextName == "" {
-					return errors.New("no contexts found")
+					return fmt.Errorf("no contexts found, log in first: 'srvctl login <context-name>'")
 				}
 			}
 
@@ -108,7 +108,7 @@ Example: srvctl login context-name`,
 	}
 
 	cmd.Flags().BoolVarP(&force, "force", "f", false, "Force override existing context")
-	cmd.Flags().StringVar(&endpoint, "endpoint", "https://api.servers.com/v1", "API endpoint")
+	cmd.Flags().StringVar(&endpoint, "endpoint", base.ENDPOINT, "API endpoint")
 	cmd.Flags().BoolVarP(&setDefault, "default", "d", true, "Set as default context")
 
 	return cmd

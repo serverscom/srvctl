@@ -38,8 +38,8 @@ func NewManager(configPath string) (*Manager, error) {
 	return m, nil
 }
 
-// NewTestManager returns a new Manager for testing purposes
-func NewTestManager(config *Config) *Manager {
+// NewManagerWithConfig returns a new Manager with specified config
+func NewManagerWithConfig(config *Config) *Manager {
 	if config == nil {
 		return &Manager{
 			configPath: "/dev/null",
@@ -218,9 +218,12 @@ func (m *Manager) UpdateContextConfig(contextName string, configOptions ConfigOp
 	return nil
 }
 
-// GetToken returns token for default context
-func (m *Manager) GetToken() string {
+// GetToken returns token for specified context or for default context if empty context passed
+func (m *Manager) GetToken(context string) string {
 	ctx := m.config.DefaultContext
+	if context != "" {
+		ctx = context
+	}
 
 	if ctx == "" && len(m.config.Contexts) > 0 {
 		return m.config.Contexts[0].Token
@@ -235,9 +238,12 @@ func (m *Manager) GetToken() string {
 	return ""
 }
 
-// GetEndpoint returns endpoint for default context
-func (m *Manager) GetEndpoint() string {
+// GetEndpoint returns endpoint for specified context or for default context if empty context passed
+func (m *Manager) GetEndpoint(context string) string {
 	ctx := m.config.DefaultContext
+	if context != "" {
+		ctx = context
+	}
 
 	if ctx == "" && len(m.config.Contexts) > 0 {
 		return m.config.Contexts[0].Endpoint
