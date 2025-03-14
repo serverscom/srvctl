@@ -2,10 +2,12 @@ package login
 
 import (
 	"io"
+	"os"
 	"path/filepath"
 	"strings"
 	"testing"
 
+	"github.com/creack/pty"
 	. "github.com/onsi/gomega"
 	serverscom "github.com/serverscom/serverscom-go-client/pkg"
 	"github.com/serverscom/srvctl/cmd/testutils"
@@ -26,6 +28,7 @@ func TestLoginCmd(t *testing.T) {
 		configureMock  func(*mocks.MockCollection[serverscom.Host])
 		expectedOutput []byte
 		expectError    bool
+		tty            bool
 	}{
 		{
 			name:        "login with empty token",
@@ -43,6 +46,7 @@ func TestLoginCmd(t *testing.T) {
 					List(gomock.Any()).
 					Return([]serverscom.Host{}, nil)
 			},
+			tty: true,
 		},
 		{
 			name:           "login with force",
@@ -54,11 +58,19 @@ func TestLoginCmd(t *testing.T) {
 					List(gomock.Any()).
 					Return([]serverscom.Host{}, nil)
 			},
+			tty: true,
 		},
 		{
 			name:        "login with invalid context name",
 			args:        []string{"_invalid"},
 			expectError: true,
+		},
+		{
+			name:        "no TTY",
+			args:        []string{"notty"},
+			input:       strings.NewReader("token\n"),
+			expectError: true,
+			tty:         false,
 		},
 	}
 
@@ -91,6 +103,18 @@ func TestLoginCmd(t *testing.T) {
 
 			if tc.configureMock != nil {
 				tc.configureMock(collectionHandler)
+			}
+			if tc.tty {
+				ptmx, tty, err := pty.Open()
+				if err != nil {
+					t.Fatalf("failed to open pty: %v", err)
+				}
+				defer ptmx.Close()
+				defer tty.Close()
+
+				oldStdout := os.Stdout
+				defer func() { os.Stdout = oldStdout }()
+				os.Stdout = tty
 			}
 
 			loginCmd := NewCmd(testCmdContext, testClientFactory)

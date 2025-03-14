@@ -19,6 +19,7 @@ type Formatter struct {
 	pageView     bool
 	fieldsToShow []string
 	fieldList    bool
+	header       bool
 }
 
 // NewFormatter creates new formatter with specified io.Writer
@@ -28,6 +29,7 @@ func NewFormatter(cmd *cobra.Command, manager *config.Manager) *Formatter {
 	template, _ := manager.GetResolvedStringValue(cmd, "template")
 	fields, _ := manager.GetResolvedStringSliceValue(cmd, "field")
 	fieldList, _ := manager.GetResolvedBoolValue(cmd, "field-list")
+	noHeader, _ := manager.GetResolvedBoolValue(cmd, "no-header")
 
 	return &Formatter{
 		writer:       cmd.OutOrStdout(),
@@ -36,6 +38,7 @@ func NewFormatter(cmd *cobra.Command, manager *config.Manager) *Formatter {
 		pageView:     pageView,
 		fieldsToShow: fields,
 		fieldList:    fieldList,
+		header:       !noHeader,
 	}
 }
 

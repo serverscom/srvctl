@@ -84,7 +84,7 @@ func mapHandler(w io.Writer, v interface{}, indent string, _ *Field) error {
 	return err
 }
 
-func structPVHandler(w io.Writer, v interface{}, indent string, f *Field) error {
+func structPVHandler(w io.Writer, v any, indent string, f *Field) error {
 	if v == nil {
 		fmt.Fprintf(w, "\t<none>")
 		return nil

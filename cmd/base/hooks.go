@@ -62,9 +62,27 @@ func CheckFormatterFlags(cmdContext *CmdContext, entities map[string]entities.En
 		manager := cmdContext.GetManager()
 		formatter := cmdContext.GetOrCreateFormatter(cmd)
 
+		fieldList, err := manager.GetResolvedBoolValue(cmd, "field-list")
+		if err != nil {
+			return err
+		}
+
+		entity := findEntity(cmd, entities)
+		if entity == nil {
+			return fmt.Errorf("can't find entity")
+		}
+		if fieldList {
+			formatter.ListEntityFields(entity.GetFields())
+			os.Exit(0)
+		}
+
 		output := formatter.GetOutput()
-		if output == "json" || output == "yaml" {
+		switch output {
+		case "json", "yaml":
 			return nil
+		case "text":
+		default:
+			return fmt.Errorf("invalid output %q, allowed values: json, text, yaml", output)
 		}
 
 		tmpl := formatter.GetTemplateStr()
@@ -79,24 +97,6 @@ func CheckFormatterFlags(cmdContext *CmdContext, entities map[string]entities.En
 			}
 			formatter.SetTemplate(t)
 			return nil
-		}
-
-		fieldList, err := manager.GetResolvedBoolValue(cmd, "field-list")
-		if err != nil {
-			return err
-		}
-
-		entity := findEntity(cmd, entities)
-		if entity == nil {
-			return fmt.Errorf("can't find entity")
-		}
-		if err := entity.SetCmdDefaultFields(cmd.Name()); err != nil {
-			return err
-		}
-
-		if fieldList {
-			formatter.ListEntityFields(entity.GetFields())
-			os.Exit(0)
 		}
 
 		fields, err := manager.GetResolvedStringSliceValue(cmd, "field")

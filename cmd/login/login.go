@@ -2,6 +2,7 @@ package login
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
 	"io"
 	"log"
@@ -33,6 +34,9 @@ func NewCmd(cmdContext *base.CmdContext, clientFactory client.ClientFactory) *co
 Example: srvctl login context-name`,
 		Args: cobra.MaximumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
+			if !term.IsTerminal(int(os.Stdout.Fd())) {
+				return errors.New("TTY required to enter the token.")
+			}
 			manager := cmdContext.GetManager()
 
 			var contextName string
@@ -41,7 +45,7 @@ Example: srvctl login context-name`,
 			} else {
 				contextName = manager.GetDefaultContextName()
 				if contextName == "" {
-					return fmt.Errorf("no contexts found")
+					return errors.New("no contexts found")
 				}
 			}
 

@@ -22,6 +22,7 @@ func NewRootCmd(version string) *cobra.Command {
 		Long:              `A command line interface for managing servers.com resources`,
 		Version:           version,
 		PersistentPreRunE: base.InitCmdContext(cmdContext),
+		SilenceUsage:      true,
 	}
 
 	// Global flags

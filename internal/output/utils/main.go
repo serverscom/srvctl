@@ -17,7 +17,7 @@ func Humanize(input string) string {
 }
 
 // GetFieldValue returns the value of a given field for an item.
-func GetFieldValue(item interface{}, jsonPath string) (interface{}, error) {
+func GetFieldValue(item any, jsonPath string) (any, error) {
 	if jsonPath == "" || jsonPath == "." {
 		return item, nil
 	}
