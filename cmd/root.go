@@ -6,6 +6,7 @@ import (
 	"github.com/serverscom/srvctl/cmd/context"
 	"github.com/serverscom/srvctl/cmd/entities/hosts"
 	sshkeys "github.com/serverscom/srvctl/cmd/entities/ssh-keys"
+	"github.com/serverscom/srvctl/cmd/entities/ssl"
 	"github.com/serverscom/srvctl/cmd/login"
 	"github.com/serverscom/srvctl/internal/client"
 	"github.com/spf13/cobra"
@@ -38,6 +39,7 @@ func NewRootCmd(version string) *cobra.Command {
 	// resources comands
 	cmd.AddCommand(sshkeys.NewCmd(cmdContext))
 	cmd.AddCommand(hosts.NewCmd(cmdContext))
+	cmd.AddCommand(ssl.NewCmd(cmdContext))
 
 	return cmd
 }
