@@ -9,7 +9,7 @@ import (
 )
 
 type hostListOptions struct {
-	base.BaseLabelsListOptions[serverscom.Host]
+	base.BaseListOptions[serverscom.Host]
 	rackID     string
 	locationID string
 }
@@ -50,10 +50,16 @@ func newListCmd(cmdContext *base.CmdContext, hostType *HostTypeCmd) *cobra.Comma
 		return collection
 	}
 
+	opts := base.NewListOptions(
+		&hostListOptions{},
+		&base.LabelSelectorOption[serverscom.Host]{},
+		&base.SearchPatternOption[serverscom.Host]{},
+	)
+
 	entityName := "Hosts"
 	if hostType != nil {
 		entityName = hostType.entityName
 	}
 
-	return base.NewListCmd("list", entityName, factory, cmdContext, &hostListOptions{})
+	return base.NewListCmd("list", entityName, factory, cmdContext, opts...)
 }

@@ -12,7 +12,11 @@ func newListCmd(cmdContext *base.CmdContext) *cobra.Command {
 		return scClient.SSLCertificates.Collection()
 	}
 
-	opts := &base.BaseLabelsListOptions[serverscom.SSLCertificate]{}
+	opts := base.NewListOptions(
+		&base.BaseListOptions[serverscom.SSLCertificate]{},
+		&base.LabelSelectorOption[serverscom.SSLCertificate]{},
+		&base.SearchPatternOption[serverscom.SSLCertificate]{},
+	)
 
-	return base.NewListCmd("list", "SSL Certificates", factory, cmdContext, opts)
+	return base.NewListCmd("list", "SSL Certificates", factory, cmdContext, opts...)
 }
