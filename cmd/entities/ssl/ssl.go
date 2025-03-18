@@ -30,7 +30,7 @@ func NewCmd(cmdContext *base.CmdContext) *cobra.Command {
 	cmd.AddCommand(
 		newListCmd(cmdContext),
 		// newAddCmd(cmdContext),
-		// newGetCmd(cmdContext),
+		newGetCmd(cmdContext),
 		// newUpdateCmd(cmdContext),
 		// newDeleteCmd(cmdContext),
 	)

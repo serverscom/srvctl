@@ -11,5 +11,6 @@ func init() {
 	RegisterDedicatedServerDefinition()
 	RegisterKubernetesBaremetalNodeDefinition()
 	RegisterSBMServerDefinition()
-	RegisterSSLCertKeyDefinition()
+	RegisterSSLCertDefinition()
+	RegisterSSLCertCustomDefinition()
 }

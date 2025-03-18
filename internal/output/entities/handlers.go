@@ -62,7 +62,7 @@ func timeHandler(w io.Writer, v any, indent string, _ *Field) error {
 	}
 }
 
-func mapHandler(w io.Writer, v interface{}, indent string, _ *Field) error {
+func mapPvHandler(w io.Writer, v any, indent string, _ *Field) error {
 	if v == nil {
 		_, err := fmt.Fprintf(w, "%s<none>", indent)
 		return err
@@ -113,4 +113,25 @@ func structPVHandler(w io.Writer, v any, indent string, f *Field) error {
 	}
 
 	return nil
+}
+
+func slicePvHandler(w io.Writer, v any, indent string, _ *Field) error {
+	if v == nil {
+		_, err := fmt.Fprintf(w, "%s<none>", indent)
+		return err
+	}
+
+	slice, ok := v.([]string)
+	if !ok || len(slice) == 0 {
+		_, err := fmt.Fprintf(w, "%s<empty>", indent)
+		return err
+	}
+
+	lines := make([]string, 0, len(slice))
+	for _, item := range slice {
+		lines = append(lines, fmt.Sprintf("%s%s", indent, item))
+	}
+
+	_, err := fmt.Fprint(w, strings.Join(lines, "\n"))
+	return err
 }
