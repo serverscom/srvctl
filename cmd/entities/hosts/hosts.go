@@ -119,7 +119,7 @@ func newHostTypeCmd(cmdContext *base.CmdContext, hostTypeCmd HostTypeCmd) *cobra
 	hostCmd.AddCommand(newListCmd(cmdContext, &hostTypeCmd))
 	hostCmd.AddCommand(newGetCmd(cmdContext, &hostTypeCmd))
 
-	if hostTypeCmd.managers.getMgr != nil {
+	if hostTypeCmd.managers.createMgr != nil {
 		hostCmd.AddCommand(newAddCmd(cmdContext, &hostTypeCmd))
 	}
 	if hostTypeCmd.managers.powerMgr != nil {
@@ -144,6 +144,7 @@ func getHostsEntities() (map[string]entities.EntityInterface, error) {
 		return nil, err
 	}
 	result["hosts"] = hostsEntity
+	result["list"] = hostsEntity
 
 	dsEntity, err := entities.Registry.GetEntityFromValue(serverscom.DedicatedServer{})
 	if err != nil {
