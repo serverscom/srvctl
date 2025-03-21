@@ -13,4 +13,5 @@ func init() {
 	RegisterSBMServerDefinition()
 	RegisterSSLCertDefinition()
 	RegisterSSLCertCustomDefinition()
+	RegisterSSLCertLeDefinition()
 }

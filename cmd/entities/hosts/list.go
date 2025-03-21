@@ -1,8 +1,6 @@
 package hosts
 
 import (
-	"log"
-
 	serverscom "github.com/serverscom/serverscom-go-client/pkg"
 	"github.com/serverscom/srvctl/cmd/base"
 	"github.com/spf13/cobra"
@@ -20,11 +18,6 @@ func (o *hostListOptions) AddFlags(cmd *cobra.Command) {
 	flags := cmd.Flags()
 	flags.StringVar(&o.rackID, "rack-id", "", "Filter by rack ID")
 	flags.StringVar(&o.locationID, "location-id", "", "Filter by location ID")
-
-	flags.String("type", "", "")
-	if err := flags.MarkHidden("type"); err != nil {
-		log.Fatal(err)
-	}
 }
 
 func (o *hostListOptions) ApplyToCollection(collection serverscom.Collection[serverscom.Host]) {

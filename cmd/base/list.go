@@ -1,6 +1,7 @@
 package base
 
 import (
+	"log"
 	"strings"
 
 	serverscom "github.com/serverscom/serverscom-go-client/pkg"
@@ -38,6 +39,11 @@ func (o *BaseListOptions[T]) AddFlags(cmd *cobra.Command) {
 	flags.StringVar(&o.sorting, "sorting", "", "Sort field")
 	flags.StringVar(&o.direction, "direction", "", "Sort direction (ASC or DESC)")
 	flags.BoolVarP(&o.allPages, "all", "A", false, "Get all pages of resources")
+
+	flags.String("type", "", "")
+	if err := flags.MarkHidden("type"); err != nil {
+		log.Fatal(err)
+	}
 }
 
 // ApplyToCollection applies the options to a collection

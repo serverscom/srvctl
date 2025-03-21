@@ -6,10 +6,16 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func newListCmd(cmdContext *base.CmdContext) *cobra.Command {
+func newListCmd(cmdContext *base.CmdContext, sslType *SSLTypeCmd) *cobra.Command {
 	factory := func(verbose bool, args ...string) serverscom.Collection[serverscom.SSLCertificate] {
 		scClient := cmdContext.GetClient().SetVerbose(verbose).GetScClient()
-		return scClient.SSLCertificates.Collection()
+		collection := scClient.SSLCertificates.Collection()
+
+		if sslType != nil && sslType.typeFlag != "" {
+			collection = collection.SetParam("type", sslType.typeFlag)
+		}
+
+		return collection
 	}
 
 	opts := base.NewListOptions(
@@ -18,5 +24,10 @@ func newListCmd(cmdContext *base.CmdContext) *cobra.Command {
 		&base.SearchPatternOption[serverscom.SSLCertificate]{},
 	)
 
-	return base.NewListCmd("list", "SSL Certificates", factory, cmdContext, opts...)
+	entityName := "SSL certificates"
+	if sslType != nil {
+		entityName = sslType.entityName
+	}
+
+	return base.NewListCmd("list", entityName, factory, cmdContext, opts...)
 }
