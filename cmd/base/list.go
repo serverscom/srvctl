@@ -13,6 +13,10 @@ type ListOptions[T any] interface {
 	ApplyToCollection(serverscom.Collection[T])
 }
 
+type AllPager interface {
+	AllPages() bool
+}
+
 func NewListOptions[T any](opts ...ListOptions[T]) []ListOptions[T] {
 	return opts
 }
@@ -120,19 +124,7 @@ func NewListCmd[T any](use string, entityName string, colFactory CollectionFacto
 				opt.ApplyToCollection(collection)
 			}
 
-			var items []T
-			var err error
-			for _, opt := range opts {
-				if baseOpts, ok := opt.(*BaseListOptions[T]); ok && baseOpts.AllPages() {
-					items, err = collection.Collect(ctx)
-					break
-				}
-			}
-
-			if items == nil && err == nil {
-				items, err = collection.List(ctx)
-			}
-
+			items, err := fetchItems(ctx, collection, opts)
 			if err != nil {
 				return err
 			}
