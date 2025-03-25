@@ -57,7 +57,7 @@ func newUpdateLeCmd(cmdContext *base.CmdContext) *cobra.Command {
 	var labels []string
 
 	cmd := &cobra.Command{
-		Use:   "update <fingerprint>",
+		Use:   "update <id>",
 		Short: "Update an ssl le certificate",
 		Long:  "Update an ssl le certificate by id",
 		Args:  cobra.ExactArgs(1),

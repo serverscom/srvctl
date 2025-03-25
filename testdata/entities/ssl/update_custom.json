@@ -1,0 +1,17 @@
+{
+    "id": "testId",
+    "name": "test-ssl-custom",
+    "type": "custom",
+    "issuer": "servers.com",
+    "subject": "servers.com",
+    "domain_names": [
+        "servers.com"
+    ],
+    "sha1_fingerprint": "21e84c9a3878673b377f0adf053290e8fc25cb80",
+    "labels": {
+        "new": "label"
+    },
+    "expires_at": "2035-01-01T12:00:00Z",
+    "created_at": "2025-01-01T12:00:00Z",
+    "updated_at": "2025-01-01T12:00:00Z"
+}

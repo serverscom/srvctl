@@ -1,0 +1,13 @@
+id: testId
+name: test-ssl-custom
+type: custom
+issuer: servers.com
+subject: servers.com
+domainnames:
+    - servers.com
+sha1fingerprint: 21e84c9a3878673b377f0adf053290e8fc25cb80
+labels:
+    foo: bar
+expires: 2035-01-01T12:00:00Z
+created: 2025-01-01T12:00:00Z
+updated: 2025-01-01T12:00:00Z

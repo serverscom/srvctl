@@ -1,0 +1,17 @@
+ID:           testId
+Name:         test-ssl-custom
+Type:         custom
+Fingerprint:  21e84c9a3878673b377f0adf053290e8fc25cb80
+Labels:       foo=bar
+Expires:      2035-01-01T12:00:00Z
+Created:      2025-01-01T12:00:00Z
+Updated:      2025-01-01T12:00:00Z
+---
+ID:           testId
+Name:         test-ssl-le
+Type:         letsencrypt
+Fingerprint:  21e84c9a3878673b377f0adf053290e8fc25cb80
+Labels:       foo=bar
+Expires:      2035-01-01T12:00:00Z
+Created:      2025-01-01T12:00:00Z
+Updated:      2025-01-01T12:00:00Z

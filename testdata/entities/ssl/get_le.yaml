@@ -1,0 +1,12 @@
+id: testId
+name: test-ssl-le
+type: letsencrypt
+issuer: servers.com
+subject: servers.com
+domainnames:
+    - servers.com
+labels:
+    foo: bar
+expires: 2035-01-01T12:00:00Z
+created: 2025-01-01T12:00:00Z
+updated: 2025-01-01T12:00:00Z
