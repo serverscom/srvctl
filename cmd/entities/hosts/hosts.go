@@ -19,8 +19,9 @@ type HostTypeCmd struct {
 }
 
 type HostManagers struct {
-	getMgr       HostGetter
-	createMgr    HostCreator
+	getMgr    HostGetter
+	createMgr HostCreator
+	// for update we use simple commands in sake of simplicity
 	powerMgr     HostPowerer
 	reinstallMgr HostReinstaller
 }

@@ -21,6 +21,7 @@ type SSLTypeCmd struct {
 type SSLManagers struct {
 	getMgr    SSLGetter
 	createMgr SSLCreator
+	// for update we use simple commands in sake of simplicity
 	deleteMgr SSLDeleter
 }
 
