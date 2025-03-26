@@ -11,6 +11,7 @@ import (
 	"strings"
 	"time"
 
+	serverscom "github.com/serverscom/serverscom-go-client/pkg"
 	"github.com/serverscom/srvctl/internal/client"
 	"github.com/serverscom/srvctl/internal/config"
 	"github.com/serverscom/srvctl/internal/output"
@@ -182,4 +183,14 @@ func NoArgs(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("unknown command %q for %q\n%s", args[0], cmd.CommandPath(), helpStr)
 	}
 	return nil
+}
+
+func fetchItems[T any](ctx context.Context, collection serverscom.Collection[T], opts []ListOptions[T]) ([]T, error) {
+	for _, opt := range opts {
+		if baseOpts, ok := opt.(AllPager); ok && baseOpts.AllPages() {
+			return collection.Collect(ctx)
+		}
+	}
+
+	return collection.List(ctx)
 }

@@ -1,0 +1,16 @@
+{
+    "id": "testId",
+    "name": "test-ssl-le",
+    "type": "letsencrypt",
+    "issuer": "servers.com",
+    "subject": "servers.com",
+    "domain_names": [
+        "servers.com"
+    ],
+    "labels": {
+        "new": "label"
+    },
+    "expires_at": "2035-01-01T12:00:00Z",
+    "created_at": "2025-01-01T12:00:00Z",
+    "updated_at": "2025-01-01T12:00:00Z"
+}

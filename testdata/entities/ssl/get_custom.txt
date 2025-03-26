@@ -1,0 +1,2 @@
+ID       Name              Type     Subject       Fingerprint                                Expires                Created                Updated
+testId   test-ssl-custom   custom   servers.com   21e84c9a3878673b377f0adf053290e8fc25cb80   2035-01-01T12:00:00Z   2025-01-01T12:00:00Z   2025-01-01T12:00:00Z

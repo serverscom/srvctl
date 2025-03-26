@@ -1,15 +1,13 @@
 package hosts
 
 import (
-	"log"
-
 	serverscom "github.com/serverscom/serverscom-go-client/pkg"
 	"github.com/serverscom/srvctl/cmd/base"
 	"github.com/spf13/cobra"
 )
 
 type hostListOptions struct {
-	base.BaseLabelsListOptions[serverscom.Host]
+	base.BaseListOptions[serverscom.Host]
 	rackID     string
 	locationID string
 }
@@ -20,11 +18,6 @@ func (o *hostListOptions) AddFlags(cmd *cobra.Command) {
 	flags := cmd.Flags()
 	flags.StringVar(&o.rackID, "rack-id", "", "Filter by rack ID")
 	flags.StringVar(&o.locationID, "location-id", "", "Filter by location ID")
-
-	flags.String("type", "", "")
-	if err := flags.MarkHidden("type"); err != nil {
-		log.Fatal(err)
-	}
 }
 
 func (o *hostListOptions) ApplyToCollection(collection serverscom.Collection[serverscom.Host]) {
@@ -50,10 +43,16 @@ func newListCmd(cmdContext *base.CmdContext, hostType *HostTypeCmd) *cobra.Comma
 		return collection
 	}
 
+	opts := base.NewListOptions(
+		&hostListOptions{},
+		&base.LabelSelectorOption[serverscom.Host]{},
+		&base.SearchPatternOption[serverscom.Host]{},
+	)
+
 	entityName := "Hosts"
 	if hostType != nil {
 		entityName = hostType.entityName
 	}
 
-	return base.NewListCmd("list", entityName, factory, cmdContext, &hostListOptions{})
+	return base.NewListCmd("list", entityName, factory, cmdContext, opts...)
 }

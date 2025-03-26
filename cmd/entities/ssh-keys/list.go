@@ -12,7 +12,10 @@ func newListCmd(cmdContext *base.CmdContext) *cobra.Command {
 		return scClient.SSHKeys.Collection()
 	}
 
-	opts := &base.BaseLabelsListOptions[serverscom.SSHKey]{}
+	opts := base.NewListOptions(
+		&base.BaseListOptions[serverscom.SSHKey]{},
+		&base.LabelSelectorOption[serverscom.SSHKey]{},
+	)
 
-	return base.NewListCmd("list", "SSH Keys", factory, cmdContext, opts)
+	return base.NewListCmd("list", "SSH Keys", factory, cmdContext, opts...)
 }

@@ -1,6 +1,7 @@
 package base
 
 import (
+	"log"
 	"strings"
 
 	serverscom "github.com/serverscom/serverscom-go-client/pkg"
@@ -10,7 +11,14 @@ import (
 type ListOptions[T any] interface {
 	AddFlags(*cobra.Command)
 	ApplyToCollection(serverscom.Collection[T])
+}
+
+type AllPager interface {
 	AllPages() bool
+}
+
+func NewListOptions[T any](opts ...ListOptions[T]) []ListOptions[T] {
+	return opts
 }
 
 // CollectionFactory is a function type that creates a typed resource collection
@@ -35,6 +43,11 @@ func (o *BaseListOptions[T]) AddFlags(cmd *cobra.Command) {
 	flags.StringVar(&o.sorting, "sorting", "", "Sort field")
 	flags.StringVar(&o.direction, "direction", "", "Sort direction (ASC or DESC)")
 	flags.BoolVarP(&o.allPages, "all", "A", false, "Get all pages of resources")
+
+	flags.String("type", "", "")
+	if err := flags.MarkHidden("type"); err != nil {
+		log.Fatal(err)
+	}
 }
 
 // ApplyToCollection applies the options to a collection
@@ -59,28 +72,36 @@ func (o *BaseListOptions[T]) AllPages() bool {
 	return o.allPages
 }
 
-// BaseLabelsListOptions is a base options struct for list commands with label selector option
-type BaseLabelsListOptions[T any] struct {
-	BaseListOptions[T]
+type LabelSelectorOption[T any] struct {
 	labelSelector string
 }
 
-// AddFlags adds common list flags to the command
-func (o *BaseLabelsListOptions[T]) AddFlags(cmd *cobra.Command) {
-	o.BaseListOptions.AddFlags(cmd)
-	flags := cmd.Flags()
-	flags.StringVar(&o.labelSelector, "label-selector", "", "Filter by label selector")
+func (o *LabelSelectorOption[T]) AddFlags(cmd *cobra.Command) {
+	cmd.Flags().StringVar(&o.labelSelector, "label-selector", "", "Filter results by labels")
 }
 
-// ApplyToCollection applies the options to a collection
-func (o *BaseLabelsListOptions[T]) ApplyToCollection(collection serverscom.Collection[T]) {
+func (o *LabelSelectorOption[T]) ApplyToCollection(collection serverscom.Collection[T]) {
 	if o.labelSelector != "" {
 		collection.SetParam("label_selector", o.labelSelector)
 	}
 }
 
+type SearchPatternOption[T any] struct {
+	searchPattern string
+}
+
+func (o *SearchPatternOption[T]) AddFlags(cmd *cobra.Command) {
+	cmd.Flags().StringVar(&o.searchPattern, "search-pattern", "", "Return resources containing the parameter value in its name")
+}
+
+func (o *SearchPatternOption[T]) ApplyToCollection(collection serverscom.Collection[T]) {
+	if o.searchPattern != "" {
+		collection.SetParam("search_pattern", o.searchPattern)
+	}
+}
+
 // NewListCmd base list command for different collections
-func NewListCmd[T any](use string, entityName string, colFactory CollectionFactory[T], cmdContext *CmdContext, opts ListOptions[T]) *cobra.Command {
+func NewListCmd[T any](use string, entityName string, colFactory CollectionFactory[T], cmdContext *CmdContext, opts ...ListOptions[T]) *cobra.Command {
 	aliases := []string{}
 	if use == "list" {
 		aliases = append(aliases, "ls")
@@ -99,16 +120,11 @@ func NewListCmd[T any](use string, entityName string, colFactory CollectionFacto
 			SetupProxy(cmd, manager)
 
 			collection := colFactory(manager.GetVerbose(cmd), args...)
-			opts.ApplyToCollection(collection)
-
-			var items []T
-			var err error
-			if opts.AllPages() {
-				items, err = collection.Collect(ctx)
-			} else {
-				items, err = collection.List(ctx)
+			for _, opt := range opts {
+				opt.ApplyToCollection(collection)
 			}
 
+			items, err := fetchItems(ctx, collection, opts)
 			if err != nil {
 				return err
 			}
@@ -118,7 +134,9 @@ func NewListCmd[T any](use string, entityName string, colFactory CollectionFacto
 		},
 	}
 
-	opts.AddFlags(cmd)
+	for _, opt := range opts {
+		opt.AddFlags(cmd)
+	}
 
 	return cmd
 }
