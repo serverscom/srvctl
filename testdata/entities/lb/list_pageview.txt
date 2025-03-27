@@ -1,0 +1,21 @@
+ID:                 testId1
+Name:               test-l4-lb
+Type:               l4
+Status:             active
+ExternalAddresses:  127.0.0.1
+LocationID:         1
+ClusterID:          <none>
+Labels:             foo=bar
+Created:            2025-01-01T12:00:00Z
+Updated:            2025-01-01T12:00:00Z
+---
+ID:                 testId2
+Name:               test-l7-lb
+Type:               l7
+Status:             active
+ExternalAddresses:  127.0.0.1
+LocationID:         1
+ClusterID:          <none>
+Labels:             foo=bar
+Created:            2025-01-01T12:00:00Z
+Updated:            2025-01-01T12:00:00Z

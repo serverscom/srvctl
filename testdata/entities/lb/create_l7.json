@@ -1,0 +1,32 @@
+{
+    "name": "test-l7-lb",
+    "location_id": 1,
+    "cluster_id": null,
+    "vhost_zones": [
+        {
+            "id": "test1",
+            "ports": [
+                80
+            ],
+            "udp": true,
+            "proxy_protocol": true,
+            "upstream_id": "test2"
+        }
+    ],
+    "upstream_zones": [
+        {
+            "id": "test2",
+            "udp": true,
+            "upstreams": [
+                {
+                    "ip": "10.253.115.4",
+                    "port": 81,
+                    "weight": 1
+                }
+            ]
+        }
+    ],
+    "labels": {
+        "foo": "bar"
+    }
+}

@@ -1,0 +1,17 @@
+id: testId
+name: test-l7-lb
+type: l7
+domains:
+    - test.com
+status: active
+externaladdresses:
+    - 127.0.0.1
+locationid: 1
+geoip: false
+storelogs: false
+storelogsregionid: 0
+clusterid: null
+labels:
+    foo: bar
+created: 2025-01-01T12:00:00Z
+updated: 2025-01-01T12:00:00Z
