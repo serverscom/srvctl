@@ -89,9 +89,8 @@ func newSSLTypeCmd(cmdContext *base.CmdContext, sslTypeCmd SSLTypeCmd) *cobra.Co
 	sslCmd := &cobra.Command{
 		Use:   sslTypeCmd.use,
 		Short: sslTypeCmd.shortDesc,
-		RunE: func(cmd *cobra.Command, args []string) error {
-			return cmd.Help()
-		},
+		Args:  base.NoArgs,
+		Run:   base.UsageRun,
 	}
 
 	sslCmd.AddCommand(newListCmd(cmdContext, &sslTypeCmd))

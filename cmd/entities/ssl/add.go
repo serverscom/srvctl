@@ -50,14 +50,14 @@ func newAddCmd(cmdContext *base.CmdContext, sslType *SSLTypeCmd) *cobra.Command 
 
 			scClient := cmdContext.GetClient().SetVerbose(manager.GetVerbose(cmd)).GetScClient()
 
-			server, err := sslType.managers.createMgr.Create(ctx, scClient, input)
+			sslCert, err := sslType.managers.createMgr.Create(ctx, scClient, input)
 			if err != nil {
 				return err
 			}
 
-			if server != nil {
+			if sslCert != nil {
 				formatter := cmdContext.GetOrCreateFormatter(cmd)
-				return formatter.Format(server)
+				return formatter.Format(sslCert)
 			}
 
 			return nil

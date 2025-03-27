@@ -12,7 +12,7 @@ func newUpdateCustomCmd(cmdContext *base.CmdContext) *cobra.Command {
 	var labels []string
 
 	cmd := &cobra.Command{
-		Use:   "update <fingerprint>",
+		Use:   "update <id>",
 		Short: "Update an ssl custom certificate",
 		Long:  "Update an ssl custom certificate by id",
 		Args:  cobra.ExactArgs(1),
@@ -35,14 +35,14 @@ func newUpdateCustomCmd(cmdContext *base.CmdContext) *cobra.Command {
 			scClient := cmdContext.GetClient().SetVerbose(manager.GetVerbose(cmd)).GetScClient()
 
 			id := args[0]
-			sshKey, err := scClient.SSLCertificates.UpdateCustom(ctx, id, input)
+			sslCert, err := scClient.SSLCertificates.UpdateCustom(ctx, id, input)
 			if err != nil {
 				return err
 			}
 
-			if sshKey != nil {
+			if sslCert != nil {
 				formatter := cmdContext.GetOrCreateFormatter(cmd)
-				return formatter.Format(sshKey)
+				return formatter.Format(sslCert)
 			}
 			return nil
 		},
@@ -80,14 +80,14 @@ func newUpdateLeCmd(cmdContext *base.CmdContext) *cobra.Command {
 			scClient := cmdContext.GetClient().SetVerbose(manager.GetVerbose(cmd)).GetScClient()
 
 			id := args[0]
-			sshKey, err := scClient.SSLCertificates.UpdateLE(ctx, id, input)
+			sslCert, err := scClient.SSLCertificates.UpdateLE(ctx, id, input)
 			if err != nil {
 				return err
 			}
 
-			if sshKey != nil {
+			if sslCert != nil {
 				formatter := cmdContext.GetOrCreateFormatter(cmd)
-				return formatter.Format(sshKey)
+				return formatter.Format(sslCert)
 			}
 			return nil
 		},

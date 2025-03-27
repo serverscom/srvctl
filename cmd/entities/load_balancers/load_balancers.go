@@ -19,10 +19,10 @@ type LBTypeCmd struct {
 }
 
 type LBManagers struct {
-	// getMgr    LBGetter
-	// createMgr LBCreator
-	// for update we use simple commands in sake of simplicity
-	// deleteMgr LBDeleter
+	getMgr    LBGetter
+	createMgr LBCreator
+	updateMgr LBUpdater
+	deleteMgr LBDeleter
 }
 
 func NewCmd(cmdContext *base.CmdContext) *cobra.Command {
@@ -37,13 +37,11 @@ func NewCmd(cmdContext *base.CmdContext) *cobra.Command {
 			shortDesc:  "Manage L4 load balancers",
 			entityName: "L4 load balancers",
 			typeFlag:   "l4",
-			managers:   LBManagers{
-				// getMgr:    &LBCustomGetMgr{},
-				// createMgr: &LBCustomCreateMgr{},
-				// deleteMgr: &LBCustomDeleteMgr{},
-			},
-			extraCmds: []func(*base.CmdContext) *cobra.Command{
-				// newUpdateCustomCmd,
+			managers: LBManagers{
+				getMgr:    &LBL4GetMgr{},
+				createMgr: &LBL4CreateMgr{},
+				updateMgr: &LBL4UpdateMgr{},
+				deleteMgr: &LBL4DeleteMgr{},
 			},
 		},
 		{
@@ -51,12 +49,11 @@ func NewCmd(cmdContext *base.CmdContext) *cobra.Command {
 			shortDesc:  "Manage L7 load balancers",
 			entityName: "L7 load balancers",
 			typeFlag:   "l7",
-			managers:   LBManagers{
-				// getMgr:    &LBLeGetMgr{},
-				// deleteMgr: &LBLeDeleteMgr{},
-			},
-			extraCmds: []func(*base.CmdContext) *cobra.Command{
-				// newUpdateLeCmd,
+			managers: LBManagers{
+				getMgr:    &LBL7GetMgr{},
+				createMgr: &LBL7CreateMgr{},
+				updateMgr: &LBL7UpdateMgr{},
+				deleteMgr: &LBL7DeleteMgr{},
 			},
 		},
 	}
@@ -85,26 +82,28 @@ func NewCmd(cmdContext *base.CmdContext) *cobra.Command {
 	return cmd
 }
 
-func newLBTypeCmd(cmdContext *base.CmdContext, LBTypeCmd LBTypeCmd) *cobra.Command {
+func newLBTypeCmd(cmdContext *base.CmdContext, lbType LBTypeCmd) *cobra.Command {
 	LBCmd := &cobra.Command{
-		Use:   LBTypeCmd.use,
-		Short: LBTypeCmd.shortDesc,
-		RunE: func(cmd *cobra.Command, args []string) error {
-			return cmd.Help()
-		},
+		Use:   lbType.use,
+		Short: lbType.shortDesc,
+		Args:  base.NoArgs,
+		Run:   base.UsageRun,
 	}
 
-	LBCmd.AddCommand(newListCmd(cmdContext, &LBTypeCmd))
-	// LBCmd.AddCommand(newGetCmd(cmdContext, &LBTypeCmd))
+	LBCmd.AddCommand(newListCmd(cmdContext, &lbType))
+	LBCmd.AddCommand(newGetCmd(cmdContext, &lbType))
 
-	// if LBTypeCmd.managers.createMgr != nil {
-	// LBCmd.AddCommand(newAddCmd(cmdContext, &LBTypeCmd))
-	// }
-	// if LBTypeCmd.managers.deleteMgr != nil {
-	// LBCmd.AddCommand(newDeleteCmd(cmdContext, &LBTypeCmd))
-	// }
+	if lbType.managers.createMgr != nil {
+		LBCmd.AddCommand(newAddCmd(cmdContext, &lbType))
+	}
+	if lbType.managers.updateMgr != nil {
+		LBCmd.AddCommand(newUpdateCmd(cmdContext, &lbType))
+	}
+	if lbType.managers.deleteMgr != nil {
+		LBCmd.AddCommand(newDeleteCmd(cmdContext, &lbType))
+	}
 
-	for _, cmdFunc := range LBTypeCmd.extraCmds {
+	for _, cmdFunc := range lbType.extraCmds {
 		LBCmd.AddCommand(cmdFunc(cmdContext))
 	}
 

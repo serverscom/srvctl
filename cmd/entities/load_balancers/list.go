@@ -22,7 +22,8 @@ func newListCmd(cmdContext *base.CmdContext, lbType *LBTypeCmd) *cobra.Command {
 		&base.BaseListOptions[serverscom.LoadBalancer]{},
 		&base.LabelSelectorOption[serverscom.LoadBalancer]{},
 		&base.SearchPatternOption[serverscom.LoadBalancer]{},
-		// TODO location_id, cluster_id
+		&base.LocationIDOption[serverscom.LoadBalancer]{},
+		&base.ClusterIDOption[serverscom.LoadBalancer]{},
 	)
 
 	entityName := "load balancers"
