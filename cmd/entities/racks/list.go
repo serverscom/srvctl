@@ -15,6 +15,7 @@ func newListCmd(cmdContext *base.CmdContext) *cobra.Command {
 	opts := base.NewListOptions(
 		&base.BaseListOptions[serverscom.Rack]{},
 		&base.LabelSelectorOption[serverscom.Rack]{},
+		&base.LocationIDOption[serverscom.Rack]{},
 	)
 
 	return base.NewListCmd("list", "racks", factory, cmdContext, opts...)

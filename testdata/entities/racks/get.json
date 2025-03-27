@@ -1,0 +1,9 @@
+{
+    "id": "testId",
+    "name": "test-rack",
+    "location_id": 1,
+    "location_code": "test",
+    "labels": {
+        "foo": "bar"
+    }
+}
