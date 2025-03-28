@@ -1,0 +1,11 @@
+ID:            testId12
+Name:          test-rack
+LocationID:    1
+LocationCode:  test
+Labels:        foo=bar
+---
+ID:            testId
+Name:          test-rack 2
+LocationID:    1
+LocationCode:  test
+Labels:        foo=bar

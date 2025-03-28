@@ -1,0 +1,6 @@
+id: testId
+name: test-rack
+locationid: 1
+locationcode: test
+labels:
+    foo: bar
