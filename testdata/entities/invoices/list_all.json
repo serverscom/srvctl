@@ -1,0 +1,22 @@
+[
+    {
+        "id": "testId1",
+        "number": 123,
+        "parent_id": null,
+        "status": "paid",
+        "date": "2025-01-01",
+        "type": "1",
+        "total_due": 1.23,
+        "currency": "USD"
+    },
+    {
+        "id": "testId2",
+        "number": 456,
+        "parent_id": null,
+        "status": "paid",
+        "date": "2025-01-01",
+        "type": "1",
+        "total_due": 1.23,
+        "currency": "USD"
+    }
+]

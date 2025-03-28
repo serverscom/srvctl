@@ -126,3 +126,94 @@ func (o *ClusterIDOption[T]) ApplyToCollection(collection serverscom.Collection[
 		collection.SetParam("cluster_id", o.clusterID)
 	}
 }
+
+// status option
+type StatusOption[T any] struct {
+	status string
+}
+
+func (o *StatusOption[T]) AddFlags(cmd *cobra.Command) {
+	cmd.Flags().StringVar(&o.status, "status", "", "Filter results by status")
+}
+
+func (o *StatusOption[T]) ApplyToCollection(collection serverscom.Collection[T]) {
+	if o.status != "" {
+		collection.SetParam("status", o.status)
+	}
+}
+
+// invoice type option
+type InvoiceTypeOption[T any] struct {
+	typeVal string
+}
+
+// use itype instead of type to avoid conflict with baseList 'type'  hidden flag which we use for subcommands
+func (o *InvoiceTypeOption[T]) AddFlags(cmd *cobra.Command) {
+	cmd.Flags().StringVar(&o.typeVal, "itype", "", "Filter results by type")
+}
+
+func (o *InvoiceTypeOption[T]) ApplyToCollection(collection serverscom.Collection[T]) {
+	if o.typeVal != "" {
+		collection.SetParam("type", o.typeVal)
+	}
+}
+
+// parent id option
+type ParentIDOption[T any] struct {
+	parentID string
+}
+
+func (o *ParentIDOption[T]) AddFlags(cmd *cobra.Command) {
+	cmd.Flags().StringVar(&o.parentID, "parent-id", "", "Filter results by parent ID")
+}
+
+func (o *ParentIDOption[T]) ApplyToCollection(collection serverscom.Collection[T]) {
+	if o.parentID != "" {
+		collection.SetParam("parent_id", o.parentID)
+	}
+}
+
+// currency option
+type CurrencyOption[T any] struct {
+	currency string
+}
+
+func (o *CurrencyOption[T]) AddFlags(cmd *cobra.Command) {
+	cmd.Flags().StringVar(&o.currency, "currency", "", "Filter results by currency")
+}
+
+func (o *CurrencyOption[T]) ApplyToCollection(collection serverscom.Collection[T]) {
+	if o.currency != "" {
+		collection.SetParam("currency", o.currency)
+	}
+}
+
+// start date option
+type StartDateOption[T any] struct {
+	startDate string
+}
+
+func (o *StartDateOption[T]) AddFlags(cmd *cobra.Command) {
+	cmd.Flags().StringVar(&o.startDate, "start-date", "", "Filter results by start date")
+}
+
+func (o *StartDateOption[T]) ApplyToCollection(collection serverscom.Collection[T]) {
+	if o.startDate != "" {
+		collection.SetParam("start_date", o.startDate)
+	}
+}
+
+// end date option
+type EndDateOption[T any] struct {
+	endDate string
+}
+
+func (o *EndDateOption[T]) AddFlags(cmd *cobra.Command) {
+	cmd.Flags().StringVar(&o.endDate, "end-date", "", "Filter results by end date")
+}
+
+func (o *EndDateOption[T]) ApplyToCollection(collection serverscom.Collection[T]) {
+	if o.endDate != "" {
+		collection.SetParam("end_date", o.endDate)
+	}
+}

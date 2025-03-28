@@ -16,4 +16,5 @@ func init() {
 	RegisterSSLCertLeDefinition()
 	RegisterLoadBalancerDefinitions()
 	RegisterRackDefinition()
+	RegisterInvoiceDefinition()
 }
