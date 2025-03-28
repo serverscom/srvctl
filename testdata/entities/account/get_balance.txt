@@ -1,0 +1,2 @@
+CurrentBalance   NextInvoiceTotalDue   Currency
+100              0                     EUR
