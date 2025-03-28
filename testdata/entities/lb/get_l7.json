@@ -1,0 +1,22 @@
+{
+    "id": "testId",
+    "name": "test-l7-lb",
+    "type": "l7",
+    "domains": [
+        "test.com"
+    ],
+    "status": "active",
+    "external_addresses": [
+        "127.0.0.1"
+    ],
+    "location_id": 1,
+    "geoip": false,
+    "store_logs": false,
+    "store_logs_region_id": 0,
+    "cluster_id": null,
+    "labels": {
+        "foo": "bar"
+    },
+    "created_at": "2025-01-01T12:00:00Z",
+    "updated_at": "2025-01-01T12:00:00Z"
+}

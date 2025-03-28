@@ -112,9 +112,8 @@ func newHostTypeCmd(cmdContext *base.CmdContext, hostTypeCmd HostTypeCmd) *cobra
 	hostCmd := &cobra.Command{
 		Use:   hostTypeCmd.use,
 		Short: hostTypeCmd.shortDesc,
-		RunE: func(cmd *cobra.Command, args []string) error {
-			return cmd.Help()
-		},
+		Args:  base.NoArgs,
+		Run:   base.UsageRun,
 	}
 
 	hostCmd.AddCommand(newListCmd(cmdContext, &hostTypeCmd))

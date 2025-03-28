@@ -1,0 +1,13 @@
+id: testId
+name: test-l4-lb
+type: l4
+status: active
+externaladdresses:
+    - 127.0.0.1
+locationid: 1
+storelogs: false
+clusterid: null
+labels:
+    foo: bar
+created: 2025-01-01T12:00:00Z
+updated: 2025-01-01T12:00:00Z

@@ -1,0 +1,17 @@
+{
+    "id": "testId",
+    "name": "test-l4-lb",
+    "type": "l4",
+    "status": "active",
+    "external_addresses": [
+        "127.0.0.1"
+    ],
+    "location_id": 1,
+    "store_logs": false,
+    "cluster_id": null,
+    "labels": {
+        "new": "label"
+    },
+    "created_at": "2025-01-01T12:00:00Z",
+    "updated_at": "2025-01-01T12:00:00Z"
+}
