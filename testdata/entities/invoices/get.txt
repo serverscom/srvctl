@@ -1,0 +1,2 @@
+ID       Number   ParentID   Status   Date         Type   TotalDue   Currency
+testId   123      <none>     paid     2025-01-01   1      1.23       USD

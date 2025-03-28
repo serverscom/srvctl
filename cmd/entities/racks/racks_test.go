@@ -33,25 +33,25 @@ func TestGetRackCmd(t *testing.T) {
 		expectError    bool
 	}{
 		{
-			name:           "get ssh key in default format",
+			name:           "get rack in default format",
 			id:             testId,
 			output:         "",
 			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "get.txt")),
 		},
 		{
-			name:           "get ssh key in JSON format",
+			name:           "get rack in JSON format",
 			id:             testId,
 			output:         "json",
 			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "get.json")),
 		},
 		{
-			name:           "get ssh key in YAML format",
+			name:           "get rack in YAML format",
 			id:             testId,
 			output:         "yaml",
 			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "get.yaml")),
 		},
 		{
-			name:        "get ssh key with error",
+			name:        "get rack with error",
 			id:          testId,
 			expectError: true,
 		},
@@ -108,7 +108,7 @@ func TestListRacksCmd(t *testing.T) {
 	testRack2 := testRack
 	testRack1.ID += "1"
 	testRack2.Name = "test-rack 2"
-	testRack1.ID += "2"
+	testRack2.ID += "2"
 
 	testCases := []struct {
 		name           string

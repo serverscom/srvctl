@@ -1,10 +1,10 @@
-ID:            testId12
+ID:            testId1
 Name:          test-rack
 LocationID:    1
 LocationCode:  test
 Labels:        foo=bar
 ---
-ID:            testId
+ID:            testId2
 Name:          test-rack 2
 LocationID:    1
 LocationCode:  test

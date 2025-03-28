@@ -1,0 +1,10 @@
+id: testId
+number: 123
+parentid: null
+status: paid
+date: "2025-01-01"
+type: "1"
+totaldue: 1.23
+currency: USD
+csvurl: http://test.csv
+pdfurl: http://test.pdf
