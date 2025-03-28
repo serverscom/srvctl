@@ -4,6 +4,7 @@ import (
 	"github.com/serverscom/srvctl/cmd/base"
 	"github.com/serverscom/srvctl/cmd/config"
 	"github.com/serverscom/srvctl/cmd/context"
+	"github.com/serverscom/srvctl/cmd/entities/account"
 	"github.com/serverscom/srvctl/cmd/entities/hosts"
 	"github.com/serverscom/srvctl/cmd/entities/invoices"
 	loadbalancers "github.com/serverscom/srvctl/cmd/entities/load_balancers"
@@ -46,6 +47,7 @@ func NewRootCmd(version string) *cobra.Command {
 	cmd.AddCommand(loadbalancers.NewCmd(cmdContext))
 	cmd.AddCommand(racks.NewCmd(cmdContext))
 	cmd.AddCommand(invoices.NewCmd(cmdContext))
+	cmd.AddCommand(account.NewCmd(cmdContext))
 
 	return cmd
 }

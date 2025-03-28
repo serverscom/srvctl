@@ -51,8 +51,8 @@ github.com/sagikazarmark/locafero v0.4.0 h1:HApY1R9zGo4DBgr7dqsTH/JJxLTTsOt7u6ke
 github.com/sagikazarmark/locafero v0.4.0/go.mod h1:Pe1W6UlPYUk/+wc/6KFhbORCfqzgYEpgQ3O5fPuL3H4=
 github.com/sagikazarmark/slog-shim v0.1.0 h1:diDBnUNK9N/354PgrxMywXnAwEr1QZcOr6gto+ugjYE=
 github.com/sagikazarmark/slog-shim v0.1.0/go.mod h1:SrcSrq8aKtyuqEI1uvTDTK1arOWRIczQRv+GVI1AkeQ=
-github.com/serverscom/serverscom-go-client v1.0.13 h1:HjcODZl8M8SEwhbeBGX2D/M3ZZM7I0JGQq717rW792Y=
-github.com/serverscom/serverscom-go-client v1.0.13/go.mod h1:o4lNYX+shv5TZ6miuGAaMDJP8y7Z7TdPEhMsCcL9PrU=
+github.com/serverscom/serverscom-go-client v1.0.14 h1:/SR4moqSL6MqW+gt6wtF9Wl5KfckP4RcqeS0AECwwAs=
+github.com/serverscom/serverscom-go-client v1.0.14/go.mod h1:o4lNYX+shv5TZ6miuGAaMDJP8y7Z7TdPEhMsCcL9PrU=
 github.com/sourcegraph/conc v0.3.0 h1:OQTbbt6P72L20UqAkXXuLOj79LfEanQ+YQFNpLA9ySo=
 github.com/sourcegraph/conc v0.3.0/go.mod h1:Sdozi7LEKbFPqYX2/J+iBAM6HpqSLTASQIKqDmF7Mt0=
 github.com/spf13/afero v1.11.0 h1:WJQKhtpdm3v2IzqG8VMqrr6Rf3UYpEF239Jy9wNepM8=

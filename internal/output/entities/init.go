@@ -17,4 +17,5 @@ func init() {
 	RegisterLoadBalancerDefinitions()
 	RegisterRackDefinition()
 	RegisterInvoiceDefinition()
+	RegisterAccountDefinition()
 }
