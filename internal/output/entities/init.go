@@ -18,4 +18,5 @@ func init() {
 	RegisterRackDefinition()
 	RegisterInvoiceDefinition()
 	RegisterAccountDefinition()
+	RegisterLocationDefinition()
 }
