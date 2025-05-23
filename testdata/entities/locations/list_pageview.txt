@@ -1,0 +1,19 @@
+ID:                    1
+Name:                  test-location
+Status:                active
+Code:                  test
+SupportedFeatures:     feature1
+                       feature2
+L2SegmentsEnabled:     false
+PrivateRacksEnabled:   false
+LoadBalancersEnabled:  false
+---
+ID:                    2
+Name:                  test-location 2
+Status:                active
+Code:                  test
+SupportedFeatures:     feature1
+                       feature2
+L2SegmentsEnabled:     false
+PrivateRacksEnabled:   false
+LoadBalancersEnabled:  false

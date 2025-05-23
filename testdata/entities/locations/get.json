@@ -1,0 +1,13 @@
+{
+    "id": 1,
+    "name": "test-location",
+    "status": "active",
+    "code": "test",
+    "supported_features": [
+        "feature1",
+        "feature2"
+    ],
+    "l2_segments_enabled": false,
+    "private_racks_enabled": false,
+    "load_balancers_enabled": false
+}
