@@ -19,8 +19,7 @@ type HostTypeCmd struct {
 }
 
 type HostManagers struct {
-	getMgr    HostGetter
-	createMgr HostCreator
+	getMgr HostGetter
 	// for update we use simple commands in sake of simplicity
 	powerMgr     HostPowerer
 	reinstallMgr HostReinstaller
@@ -40,11 +39,11 @@ func NewCmd(cmdContext *base.CmdContext) *cobra.Command {
 			typeFlag:   "dedicated_server",
 			managers: HostManagers{
 				getMgr:       &DSGetMgr{},
-				createMgr:    &DSCreateMgr{},
 				powerMgr:     &DSPowerMgr{},
 				reinstallMgr: &DSReinstallMgr{},
 			},
 			extraCmds: []func(*base.CmdContext) *cobra.Command{
+				newAddDSCmd,
 				newUpdateDSCmd,
 				newListDSDriveSlotsCmd,
 				newListDSConnectionsCmd,
@@ -73,11 +72,11 @@ func NewCmd(cmdContext *base.CmdContext) *cobra.Command {
 			typeFlag:   "sbm_server",
 			managers: HostManagers{
 				getMgr:       &SBMGetMgr{},
-				createMgr:    &SBMCreateMgr{},
 				powerMgr:     &SBMPowerMgr{},
 				reinstallMgr: &SBMReinstallMgr{},
 			},
 			extraCmds: []func(*base.CmdContext) *cobra.Command{
+				newAddSBMCmd,
 				newUpdateSBMCmd,
 				newSBMReleaseCmd,
 			},
@@ -119,9 +118,6 @@ func newHostTypeCmd(cmdContext *base.CmdContext, hostTypeCmd HostTypeCmd) *cobra
 	hostCmd.AddCommand(newListCmd(cmdContext, &hostTypeCmd))
 	hostCmd.AddCommand(newGetCmd(cmdContext, &hostTypeCmd))
 
-	if hostTypeCmd.managers.createMgr != nil {
-		hostCmd.AddCommand(newAddCmd(cmdContext, &hostTypeCmd))
-	}
 	if hostTypeCmd.managers.powerMgr != nil {
 		hostCmd.AddCommand(newPowerCmd(cmdContext, &hostTypeCmd))
 		hostCmd.AddCommand(newListPowerFeedsCmd(cmdContext, &hostTypeCmd))
