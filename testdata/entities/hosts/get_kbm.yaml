@@ -1,4 +1,8 @@
 id: testId
+kubernetesclusterid: testId
+kubernetesclusternodeid: testId
+kubernetesclusternodenumber: 1
+rackid: testId
 type: kubernetes_baremetal_node
 title: example.aa
 locationid: 0
@@ -9,7 +13,9 @@ powerstatus: ""
 configuration: ""
 privateipv4address: null
 publicipv4address: null
+leasestart: ""
 scheduledrelease: null
+oobipv4address: ""
 configurationdetails:
     ramsize: 0
     servermodelid: null

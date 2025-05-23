@@ -47,6 +47,7 @@ func RegisterHostDefinition() {
 	hostEntity := &Entity{
 		fields: []Field{
 			{ID: "ID", Name: "ID", Path: "ID", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
+			// {ID: "RackID", Name: "RackID", Path: "RackID", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
 			{ID: "Type", Name: "Type", Path: "Type", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
 			{ID: "Title", Name: "Title", Path: "Title", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
 			{ID: "LocationID", Name: "LocationID", Path: "LocationID", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
@@ -57,7 +58,9 @@ func RegisterHostDefinition() {
 			{ID: "Configuration", Name: "Configuration", Path: "Configuration", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
 			{ID: "PrivateIPv4Address", Name: "PrivateIPv4Address", Path: "PrivateIPv4Address", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
 			{ID: "PublicIPv4Address", Name: "PublicIPv4Address", Path: "PublicIPv4Address", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
+			// {ID: "LeaseStart", Name: "LeaseStart", Path: "LeaseStart", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
 			{ID: "ScheduledRelease", Name: "ScheduledRelease", Path: "ScheduledRelease", ListHandlerFunc: timeHandler, PageViewHandlerFunc: timeHandler},
+			// {ID: "OobIPv4Address", Name: "OobIPv4Address", Path: "OobIPv4Address", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
 			{ID: "Created", Name: "Created", Path: "Created", ListHandlerFunc: timeHandler, PageViewHandlerFunc: timeHandler, Default: true},
 			{ID: "Updated", Name: "Updated", Path: "Updated", ListHandlerFunc: timeHandler, PageViewHandlerFunc: timeHandler, Default: true},
 		},
@@ -73,6 +76,7 @@ func RegisterDedicatedServerDefinition() {
 	serverEntity := &Entity{
 		fields: []Field{
 			{ID: "ID", Name: "ID", Path: "ID", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
+			{ID: "RackID", Name: "RackID", Path: "RackID", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
 			{ID: "Type", Name: "Type", Path: "Type", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
 			{ID: "Title", Name: "Title", Path: "Title", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
 			{ID: "LocationID", Name: "LocationID", Path: "LocationID", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
@@ -83,7 +87,9 @@ func RegisterDedicatedServerDefinition() {
 			{ID: "Configuration", Name: "Configuration", Path: "Configuration", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
 			{ID: "PrivateIPv4Address", Name: "PrivateIPv4Address", Path: "PrivateIPv4Address", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
 			{ID: "PublicIPv4Address", Name: "PublicIPv4Address", Path: "PublicIPv4Address", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
+			{ID: "LeaseStart", Name: "LeaseStart", Path: "LeaseStart", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
 			{ID: "ScheduledRelease", Name: "ScheduledRelease", Path: "ScheduledRelease", ListHandlerFunc: timeHandler, PageViewHandlerFunc: timeHandler},
+			{ID: "OobIPv4Address", Name: "OobIPv4Address", Path: "OobIPv4Address", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
 			{ID: "Labels", Name: "Labels", Path: "Labels", PageViewHandlerFunc: mapPvHandler},
 			{ID: "Created", Name: "Created", Path: "Created", ListHandlerFunc: timeHandler, PageViewHandlerFunc: timeHandler, Default: true},
 			{ID: "Updated", Name: "Updated", Path: "Updated", ListHandlerFunc: timeHandler, PageViewHandlerFunc: timeHandler, Default: true},
@@ -101,6 +107,10 @@ func RegisterKubernetesBaremetalNodeDefinition() {
 	serverEntity := &Entity{
 		fields: []Field{
 			{ID: "ID", Name: "ID", Path: "ID", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
+			{ID: "KubernetesClusterId", Name: "KubernetesClusterId", Path: "KubernetesClusterId", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
+			{ID: "KubernetesClusterNodeId", Name: "KubernetesClusterNodeId", Path: "KubernetesClusterNodeId", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
+			{ID: "KubernetesClusterNodeNumber", Name: "KubernetesClusterNodeNumber", Path: "KubernetesClusterNodeNumber", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
+			{ID: "RackID", Name: "RackID", Path: "RackID", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
 			{ID: "Type", Name: "Type", Path: "Type", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
 			{ID: "Title", Name: "Title", Path: "Title", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
 			{ID: "LocationID", Name: "LocationID", Path: "LocationID", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
@@ -111,7 +121,9 @@ func RegisterKubernetesBaremetalNodeDefinition() {
 			{ID: "Configuration", Name: "Configuration", Path: "Configuration", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
 			{ID: "PrivateIPv4Address", Name: "PrivateIPv4Address", Path: "PrivateIPv4Address", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
 			{ID: "PublicIPv4Address", Name: "PublicIPv4Address", Path: "PublicIPv4Address", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
+			{ID: "LeaseStart", Name: "LeaseStart", Path: "LeaseStart", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
 			{ID: "ScheduledRelease", Name: "ScheduledRelease", Path: "ScheduledRelease", ListHandlerFunc: timeHandler, PageViewHandlerFunc: timeHandler},
+			{ID: "OobIPv4Address", Name: "OobIPv4Address", Path: "OobIPv4Address", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
 			{ID: "Labels", Name: "Labels", Path: "Labels", PageViewHandlerFunc: mapPvHandler},
 			{ID: "Created", Name: "Created", Path: "Created", ListHandlerFunc: timeHandler, PageViewHandlerFunc: timeHandler, Default: true},
 			{ID: "Updated", Name: "Updated", Path: "Updated", ListHandlerFunc: timeHandler, PageViewHandlerFunc: timeHandler, Default: true},
@@ -129,6 +141,7 @@ func RegisterSBMServerDefinition() {
 	serverEntity := &Entity{
 		fields: []Field{
 			{ID: "ID", Name: "ID", Path: "ID", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
+			{ID: "RackID", Name: "RackID", Path: "RackID", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
 			{ID: "Type", Name: "Type", Path: "Type", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
 			{ID: "Title", Name: "Title", Path: "Title", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
 			{ID: "LocationID", Name: "LocationID", Path: "LocationID", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
@@ -139,7 +152,9 @@ func RegisterSBMServerDefinition() {
 			{ID: "Configuration", Name: "Configuration", Path: "Configuration", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
 			{ID: "PrivateIPv4Address", Name: "PrivateIPv4Address", Path: "PrivateIPv4Address", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
 			{ID: "PublicIPv4Address", Name: "PublicIPv4Address", Path: "PublicIPv4Address", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
+			{ID: "LeaseStart", Name: "LeaseStart", Path: "LeaseStart", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
 			{ID: "ScheduledRelease", Name: "ScheduledRelease", Path: "ScheduledRelease", ListHandlerFunc: timeHandler, PageViewHandlerFunc: timeHandler},
+			{ID: "OobIPv4Address", Name: "OobIPv4Address", Path: "OobIPv4Address", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
 			{ID: "Labels", Name: "Labels", Path: "Labels", PageViewHandlerFunc: mapPvHandler},
 			{ID: "Created", Name: "Created", Path: "Created", ListHandlerFunc: timeHandler, PageViewHandlerFunc: timeHandler, Default: true},
 			{ID: "Updated", Name: "Updated", Path: "Updated", ListHandlerFunc: timeHandler, PageViewHandlerFunc: timeHandler, Default: true},

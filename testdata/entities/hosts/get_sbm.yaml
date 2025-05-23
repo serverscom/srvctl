@@ -1,4 +1,5 @@
 id: testId
+rackid: testId
 type: sbm_server
 title: example.aa
 locationid: 0
@@ -9,7 +10,9 @@ powerstatus: ""
 configuration: ""
 privateipv4address: null
 publicipv4address: null
+leasestart: ""
 scheduledrelease: null
+oobipv4address: ""
 configurationdetails:
     ramsize: 0
     servermodelid: null
