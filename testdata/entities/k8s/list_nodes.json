@@ -1,0 +1,18 @@
+[
+    {
+        "id": "testNodeId1",
+        "number": 1,
+        "hostname": "test-node-1",
+        "configuration": "SSD.50",
+        "type": "cloud",
+        "role": "master",
+        "status": "active",
+        "private_ipv4_address": "10.0.0.1",
+        "public_ipv4_address": "127.0.0.1",
+        "ref_id": "1",
+        "cluster_id": "testId",
+        "labels": null,
+        "created_at": "2025-01-01T12:00:00Z",
+        "updated_at": "2025-01-01T12:00:00Z"
+    }
+]

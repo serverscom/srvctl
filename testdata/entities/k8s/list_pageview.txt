@@ -1,0 +1,15 @@
+ID:          testId1
+Name:        test-cluster
+Status:      active
+LocationID:  1
+Labels:      <empty>
+Created:     2025-01-01T12:00:00Z
+Updated:     2025-01-01T12:00:00Z
+---
+ID:          testId2
+Name:        test-cluster 2
+Status:      active
+LocationID:  1
+Labels:      <empty>
+Created:     2025-01-01T12:00:00Z
+Updated:     2025-01-01T12:00:00Z

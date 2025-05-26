@@ -1,0 +1,14 @@
+id: testNodeId
+number: 1
+hostname: test-node-1
+configuration: SSD.50
+type: cloud
+role: master
+status: active
+privateipv4address: 10.0.0.1
+publicipv4address: 127.0.0.1
+refid: "1"
+clusterid: testId
+labels: {}
+created: 2025-01-01T12:00:00Z
+updated: 2025-01-01T12:00:00Z

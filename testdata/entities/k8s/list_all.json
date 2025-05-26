@@ -1,0 +1,20 @@
+[
+    {
+        "id": "testId1",
+        "name": "test-cluster",
+        "status": "active",
+        "location_id": 1,
+        "labels": null,
+        "created_at": "2025-01-01T12:00:00Z",
+        "updated_at": "2025-01-01T12:00:00Z"
+    },
+    {
+        "id": "testId2",
+        "name": "test-cluster 2",
+        "status": "active",
+        "location_id": 1,
+        "labels": null,
+        "created_at": "2025-01-01T12:00:00Z",
+        "updated_at": "2025-01-01T12:00:00Z"
+    }
+]
