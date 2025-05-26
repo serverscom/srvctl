@@ -19,4 +19,6 @@ func init() {
 	RegisterInvoiceDefinition()
 	RegisterAccountDefinition()
 	RegisterLocationDefinition()
+	RegisterKubernetesClusterDefinition()
+	RegisterKubernetesClusterNodeDefinition()
 }
