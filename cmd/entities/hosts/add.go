@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"strconv"
-	"strings"
+
+	"maps"
 
 	serverscom "github.com/serverscom/serverscom-go-client/pkg"
 	"github.com/serverscom/srvctl/cmd/base"
@@ -24,7 +24,7 @@ type AddDSFlags struct {
 	PublicBandwidthID int
 	PrivateUplinkID   int
 	DriveSlots        map[string]int
-	Layout            string
+	Layout            []string
 	Partitions        []string
 	IPv6              bool
 	UserDataFile      string
@@ -78,11 +78,11 @@ func applyFlagsToInput(
 	}
 
 	if pflags.Changed("layout") {
-		layout, err := parseLayout(flags.Layout)
+		layouts, err := parseLayout(flags.Layout)
 		if err != nil {
 			return err
 		}
-		input.Drives.Layout = layout
+		input.Drives.Layout = mergeLayouts(input.Drives.Layout, layouts)
 	}
 
 	if pflags.Changed("partition") {
@@ -93,7 +93,10 @@ func applyFlagsToInput(
 		if err != nil {
 			return err
 		}
-		input.Drives.Layout[0].Partitions = partitions
+		err = applyPartitions(input.Drives.Layout, partitions)
+		if err != nil {
+			return err
+		}
 	}
 	if pflags.Changed("ipv6") {
 		input.IPv6 = flags.IPv6
@@ -115,7 +118,7 @@ func applyFlagsToInput(
 
 	if pflags.Changed("labels") {
 		for i := range input.Hosts {
-			input.Hosts[i].Labels = flags.Labels
+			maps.Copy(input.Hosts[i].Labels, flags.Labels)
 		}
 	}
 	return nil
@@ -138,9 +141,12 @@ func newAddDSCmd(cmdContext *base.CmdContext) *cobra.Command {
 
 			input := serverscom.DedicatedServerCreateInput{}
 
-			if err := base.ReadInputJSON(flags.InputPath, cmd.InOrStdin(), &input); err != nil {
-				return err
+			if flags.InputPath != "" {
+				if err := base.ReadInputJSON(flags.InputPath, cmd.InOrStdin(), &input); err != nil {
+					return err
+				}
 			}
+
 			if len(input.Hosts) == 0 && len(args) == 0 {
 				return fmt.Errorf("no hosts found from positional args and no hosts found from input, can't continue")
 			}
@@ -148,6 +154,7 @@ func newAddDSCmd(cmdContext *base.CmdContext) *cobra.Command {
 			for _, hostname := range args {
 				input.Hosts = append(input.Hosts, serverscom.DedicatedServerHostInput{
 					Hostname: hostname,
+					Labels:   make(map[string]string),
 				})
 			}
 
@@ -183,7 +190,7 @@ func newAddDSCmd(cmdContext *base.CmdContext) *cobra.Command {
 	cmd.Flags().IntVar(&flags.PrivateUplinkID, "private-uplink-id", 0, "The private uplink ID")
 	cmd.Flags().IntVar(&flags.PublicBandwidthID, "public-bandwidth-id", 0, "The public bandwidth ID, MUST be omitted if public uplink id is not passed")
 	cmd.Flags().StringToIntVar(&flags.DriveSlots, "drive-slots", nil, "mapping of the specific slot to the specific drive model")
-	cmd.Flags().StringVar(&flags.Layout, "layout", "", "Configuration of drives layout")
+	cmd.Flags().StringArrayVar(&flags.Layout, "layout", nil, "Configuration of drives layout")
 	cmd.Flags().StringArrayVar(&flags.Partitions, "partition", nil, "Configuration of the specific partitions")
 	cmd.Flags().BoolVar(&flags.IPv6, "ipv6", false, "Enable IPv6")
 	cmd.Flags().StringVar(&flags.UserDataFile, "user-data-file", "", "Path to user data which should be readed")
@@ -234,84 +241,4 @@ func newAddSBMCmd(cmdContext *base.CmdContext) *cobra.Command {
 	}
 
 	return cmd
-}
-
-func parseDriveSlots(driveSlots map[string]int) ([]serverscom.DedicatedServerSlotInput, error) {
-	slots := make([]serverscom.DedicatedServerSlotInput, 0, len(driveSlots))
-	for pos, id := range driveSlots {
-		dId := int64(id)
-		posNum, err := strconv.Atoi(pos)
-		if err != nil {
-			return nil, fmt.Errorf("can't parse drive slot position '%s' as integer", pos)
-		}
-		slots = append(slots, serverscom.DedicatedServerSlotInput{
-			Position:     posNum,
-			DriveModelID: &dId,
-		})
-	}
-	return slots, nil
-}
-
-func parseLayout(s string) ([]serverscom.DedicatedServerLayoutInput, error) {
-	parts := strings.Split(s, ",")
-	var layout serverscom.DedicatedServerLayoutInput
-
-	for _, part := range parts {
-		pair := strings.SplitN(part, "=", 2)
-		if len(pair) != 2 {
-			continue
-		}
-		key := pair[0]
-		val := pair[1]
-
-		switch key {
-		case "slot":
-			num, err := strconv.Atoi(val)
-			if err != nil {
-				return nil, fmt.Errorf("can't parse layout slot '%s' as integer", val)
-			}
-			layout.SlotPositions = append(layout.SlotPositions, num)
-		case "raid":
-			raid, err := strconv.Atoi(val)
-			if err != nil {
-				return nil, fmt.Errorf("can't parse layout raid '%s' as integer", val)
-			}
-			layout.Raid = &raid
-		}
-	}
-	return []serverscom.DedicatedServerLayoutInput{layout}, nil
-}
-
-func parsePartitions(values []string) ([]serverscom.DedicatedServerLayoutPartitionInput, error) {
-	var result []serverscom.DedicatedServerLayoutPartitionInput
-
-	for _, s := range values {
-		var p serverscom.DedicatedServerLayoutPartitionInput
-		parts := strings.Split(s, ",")
-		for _, part := range parts {
-			pair := strings.SplitN(part, "=", 2)
-			if len(pair) != 2 {
-				continue
-			}
-			key, val := pair[0], pair[1]
-
-			switch key {
-			case "target":
-				p.Target = val
-			case "size":
-				size, err := strconv.Atoi(val)
-				if err != nil {
-					return nil, fmt.Errorf("can't parse partition size '%s' as integer", val)
-				}
-				p.Size = size
-			case "fs":
-				p.Fs = &val
-			case "fill":
-				p.Fill = (val == "true")
-			}
-		}
-		result = append(result, p)
-	}
-
-	return result, nil
 }
