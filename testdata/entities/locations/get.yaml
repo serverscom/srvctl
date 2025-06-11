@@ -1,0 +1,10 @@
+id: 1
+name: test-location
+status: active
+code: test
+supportedfeatures:
+    - feature1
+    - feature2
+l2segmentsenabled: false
+privateracksenabled: false
+loadbalancersenabled: false

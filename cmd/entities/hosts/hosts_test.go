@@ -26,6 +26,7 @@ var (
 	}
 	testDS = serverscom.DedicatedServer{
 		ID:      testId,
+		RackID:  testId,
 		Type:    "dedicated_server",
 		Title:   "example.aa",
 		Status:  "active",
@@ -33,15 +34,20 @@ var (
 		Updated: fixedTime,
 	}
 	testKBM = serverscom.KubernetesBaremetalNode{
-		ID:      testId,
-		Type:    "kubernetes_baremetal_node",
-		Title:   "example.aa",
-		Status:  "active",
-		Created: fixedTime,
-		Updated: fixedTime,
+		ID:                          testId,
+		RackID:                      testId,
+		KubernetesClusterID:         testId,
+		KubernetesClusterNodeID:     testId,
+		KubernetesClusterNodeNumber: 1,
+		Type:                        "kubernetes_baremetal_node",
+		Title:                       "example.aa",
+		Status:                      "active",
+		Created:                     fixedTime,
+		Updated:                     fixedTime,
 	}
 	testSBM = serverscom.SBMServer{
 		ID:      testId,
+		RackID:  testId,
 		Type:    "sbm_server",
 		Title:   "example.aa",
 		Status:  "active",

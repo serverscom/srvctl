@@ -1,6 +1,7 @@
 [
     {
         "id": "testId",
+        "rack_id": "testId",
         "type": "dedicated_server",
         "title": "example.aa",
         "location_id": 0,
@@ -11,7 +12,9 @@
         "configuration": "",
         "private_ipv4_address": null,
         "public_ipv4_address": null,
+        "lease_start_at": "",
         "scheduled_release_at": null,
+        "oob_ipv4_address": "",
         "configuration_details": {
             "ram_size": 0,
             "server_model_id": null,
