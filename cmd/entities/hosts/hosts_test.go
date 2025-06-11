@@ -57,6 +57,57 @@ var (
 )
 
 func TestAddDSCmd(t *testing.T) {
+	expectedInput := serverscom.DedicatedServerCreateInput{
+		ServerModelID: 1234,
+		LocationID:    5678,
+		RAMSize:       16,
+		UplinkModels: serverscom.DedicatedServerUplinkModelsInput{
+			Public: &serverscom.DedicatedServerPublicUplinkInput{
+				ID:               4321,
+				BandwidthModelID: 8765,
+			},
+			Private: serverscom.DedicatedServerPrivateUplinkInput{
+				ID: 7890,
+			},
+		},
+		Drives: serverscom.DedicatedServerDrivesInput{
+			Slots: []serverscom.DedicatedServerSlotInput{
+				{
+					Position:     1,
+					DriveModelID: testutils.PtrInt64(3456),
+				},
+				{
+					Position:     2,
+					DriveModelID: testutils.PtrInt64(3456),
+				},
+			},
+			Layout: []serverscom.DedicatedServerLayoutInput{
+				{
+					SlotPositions: []int{1, 2},
+					Raid:          testutils.PtrInt(1),
+					Partitions: []serverscom.DedicatedServerLayoutPartitionInput{
+						{
+							Target: "/boot",
+							Size:   500,
+							Fill:   false,
+							Fs:     testutils.PtrString("ext4"),
+						},
+					},
+				},
+			},
+		},
+		Hosts: []serverscom.DedicatedServerHostInput{
+			{
+				Hostname:             "example.aa",
+				PublicIPv4NetworkID:  testutils.PtrString("PublicNet123"),
+				PrivateIPv4NetworkID: testutils.PtrString("PrivateNet456"),
+				Labels: map[string]string{
+					"environment": "testing",
+				},
+			},
+		},
+	}
+
 	testCases := []struct {
 		name           string
 		output         string
@@ -72,56 +123,36 @@ func TestAddDSCmd(t *testing.T) {
 			args:           []string{"--input", filepath.Join(fixtureBasePath, "create_ds_input.json")},
 			configureMock: func(mock *mocks.MockHostsService) {
 				mock.EXPECT().
-					CreateDedicatedServers(gomock.Any(), serverscom.DedicatedServerCreateInput{
-						ServerModelID: 1234,
-						LocationID:    5678,
-						RAMSize:       16,
-						UplinkModels: serverscom.DedicatedServerUplinkModelsInput{
-							Public: &serverscom.DedicatedServerPublicUplinkInput{
-								ID:               4321,
-								BandwidthModelID: 8765,
-							},
-							Private: serverscom.DedicatedServerPrivateUplinkInput{
-								ID: 7890,
-							},
+					CreateDedicatedServers(gomock.Any(), expectedInput).
+					Return([]serverscom.DedicatedServer{testDS}, nil)
+			},
+		},
+		{
+			name:           "create dedicated server with merge input with flags",
+			output:         "json",
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "create_ds_resp.json")),
+			args: []string{
+				"--input", filepath.Join(fixtureBasePath, "create_ds_input.json"),
+				"--layout", "slot=3,slot=4,raid=0",
+				"--partition", "slot=3,slot=4,target=/boot,fs=ext4,size=500",
+			},
+			configureMock: func(mock *mocks.MockHostsService) {
+				input := expectedInput
+				input.Drives.Layout = append(input.Drives.Layout, serverscom.DedicatedServerLayoutInput{
+					SlotPositions: []int{3, 4},
+					Raid:          testutils.PtrInt(0),
+					Partitions: []serverscom.DedicatedServerLayoutPartitionInput{
+						{
+							Target: "/boot",
+							Size:   500,
+							Fill:   false,
+							Fs:     testutils.PtrString("ext4"),
 						},
-						Drives: serverscom.DedicatedServerDrivesInput{
-							Slots: []serverscom.DedicatedServerSlotInput{
-								{
-									Position:     1,
-									DriveModelID: testutils.PtrInt64(3456),
-								},
-								{
-									Position:     2,
-									DriveModelID: testutils.PtrInt64(3456),
-								},
-							},
-							Layout: []serverscom.DedicatedServerLayoutInput{
-								{
-									SlotPositions: []int{1, 2},
-									Raid:          testutils.PtrInt(1),
-									Partitions: []serverscom.DedicatedServerLayoutPartitionInput{
-										{
-											Target: "/boot",
-											Size:   500,
-											Fill:   false,
-											Fs:     testutils.PtrString("ext4"),
-										},
-									},
-								},
-							},
-						},
-						Hosts: []serverscom.DedicatedServerHostInput{
-							{
-								Hostname:             "example.aa",
-								PublicIPv4NetworkID:  testutils.PtrString("PublicNet123"),
-								PrivateIPv4NetworkID: testutils.PtrString("PrivateNet456"),
-								Labels: map[string]string{
-									"environment": "testing",
-								},
-							},
-						},
-					}).
+					},
+				})
+
+				mock.EXPECT().
+					CreateDedicatedServers(gomock.Any(), input).
 					Return([]serverscom.DedicatedServer{testDS}, nil)
 			},
 		},

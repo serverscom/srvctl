@@ -8,6 +8,7 @@ var (
 func init() {
 	RegisterSSHKeyDefinition()
 	RegisterHostDefinition()
+	RegisterHostsSubDefinitions()
 	RegisterDedicatedServerDefinition()
 	RegisterKubernetesBaremetalNodeDefinition()
 	RegisterSBMServerDefinition()
