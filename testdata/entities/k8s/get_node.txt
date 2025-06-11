@@ -1,0 +1,2 @@
+ID           Number   Hostname      Configuration   Type    Role     Status   PrivateIPv4Address   PublicIPv4Address   RefID   ClusterID   Created                Updated
+testNodeId   1        test-node-1   SSD.50          cloud   master   active   10.0.0.1             127.0.0.1           1       testId      2025-01-01T12:00:00Z   2025-01-01T12:00:00Z

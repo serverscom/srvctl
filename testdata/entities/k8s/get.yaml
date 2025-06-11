@@ -1,0 +1,7 @@
+id: testId
+name: test-cluster
+status: active
+locationid: 1
+labels: {}
+created: 2025-01-01T12:00:00Z
+updated: 2025-01-01T12:00:00Z
