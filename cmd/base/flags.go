@@ -11,7 +11,6 @@ func AddGlobalFlags(cmd *cobra.Command) {
 	cmd.PersistentFlags().StringP("output", "o", "text", "output format (text/json/yaml)")
 	// define help flag without shorthand before cobra adds it by default to avoid conflict with no-header flag shorthand
 	cmd.PersistentFlags().Bool("help", false, "Print usage")
-	cmd.PersistentFlags().Lookup("help").Hidden = true
 	cmd.PersistentFlags().BoolP("no-header", "h", false, "print output without headers")
 }
 

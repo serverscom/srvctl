@@ -12,6 +12,10 @@ var (
 	DedicatedServerType         = reflect.TypeOf(serverscom.DedicatedServer{})
 	KubernetesBaremetalNodeType = reflect.TypeOf(serverscom.KubernetesBaremetalNode{})
 	SBMServerType               = reflect.TypeOf(serverscom.SBMServer{})
+	HostConnectionType          = reflect.TypeOf(serverscom.HostConnection{})
+	HostPowerFeedType           = reflect.TypeOf(serverscom.HostPowerFeed{})
+	HostDriveSlotType           = reflect.TypeOf(serverscom.HostDriveSlot{})
+	HostPTRRecordType           = reflect.TypeOf(serverscom.PTRRecord{})
 	HostListDefaultFields       = []string{"ID", "Type", "Title", "Status"}
 	CmdDefaultFields            = map[string][]string{
 		"list": HostListDefaultFields,
@@ -37,6 +41,26 @@ func getConfigurationDetailsField() Field {
 		{ID: "BandwidthName", Name: "BandwidthName", Path: "BandwidthName", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Parent: &f},
 		{ID: "OperatingSystemID", Name: "OperatingSystemID", Path: "OperatingSystemID", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Parent: &f},
 		{ID: "OperatingSystemFullName", Name: "OperatingSystemFullName", Path: "OperatingSystemFullName", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Parent: &f},
+	}
+	f.ChildFields = append(f.ChildFields, childs...)
+
+	return f
+}
+
+func getDriveModel() Field {
+	f := Field{
+		ID:                  "DriveModel",
+		Name:                "DriveModel",
+		Path:                "DriveModel",
+		PageViewHandlerFunc: structPVHandler,
+	}
+	childs := []Field{
+		{ID: "ID", Name: "ID", Path: "ID", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Parent: &f},
+		{ID: "Name", Name: "Name", Path: "Name", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Parent: &f},
+		{ID: "Capacity", Name: "Capacity", Path: "Capacity", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Parent: &f},
+		{ID: "Interface", Name: "Interface", Path: "Interface", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Parent: &f},
+		{ID: "FormFactor", Name: "FormFactor", Path: "FormFactor", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Parent: &f},
+		{ID: "MediaType", Name: "MediaType", Path: "MediaType", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Parent: &f},
 	}
 	f.ChildFields = append(f.ChildFields, childs...)
 
@@ -166,4 +190,57 @@ func RegisterSBMServerDefinition() {
 	if err := Registry.Register(serverEntity); err != nil {
 		log.Fatal(err)
 	}
+}
+
+func RegisterHostsSubDefinitions() {
+	hostConnectionEntity := &Entity{
+		fields: []Field{
+			{ID: "Port", Name: "Port", Path: "Port", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
+			{ID: "Type", Name: "Type", Path: "Type", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
+			{ID: "MACAddress", Name: "MACAddress", Path: "MACAddress", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
+		},
+		eType: HostConnectionType,
+	}
+	if err := Registry.Register(hostConnectionEntity); err != nil {
+		log.Fatal(err)
+	}
+
+	hostPowerFeedEntity := &Entity{
+		fields: []Field{
+			{ID: "Name", Name: "Name", Path: "Name", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
+			{ID: "Status", Name: "Status", Path: "Status", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
+		},
+		eType: HostPowerFeedType,
+	}
+	if err := Registry.Register(hostPowerFeedEntity); err != nil {
+		log.Fatal(err)
+	}
+
+	hostDriveSlotEntity := &Entity{
+		fields: []Field{
+			{ID: "Position", Name: "Position", Path: "Position", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
+			{ID: "Interface", Name: "Interface", Path: "Interface", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
+			{ID: "FormFactor", Name: "FormFactor", Path: "FormFactor", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
+			getDriveModel(),
+		},
+		eType: HostDriveSlotType,
+	}
+	if err := Registry.Register(hostDriveSlotEntity); err != nil {
+		log.Fatal(err)
+	}
+
+	hostPTRRecordEntity := &Entity{
+		fields: []Field{
+			{ID: "ID", Name: "ID", Path: "ID", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
+			{ID: "IP", Name: "IP", Path: "IP", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
+			{ID: "Domain", Name: "Domain", Path: "Domain", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
+			{ID: "Priority", Name: "Priority", Path: "Priority", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
+			{ID: "TTL", Name: "TTL", Path: "TTL", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
+		},
+		eType: HostPTRRecordType,
+	}
+	if err := Registry.Register(hostPTRRecordEntity); err != nil {
+		log.Fatal(err)
+	}
+
 }
