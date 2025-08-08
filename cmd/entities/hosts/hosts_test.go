@@ -15,6 +15,7 @@ import (
 
 var (
 	testId          = "testId"
+	testNetworkId   = "testNetId"
 	fixtureBasePath = filepath.Join("..", "..", "..", "testdata", "entities", "hosts")
 	fixedTime       = time.Date(2025, 1, 1, 12, 0, 0, 0, time.UTC)
 	testHost        = serverscom.Host{
@@ -53,6 +54,20 @@ var (
 		Status:  "active",
 		Created: fixedTime,
 		Updated: fixedTime,
+	}
+	netTitle      = "Some Net"
+	cidr          = "100.0.8.0/29"
+	testDSNetwork = serverscom.Network{
+		ID:                 testNetworkId,
+		Title:              &netTitle,
+		Status:             "active",
+		Cidr:               &cidr,
+		Family:             "ipv4",
+		InterfaceType:      "public",
+		DistributionMethod: "gateway",
+		Additional:         false,
+		Created:            fixedTime,
+		Updated:            fixedTime,
 	}
 )
 
@@ -1391,6 +1406,401 @@ func TestReleaseSBMCmd(t *testing.T) {
 
 			cmd := builder.Build()
 
+			err = cmd.Execute()
+
+			if tc.expectError {
+				g.Expect(err).To(HaveOccurred())
+			} else {
+				g.Expect(err).To(BeNil())
+				g.Expect(builder.GetOutput()).To(BeEquivalentTo(string(tc.expectedOutput)))
+			}
+		})
+	}
+}
+
+func TestGetDSNetworkCmd(t *testing.T) {
+	testCases := []struct {
+		name           string
+		id             string
+		networkID      string
+		output         string
+		expectedOutput []byte
+		expectError    bool
+	}{
+		{
+			name:           "get DS network in default format",
+			id:             testId,
+			networkID:      testNetworkId,
+			output:         "",
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "get_ds_network.txt")),
+		},
+		{
+			name:           "get DS network in JSON format",
+			id:             testId,
+			networkID:      testNetworkId,
+			output:         "json",
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "get_ds_network.json")),
+		},
+		{
+			name:           "get DS network in YAML format",
+			id:             testId,
+			networkID:      testNetworkId,
+			output:         "yaml",
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "get_ds_network.yaml")),
+		},
+		{
+			name:        "get DS network with error",
+			id:          testId,
+			networkID:   testNetworkId,
+			expectError: true,
+		},
+	}
+
+	mockCtrl := gomock.NewController(t)
+	defer mockCtrl.Finish()
+
+	hostsServiceHandler := mocks.NewMockHostsService(mockCtrl)
+	scClient := serverscom.NewClientWithEndpoint("", "")
+	scClient.Hosts = hostsServiceHandler
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			g := NewWithT(t)
+
+			var err error
+			if tc.expectError {
+				err = errors.New("some error")
+			}
+			hostsServiceHandler.EXPECT().
+				GetDedicatedServerNetwork(gomock.Any(), tc.id, tc.networkID).
+				Return(&testDSNetwork, err)
+
+			testCmdContext := testutils.NewTestCmdContext(scClient)
+			hostsCmd := NewCmd(testCmdContext)
+
+			args := []string{
+				"hosts", "ds", "get-network", tc.id,
+				"--network-id", tc.networkID,
+			}
+			if tc.output != "" {
+				args = append(args, "--output", tc.output)
+			}
+
+			builder := testutils.NewTestCommandBuilder().
+				WithCommand(hostsCmd).
+				WithArgs(args)
+
+			cmd := builder.Build()
+			err = cmd.Execute()
+
+			if tc.expectError {
+				g.Expect(err).To(HaveOccurred())
+			} else {
+				g.Expect(err).To(BeNil())
+				g.Expect(builder.GetOutput()).To(BeEquivalentTo(string(tc.expectedOutput)))
+			}
+		})
+	}
+}
+
+func TestListDSNetworksCmd(t *testing.T) {
+	testNetwork1 := testDSNetwork
+	testNetwork1.ID = testNetworkId
+	testNetwork2 := testNetwork1
+	testNetwork2.ID = "testNetId2"
+	netTitle2 := "Another Net"
+	testNetwork2.Title = &netTitle2
+
+	testCases := []struct {
+		name           string
+		output         string
+		args           []string
+		expectedOutput []byte
+		expectError    bool
+		configureMock  func(*mocks.MockCollection[serverscom.Network])
+	}{
+		{
+			name:           "list all DS networks",
+			output:         "json",
+			args:           []string{"testServerId", "-A"},
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_ds_networks_all.json")),
+			configureMock: func(mock *mocks.MockCollection[serverscom.Network]) {
+				mock.EXPECT().
+					Collect(gomock.Any()).
+					Return([]serverscom.Network{
+						testNetwork1,
+						testNetwork2,
+					}, nil)
+			},
+		},
+		{
+			name:           "list DS networks",
+			output:         "json",
+			args:           []string{"testServerId"},
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_ds_networks.json")),
+			configureMock: func(mock *mocks.MockCollection[serverscom.Network]) {
+				mock.EXPECT().
+					List(gomock.Any()).
+					Return([]serverscom.Network{
+						testNetwork1,
+					}, nil)
+			},
+		},
+		{
+			name:           "list DS networks with template",
+			args:           []string{"testServerId", "--template", "{{range .}}Network: {{.ID}}  Title: {{.Title}}\n{{end}}"},
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_ds_networks_template.txt")),
+			configureMock: func(mock *mocks.MockCollection[serverscom.Network]) {
+				mock.EXPECT().
+					List(gomock.Any()).
+					Return([]serverscom.Network{
+						testNetwork1,
+						testNetwork2,
+					}, nil)
+			},
+		},
+		{
+			name:           "list DS networks with pageView",
+			args:           []string{"testServerId", "--page-view"},
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_ds_networks_pageview.txt")),
+			configureMock: func(mock *mocks.MockCollection[serverscom.Network]) {
+				mock.EXPECT().
+					List(gomock.Any()).
+					Return([]serverscom.Network{
+						testNetwork1,
+						testNetwork2,
+					}, nil)
+			},
+		},
+		{
+			name:        "list DS networks with error",
+			args:        []string{"testServerId"},
+			expectError: true,
+			configureMock: func(mock *mocks.MockCollection[serverscom.Network]) {
+				mock.EXPECT().
+					List(gomock.Any()).
+					Return(nil, errors.New("some error"))
+			},
+		},
+	}
+
+	mockCtrl := gomock.NewController(t)
+	defer mockCtrl.Finish()
+
+	hostsServiceHandler := mocks.NewMockHostsService(mockCtrl)
+	collectionHandler := mocks.NewMockCollection[serverscom.Network](mockCtrl)
+
+	hostsServiceHandler.EXPECT().
+		DedicatedServerNetworks(gomock.Any()).
+		Return(collectionHandler).
+		AnyTimes()
+
+	collectionHandler.EXPECT().
+		SetParam(gomock.Any(), gomock.Any()).
+		Return(collectionHandler).
+		AnyTimes()
+
+	scClient := serverscom.NewClientWithEndpoint("", "")
+	scClient.Hosts = hostsServiceHandler
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			g := NewWithT(t)
+
+			if tc.configureMock != nil {
+				tc.configureMock(collectionHandler)
+			}
+
+			testCmdContext := testutils.NewTestCmdContext(scClient)
+			hostsCmd := NewCmd(testCmdContext)
+
+			args := []string{"hosts", "ds", "list-networks"}
+			if len(tc.args) > 0 {
+				args = append(args, tc.args...)
+			}
+			if tc.output != "" {
+				args = append(args, "--output", tc.output)
+			}
+
+			builder := testutils.NewTestCommandBuilder().
+				WithCommand(hostsCmd).
+				WithArgs(args)
+
+			cmd := builder.Build()
+
+			err := cmd.Execute()
+
+			if tc.expectError {
+				g.Expect(err).To(HaveOccurred())
+			} else {
+				g.Expect(err).To(BeNil())
+				g.Expect(builder.GetOutput()).To(BeEquivalentTo(string(tc.expectedOutput)))
+			}
+		})
+	}
+}
+
+func TestAddDSNetworkCmd(t *testing.T) {
+	expectedInputPublic := serverscom.NetworkInput{
+		DistributionMethod: "route",
+		Mask:               32,
+	}
+	expectedInputPrivate := serverscom.NetworkInput{
+		DistributionMethod: "gateway",
+		Mask:               29,
+	}
+
+	testCases := []struct {
+		name           string
+		output         string
+		args           []string
+		configureMock  func(*mocks.MockHostsService)
+		expectedOutput []byte
+		expectError    bool
+	}{
+		{
+			name:   "add public DS network",
+			output: "json",
+			args: []string{
+				testId,
+				"--type", "public",
+				"--mask", "32",
+				"--distribution-method", "route",
+			},
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "get_ds_network.json")),
+			configureMock: func(mock *mocks.MockHostsService) {
+				mock.EXPECT().
+					AddDedicatedServerPublicIPv4Network(gomock.Any(), testId, expectedInputPublic).
+					Return(&testDSNetwork, nil)
+			},
+		},
+		{
+			name:   "add private DS network",
+			output: "json",
+			args: []string{
+				testId,
+				"--type", "private",
+				"--mask", "29",
+				"--distribution-method", "gateway",
+			},
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "get_ds_network.json")),
+			configureMock: func(mock *mocks.MockHostsService) {
+				mock.EXPECT().
+					AddDedicatedServerPrivateIPv4Network(gomock.Any(), testId, expectedInputPrivate).
+					Return(&testDSNetwork, nil)
+			},
+		},
+		{
+			name: "add DS network with unsupported mask",
+			args: []string{
+				testId,
+				"--type", "public",
+				"--mask", "24",
+				"--distribution-method", "gateway",
+			},
+			expectError: true,
+		},
+	}
+
+	mockCtrl := gomock.NewController(t)
+	defer mockCtrl.Finish()
+
+	hostsServiceHandler := mocks.NewMockHostsService(mockCtrl)
+
+	scClient := serverscom.NewClientWithEndpoint("", "")
+	scClient.Hosts = hostsServiceHandler
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			g := NewWithT(t)
+
+			if tc.configureMock != nil {
+				tc.configureMock(hostsServiceHandler)
+			}
+
+			testCmdContext := testutils.NewTestCmdContext(scClient)
+			hostsCmd := NewCmd(testCmdContext)
+
+			args := append([]string{"hosts", "ds", "add-network"}, tc.args...)
+			if tc.output != "" {
+				args = append(args, "--output", tc.output)
+			}
+
+			builder := testutils.NewTestCommandBuilder().
+				WithCommand(hostsCmd).
+				WithArgs(args)
+
+			cmd := builder.Build()
+
+			err := cmd.Execute()
+
+			if tc.expectError {
+				g.Expect(err).To(HaveOccurred())
+			} else {
+				g.Expect(err).To(BeNil())
+				g.Expect(builder.GetOutput()).To(BeEquivalentTo(string(tc.expectedOutput)))
+			}
+		})
+	}
+}
+
+func TestDeleteDSNetworkCmd(t *testing.T) {
+	testCases := []struct {
+		name           string
+		id             string
+		networkID      string
+		output         string
+		expectedOutput []byte
+		expectError    bool
+	}{
+		{
+			name:           "delete DS network",
+			id:             testId,
+			networkID:      testNetworkId,
+			output:         "json",
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "get_ds_network.json")),
+		},
+		{
+			name:        "delete DS network with error",
+			id:          testId,
+			networkID:   testNetworkId,
+			expectError: true,
+		},
+	}
+
+	mockCtrl := gomock.NewController(t)
+	defer mockCtrl.Finish()
+
+	hostsServiceHandler := mocks.NewMockHostsService(mockCtrl)
+
+	scClient := serverscom.NewClientWithEndpoint("", "")
+	scClient.Hosts = hostsServiceHandler
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			g := NewWithT(t)
+
+			var err error
+			if tc.expectError {
+				err = errors.New("some error")
+			}
+			hostsServiceHandler.EXPECT().
+				DeleteDedicatedServerNetwork(gomock.Any(), tc.id, tc.networkID).
+				Return(&testDSNetwork, err)
+
+			testCmdContext := testutils.NewTestCmdContext(scClient)
+			hostsCmd := NewCmd(testCmdContext)
+
+			args := []string{"hosts", "ds", "delete-network", tc.id, "--network-id", tc.networkID}
+			if tc.output != "" {
+				args = append(args, "--output", tc.output)
+			}
+
+			builder := testutils.NewTestCommandBuilder().
+				WithCommand(hostsCmd).
+				WithArgs(args)
+
+			cmd := builder.Build()
 			err = cmd.Execute()
 
 			if tc.expectError {
