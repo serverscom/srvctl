@@ -18,9 +18,16 @@ func newListDSNetworksCmd(cmdContext *base.CmdContext) *cobra.Command {
 		return scClient.Hosts.DedicatedServerNetworks(id)
 	}
 
-	opts := &base.BaseListOptions[serverscom.Network]{}
+	opts := base.NewListOptions(
+		&base.BaseListOptions[serverscom.Network]{},
+		&base.SearchPatternOption[serverscom.Network]{},
+		&base.FamilyOption[serverscom.Network]{},
+		&base.InterfaceTypeOption[serverscom.Network]{},
+		&base.DistributionMethodOption[serverscom.Network]{},
+		&base.AdditionalOption[serverscom.Network]{},
+	)
 
-	return base.NewListCmd("list-networks <id>", "Dedicated server networks", factory, cmdContext, opts)
+	return base.NewListCmd("list-networks <id>", "Dedicated server networks", factory, cmdContext, opts...)
 }
 
 func newGetDSNetworkCmd(cmdContext *base.CmdContext) *cobra.Command {
