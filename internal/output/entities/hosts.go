@@ -16,6 +16,7 @@ var (
 	HostPowerFeedType           = reflect.TypeOf(serverscom.HostPowerFeed{})
 	HostDriveSlotType           = reflect.TypeOf(serverscom.HostDriveSlot{})
 	HostPTRRecordType           = reflect.TypeOf(serverscom.PTRRecord{})
+	HostNetworkType             = reflect.TypeOf(serverscom.Network{})
 	HostListDefaultFields       = []string{"ID", "Type", "Title", "Status"}
 	CmdDefaultFields            = map[string][]string{
 		"list": HostListDefaultFields,
@@ -240,6 +241,25 @@ func RegisterHostsSubDefinitions() {
 		eType: HostPTRRecordType,
 	}
 	if err := Registry.Register(hostPTRRecordEntity); err != nil {
+		log.Fatal(err)
+	}
+
+	hostNetworkEntity := &Entity{
+		fields: []Field{
+			{ID: "ID", Name: "ID", Path: "ID", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
+			{ID: "Title", Name: "Title", Path: "Title", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
+			{ID: "Status", Name: "Status", Path: "Status", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
+			{ID: "CIDR", Name: "CIDR", Path: "Cidr", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
+			{ID: "Family", Name: "Family", Path: "Family", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
+			{ID: "InterfaceType", Name: "InterfaceType", Path: "InterfaceType", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
+			{ID: "DistributionMethod", Name: "DistributionMethod", Path: "DistributionMethod", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
+			{ID: "Additional", Name: "Additional", Path: "Additional", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
+			{ID: "Updated", Name: "Updated", Path: "Updated", ListHandlerFunc: timeHandler, PageViewHandlerFunc: timeHandler, Default: true},
+			{ID: "Created", Name: "Created", Path: "Created", ListHandlerFunc: timeHandler, PageViewHandlerFunc: timeHandler, Default: true},
+		},
+		eType: HostNetworkType,
+	}
+	if err := Registry.Register(hostNetworkEntity); err != nil {
 		log.Fatal(err)
 	}
 
