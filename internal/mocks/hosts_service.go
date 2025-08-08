@@ -56,6 +56,51 @@ func (mr *MockHostsServiceMockRecorder) AbortReleaseForDedicatedServer(ctx, id a
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AbortReleaseForDedicatedServer", reflect.TypeOf((*MockHostsService)(nil).AbortReleaseForDedicatedServer), ctx, id)
 }
 
+// ActivateDedicatedServerPubliIPv6Network mocks base method.
+func (m *MockHostsService) ActivateDedicatedServerPubliIPv6Network(ctx context.Context, id string) (*serverscom.Network, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ActivateDedicatedServerPubliIPv6Network", ctx, id)
+	ret0, _ := ret[0].(*serverscom.Network)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ActivateDedicatedServerPubliIPv6Network indicates an expected call of ActivateDedicatedServerPubliIPv6Network.
+func (mr *MockHostsServiceMockRecorder) ActivateDedicatedServerPubliIPv6Network(ctx, id any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ActivateDedicatedServerPubliIPv6Network", reflect.TypeOf((*MockHostsService)(nil).ActivateDedicatedServerPubliIPv6Network), ctx, id)
+}
+
+// AddDedicatedServerPrivateIPv4Network mocks base method.
+func (m *MockHostsService) AddDedicatedServerPrivateIPv4Network(ctx context.Context, id string, input serverscom.NetworkInput) (*serverscom.Network, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "AddDedicatedServerPrivateIPv4Network", ctx, id, input)
+	ret0, _ := ret[0].(*serverscom.Network)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// AddDedicatedServerPrivateIPv4Network indicates an expected call of AddDedicatedServerPrivateIPv4Network.
+func (mr *MockHostsServiceMockRecorder) AddDedicatedServerPrivateIPv4Network(ctx, id, input any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddDedicatedServerPrivateIPv4Network", reflect.TypeOf((*MockHostsService)(nil).AddDedicatedServerPrivateIPv4Network), ctx, id, input)
+}
+
+// AddDedicatedServerPublicIPv4Network mocks base method.
+func (m *MockHostsService) AddDedicatedServerPublicIPv4Network(ctx context.Context, id string, input serverscom.NetworkInput) (*serverscom.Network, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "AddDedicatedServerPublicIPv4Network", ctx, id, input)
+	ret0, _ := ret[0].(*serverscom.Network)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// AddDedicatedServerPublicIPv4Network indicates an expected call of AddDedicatedServerPublicIPv4Network.
+func (mr *MockHostsServiceMockRecorder) AddDedicatedServerPublicIPv4Network(ctx, id, input any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddDedicatedServerPublicIPv4Network", reflect.TypeOf((*MockHostsService)(nil).AddDedicatedServerPublicIPv4Network), ctx, id, input)
+}
+
 // Collection mocks base method.
 func (m *MockHostsService) Collection() serverscom.Collection[serverscom.Host] {
 	m.ctrl.T.Helper()
@@ -186,18 +231,33 @@ func (mr *MockHostsServiceMockRecorder) DedicatedServerPowerFeeds(ctx, id any) *
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DedicatedServerPowerFeeds", reflect.TypeOf((*MockHostsService)(nil).DedicatedServerPowerFeeds), ctx, id)
 }
 
-// DeletePTRRecordForDedicatedServer mocks base method.
-func (m *MockHostsService) DeletePTRRecordForDedicatedServer(ctx context.Context, hostID, ptrRecordID string) error {
+// DeleteDedicatedServerNetwork mocks base method.
+func (m *MockHostsService) DeleteDedicatedServerNetwork(ctx context.Context, serverID, networkID string) (*serverscom.Network, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "DeletePTRRecordForDedicatedServer", ctx, hostID, ptrRecordID)
+	ret := m.ctrl.Call(m, "DeleteDedicatedServerNetwork", ctx, serverID, networkID)
+	ret0, _ := ret[0].(*serverscom.Network)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// DeleteDedicatedServerNetwork indicates an expected call of DeleteDedicatedServerNetwork.
+func (mr *MockHostsServiceMockRecorder) DeleteDedicatedServerNetwork(ctx, serverID, networkID any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteDedicatedServerNetwork", reflect.TypeOf((*MockHostsService)(nil).DeleteDedicatedServerNetwork), ctx, serverID, networkID)
+}
+
+// DeletePTRRecordForDedicatedServer mocks base method.
+func (m *MockHostsService) DeletePTRRecordForDedicatedServer(ctx context.Context, serverID, ptrRecordID string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeletePTRRecordForDedicatedServer", ctx, serverID, ptrRecordID)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // DeletePTRRecordForDedicatedServer indicates an expected call of DeletePTRRecordForDedicatedServer.
-func (mr *MockHostsServiceMockRecorder) DeletePTRRecordForDedicatedServer(ctx, hostID, ptrRecordID any) *gomock.Call {
+func (mr *MockHostsServiceMockRecorder) DeletePTRRecordForDedicatedServer(ctx, serverID, ptrRecordID any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeletePTRRecordForDedicatedServer", reflect.TypeOf((*MockHostsService)(nil).DeletePTRRecordForDedicatedServer), ctx, hostID, ptrRecordID)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeletePTRRecordForDedicatedServer", reflect.TypeOf((*MockHostsService)(nil).DeletePTRRecordForDedicatedServer), ctx, serverID, ptrRecordID)
 }
 
 // GetDedicatedServer mocks base method.
@@ -213,6 +273,36 @@ func (m *MockHostsService) GetDedicatedServer(ctx context.Context, id string) (*
 func (mr *MockHostsServiceMockRecorder) GetDedicatedServer(ctx, id any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetDedicatedServer", reflect.TypeOf((*MockHostsService)(nil).GetDedicatedServer), ctx, id)
+}
+
+// GetDedicatedServerNetwork mocks base method.
+func (m *MockHostsService) GetDedicatedServerNetwork(ctx context.Context, serverID, networkID string) (*serverscom.Network, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetDedicatedServerNetwork", ctx, serverID, networkID)
+	ret0, _ := ret[0].(*serverscom.Network)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetDedicatedServerNetwork indicates an expected call of GetDedicatedServerNetwork.
+func (mr *MockHostsServiceMockRecorder) GetDedicatedServerNetwork(ctx, serverID, networkID any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetDedicatedServerNetwork", reflect.TypeOf((*MockHostsService)(nil).GetDedicatedServerNetwork), ctx, serverID, networkID)
+}
+
+// GetDedicatedServerNetworkUsage mocks base method.
+func (m *MockHostsService) GetDedicatedServerNetworkUsage(ctx context.Context, id string) (*serverscom.NetworkUsage, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetDedicatedServerNetworkUsage", ctx, id)
+	ret0, _ := ret[0].(*serverscom.NetworkUsage)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetDedicatedServerNetworkUsage indicates an expected call of GetDedicatedServerNetworkUsage.
+func (mr *MockHostsServiceMockRecorder) GetDedicatedServerNetworkUsage(ctx, id any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetDedicatedServerNetworkUsage", reflect.TypeOf((*MockHostsService)(nil).GetDedicatedServerNetworkUsage), ctx, id)
 }
 
 // GetKubernetesBaremetalNode mocks base method.
