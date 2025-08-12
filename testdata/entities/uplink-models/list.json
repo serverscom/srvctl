@@ -1,0 +1,9 @@
+[
+    {
+        "id": 10,
+        "name": "Public 1 Gbps with redundancy",
+        "type": "public",
+        "speed": 1000,
+        "redundancy": true
+    }
+]
