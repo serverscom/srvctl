@@ -22,4 +22,6 @@ func init() {
 	RegisterLocationDefinition()
 	RegisterKubernetesClusterDefinition()
 	RegisterKubernetesClusterNodeDefinition()
+	RegisterUplinkOptionDefinition()
+	RegisterBandwidthOptionDefinition()
 }
