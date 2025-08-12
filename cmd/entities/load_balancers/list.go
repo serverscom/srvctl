@@ -20,6 +20,7 @@ func newListCmd(cmdContext *base.CmdContext, lbType *LBTypeCmd) *cobra.Command {
 
 	opts := base.NewListOptions(
 		&base.BaseListOptions[serverscom.LoadBalancer]{},
+		&base.HiddenTypeOption[serverscom.LoadBalancer]{},
 		&base.LabelSelectorOption[serverscom.LoadBalancer]{},
 		&base.SearchPatternOption[serverscom.LoadBalancer]{},
 		&base.LocationIDOption[serverscom.LoadBalancer]{},

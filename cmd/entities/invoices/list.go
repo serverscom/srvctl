@@ -14,7 +14,7 @@ func newListCmd(cmdContext *base.CmdContext) *cobra.Command {
 
 	opts := base.NewListOptions(
 		&base.BaseListOptions[serverscom.InvoiceList]{},
-		&base.StatusOption[serverscom.InvoiceList]{},
+		&base.InvoiceStatusOption[serverscom.InvoiceList]{},
 		&base.InvoiceTypeOption[serverscom.InvoiceList]{},
 		&base.ParentIDOption[serverscom.InvoiceList]{},
 		&base.CurrencyOption[serverscom.InvoiceList]{},

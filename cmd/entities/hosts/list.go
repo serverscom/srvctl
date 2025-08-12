@@ -45,6 +45,7 @@ func newListCmd(cmdContext *base.CmdContext, hostType *HostTypeCmd) *cobra.Comma
 
 	opts := base.NewListOptions(
 		&hostListOptions{},
+		&base.HiddenTypeOption[serverscom.Host]{},
 		&base.LabelSelectorOption[serverscom.Host]{},
 		&base.SearchPatternOption[serverscom.Host]{},
 	)
