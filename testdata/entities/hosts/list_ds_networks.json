@@ -1,0 +1,15 @@
+[
+    {
+        "id": "testNetId",
+        "title": "Some Net",
+        "status": "active",
+        "cidr": "100.0.8.0/29",
+        "family": "ipv4",
+        "interface_type": "public",
+        "distribution_method": "gateway",
+        "additional": false,
+        "created_at": "2025-01-01T12:00:00Z",
+        "updated_at": "2025-01-01T12:00:00Z",
+        "state": ""
+    }
+]

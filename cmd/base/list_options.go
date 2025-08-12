@@ -217,3 +217,59 @@ func (o *EndDateOption[T]) ApplyToCollection(collection serverscom.Collection[T]
 		collection.SetParam("end_date", o.endDate)
 	}
 }
+
+type FamilyOption[T any] struct {
+	family string
+}
+
+func (o *FamilyOption[T]) AddFlags(cmd *cobra.Command) {
+	cmd.Flags().StringVar(&o.family, "family", "", "Set to 'ipv4' or 'ipv6'")
+}
+
+func (o *FamilyOption[T]) ApplyToCollection(collection serverscom.Collection[T]) {
+	if o.family != "" {
+		collection.SetParam("family", o.family)
+	}
+}
+
+type InterfaceTypeOption[T any] struct {
+	interfaceType string
+}
+
+func (o *InterfaceTypeOption[T]) AddFlags(cmd *cobra.Command) {
+	cmd.Flags().StringVar(&o.interfaceType, "interface-type", "", "Type of network interface: public, private, oob")
+}
+
+func (o *InterfaceTypeOption[T]) ApplyToCollection(collection serverscom.Collection[T]) {
+	if o.interfaceType != "" {
+		collection.SetParam("interface_type", o.interfaceType)
+	}
+}
+
+type DistributionMethodOption[T any] struct {
+	distributionMethod string
+}
+
+func (o *DistributionMethodOption[T]) AddFlags(cmd *cobra.Command) {
+	cmd.Flags().StringVar(&o.distributionMethod, "distribution-method", "", "Distribution method: route or gateway")
+}
+
+func (o *DistributionMethodOption[T]) ApplyToCollection(collection serverscom.Collection[T]) {
+	if o.distributionMethod != "" {
+		collection.SetParam("distribution_method", o.distributionMethod)
+	}
+}
+
+type AdditionalOption[T any] struct {
+	additional bool
+}
+
+func (o *AdditionalOption[T]) AddFlags(cmd *cobra.Command) {
+	cmd.Flags().BoolVar(&o.additional, "additional", false, "Filter additional networks only")
+}
+
+func (o *AdditionalOption[T]) ApplyToCollection(collection serverscom.Collection[T]) {
+	if o.additional {
+		collection.SetParam("additional", "true")
+	}
+}

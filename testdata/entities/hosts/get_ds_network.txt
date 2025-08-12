@@ -1,0 +1,2 @@
+ID          Title      Status   CIDR           Family   InterfaceType   DistributionMethod   Additional   Updated                Created
+testNetId   Some Net   active   100.0.8.0/29   ipv4     public          gateway              false        2025-01-01T12:00:00Z   2025-01-01T12:00:00Z
