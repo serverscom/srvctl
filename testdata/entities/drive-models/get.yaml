@@ -1,0 +1,6 @@
+id: 10
+name: ssd-model-749
+capacity: 100
+interface: SATA3
+formfactor: "2.5"
+mediatype: SSD

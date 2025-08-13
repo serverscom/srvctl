@@ -5,12 +5,14 @@ import (
 	"github.com/serverscom/srvctl/cmd/config"
 	"github.com/serverscom/srvctl/cmd/context"
 	"github.com/serverscom/srvctl/cmd/entities/account"
+	"github.com/serverscom/srvctl/cmd/entities/drivemodels"
 	"github.com/serverscom/srvctl/cmd/entities/hosts"
 	"github.com/serverscom/srvctl/cmd/entities/invoices"
 	"github.com/serverscom/srvctl/cmd/entities/k8s"
 	loadbalancers "github.com/serverscom/srvctl/cmd/entities/load_balancers"
 	"github.com/serverscom/srvctl/cmd/entities/locations"
 	"github.com/serverscom/srvctl/cmd/entities/racks"
+	"github.com/serverscom/srvctl/cmd/entities/servermodels"
 	sshkeys "github.com/serverscom/srvctl/cmd/entities/ssh-keys"
 	"github.com/serverscom/srvctl/cmd/entities/ssl"
 	"github.com/serverscom/srvctl/cmd/entities/uplinkbandwidths"
@@ -56,6 +58,8 @@ func NewRootCmd(version string) *cobra.Command {
 	cmd.AddCommand(k8s.NewCmd(cmdContext))
 	cmd.AddCommand(uplinkmodels.NewCmd(cmdContext))
 	cmd.AddCommand(uplinkbandwidths.NewCmd(cmdContext))
+	cmd.AddCommand(servermodels.NewCmd(cmdContext))
+	cmd.AddCommand(drivemodels.NewCmd(cmdContext))
 
 	return cmd
 }

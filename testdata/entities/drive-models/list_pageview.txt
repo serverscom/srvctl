@@ -1,0 +1,13 @@
+ID:          10
+Name:        ssd-model-749
+Capacity:    100
+Interface:   SATA3
+FormFactor:  2.5
+MediaType:   SSD
+---
+ID:          11
+Name:        hdd-model-741
+Capacity:    100
+Interface:   SATA3
+FormFactor:  2.5
+MediaType:   HDD
