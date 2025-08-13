@@ -1,0 +1,25 @@
+ID:                  100
+Name:                server-model-123
+CPUName:             Intel Xeon Silver 4214
+CPUCount:            2
+CPUCoresCount:       24
+CPUFrequency:        2200
+RAM:                 64
+RAMType:             DDR4 ECC
+MaxRAM:              2048
+HasRAIDController:   true
+RAIDControllerName:  PERC H740P
+DriveSlotsCount:     16
+---
+ID:                  101
+Name:                server-model-456
+CPUName:             Intel Xeon Silver 4214
+CPUCount:            2
+CPUCoresCount:       24
+CPUFrequency:        2200
+RAM:                 64
+RAMType:             DDR4 ECC
+MaxRAM:              2048
+HasRAIDController:   true
+RAIDControllerName:  PERC H740P
+DriveSlotsCount:     16

@@ -24,4 +24,6 @@ func init() {
 	RegisterKubernetesClusterNodeDefinition()
 	RegisterUplinkOptionDefinition()
 	RegisterBandwidthOptionDefinition()
+	RegisterDriveModelOptionDefinition()
+	RegisterServerModelOptionDefinitions()
 }

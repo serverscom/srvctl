@@ -1,0 +1,23 @@
+id: 100
+name: server-model-123
+cpuname: Intel Xeon Silver 4214
+cpucount: 2
+cpucorescount: 24
+cpufrequency: 2200
+ram: 64
+ramtype: DDR4 ECC
+maxram: 2048
+hasraidcontroller: true
+raidcontrollername: PERC H740P
+driveslotscount: 16
+driveslots:
+    - position: 1
+      interface: SAS
+      formfactor: 2.5"
+      drivemodelid: 101
+      hotswappable: true
+    - position: 2
+      interface: SAS
+      formfactor: 2.5"
+      drivemodelid: 102
+      hotswappable: true

@@ -120,8 +120,7 @@ func RegisterDedicatedServerDefinition() {
 			{ID: "Updated", Name: "Updated", Path: "Updated", ListHandlerFunc: timeHandler, PageViewHandlerFunc: timeHandler, Default: true},
 			getConfigurationDetailsField(),
 		},
-		cmdDefaultFields: CmdDefaultFields,
-		eType:            DedicatedServerType,
+		eType: DedicatedServerType,
 	}
 	if err := Registry.Register(serverEntity); err != nil {
 		log.Fatal(err)
@@ -154,8 +153,7 @@ func RegisterKubernetesBaremetalNodeDefinition() {
 			{ID: "Updated", Name: "Updated", Path: "Updated", ListHandlerFunc: timeHandler, PageViewHandlerFunc: timeHandler, Default: true},
 			getConfigurationDetailsField(),
 		},
-		cmdDefaultFields: CmdDefaultFields,
-		eType:            KubernetesBaremetalNodeType,
+		eType: KubernetesBaremetalNodeType,
 	}
 	if err := Registry.Register(serverEntity); err != nil {
 		log.Fatal(err)
@@ -185,8 +183,7 @@ func RegisterSBMServerDefinition() {
 			{ID: "Updated", Name: "Updated", Path: "Updated", ListHandlerFunc: timeHandler, PageViewHandlerFunc: timeHandler, Default: true},
 			getConfigurationDetailsField(),
 		},
-		cmdDefaultFields: CmdDefaultFields,
-		eType:            SBMServerType,
+		eType: SBMServerType,
 	}
 	if err := Registry.Register(serverEntity); err != nil {
 		log.Fatal(err)

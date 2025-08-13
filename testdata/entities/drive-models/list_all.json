@@ -1,0 +1,18 @@
+[
+    {
+        "id": 10,
+        "name": "ssd-model-749",
+        "capacity": 100,
+        "interface": "SATA3",
+        "form_factor": "2.5",
+        "media_type": "SSD"
+    },
+    {
+        "id": 11,
+        "name": "hdd-model-741",
+        "capacity": 100,
+        "interface": "SATA3",
+        "form_factor": "2.5",
+        "media_type": "HDD"
+    }
+]

@@ -1,0 +1,16 @@
+[
+    {
+        "id": 100,
+        "name": "server-model-123",
+        "cpu_name": "Intel Xeon Silver 4214",
+        "cpu_count": 2,
+        "cpu_cores_count": 24,
+        "cpu_frequency": 2200,
+        "ram": 64,
+        "ram_type": "DDR4 ECC",
+        "max_ram": 2048,
+        "has_raid_controller": true,
+        "raid_controller_name": "PERC H740P",
+        "drive_slots_count": 16
+    }
+]

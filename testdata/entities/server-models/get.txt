@@ -1,0 +1,2 @@
+ID    Name               CPUName                  CPUCount   CPUCoresCount   CPUFrequency   RAM   RAMType    MaxRAM   HasRAIDController   RAIDControllerName   DriveSlotsCount
+100   server-model-123   Intel Xeon Silver 4214   2          24              2200           64    DDR4 ECC   2048     true                PERC H740P           16

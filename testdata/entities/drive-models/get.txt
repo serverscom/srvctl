@@ -1,0 +1,2 @@
+ID   Name            Capacity   Interface   FormFactor   MediaType
+10   ssd-model-749   100        SATA3       2.5          SSD

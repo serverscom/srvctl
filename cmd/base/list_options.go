@@ -341,3 +341,48 @@ func (o *BandwidthTypeOption[T]) ApplyToCollection(collection serverscom.Collect
 		collection.SetParam("type", o.bandwidthType)
 	}
 }
+
+type HasRaidControllerOption[T any] struct {
+	hasRaidController bool
+}
+
+func (o *HasRaidControllerOption[T]) AddFlags(cmd *cobra.Command) {
+	cmd.Flags().BoolVar(&o.hasRaidController, "has-raid-controller", false,
+		"Filter only servers with RAID controller")
+}
+
+func (o *HasRaidControllerOption[T]) ApplyToCollection(collection serverscom.Collection[T]) {
+	if o.hasRaidController {
+		collection.SetParam("has_raid_controller", "true")
+	}
+}
+
+type DriveMediaTypeOption[T any] struct {
+	mediaType string
+}
+
+func (o *DriveMediaTypeOption[T]) AddFlags(cmd *cobra.Command) {
+	cmd.Flags().StringVar(&o.mediaType, "media-type", "",
+		"Filter drives by media type (HDD, SSD")
+}
+
+func (o *DriveMediaTypeOption[T]) ApplyToCollection(collection serverscom.Collection[T]) {
+	if o.mediaType != "" {
+		collection.SetParam("media_type", o.mediaType)
+	}
+}
+
+type DriveInterfaceOption[T any] struct {
+	iface string
+}
+
+func (o *DriveInterfaceOption[T]) AddFlags(cmd *cobra.Command) {
+	cmd.Flags().StringVar(&o.iface, "interface", "",
+		"Filter drives by interface (SATA1, SATA2, SATA3, SAS, NVMe-PCIe)")
+}
+
+func (o *DriveInterfaceOption[T]) ApplyToCollection(collection serverscom.Collection[T]) {
+	if o.iface != "" {
+		collection.SetParam("interface", o.iface)
+	}
+}
