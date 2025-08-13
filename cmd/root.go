@@ -13,6 +13,8 @@ import (
 	"github.com/serverscom/srvctl/cmd/entities/racks"
 	sshkeys "github.com/serverscom/srvctl/cmd/entities/ssh-keys"
 	"github.com/serverscom/srvctl/cmd/entities/ssl"
+	"github.com/serverscom/srvctl/cmd/entities/uplinkbandwidths"
+	"github.com/serverscom/srvctl/cmd/entities/uplinkmodels"
 	"github.com/serverscom/srvctl/cmd/login"
 	"github.com/serverscom/srvctl/internal/client"
 	"github.com/spf13/cobra"
@@ -52,6 +54,8 @@ func NewRootCmd(version string) *cobra.Command {
 	cmd.AddCommand(account.NewCmd(cmdContext))
 	cmd.AddCommand(locations.NewCmd(cmdContext))
 	cmd.AddCommand(k8s.NewCmd(cmdContext))
+	cmd.AddCommand(uplinkmodels.NewCmd(cmdContext))
+	cmd.AddCommand(uplinkbandwidths.NewCmd(cmdContext))
 
 	return cmd
 }

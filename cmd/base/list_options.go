@@ -1,7 +1,7 @@
 package base
 
 import (
-	"log"
+	"fmt"
 	"strings"
 
 	serverscom "github.com/serverscom/serverscom-go-client/pkg"
@@ -36,13 +36,8 @@ func (o *BaseListOptions[T]) AddFlags(cmd *cobra.Command) {
 	flags.IntVar(&o.perPage, "per-page", 0, "Number of items per page")
 	flags.IntVar(&o.page, "page", 0, "Page number")
 	flags.StringVar(&o.sorting, "sorting", "", "Sort field")
-	flags.StringVar(&o.direction, "direction", "", "Sort direction (ASC or DESC)")
+	flags.StringVar(&o.direction, "direction", "", "Sort direction (asc, desc)")
 	flags.BoolVarP(&o.allPages, "all", "A", false, "Get all pages of resources")
-
-	flags.String("type", "", "")
-	if err := flags.MarkHidden("type"); err != nil {
-		log.Fatal(err)
-	}
 }
 
 // ApplyToCollection applies the options to a collection
@@ -65,6 +60,19 @@ func (o *BaseListOptions[T]) ApplyToCollection(collection serverscom.Collection[
 // AllPages returns true if all pages should be retrieved
 func (o *BaseListOptions[T]) AllPages() bool {
 	return o.allPages
+}
+
+// HiddenTypeOption adds hidden type flag.
+// Used in commands that determine type from sub command rather than user input
+type HiddenTypeOption[T any] struct{}
+
+func (o *HiddenTypeOption[T]) AddFlags(cmd *cobra.Command) {
+	cmd.Flags().String("type", "", "")
+	_ = cmd.Flags().MarkHidden("type")
+}
+
+func (o *HiddenTypeOption[T]) ApplyToCollection(collection serverscom.Collection[T]) {
+	// stub for compatibility with other options
 }
 
 // label selector option
@@ -127,16 +135,16 @@ func (o *ClusterIDOption[T]) ApplyToCollection(collection serverscom.Collection[
 	}
 }
 
-// status option
-type StatusOption[T any] struct {
+// invoice status option
+type InvoiceStatusOption[T any] struct {
 	status string
 }
 
-func (o *StatusOption[T]) AddFlags(cmd *cobra.Command) {
-	cmd.Flags().StringVar(&o.status, "status", "", "Filter results by status")
+func (o *InvoiceStatusOption[T]) AddFlags(cmd *cobra.Command) {
+	cmd.Flags().StringVar(&o.status, "status", "", "Filter results by status (pending, outstanding, overdue, paid, canceled, reissued)")
 }
 
-func (o *StatusOption[T]) ApplyToCollection(collection serverscom.Collection[T]) {
+func (o *InvoiceStatusOption[T]) ApplyToCollection(collection serverscom.Collection[T]) {
 	if o.status != "" {
 		collection.SetParam("status", o.status)
 	}
@@ -149,7 +157,7 @@ type InvoiceTypeOption[T any] struct {
 
 // use itype instead of type to avoid conflict with baseList 'type'  hidden flag which we use for subcommands
 func (o *InvoiceTypeOption[T]) AddFlags(cmd *cobra.Command) {
-	cmd.Flags().StringVar(&o.typeVal, "itype", "", "Filter results by type")
+	cmd.Flags().StringVar(&o.typeVal, "type", "", "Filter results by type (invoice, credit_note)")
 }
 
 func (o *InvoiceTypeOption[T]) ApplyToCollection(collection serverscom.Collection[T]) {
@@ -223,7 +231,7 @@ type FamilyOption[T any] struct {
 }
 
 func (o *FamilyOption[T]) AddFlags(cmd *cobra.Command) {
-	cmd.Flags().StringVar(&o.family, "family", "", "Set to 'ipv4' or 'ipv6'")
+	cmd.Flags().StringVar(&o.family, "family", "", "Filter results by IP family (ipv4, ipv6)")
 }
 
 func (o *FamilyOption[T]) ApplyToCollection(collection serverscom.Collection[T]) {
@@ -237,7 +245,7 @@ type InterfaceTypeOption[T any] struct {
 }
 
 func (o *InterfaceTypeOption[T]) AddFlags(cmd *cobra.Command) {
-	cmd.Flags().StringVar(&o.interfaceType, "interface-type", "", "Type of network interface: public, private, oob")
+	cmd.Flags().StringVar(&o.interfaceType, "interface-type", "", "Filter results by network interface type (public, private, oob)")
 }
 
 func (o *InterfaceTypeOption[T]) ApplyToCollection(collection serverscom.Collection[T]) {
@@ -251,7 +259,7 @@ type DistributionMethodOption[T any] struct {
 }
 
 func (o *DistributionMethodOption[T]) AddFlags(cmd *cobra.Command) {
-	cmd.Flags().StringVar(&o.distributionMethod, "distribution-method", "", "Distribution method: route or gateway")
+	cmd.Flags().StringVar(&o.distributionMethod, "distribution-method", "", "Filter results by distribution method (route, gateway)")
 }
 
 func (o *DistributionMethodOption[T]) ApplyToCollection(collection serverscom.Collection[T]) {
@@ -271,5 +279,65 @@ func (o *AdditionalOption[T]) AddFlags(cmd *cobra.Command) {
 func (o *AdditionalOption[T]) ApplyToCollection(collection serverscom.Collection[T]) {
 	if o.additional {
 		collection.SetParam("additional", "true")
+	}
+}
+
+// redundancy option
+type RedundancyOption[T any] struct {
+	redundancy bool
+}
+
+func (o *RedundancyOption[T]) AddFlags(cmd *cobra.Command) {
+	cmd.Flags().BoolVar(&o.redundancy, "redundancy", false, "Filter uplinks by redundancy (true, false)")
+}
+
+func (o *RedundancyOption[T]) ApplyToCollection(collection serverscom.Collection[T]) {
+	if o.redundancy {
+		collection.SetParam("redundancy", "true")
+	}
+}
+
+// uplink type option
+type UplinkTypeOption[T any] struct {
+	uplinkType string
+}
+
+func (o *UplinkTypeOption[T]) AddFlags(cmd *cobra.Command) {
+	cmd.Flags().StringVar(&o.uplinkType, "type", "", "Filter uplinks by type (public, private)")
+}
+
+func (o *UplinkTypeOption[T]) ApplyToCollection(collection serverscom.Collection[T]) {
+	if o.uplinkType != "" {
+		collection.SetParam("type", o.uplinkType)
+	}
+}
+
+// operating system id option
+type OperatingSystemIDOption[T any] struct {
+	osID int64
+}
+
+func (o *OperatingSystemIDOption[T]) AddFlags(cmd *cobra.Command) {
+	cmd.Flags().Int64Var(&o.osID, "operating-system-id", 0, "Filter uplinks by operating system ID")
+}
+
+func (o *OperatingSystemIDOption[T]) ApplyToCollection(collection serverscom.Collection[T]) {
+	if o.osID != 0 {
+		collection.SetParam("operating_system_id", fmt.Sprintf("%d", o.osID))
+	}
+}
+
+// bandwidth type option
+type BandwidthTypeOption[T any] struct {
+	bandwidthType string
+}
+
+func (o *BandwidthTypeOption[T]) AddFlags(cmd *cobra.Command) {
+	cmd.Flags().StringVar(&o.bandwidthType, "type", "", `Filter bandwidth options by type (bytes, bandwidth, unmetered)`)
+}
+
+func (o *BandwidthTypeOption[T]) ApplyToCollection(collection serverscom.Collection[T]) {
+	if o.bandwidthType != "" {
+		collection.SetParam("type", o.bandwidthType)
 	}
 }

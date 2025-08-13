@@ -20,6 +20,7 @@ func newListCmd(cmdContext *base.CmdContext, sslType *SSLTypeCmd) *cobra.Command
 
 	opts := base.NewListOptions(
 		&base.BaseListOptions[serverscom.SSLCertificate]{},
+		&base.HiddenTypeOption[serverscom.SSLCertificate]{},
 		&base.LabelSelectorOption[serverscom.SSLCertificate]{},
 		&base.SearchPatternOption[serverscom.SSLCertificate]{},
 	)

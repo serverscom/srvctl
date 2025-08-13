@@ -1,0 +1,11 @@
+ID:          10
+Name:        Public 1 Gbps with redundancy
+Type:        public
+Speed:       1000
+Redundancy:  true
+---
+ID:          11
+Name:        Private 1 Gbps with redundancy
+Type:        private
+Speed:       1000
+Redundancy:  true
