@@ -386,3 +386,18 @@ func (o *DriveInterfaceOption[T]) ApplyToCollection(collection serverscom.Collec
 		collection.SetParam("interface", o.iface)
 	}
 }
+
+type SBMFlavorsShowAllOption[T any] struct {
+	all bool
+}
+
+func (o *SBMFlavorsShowAllOption[T]) AddFlags(cmd *cobra.Command) {
+	cmd.Flags().BoolVar(&o.all, "show-all", false,
+		"Filter to show all SBM flavors including unavailable ones")
+}
+
+func (o *SBMFlavorsShowAllOption[T]) ApplyToCollection(collection serverscom.Collection[T]) {
+	if o.all {
+		collection.SetParam("show_all", "true")
+	}
+}
