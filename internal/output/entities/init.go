@@ -26,4 +26,7 @@ func init() {
 	RegisterBandwidthOptionDefinition()
 	RegisterDriveModelOptionDefinition()
 	RegisterServerModelOptionDefinitions()
+	RegisterSBMModelOptionDefinition()
+	RegisterOperatingSystemOptionDefinition()
+	RegisterRAMOptionDefinition()
 }
