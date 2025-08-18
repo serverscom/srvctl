@@ -1,0 +1,21 @@
+ID:           10
+Full Name:    Ubuntu 18.04-server x86_64
+Name:         Ubuntu
+Version:      18.04-server
+Arch:         x86_64
+Filesystems:  ext2
+              ext4
+              swap
+              xfs
+              reiser
+---
+ID:           11
+Full Name:    CentOS 7 x86_64
+Name:         CentOS
+Version:      7
+Arch:         x86_64
+Filesystems:  ext2
+              ext4
+              swap
+              xfs
+              reiser

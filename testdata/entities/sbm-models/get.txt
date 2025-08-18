@@ -1,0 +1,2 @@
+ID   Name    CPU Count   CPU Cores Count   RAM Size   Bandwidth Name
+10   P-101   1           2                 4096       public-bandwidth-model-35

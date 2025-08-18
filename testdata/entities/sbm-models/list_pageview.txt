@@ -1,0 +1,29 @@
+ID:                         10
+Name:                       P-101
+CPU Name:                   cpu_name
+CPU Count:                  1
+CPU Cores Count:            2
+CPU Frequency:              3.8
+RAM Size:                   4096
+Drives Configuration:       
+Public Uplink Model ID:     843
+Public Uplink Model Name:   uplink-model-name-30
+Private Uplink Model ID:    842
+Private Uplink Model Name:  uplink-model-name-29
+Bandwidth ID:               844
+Bandwidth Name:             public-bandwidth-model-35
+---
+ID:                         11
+Name:                       P-102
+CPU Name:                   cpu_name
+CPU Count:                  1
+CPU Cores Count:            2
+CPU Frequency:              3.8
+RAM Size:                   4096
+Drives Configuration:       
+Public Uplink Model ID:     843
+Public Uplink Model Name:   uplink-model-name-30
+Private Uplink Model ID:    842
+Private Uplink Model Name:  uplink-model-name-29
+Bandwidth ID:               844
+Bandwidth Name:             public-bandwidth-model-35

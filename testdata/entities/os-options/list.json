@@ -1,0 +1,16 @@
+[
+    {
+        "id": 10,
+        "full_name": "Ubuntu 18.04-server x86_64",
+        "name": "Ubuntu",
+        "version": "18.04-server",
+        "arch": "x86_64",
+        "filesystems": [
+            "ext2",
+            "ext4",
+            "swap",
+            "xfs",
+            "reiser"
+        ]
+    }
+]
