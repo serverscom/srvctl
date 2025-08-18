@@ -1,0 +1,14 @@
+id: 10
+name: P-101
+cpuname: cpu_name
+cpucount: 1
+cpucorescount: 2
+cpufrequency: "3.8"
+ramsize: 4096
+drivesconfiguration: ""
+publicuplinkmodelid: 843
+publicuplinkmodelname: uplink-model-name-30
+privateuplinkmodelid: 842
+privateuplinkmodelname: uplink-model-name-29
+bandwidthid: 844
+bandwidthname: public-bandwidth-model-35

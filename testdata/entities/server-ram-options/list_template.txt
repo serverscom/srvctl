@@ -1,0 +1,2 @@
+RAM: 16384 Type: DDR4
+RAM: 32768 Type: DDR4

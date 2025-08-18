@@ -1,0 +1,34 @@
+[
+    {
+        "id": 10,
+        "name": "P-101",
+        "cpu_name": "cpu_name",
+        "cpu_count": 1,
+        "cpu_cores_count": 2,
+        "cpu_frequency": "3.8",
+        "ram_size": 4096,
+        "drives_configuration": "",
+        "public_uplink_model_id": 843,
+        "public_uplink_model_name": "uplink-model-name-30",
+        "private_uplink_model_id": 842,
+        "private_uplink_model_name": "uplink-model-name-29",
+        "bandwidth_id": 844,
+        "bandwidth_name": "public-bandwidth-model-35"
+    },
+    {
+        "id": 11,
+        "name": "P-102",
+        "cpu_name": "cpu_name",
+        "cpu_count": 1,
+        "cpu_cores_count": 2,
+        "cpu_frequency": "3.8",
+        "ram_size": 4096,
+        "drives_configuration": "",
+        "public_uplink_model_id": 843,
+        "public_uplink_model_name": "uplink-model-name-30",
+        "private_uplink_model_id": 842,
+        "private_uplink_model_name": "uplink-model-name-29",
+        "bandwidth_id": 844,
+        "bandwidth_name": "public-bandwidth-model-35"
+    }
+]

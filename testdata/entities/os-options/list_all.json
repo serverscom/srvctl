@@ -1,0 +1,30 @@
+[
+    {
+        "id": 10,
+        "full_name": "Ubuntu 18.04-server x86_64",
+        "name": "Ubuntu",
+        "version": "18.04-server",
+        "arch": "x86_64",
+        "filesystems": [
+            "ext2",
+            "ext4",
+            "swap",
+            "xfs",
+            "reiser"
+        ]
+    },
+    {
+        "id": 11,
+        "full_name": "CentOS 7 x86_64",
+        "name": "CentOS",
+        "version": "7",
+        "arch": "x86_64",
+        "filesystems": [
+            "ext2",
+            "ext4",
+            "swap",
+            "xfs",
+            "reiser"
+        ]
+    }
+]

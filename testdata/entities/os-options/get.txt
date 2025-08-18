@@ -1,0 +1,2 @@
+ID   Full Name                    Name     Version        Arch
+10   Ubuntu 18.04-server x86_64   Ubuntu   18.04-server   x86_64
