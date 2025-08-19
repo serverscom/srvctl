@@ -121,15 +121,20 @@ func slicePvHandler(w io.Writer, v any, indent string, _ *Field) error {
 		return err
 	}
 
-	slice, ok := v.([]string)
-	if !ok || len(slice) == 0 {
+	rv := reflect.ValueOf(v)
+	if rv.Kind() != reflect.Slice {
+		_, err := fmt.Fprintf(w, "%s<unsupported type %T>", indent, v)
+		return err
+	}
+
+	if rv.Len() == 0 {
 		_, err := fmt.Fprintf(w, "%s<empty>", indent)
 		return err
 	}
 
-	lines := make([]string, 0, len(slice))
-	for _, item := range slice {
-		lines = append(lines, fmt.Sprintf("%s%s", indent, item))
+	lines := make([]string, 0, rv.Len())
+	for i := range rv.Len() {
+		lines = append(lines, fmt.Sprintf("%s%v", indent, rv.Index(i).Interface()))
 	}
 
 	_, err := fmt.Fprint(w, strings.Join(lines, "\n"))

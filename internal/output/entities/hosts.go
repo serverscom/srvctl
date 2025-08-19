@@ -18,9 +18,7 @@ var (
 	HostPTRRecordType           = reflect.TypeOf(serverscom.PTRRecord{})
 	HostNetworkType             = reflect.TypeOf(serverscom.Network{})
 	HostListDefaultFields       = []string{"ID", "Type", "Title", "Status"}
-	CmdDefaultFields            = map[string][]string{
-		"list": HostListDefaultFields,
-	}
+	NetworkListDefaultFields    = []string{"ID", "Title", "Status", "CIDR", "Family", "InterfaceType", "DistributionMethod", "Additional"}
 )
 
 func getConfigurationDetailsField() Field {
@@ -89,8 +87,10 @@ func RegisterHostDefinition() {
 			{ID: "Created", Name: "Created", Path: "Created", ListHandlerFunc: timeHandler, PageViewHandlerFunc: timeHandler, Default: true},
 			{ID: "Updated", Name: "Updated", Path: "Updated", ListHandlerFunc: timeHandler, PageViewHandlerFunc: timeHandler, Default: true},
 		},
-		cmdDefaultFields: CmdDefaultFields,
-		eType:            HostType,
+		cmdDefaultFields: map[string][]string{
+			"list": HostListDefaultFields,
+		},
+		eType: HostType,
 	}
 	if err := Registry.Register(hostEntity); err != nil {
 		log.Fatal(err)
@@ -251,13 +251,15 @@ func RegisterHostsSubDefinitions() {
 			{ID: "InterfaceType", Name: "InterfaceType", Path: "InterfaceType", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
 			{ID: "DistributionMethod", Name: "DistributionMethod", Path: "DistributionMethod", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
 			{ID: "Additional", Name: "Additional", Path: "Additional", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
-			{ID: "Updated", Name: "Updated", Path: "Updated", ListHandlerFunc: timeHandler, PageViewHandlerFunc: timeHandler, Default: true},
 			{ID: "Created", Name: "Created", Path: "Created", ListHandlerFunc: timeHandler, PageViewHandlerFunc: timeHandler, Default: true},
+			{ID: "Updated", Name: "Updated", Path: "Updated", ListHandlerFunc: timeHandler, PageViewHandlerFunc: timeHandler, Default: true},
 		},
 		eType: HostNetworkType,
+		cmdDefaultFields: map[string][]string{
+			"list-networks": NetworkListDefaultFields,
+		},
 	}
 	if err := Registry.Register(hostNetworkEntity); err != nil {
 		log.Fatal(err)
 	}
-
 }
