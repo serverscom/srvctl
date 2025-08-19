@@ -15,9 +15,9 @@ func NewCmd(cmdContext *base.CmdContext) *cobra.Command {
 		log.Fatal(err)
 	}
 	entitiesMap := make(map[string]entities.EntityInterface)
-	entitiesMap["l2"] = l2Entity
+	entitiesMap["l2-segments"] = l2Entity
 	cmd := &cobra.Command{
-		Use:   "l2",
+		Use:   "l2-segments",
 		Short: "Manage L2 segments",
 		PersistentPreRunE: base.CombinePreRunE(
 			base.CheckFormatterFlags(cmdContext, entitiesMap),

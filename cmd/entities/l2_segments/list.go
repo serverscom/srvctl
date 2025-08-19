@@ -17,7 +17,7 @@ func newListCmd(cmdContext *base.CmdContext) *cobra.Command {
 		&base.LabelSelectorOption[serverscom.L2Segment]{},
 	)
 
-	return base.NewListCmd("list", "l2", factory, cmdContext, opts...)
+	return base.NewListCmd("list", "l2 segments", factory, cmdContext, opts...)
 }
 
 func newListGroupsCmd(cmdContext *base.CmdContext) *cobra.Command {
@@ -31,7 +31,7 @@ func newListGroupsCmd(cmdContext *base.CmdContext) *cobra.Command {
 		&base.L2SegmentGroupTypeOption[serverscom.L2LocationGroup]{},
 	)
 
-	return base.NewListCmd("list-groups", "l2 location groups", factory, cmdContext, opts...)
+	return base.NewListCmd("list-groups", "l2 segment location groups", factory, cmdContext, opts...)
 }
 
 func newListMembersCmd(cmdContext *base.CmdContext) *cobra.Command {
@@ -45,7 +45,7 @@ func newListMembersCmd(cmdContext *base.CmdContext) *cobra.Command {
 		&base.L2SegmentGroupTypeOption[serverscom.L2Member]{},
 	)
 
-	return base.NewListCmd("list-members", "l2 members", factory, cmdContext, opts...)
+	return base.NewListCmd("list-members", "l2 segment members", factory, cmdContext, opts...)
 }
 
 func newListNetworksCmd(cmdContext *base.CmdContext) *cobra.Command {
@@ -60,5 +60,5 @@ func newListNetworksCmd(cmdContext *base.CmdContext) *cobra.Command {
 		&base.L2SegmentGroupTypeOption[serverscom.Network]{},
 	)
 
-	return base.NewListCmd("list-networks", "l2 networks", factory, cmdContext, opts...)
+	return base.NewListCmd("list-networks", "l2 segment networks", factory, cmdContext, opts...)
 }

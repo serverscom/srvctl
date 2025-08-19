@@ -126,7 +126,7 @@ func TestGetL2SegmentCmd(t *testing.T) {
 			testCmdContext := testutils.NewTestCmdContext(scClient)
 			l2Cmd := NewCmd(testCmdContext)
 
-			args := []string{"l2", "get", fmt.Sprint(tc.id)}
+			args := []string{"l2-segments", "get", fmt.Sprint(tc.id)}
 			if tc.output != "" {
 				args = append(args, "--output", tc.output)
 			}
@@ -255,7 +255,7 @@ func TestListL2SegmentsCmd(t *testing.T) {
 			testCmdContext := testutils.NewTestCmdContext(scClient)
 			l2Cmd := NewCmd(testCmdContext)
 
-			args := []string{"l2", "list"}
+			args := []string{"l2-segments", "list"}
 			if len(tc.args) > 0 {
 				args = append(args, tc.args...)
 			}
@@ -323,7 +323,7 @@ func TestAddL2SegmentCmd(t *testing.T) {
 			testCmdContext := testutils.NewTestCmdContext(scClient)
 			l2Cmd := NewCmd(testCmdContext)
 
-			args := []string{"l2", "add"}
+			args := []string{"l2-segments", "add"}
 			if len(tc.args) > 0 {
 				args = append(args, tc.args...)
 			}
@@ -400,7 +400,7 @@ func TestUpdateL2SegmentCmd(t *testing.T) {
 			testCmdContext := testutils.NewTestCmdContext(scClient)
 			l2Cmd := NewCmd(testCmdContext)
 
-			args := []string{"l2", "update", tc.id}
+			args := []string{"l2-segments", "update", tc.id}
 			if len(tc.args) > 0 {
 				args = append(args, tc.args...)
 			}
@@ -464,7 +464,7 @@ func TestDeleteL2SegmentCmd(t *testing.T) {
 			testCmdContext := testutils.NewTestCmdContext(scClient)
 			l2Cmd := NewCmd(testCmdContext)
 
-			args := []string{"l2", "delete", tc.id}
+			args := []string{"l2-segments", "delete", tc.id}
 			builder := testutils.NewTestCommandBuilder().
 				WithCommand(l2Cmd).
 				WithArgs(args)
@@ -532,7 +532,7 @@ func TestUpdateL2NetworksCmd(t *testing.T) {
 			testCmdContext := testutils.NewTestCmdContext(scClient)
 			l2Cmd := NewCmd(testCmdContext)
 
-			args := []string{"l2", "update-networks", tc.id}
+			args := []string{"l2-segments", "update-networks", tc.id}
 			if len(tc.args) > 0 {
 				args = append(args, tc.args...)
 			}
@@ -650,7 +650,7 @@ func TestListL2GroupsCmd(t *testing.T) {
 			testCmdContext := testutils.NewTestCmdContext(scClient)
 			l2Cmd := NewCmd(testCmdContext)
 
-			args := []string{"l2", "list-groups"}
+			args := []string{"l2-segments", "list-groups"}
 			if len(tc.args) > 0 {
 				args = append(args, tc.args...)
 			}
@@ -772,7 +772,7 @@ func TestListL2MembersCmd(t *testing.T) {
 			testCmdContext := testutils.NewTestCmdContext(scClient)
 			l2Cmd := NewCmd(testCmdContext)
 
-			args := []string{"l2", "list-members"}
+			args := []string{"l2-segments", "list-members"}
 			if len(tc.args) > 0 {
 				args = append(args, tc.args...)
 			}
@@ -893,7 +893,7 @@ func TestListL2NetworksCmd(t *testing.T) {
 			testCmdContext := testutils.NewTestCmdContext(scClient)
 			l2Cmd := NewCmd(testCmdContext)
 
-			args := []string{"l2", "list-networks"}
+			args := []string{"l2-segments", "list-networks"}
 			if len(tc.args) > 0 {
 				args = append(args, tc.args...)
 			}
