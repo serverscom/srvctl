@@ -17,6 +17,7 @@ generate: deps
 	mockgen --destination ./internal/mocks/account_service.go --package=mocks --source ./vendor/github.com/serverscom/serverscom-go-client/pkg/accounts.go
 	mockgen --destination ./internal/mocks/locations_service.go --package=mocks --source ./vendor/github.com/serverscom/serverscom-go-client/pkg/locations.go
 	mockgen --destination ./internal/mocks/kubernetes_clusters_service.go --package=mocks --source ./vendor/github.com/serverscom/serverscom-go-client/pkg/kubernetes_clusters.go
+	mockgen --destination ./internal/mocks/l2_segment_service.go --package=mocks --source ./vendor/github.com/serverscom/serverscom-go-client/pkg/l2_segments.go
 	sed -i '' 's|github.com/serverscom/srvctl/vendor/github.com/serverscom/serverscom-go-client/pkg|github.com/serverscom/serverscom-go-client/pkg|g' \
 	./internal/mocks/ssh_service.go \
 	./internal/mocks/hosts_service.go \
@@ -27,5 +28,5 @@ generate: deps
 	./internal/mocks/account_service.go \
 	./internal/mocks/collection.go \
 	./internal/mocks/locations_service.go \
-	./internal/mocks/kubernetes_clusters_service.go
-
+	./internal/mocks/kubernetes_clusters_service.go \
+	./internal/mocks/l2_segment_service.go

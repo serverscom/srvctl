@@ -1,0 +1,21 @@
+ID:                  testId1
+Title:               testNetwork
+Status:              new
+CIDR:                127.1.182.0/24
+Family:              ipv4
+InterfaceType:       public
+DistributionMethod:  route
+Additional:          true
+Created:             2025-01-01T12:00:00Z
+Updated:             2025-01-01T12:00:00Z
+---
+ID:                  testId2
+Title:               other-network
+Status:              new
+CIDR:                127.1.182.0/24
+Family:              ipv4
+InterfaceType:       public
+DistributionMethod:  route
+Additional:          true
+Created:             2025-01-01T12:00:00Z
+Updated:             2025-01-01T12:00:00Z

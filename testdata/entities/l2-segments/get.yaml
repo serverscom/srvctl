@@ -1,0 +1,10 @@
+id: testId
+name: testName
+type: public
+status: pending
+locationgroupid: 58
+locationgroupcode: location1565
+labels:
+    environment: testing
+created: 2025-01-01T12:00:00Z
+updated: 2025-01-01T12:00:00Z

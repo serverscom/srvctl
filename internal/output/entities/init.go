@@ -29,4 +29,5 @@ func init() {
 	RegisterSBMModelOptionDefinition()
 	RegisterOperatingSystemOptionDefinition()
 	RegisterRAMOptionDefinition()
+	RegisterL2SegmentDefinitions()
 }

@@ -1,0 +1,19 @@
+ID:                 testId1
+Name:               testName
+Type:               public
+Status:             pending
+LocationGroupID:    58
+LocationGroupCode:  location1565
+Labels:             environment=testing
+Created:            2025-01-01T12:00:00Z
+Updated:            2025-01-01T12:00:00Z
+---
+ID:                 testId2
+Name:               other-segment
+Type:               public
+Status:             pending
+LocationGroupID:    58
+LocationGroupCode:  location1565
+Labels:             environment=testing
+Created:            2025-01-01T12:00:00Z
+Updated:            2025-01-01T12:00:00Z

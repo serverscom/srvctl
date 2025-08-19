@@ -1,0 +1,2 @@
+ID       Name       Type     Status    LocationGroupID   LocationGroupCode   Created                Updated
+testId   testName   public   pending   58                location1565        2025-01-01T12:00:00Z   2025-01-01T12:00:00Z
