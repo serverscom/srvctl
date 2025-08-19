@@ -401,3 +401,18 @@ func (o *SBMFlavorsShowAllOption[T]) ApplyToCollection(collection serverscom.Col
 		collection.SetParam("show_all", "true")
 	}
 }
+
+type L2SegmentGroupTypeOption[T any] struct {
+	group string
+}
+
+func (o *L2SegmentGroupTypeOption[T]) AddFlags(cmd *cobra.Command) {
+	cmd.Flags().StringVar(&o.group, "group-type", "",
+		"Filter l2 location groups by type (public, private)")
+}
+
+func (o *L2SegmentGroupTypeOption[T]) ApplyToCollection(collection serverscom.Collection[T]) {
+	if o.group != "" {
+		collection.SetParam("group_type", o.group)
+	}
+}
