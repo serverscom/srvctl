@@ -164,5 +164,11 @@ func getHostsEntities() (map[string]entities.EntityInterface, error) {
 	}
 	result["sbm"] = sbmEntity
 
+	hostNetworkEntity, err := entities.Registry.GetEntityFromValue(serverscom.Network{})
+	if err != nil {
+		return nil, err
+	}
+	result["list-networks"] = hostNetworkEntity
+
 	return result, nil
 }
