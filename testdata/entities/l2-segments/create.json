@@ -1,0 +1,14 @@
+{
+    "name": "testName",
+    "type": "public",
+    "location_group_id": 58,
+    "members": [
+        {
+            "id": "LDdwmwa1",
+            "mode": "native"
+        }
+    ],
+    "labels": {
+        "environment": "testing"
+    }
+}

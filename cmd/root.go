@@ -9,9 +9,14 @@ import (
 	"github.com/serverscom/srvctl/cmd/entities/hosts"
 	"github.com/serverscom/srvctl/cmd/entities/invoices"
 	"github.com/serverscom/srvctl/cmd/entities/k8s"
+	l2segments "github.com/serverscom/srvctl/cmd/entities/l2_segments"
 	loadbalancers "github.com/serverscom/srvctl/cmd/entities/load_balancers"
 	"github.com/serverscom/srvctl/cmd/entities/locations"
 	"github.com/serverscom/srvctl/cmd/entities/racks"
+	sbmmodels "github.com/serverscom/srvctl/cmd/entities/sbm_models"
+	sbmosoptions "github.com/serverscom/srvctl/cmd/entities/sbm_os_options"
+	serverosoptions "github.com/serverscom/srvctl/cmd/entities/server_os_options"
+	serverramoptions "github.com/serverscom/srvctl/cmd/entities/server_ram_options"
 	"github.com/serverscom/srvctl/cmd/entities/servermodels"
 	sshkeys "github.com/serverscom/srvctl/cmd/entities/ssh-keys"
 	"github.com/serverscom/srvctl/cmd/entities/ssl"
@@ -60,6 +65,11 @@ func NewRootCmd(version string) *cobra.Command {
 	cmd.AddCommand(uplinkbandwidths.NewCmd(cmdContext))
 	cmd.AddCommand(servermodels.NewCmd(cmdContext))
 	cmd.AddCommand(drivemodels.NewCmd(cmdContext))
+	cmd.AddCommand(serverosoptions.NewCmd(cmdContext))
+	cmd.AddCommand(serverramoptions.NewCmd(cmdContext))
+	cmd.AddCommand(sbmosoptions.NewCmd(cmdContext))
+	cmd.AddCommand(sbmmodels.NewCmd(cmdContext))
+	cmd.AddCommand(l2segments.NewCmd(cmdContext))
 
 	return cmd
 }

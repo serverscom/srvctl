@@ -1,0 +1,17 @@
+ID:       testId1
+Title:    member-title
+Mode:     native
+VLAN:     <none>
+Status:   new
+Labels:   environment=testing
+Created:  2025-01-01T12:00:00Z
+Updated:  2025-01-01T12:00:00Z
+---
+ID:       testId2
+Title:    other-member
+Mode:     native
+VLAN:     <none>
+Status:   new
+Labels:   environment=testing
+Created:  2025-01-01T12:00:00Z
+Updated:  2025-01-01T12:00:00Z

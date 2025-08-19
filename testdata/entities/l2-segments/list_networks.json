@@ -1,0 +1,15 @@
+[
+    {
+        "id": "testId1",
+        "title": "testNetwork",
+        "status": "new",
+        "cidr": "127.1.182.0/24",
+        "family": "ipv4",
+        "interface_type": "public",
+        "distribution_method": "route",
+        "additional": true,
+        "created_at": "2025-01-01T12:00:00Z",
+        "updated_at": "2025-01-01T12:00:00Z",
+        "state": ""
+    }
+]

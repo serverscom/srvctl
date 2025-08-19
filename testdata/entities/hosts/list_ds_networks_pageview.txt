@@ -6,8 +6,8 @@ Family:              ipv4
 InterfaceType:       public
 DistributionMethod:  gateway
 Additional:          false
-Updated:             2025-01-01T12:00:00Z
 Created:             2025-01-01T12:00:00Z
+Updated:             2025-01-01T12:00:00Z
 ---
 ID:                  testNetId2
 Title:               Another Net
@@ -17,5 +17,5 @@ Family:              ipv4
 InterfaceType:       public
 DistributionMethod:  gateway
 Additional:          false
-Updated:             2025-01-01T12:00:00Z
 Created:             2025-01-01T12:00:00Z
+Updated:             2025-01-01T12:00:00Z
