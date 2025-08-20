@@ -50,7 +50,7 @@ func newUpdateCmd(cmdContext *base.CmdContext) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&name, "name", "n", "", "string")
+	cmd.Flags().StringVarP(&name, "name", "n", "", "A Name of an SSH key")
 	cmd.Flags().StringArrayVarP(&labels, "label", "l", []string{}, "string in key=value format")
 
 	return cmd

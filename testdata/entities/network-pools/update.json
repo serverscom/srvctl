@@ -1,0 +1,15 @@
+{
+    "id": "testId",
+    "title": "updated",
+    "cidr": "192.168.0.0/24",
+    "type": "private",
+    "location_ids": [
+        1,
+        2
+    ],
+    "labels": {
+        "environment": "testing"
+    },
+    "created_at": "2025-01-01T12:00:00Z",
+    "updated_at": "2025-01-01T12:00:00Z"
+}

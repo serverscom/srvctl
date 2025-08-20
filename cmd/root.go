@@ -12,6 +12,7 @@ import (
 	l2segments "github.com/serverscom/srvctl/cmd/entities/l2_segments"
 	loadbalancers "github.com/serverscom/srvctl/cmd/entities/load_balancers"
 	"github.com/serverscom/srvctl/cmd/entities/locations"
+	networkpools "github.com/serverscom/srvctl/cmd/entities/network-pools"
 	"github.com/serverscom/srvctl/cmd/entities/racks"
 	sbmmodels "github.com/serverscom/srvctl/cmd/entities/sbm_models"
 	sbmosoptions "github.com/serverscom/srvctl/cmd/entities/sbm_os_options"
@@ -70,6 +71,7 @@ func NewRootCmd(version string) *cobra.Command {
 	cmd.AddCommand(sbmosoptions.NewCmd(cmdContext))
 	cmd.AddCommand(sbmmodels.NewCmd(cmdContext))
 	cmd.AddCommand(l2segments.NewCmd(cmdContext))
+	cmd.AddCommand(networkpools.NewCmd(cmdContext))
 
 	return cmd
 }

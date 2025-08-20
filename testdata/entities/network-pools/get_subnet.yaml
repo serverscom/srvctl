@@ -1,0 +1,8 @@
+id: testSubnetId
+networkpoolid: testId
+title: testSubnet
+cidr: 192.168.0.0/24
+attached: false
+interfacetype: private
+created: 2025-01-01T12:00:00Z
+updated: 2025-01-01T12:00:00Z
