@@ -30,4 +30,5 @@ func init() {
 	RegisterOperatingSystemOptionDefinition()
 	RegisterRAMOptionDefinition()
 	RegisterL2SegmentDefinitions()
+	RegisterNetworkPoolDefinitions()
 }
