@@ -1,0 +1,17 @@
+ID:             testSubnetId
+NetworkPoolID:  testId
+Title:          testSubnet
+CIDR:           192.168.0.0/24
+Attached:       false
+InterfaceType:  private
+Created:        2025-01-01T12:00:00Z
+Updated:        2025-01-01T12:00:00Z
+---
+ID:             testSubnetId2
+NetworkPoolID:  testId
+Title:          testSubnet2
+CIDR:           192.168.0.0/24
+Attached:       false
+InterfaceType:  private
+Created:        2025-01-01T12:00:00Z
+Updated:        2025-01-01T12:00:00Z

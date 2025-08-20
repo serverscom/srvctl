@@ -416,3 +416,32 @@ func (o *L2SegmentGroupTypeOption[T]) ApplyToCollection(collection serverscom.Co
 		collection.SetParam("group_type", o.group)
 	}
 }
+
+// network pool type option
+type NetworkPoolTypeOption[T any] struct {
+	poolType string
+}
+
+func (o *NetworkPoolTypeOption[T]) AddFlags(cmd *cobra.Command) {
+	cmd.Flags().StringVar(&o.poolType, "type", "", "Filter network pools by type (public, private)")
+}
+
+func (o *NetworkPoolTypeOption[T]) ApplyToCollection(collection serverscom.Collection[T]) {
+	if o.poolType != "" {
+		collection.SetParam("type", o.poolType)
+	}
+}
+
+type AttachedSubnetworksOption[T any] struct {
+	attached bool
+}
+
+func (o *AttachedSubnetworksOption[T]) AddFlags(cmd *cobra.Command) {
+	cmd.Flags().BoolVar(&o.attached, "attached", false, "Filter only subnetworks that are attached to a dedicated server")
+}
+
+func (o *AttachedSubnetworksOption[T]) ApplyToCollection(collection serverscom.Collection[T]) {
+	if o.attached {
+		collection.SetParam("attached", "true")
+	}
+}

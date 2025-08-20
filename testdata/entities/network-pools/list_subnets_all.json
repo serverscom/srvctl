@@ -1,0 +1,22 @@
+[
+    {
+        "id": "testSubnetId",
+        "network_pool_id": "testId",
+        "title": "testSubnet",
+        "cidr": "192.168.0.0/24",
+        "attached": false,
+        "interface_type": "private",
+        "created_at": "2025-01-01T12:00:00Z",
+        "updated_at": "2025-01-01T12:00:00Z"
+    },
+    {
+        "id": "testSubnetId2",
+        "network_pool_id": "testId",
+        "title": "testSubnet2",
+        "cidr": "192.168.0.0/24",
+        "attached": false,
+        "interface_type": "private",
+        "created_at": "2025-01-01T12:00:00Z",
+        "updated_at": "2025-01-01T12:00:00Z"
+    }
+]

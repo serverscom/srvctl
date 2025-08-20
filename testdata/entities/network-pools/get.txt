@@ -1,0 +1,2 @@
+ID       Title             CIDR             Type      Created                Updated
+testId   testNetworkPool   192.168.0.0/24   private   2025-01-01T12:00:00Z   2025-01-01T12:00:00Z

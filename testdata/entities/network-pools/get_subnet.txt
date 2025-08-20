@@ -1,0 +1,2 @@
+ID             Title        CIDR             Attached   InterfaceType   Created                Updated
+testSubnetId   testSubnet   192.168.0.0/24   false      private         2025-01-01T12:00:00Z   2025-01-01T12:00:00Z

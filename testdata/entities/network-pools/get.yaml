@@ -1,0 +1,11 @@
+id: testId
+title: testNetworkPool
+cidr: 192.168.0.0/24
+type: private
+locationids:
+    - 1
+    - 2
+labels:
+    environment: testing
+created: 2025-01-01T12:00:00Z
+updated: 2025-01-01T12:00:00Z

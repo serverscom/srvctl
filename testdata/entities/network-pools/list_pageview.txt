@@ -1,0 +1,19 @@
+ID:           testId
+Title:        testNetworkPool
+CIDR:         192.168.0.0/24
+Type:         private
+LocationIDs:  1
+              2
+Labels:       environment=testing
+Created:      2025-01-01T12:00:00Z
+Updated:      2025-01-01T12:00:00Z
+---
+ID:           testId2
+Title:        testNetworkPool2
+CIDR:         192.168.0.0/24
+Type:         private
+LocationIDs:  1
+              2
+Labels:       environment=testing
+Created:      2025-01-01T12:00:00Z
+Updated:      2025-01-01T12:00:00Z
