@@ -1,0 +1,11 @@
+ID:        ptrId1
+IP:        192.0.2.5
+Domain:    ptr-test.example.com
+Priority:  10
+TTL:       300
+---
+ID:        ptrId2
+IP:        192.0.2.5
+Domain:    another.example.com
+Priority:  10
+TTL:       300
