@@ -48,6 +48,8 @@ func NewCmd(cmdContext *base.CmdContext) *cobra.Command {
 				newListDSDriveSlotsCmd,
 				newListDSConnectionsCmd,
 				newListDSPTRCmd,
+				newCreateDSPTRCmd,
+				newDeleteDSPTRCmd,
 				newDSAbortReleaseCmd,
 				newDSScheduleReleaseCmd,
 				newListDSNetworksCmd,

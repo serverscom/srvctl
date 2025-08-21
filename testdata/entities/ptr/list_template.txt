@@ -1,0 +1,2 @@
+ID: ptrId1 PTR: ptr-test.example.com
+ID: ptrId2 PTR: another.example.com

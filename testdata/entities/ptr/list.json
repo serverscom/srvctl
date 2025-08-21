@@ -1,0 +1,9 @@
+[
+    {
+        "id": "ptrId1",
+        "ip": "192.0.2.5",
+        "domain": "ptr-test.example.com",
+        "priority": 10,
+        "ttl": 300
+    }
+]
