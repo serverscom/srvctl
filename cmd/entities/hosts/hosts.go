@@ -56,6 +56,7 @@ func NewCmd(cmdContext *base.CmdContext) *cobra.Command {
 				newGetDSNetworkCmd,
 				newAddDSNetworkCmd,
 				newDeleteDSNetworkCmd,
+				newListDSCmd,
 			},
 		},
 		{
@@ -69,6 +70,7 @@ func NewCmd(cmdContext *base.CmdContext) *cobra.Command {
 			},
 			extraCmds: []func(*base.CmdContext) *cobra.Command{
 				newUpdateKBMCmd,
+				newListKBMCmd,
 			},
 		},
 		{
@@ -85,6 +87,7 @@ func NewCmd(cmdContext *base.CmdContext) *cobra.Command {
 				newAddSBMCmd,
 				newUpdateSBMCmd,
 				newSBMReleaseCmd,
+				newListSBMCmd,
 			},
 		},
 	}
@@ -102,7 +105,7 @@ func NewCmd(cmdContext *base.CmdContext) *cobra.Command {
 	}
 
 	// hosts list cmd
-	cmd.AddCommand(newListCmd(cmdContext, nil))
+	cmd.AddCommand(newListCmd(cmdContext))
 
 	for _, ht := range hostTypeCmds {
 		cmd.AddCommand(newHostTypeCmd(cmdContext, ht))
@@ -121,7 +124,6 @@ func newHostTypeCmd(cmdContext *base.CmdContext, hostTypeCmd HostTypeCmd) *cobra
 		Run:   base.UsageRun,
 	}
 
-	hostCmd.AddCommand(newListCmd(cmdContext, &hostTypeCmd))
 	hostCmd.AddCommand(newGetCmd(cmdContext, &hostTypeCmd))
 
 	if hostTypeCmd.managers.powerMgr != nil {
@@ -146,7 +148,6 @@ func getHostsEntities() (map[string]entities.EntityInterface, error) {
 		return nil, err
 	}
 	result["hosts"] = hostsEntity
-	result["list"] = hostsEntity
 
 	dsEntity, err := entities.Registry.GetEntityFromValue(serverscom.DedicatedServer{})
 	if err != nil {
