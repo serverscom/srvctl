@@ -14,25 +14,45 @@ import (
 )
 
 var (
-	testId          = "testId"
-	testNetworkId   = "testNetId"
-	fixtureBasePath = filepath.Join("..", "..", "..", "testdata", "entities", "hosts")
-	fixedTime       = time.Date(2025, 1, 1, 12, 0, 0, 0, time.UTC)
-	testHost        = serverscom.Host{
-		ID:      testId,
-		Title:   "example.aa",
-		Status:  "active",
-		Created: fixedTime,
-		Updated: fixedTime,
+	testId           = "testId"
+	testNetworkId    = "testNetId"
+	fixtureBasePath  = filepath.Join("..", "..", "..", "testdata", "entities", "hosts")
+	fixedTime        = time.Date(2025, 1, 1, 12, 0, 0, 0, time.UTC)
+	testPublicIP     = "1.2.3.4"
+	testLocationCode = "test"
+	testHost         = serverscom.Host{
+		ID:                testId,
+		Title:             "example.aa",
+		Status:            "active",
+		PublicIPv4Address: &testPublicIP,
+		LocationCode:      testLocationCode,
+		Created:           fixedTime,
+		Updated:           fixedTime,
+	}
+	testConfigDetails = serverscom.ConfigurationDetails{
+		RAMSize:                 2,
+		ServerModelID:           testutils.PtrInt64(1),
+		ServerModelName:         testutils.PtrString("server-model-123"),
+		PublicUplinkID:          testutils.PtrInt64(2),
+		PublicUplinkName:        testutils.PtrString("Public 1 Gbps without redundancy"),
+		PrivateUplinkID:         testutils.PtrInt64(3),
+		PrivateUplinkName:       testutils.PtrString("Private 1 Gbps without redundancy"),
+		BandwidthID:             testutils.PtrInt64(4),
+		BandwidthName:           testutils.PtrString("20000 GB"),
+		OperatingSystemID:       testutils.PtrInt64(5),
+		OperatingSystemFullName: testutils.PtrString("CentOS 7 x86_64"),
 	}
 	testDS = serverscom.DedicatedServer{
-		ID:      testId,
-		RackID:  testId,
-		Type:    "dedicated_server",
-		Title:   "example.aa",
-		Status:  "active",
-		Created: fixedTime,
-		Updated: fixedTime,
+		ID:                   testId,
+		RackID:               testId,
+		Type:                 "dedicated_server",
+		Title:                "example.aa",
+		Status:               "active",
+		LocationCode:         testLocationCode,
+		PublicIPv4Address:    &testPublicIP,
+		ConfigurationDetails: testConfigDetails,
+		Created:              fixedTime,
+		Updated:              fixedTime,
 	}
 	testKBM = serverscom.KubernetesBaremetalNode{
 		ID:                          testId,
@@ -43,17 +63,23 @@ var (
 		Type:                        "kubernetes_baremetal_node",
 		Title:                       "example.aa",
 		Status:                      "active",
+		LocationCode:                testLocationCode,
+		PublicIPv4Address:           &testPublicIP,
+		ConfigurationDetails:        testConfigDetails,
 		Created:                     fixedTime,
 		Updated:                     fixedTime,
 	}
 	testSBM = serverscom.SBMServer{
-		ID:      testId,
-		RackID:  testId,
-		Type:    "sbm_server",
-		Title:   "example.aa",
-		Status:  "active",
-		Created: fixedTime,
-		Updated: fixedTime,
+		ID:                   testId,
+		RackID:               testId,
+		Type:                 "sbm_server",
+		Title:                "example.aa",
+		Status:               "active",
+		LocationCode:         testLocationCode,
+		PublicIPv4Address:    &testPublicIP,
+		ConfigurationDetails: testConfigDetails,
+		Created:              fixedTime,
+		Updated:              fixedTime,
 	}
 	netTitle      = "Some Net"
 	cidr          = "100.0.8.0/29"
@@ -70,6 +96,129 @@ var (
 		Updated:            fixedTime,
 	}
 )
+
+func TestListHostsCmd(t *testing.T) {
+	testServer1 := testHost
+	testServer1.Type = "dedicated_server"
+	testServer2 := testServer1
+	testServer2.ID = "testId2"
+	testServer2.Type = "sbm_server"
+	testServer2.Title = "example.bb"
+
+	testCases := []struct {
+		name           string
+		output         string
+		args           []string
+		expectedOutput []byte
+		expectError    bool
+		configureMock  func(*mocks.MockCollection[serverscom.Host])
+	}{
+		{
+			name:           "list all hosts",
+			output:         "json",
+			args:           []string{"-A"},
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_hosts.json")),
+			configureMock: func(mock *mocks.MockCollection[serverscom.Host]) {
+				mock.EXPECT().
+					Collect(gomock.Any()).
+					Return([]serverscom.Host{
+						testServer1,
+						testServer2,
+					}, nil)
+			},
+		},
+		{
+			name:           "list hosts with template",
+			args:           []string{"--template", "{{range .}}Title: {{.Title}}  Type: {{.Type}}\n{{end}}"},
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_hosts_template.txt")),
+			configureMock: func(mock *mocks.MockCollection[serverscom.Host]) {
+				mock.EXPECT().
+					List(gomock.Any()).
+					Return([]serverscom.Host{
+						testServer1,
+						testServer2,
+					}, nil)
+			},
+		},
+		{
+			name:           "list hosts with pageView",
+			args:           []string{"--page-view"},
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_hosts_pageview.txt")),
+			configureMock: func(mock *mocks.MockCollection[serverscom.Host]) {
+				mock.EXPECT().
+					List(gomock.Any()).
+					Return([]serverscom.Host{
+						testServer1,
+						testServer2,
+					}, nil)
+			},
+		},
+		{
+			name:        "list hosts with error",
+			expectError: true,
+			configureMock: func(mock *mocks.MockCollection[serverscom.Host]) {
+				mock.EXPECT().
+					List(gomock.Any()).
+					Return(nil, errors.New("some error"))
+			},
+		},
+	}
+
+	mockCtrl := gomock.NewController(t)
+	defer mockCtrl.Finish()
+
+	hostsServiceHandler := mocks.NewMockHostsService(mockCtrl)
+	collectionHandler := mocks.NewMockCollection[serverscom.Host](mockCtrl)
+
+	hostsServiceHandler.EXPECT().
+		Collection().
+		Return(collectionHandler).
+		AnyTimes()
+
+	collectionHandler.EXPECT().
+		SetParam(gomock.Any(), gomock.Any()).
+		Return(collectionHandler).
+		AnyTimes()
+
+	scClient := serverscom.NewClientWithEndpoint("", "")
+	scClient.Hosts = hostsServiceHandler
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			g := NewWithT(t)
+
+			if tc.configureMock != nil {
+				tc.configureMock(collectionHandler)
+			}
+
+			testCmdContext := testutils.NewTestCmdContext(scClient)
+			hostsCmd := NewCmd(testCmdContext)
+
+			args := []string{"hosts", "list"}
+			if len(tc.args) > 0 {
+				args = append(args, tc.args...)
+			}
+			if tc.output != "" {
+				args = append(args, "--output", tc.output)
+			}
+
+			builder := testutils.NewTestCommandBuilder().
+				WithCommand(hostsCmd).
+				WithArgs(args)
+
+			cmd := builder.Build()
+
+			err := cmd.Execute()
+
+			if tc.expectError {
+				g.Expect(err).To(HaveOccurred())
+			} else {
+				g.Expect(err).To(BeNil())
+				g.Expect(builder.GetOutput()).To(BeEquivalentTo(string(tc.expectedOutput)))
+			}
+		})
+	}
+}
 
 func TestAddDSCmd(t *testing.T) {
 	expectedInput := serverscom.DedicatedServerCreateInput{
@@ -544,7 +693,7 @@ func TestGetSBMCmd(t *testing.T) {
 }
 
 func TestListDSCmd(t *testing.T) {
-	testServer1 := testHost
+	testServer1 := testDS
 	testServer1.Type = "dedicated_server"
 	testServer2 := testServer1
 	testServer2.ID = "testId2"
@@ -556,17 +705,17 @@ func TestListDSCmd(t *testing.T) {
 		args           []string
 		expectedOutput []byte
 		expectError    bool
-		configureMock  func(*mocks.MockCollection[serverscom.Host])
+		configureMock  func(*mocks.MockCollection[serverscom.DedicatedServer])
 	}{
 		{
 			name:           "list all dedicated servers",
 			output:         "json",
 			args:           []string{"-A"},
 			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_ds_all.json")),
-			configureMock: func(mock *mocks.MockCollection[serverscom.Host]) {
+			configureMock: func(mock *mocks.MockCollection[serverscom.DedicatedServer]) {
 				mock.EXPECT().
 					Collect(gomock.Any()).
-					Return([]serverscom.Host{
+					Return([]serverscom.DedicatedServer{
 						testServer1,
 						testServer2,
 					}, nil)
@@ -576,10 +725,10 @@ func TestListDSCmd(t *testing.T) {
 			name:           "list dedicated servers",
 			output:         "json",
 			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_ds.json")),
-			configureMock: func(mock *mocks.MockCollection[serverscom.Host]) {
+			configureMock: func(mock *mocks.MockCollection[serverscom.DedicatedServer]) {
 				mock.EXPECT().
 					List(gomock.Any()).
-					Return([]serverscom.Host{
+					Return([]serverscom.DedicatedServer{
 						testServer1,
 					}, nil)
 			},
@@ -588,10 +737,10 @@ func TestListDSCmd(t *testing.T) {
 			name:           "list dedicated servers with template",
 			args:           []string{"--template", "{{range .}}Title: {{.Title}}  Type: {{.Type}}\n{{end}}"},
 			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_ds_template.txt")),
-			configureMock: func(mock *mocks.MockCollection[serverscom.Host]) {
+			configureMock: func(mock *mocks.MockCollection[serverscom.DedicatedServer]) {
 				mock.EXPECT().
 					List(gomock.Any()).
-					Return([]serverscom.Host{
+					Return([]serverscom.DedicatedServer{
 						testServer1,
 						testServer2,
 					}, nil)
@@ -601,10 +750,10 @@ func TestListDSCmd(t *testing.T) {
 			name:           "list dedicated servers with pageView",
 			args:           []string{"--page-view"},
 			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_ds_pageview.txt")),
-			configureMock: func(mock *mocks.MockCollection[serverscom.Host]) {
+			configureMock: func(mock *mocks.MockCollection[serverscom.DedicatedServer]) {
 				mock.EXPECT().
 					List(gomock.Any()).
-					Return([]serverscom.Host{
+					Return([]serverscom.DedicatedServer{
 						testServer1,
 						testServer2,
 					}, nil)
@@ -613,7 +762,7 @@ func TestListDSCmd(t *testing.T) {
 		{
 			name:        "list dedicated servers with error",
 			expectError: true,
-			configureMock: func(mock *mocks.MockCollection[serverscom.Host]) {
+			configureMock: func(mock *mocks.MockCollection[serverscom.DedicatedServer]) {
 				mock.EXPECT().
 					List(gomock.Any()).
 					Return(nil, errors.New("some error"))
@@ -625,10 +774,10 @@ func TestListDSCmd(t *testing.T) {
 	defer mockCtrl.Finish()
 
 	hostsServiceHandler := mocks.NewMockHostsService(mockCtrl)
-	collectionHandler := mocks.NewMockCollection[serverscom.Host](mockCtrl)
+	collectionHandler := mocks.NewMockCollection[serverscom.DedicatedServer](mockCtrl)
 
 	hostsServiceHandler.EXPECT().
-		Collection().
+		ListDedicatedServers().
 		Return(collectionHandler).
 		AnyTimes()
 
@@ -678,7 +827,7 @@ func TestListDSCmd(t *testing.T) {
 }
 
 func TestListKBMCmd(t *testing.T) {
-	testServer1 := testHost
+	testServer1 := testKBM
 	testServer1.Type = "kubernetes_baremetal_node"
 	testServer2 := testServer1
 	testServer2.ID = "testId2"
@@ -690,17 +839,17 @@ func TestListKBMCmd(t *testing.T) {
 		args           []string
 		expectedOutput []byte
 		expectError    bool
-		configureMock  func(*mocks.MockCollection[serverscom.Host])
+		configureMock  func(*mocks.MockCollection[serverscom.KubernetesBaremetalNode])
 	}{
 		{
 			name:           "list all KMB nodes",
 			output:         "json",
 			args:           []string{"-A"},
 			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_kbm_all.json")),
-			configureMock: func(mock *mocks.MockCollection[serverscom.Host]) {
+			configureMock: func(mock *mocks.MockCollection[serverscom.KubernetesBaremetalNode]) {
 				mock.EXPECT().
 					Collect(gomock.Any()).
-					Return([]serverscom.Host{
+					Return([]serverscom.KubernetesBaremetalNode{
 						testServer1,
 						testServer2,
 					}, nil)
@@ -710,10 +859,10 @@ func TestListKBMCmd(t *testing.T) {
 			name:           "list KBM nodes",
 			output:         "json",
 			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_kbm.json")),
-			configureMock: func(mock *mocks.MockCollection[serverscom.Host]) {
+			configureMock: func(mock *mocks.MockCollection[serverscom.KubernetesBaremetalNode]) {
 				mock.EXPECT().
 					List(gomock.Any()).
-					Return([]serverscom.Host{
+					Return([]serverscom.KubernetesBaremetalNode{
 						testServer1,
 					}, nil)
 			},
@@ -722,10 +871,10 @@ func TestListKBMCmd(t *testing.T) {
 			name:           "list KBM nodes with template",
 			args:           []string{"--template", "{{range .}}Title: {{.Title}}  Type: {{.Type}}\n{{end}}"},
 			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_kbm_template.txt")),
-			configureMock: func(mock *mocks.MockCollection[serverscom.Host]) {
+			configureMock: func(mock *mocks.MockCollection[serverscom.KubernetesBaremetalNode]) {
 				mock.EXPECT().
 					List(gomock.Any()).
-					Return([]serverscom.Host{
+					Return([]serverscom.KubernetesBaremetalNode{
 						testServer1,
 						testServer2,
 					}, nil)
@@ -735,10 +884,10 @@ func TestListKBMCmd(t *testing.T) {
 			name:           "list KBM nodes with pageView",
 			args:           []string{"--page-view"},
 			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_kbm_pageview.txt")),
-			configureMock: func(mock *mocks.MockCollection[serverscom.Host]) {
+			configureMock: func(mock *mocks.MockCollection[serverscom.KubernetesBaremetalNode]) {
 				mock.EXPECT().
 					List(gomock.Any()).
-					Return([]serverscom.Host{
+					Return([]serverscom.KubernetesBaremetalNode{
 						testServer1,
 						testServer2,
 					}, nil)
@@ -747,7 +896,7 @@ func TestListKBMCmd(t *testing.T) {
 		{
 			name:        "list KBM nodes with error",
 			expectError: true,
-			configureMock: func(mock *mocks.MockCollection[serverscom.Host]) {
+			configureMock: func(mock *mocks.MockCollection[serverscom.KubernetesBaremetalNode]) {
 				mock.EXPECT().
 					List(gomock.Any()).
 					Return(nil, errors.New("some error"))
@@ -759,10 +908,10 @@ func TestListKBMCmd(t *testing.T) {
 	defer mockCtrl.Finish()
 
 	hostsServiceHandler := mocks.NewMockHostsService(mockCtrl)
-	collectionHandler := mocks.NewMockCollection[serverscom.Host](mockCtrl)
+	collectionHandler := mocks.NewMockCollection[serverscom.KubernetesBaremetalNode](mockCtrl)
 
 	hostsServiceHandler.EXPECT().
-		Collection().
+		ListKubernetesBaremetalNodes().
 		Return(collectionHandler).
 		AnyTimes()
 
@@ -812,7 +961,7 @@ func TestListKBMCmd(t *testing.T) {
 }
 
 func TestListSBMCmd(t *testing.T) {
-	testServer1 := testHost
+	testServer1 := testSBM
 	testServer1.Type = "sbm_server"
 	testServer2 := testServer1
 	testServer2.ID = "testId2"
@@ -824,17 +973,17 @@ func TestListSBMCmd(t *testing.T) {
 		args           []string
 		expectedOutput []byte
 		expectError    bool
-		configureMock  func(*mocks.MockCollection[serverscom.Host])
+		configureMock  func(*mocks.MockCollection[serverscom.SBMServer])
 	}{
 		{
 			name:           "list all SBM servers",
 			output:         "json",
 			args:           []string{"-A"},
 			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_sbm_all.json")),
-			configureMock: func(mock *mocks.MockCollection[serverscom.Host]) {
+			configureMock: func(mock *mocks.MockCollection[serverscom.SBMServer]) {
 				mock.EXPECT().
 					Collect(gomock.Any()).
-					Return([]serverscom.Host{
+					Return([]serverscom.SBMServer{
 						testServer1,
 						testServer2,
 					}, nil)
@@ -844,10 +993,10 @@ func TestListSBMCmd(t *testing.T) {
 			name:           "list SBM servers",
 			output:         "json",
 			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_sbm.json")),
-			configureMock: func(mock *mocks.MockCollection[serverscom.Host]) {
+			configureMock: func(mock *mocks.MockCollection[serverscom.SBMServer]) {
 				mock.EXPECT().
 					List(gomock.Any()).
-					Return([]serverscom.Host{
+					Return([]serverscom.SBMServer{
 						testServer1,
 					}, nil)
 			},
@@ -856,10 +1005,10 @@ func TestListSBMCmd(t *testing.T) {
 			name:           "list SBM servers with template",
 			args:           []string{"--template", "{{range .}}Title: {{.Title}}  Type: {{.Type}}\n{{end}}"},
 			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_sbm_template.txt")),
-			configureMock: func(mock *mocks.MockCollection[serverscom.Host]) {
+			configureMock: func(mock *mocks.MockCollection[serverscom.SBMServer]) {
 				mock.EXPECT().
 					List(gomock.Any()).
-					Return([]serverscom.Host{
+					Return([]serverscom.SBMServer{
 						testServer1,
 						testServer2,
 					}, nil)
@@ -869,10 +1018,10 @@ func TestListSBMCmd(t *testing.T) {
 			name:           "list SBM servers with pageView",
 			args:           []string{"--page-view"},
 			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_sbm_pageview.txt")),
-			configureMock: func(mock *mocks.MockCollection[serverscom.Host]) {
+			configureMock: func(mock *mocks.MockCollection[serverscom.SBMServer]) {
 				mock.EXPECT().
 					List(gomock.Any()).
-					Return([]serverscom.Host{
+					Return([]serverscom.SBMServer{
 						testServer1,
 						testServer2,
 					}, nil)
@@ -881,7 +1030,7 @@ func TestListSBMCmd(t *testing.T) {
 		{
 			name:        "list SBM servers with error",
 			expectError: true,
-			configureMock: func(mock *mocks.MockCollection[serverscom.Host]) {
+			configureMock: func(mock *mocks.MockCollection[serverscom.SBMServer]) {
 				mock.EXPECT().
 					List(gomock.Any()).
 					Return(nil, errors.New("some error"))
@@ -893,10 +1042,10 @@ func TestListSBMCmd(t *testing.T) {
 	defer mockCtrl.Finish()
 
 	hostsServiceHandler := mocks.NewMockHostsService(mockCtrl)
-	collectionHandler := mocks.NewMockCollection[serverscom.Host](mockCtrl)
+	collectionHandler := mocks.NewMockCollection[serverscom.SBMServer](mockCtrl)
 
 	hostsServiceHandler.EXPECT().
-		Collection().
+		ListSBMServers().
 		Return(collectionHandler).
 		AnyTimes()
 
