@@ -10,6 +10,7 @@ import (
 	"github.com/serverscom/srvctl/cmd/entities/invoices"
 	"github.com/serverscom/srvctl/cmd/entities/k8s"
 	l2segments "github.com/serverscom/srvctl/cmd/entities/l2_segments"
+	loadbalancerclusters "github.com/serverscom/srvctl/cmd/entities/load_balancer_clusters"
 	loadbalancers "github.com/serverscom/srvctl/cmd/entities/load_balancers"
 	"github.com/serverscom/srvctl/cmd/entities/locations"
 	networkpools "github.com/serverscom/srvctl/cmd/entities/network-pools"
@@ -56,6 +57,7 @@ func NewRootCmd(version string) *cobra.Command {
 	cmd.AddCommand(sshkeys.NewCmd(cmdContext))
 	cmd.AddCommand(hosts.NewCmd(cmdContext))
 	cmd.AddCommand(ssl.NewCmd(cmdContext))
+	cmd.AddCommand(loadbalancerclusters.NewCmd(cmdContext))
 	cmd.AddCommand(loadbalancers.NewCmd(cmdContext))
 	cmd.AddCommand(racks.NewCmd(cmdContext))
 	cmd.AddCommand(invoices.NewCmd(cmdContext))

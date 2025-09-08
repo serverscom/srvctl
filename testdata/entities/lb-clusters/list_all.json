@@ -1,0 +1,18 @@
+[
+    {
+        "id": "testId1",
+        "name": "test-lb-cluster-1",
+        "location_id": 1,
+        "status": "active",
+        "created_at": "2025-01-01T12:00:00Z",
+        "updated_at": "2025-01-01T12:00:00Z"
+    },
+    {
+        "id": "testId2",
+        "name": "test-lb-cluster-2",
+        "location_id": 1,
+        "status": "active",
+        "created_at": "2025-01-01T12:00:00Z",
+        "updated_at": "2025-01-01T12:00:00Z"
+    }
+]

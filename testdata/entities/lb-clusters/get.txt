@@ -1,0 +1,2 @@
+ID       Name              Status   LocationID   Created                Updated
+testId   test-lb-cluster   active   1            2025-01-01T12:00:00Z   2025-01-01T12:00:00Z
