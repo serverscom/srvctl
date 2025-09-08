@@ -445,3 +445,17 @@ func (o *AttachedSubnetworksOption[T]) ApplyToCollection(collection serverscom.C
 		collection.SetParam("attached", "true")
 	}
 }
+
+type RackIDOption[T any] struct {
+	rackID string
+}
+
+func (o *RackIDOption[T]) AddFlags(cmd *cobra.Command) {
+	cmd.Flags().StringVar(&o.rackID, "rack-id", "", "Filter results by rack ID where host is deployed")
+}
+
+func (o *RackIDOption[T]) ApplyToCollection(collection serverscom.Collection[T]) {
+	if o.rackID != "" {
+		collection.SetParam("rack_id", o.rackID)
+	}
+}

@@ -335,6 +335,48 @@ func (mr *MockHostsServiceMockRecorder) GetSBMServer(ctx, id any) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetSBMServer", reflect.TypeOf((*MockHostsService)(nil).GetSBMServer), ctx, id)
 }
 
+// ListDedicatedServers mocks base method.
+func (m *MockHostsService) ListDedicatedServers() serverscom.Collection[serverscom.DedicatedServer] {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListDedicatedServers")
+	ret0, _ := ret[0].(serverscom.Collection[serverscom.DedicatedServer])
+	return ret0
+}
+
+// ListDedicatedServers indicates an expected call of ListDedicatedServers.
+func (mr *MockHostsServiceMockRecorder) ListDedicatedServers() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListDedicatedServers", reflect.TypeOf((*MockHostsService)(nil).ListDedicatedServers))
+}
+
+// ListKubernetesBaremetalNodes mocks base method.
+func (m *MockHostsService) ListKubernetesBaremetalNodes() serverscom.Collection[serverscom.KubernetesBaremetalNode] {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListKubernetesBaremetalNodes")
+	ret0, _ := ret[0].(serverscom.Collection[serverscom.KubernetesBaremetalNode])
+	return ret0
+}
+
+// ListKubernetesBaremetalNodes indicates an expected call of ListKubernetesBaremetalNodes.
+func (mr *MockHostsServiceMockRecorder) ListKubernetesBaremetalNodes() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListKubernetesBaremetalNodes", reflect.TypeOf((*MockHostsService)(nil).ListKubernetesBaremetalNodes))
+}
+
+// ListSBMServers mocks base method.
+func (m *MockHostsService) ListSBMServers() serverscom.Collection[serverscom.SBMServer] {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListSBMServers")
+	ret0, _ := ret[0].(serverscom.Collection[serverscom.SBMServer])
+	return ret0
+}
+
+// ListSBMServers indicates an expected call of ListSBMServers.
+func (mr *MockHostsServiceMockRecorder) ListSBMServers() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListSBMServers", reflect.TypeOf((*MockHostsService)(nil).ListSBMServers))
+}
+
 // PowerCycleDedicatedServer mocks base method.
 func (m *MockHostsService) PowerCycleDedicatedServer(ctx context.Context, id string) (*serverscom.DedicatedServer, error) {
 	m.ctrl.T.Helper()

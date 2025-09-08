@@ -8,17 +8,21 @@ import (
 )
 
 var (
-	HostType                    = reflect.TypeOf(serverscom.Host{})
-	DedicatedServerType         = reflect.TypeOf(serverscom.DedicatedServer{})
-	KubernetesBaremetalNodeType = reflect.TypeOf(serverscom.KubernetesBaremetalNode{})
-	SBMServerType               = reflect.TypeOf(serverscom.SBMServer{})
-	HostConnectionType          = reflect.TypeOf(serverscom.HostConnection{})
-	HostPowerFeedType           = reflect.TypeOf(serverscom.HostPowerFeed{})
-	HostDriveSlotType           = reflect.TypeOf(serverscom.HostDriveSlot{})
-	HostPTRRecordType           = reflect.TypeOf(serverscom.PTRRecord{})
-	HostNetworkType             = reflect.TypeOf(serverscom.Network{})
-	HostListDefaultFields       = []string{"ID", "Type", "Title", "Status"}
-	NetworkListDefaultFields    = []string{"ID", "Title", "Status", "CIDR", "Family", "InterfaceType", "DistributionMethod", "Additional"}
+	HostType                                 = reflect.TypeOf(serverscom.Host{})
+	DedicatedServerType                      = reflect.TypeOf(serverscom.DedicatedServer{})
+	KubernetesBaremetalNodeType              = reflect.TypeOf(serverscom.KubernetesBaremetalNode{})
+	SBMServerType                            = reflect.TypeOf(serverscom.SBMServer{})
+	HostConnectionType                       = reflect.TypeOf(serverscom.HostConnection{})
+	HostPowerFeedType                        = reflect.TypeOf(serverscom.HostPowerFeed{})
+	HostDriveSlotType                        = reflect.TypeOf(serverscom.HostDriveSlot{})
+	HostPTRRecordType                        = reflect.TypeOf(serverscom.PTRRecord{})
+	HostNetworkType                          = reflect.TypeOf(serverscom.Network{})
+	HostListDefaultFields                    = []string{"ID", "Type", "Title", "LocationCode", "Status", "PublicIPv4Address"}
+	DedicatedServerListDefaultFields         = []string{"ID", "Title", "RackID", "LocationCode", "Status", "PublicIPv4Address"}
+	KubernetesBaremetalNodeListDefaultFields = []string{"ID", "KubernetesClusterNodeNumber", "Title", "LocationCode", "Status", "PublicIPv4Address"}
+	SBMServerListDefaultFields               = []string{"ID", "Title", "RackID", "LocationCode", "Status", "PublicIPv4Address"}
+
+	NetworkListDefaultFields = []string{"ID", "Title", "Status", "CIDR", "Family", "InterfaceType", "DistributionMethod", "Additional"}
 )
 
 func getConfigurationDetailsField() Field {
@@ -80,7 +84,7 @@ func RegisterHostDefinition() {
 			{ID: "PowerStatus", Name: "PowerStatus", Path: "PowerStatus", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
 			{ID: "Configuration", Name: "Configuration", Path: "Configuration", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
 			{ID: "PrivateIPv4Address", Name: "PrivateIPv4Address", Path: "PrivateIPv4Address", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
-			{ID: "PublicIPv4Address", Name: "PublicIPv4Address", Path: "PublicIPv4Address", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
+			{ID: "PublicIPv4Address", Name: "PublicIPv4Address", Path: "PublicIPv4Address", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
 			// {ID: "LeaseStart", Name: "LeaseStart", Path: "LeaseStart", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
 			{ID: "ScheduledRelease", Name: "ScheduledRelease", Path: "ScheduledRelease", ListHandlerFunc: timeHandler, PageViewHandlerFunc: timeHandler},
 			// {ID: "OobIPv4Address", Name: "OobIPv4Address", Path: "OobIPv4Address", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
@@ -105,13 +109,13 @@ func RegisterDedicatedServerDefinition() {
 			{ID: "Type", Name: "Type", Path: "Type", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
 			{ID: "Title", Name: "Title", Path: "Title", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
 			{ID: "LocationID", Name: "LocationID", Path: "LocationID", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
-			{ID: "LocationCode", Name: "LocationCode", Path: "LocationCode", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
+			{ID: "LocationCode", Name: "LocationCode", Path: "LocationCode", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
 			{ID: "Status", Name: "Status", Path: "Status", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
 			{ID: "OperationalStatus", Name: "OperationalStatus", Path: "OperationalStatus", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
 			{ID: "PowerStatus", Name: "PowerStatus", Path: "PowerStatus", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
 			{ID: "Configuration", Name: "Configuration", Path: "Configuration", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
 			{ID: "PrivateIPv4Address", Name: "PrivateIPv4Address", Path: "PrivateIPv4Address", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
-			{ID: "PublicIPv4Address", Name: "PublicIPv4Address", Path: "PublicIPv4Address", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
+			{ID: "PublicIPv4Address", Name: "PublicIPv4Address", Path: "PublicIPv4Address", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
 			{ID: "LeaseStart", Name: "LeaseStart", Path: "LeaseStart", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
 			{ID: "ScheduledRelease", Name: "ScheduledRelease", Path: "ScheduledRelease", ListHandlerFunc: timeHandler, PageViewHandlerFunc: timeHandler},
 			{ID: "OobIPv4Address", Name: "OobIPv4Address", Path: "OobIPv4Address", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
@@ -119,6 +123,9 @@ func RegisterDedicatedServerDefinition() {
 			{ID: "Created", Name: "Created", Path: "Created", ListHandlerFunc: timeHandler, PageViewHandlerFunc: timeHandler, Default: true},
 			{ID: "Updated", Name: "Updated", Path: "Updated", ListHandlerFunc: timeHandler, PageViewHandlerFunc: timeHandler, Default: true},
 			getConfigurationDetailsField(),
+		},
+		cmdDefaultFields: map[string][]string{
+			"list": DedicatedServerListDefaultFields,
 		},
 		eType: DedicatedServerType,
 	}
@@ -138,13 +145,13 @@ func RegisterKubernetesBaremetalNodeDefinition() {
 			{ID: "Type", Name: "Type", Path: "Type", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
 			{ID: "Title", Name: "Title", Path: "Title", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
 			{ID: "LocationID", Name: "LocationID", Path: "LocationID", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
-			{ID: "LocationCode", Name: "LocationCode", Path: "LocationCode", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
+			{ID: "LocationCode", Name: "LocationCode", Path: "LocationCode", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
 			{ID: "Status", Name: "Status", Path: "Status", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
 			{ID: "OperationalStatus", Name: "OperationalStatus", Path: "OperationalStatus", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
 			{ID: "PowerStatus", Name: "PowerStatus", Path: "PowerStatus", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
 			{ID: "Configuration", Name: "Configuration", Path: "Configuration", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
 			{ID: "PrivateIPv4Address", Name: "PrivateIPv4Address", Path: "PrivateIPv4Address", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
-			{ID: "PublicIPv4Address", Name: "PublicIPv4Address", Path: "PublicIPv4Address", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
+			{ID: "PublicIPv4Address", Name: "PublicIPv4Address", Path: "PublicIPv4Address", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
 			{ID: "LeaseStart", Name: "LeaseStart", Path: "LeaseStart", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
 			{ID: "ScheduledRelease", Name: "ScheduledRelease", Path: "ScheduledRelease", ListHandlerFunc: timeHandler, PageViewHandlerFunc: timeHandler},
 			{ID: "OobIPv4Address", Name: "OobIPv4Address", Path: "OobIPv4Address", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
@@ -152,6 +159,9 @@ func RegisterKubernetesBaremetalNodeDefinition() {
 			{ID: "Created", Name: "Created", Path: "Created", ListHandlerFunc: timeHandler, PageViewHandlerFunc: timeHandler, Default: true},
 			{ID: "Updated", Name: "Updated", Path: "Updated", ListHandlerFunc: timeHandler, PageViewHandlerFunc: timeHandler, Default: true},
 			getConfigurationDetailsField(),
+		},
+		cmdDefaultFields: map[string][]string{
+			"list": KubernetesBaremetalNodeListDefaultFields,
 		},
 		eType: KubernetesBaremetalNodeType,
 	}
@@ -168,13 +178,13 @@ func RegisterSBMServerDefinition() {
 			{ID: "Type", Name: "Type", Path: "Type", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
 			{ID: "Title", Name: "Title", Path: "Title", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
 			{ID: "LocationID", Name: "LocationID", Path: "LocationID", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
-			{ID: "LocationCode", Name: "LocationCode", Path: "LocationCode", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
+			{ID: "LocationCode", Name: "LocationCode", Path: "LocationCode", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
 			{ID: "Status", Name: "Status", Path: "Status", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
 			{ID: "OperationalStatus", Name: "OperationalStatus", Path: "OperationalStatus", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
 			{ID: "PowerStatus", Name: "PowerStatus", Path: "PowerStatus", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
 			{ID: "Configuration", Name: "Configuration", Path: "Configuration", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
 			{ID: "PrivateIPv4Address", Name: "PrivateIPv4Address", Path: "PrivateIPv4Address", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
-			{ID: "PublicIPv4Address", Name: "PublicIPv4Address", Path: "PublicIPv4Address", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
+			{ID: "PublicIPv4Address", Name: "PublicIPv4Address", Path: "PublicIPv4Address", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
 			{ID: "LeaseStart", Name: "LeaseStart", Path: "LeaseStart", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
 			{ID: "ScheduledRelease", Name: "ScheduledRelease", Path: "ScheduledRelease", ListHandlerFunc: timeHandler, PageViewHandlerFunc: timeHandler},
 			{ID: "OobIPv4Address", Name: "OobIPv4Address", Path: "OobIPv4Address", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
@@ -182,6 +192,9 @@ func RegisterSBMServerDefinition() {
 			{ID: "Created", Name: "Created", Path: "Created", ListHandlerFunc: timeHandler, PageViewHandlerFunc: timeHandler, Default: true},
 			{ID: "Updated", Name: "Updated", Path: "Updated", ListHandlerFunc: timeHandler, PageViewHandlerFunc: timeHandler, Default: true},
 			getConfigurationDetailsField(),
+		},
+		cmdDefaultFields: map[string][]string{
+			"list": SBMServerListDefaultFields,
 		},
 		eType: SBMServerType,
 	}

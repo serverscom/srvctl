@@ -1,0 +1,29 @@
+ID:                  testId
+Type:                dedicated_server
+Title:               example.aa
+LocationID:          0
+LocationCode:        test
+Status:              active
+OperationalStatus:   
+PowerStatus:         
+Configuration:       
+PrivateIPv4Address:  <none>
+PublicIPv4Address:   1.2.3.4
+ScheduledRelease:    <none>
+Created:             2025-01-01T12:00:00Z
+Updated:             2025-01-01T12:00:00Z
+---
+ID:                  testId2
+Type:                sbm_server
+Title:               example.bb
+LocationID:          0
+LocationCode:        test
+Status:              active
+OperationalStatus:   
+PowerStatus:         
+Configuration:       
+PrivateIPv4Address:  <none>
+PublicIPv4Address:   1.2.3.4
+ScheduledRelease:    <none>
+Created:             2025-01-01T12:00:00Z
+Updated:             2025-01-01T12:00:00Z

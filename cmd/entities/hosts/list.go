@@ -6,54 +6,78 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type hostListOptions struct {
-	base.BaseListOptions[serverscom.Host]
-	rackID     string
-	locationID string
-}
-
-func (o *hostListOptions) AddFlags(cmd *cobra.Command) {
-	o.BaseListOptions.AddFlags(cmd)
-
-	flags := cmd.Flags()
-	flags.StringVar(&o.rackID, "rack-id", "", "Filter by rack ID")
-	flags.StringVar(&o.locationID, "location-id", "", "Filter by location ID")
-}
-
-func (o *hostListOptions) ApplyToCollection(collection serverscom.Collection[serverscom.Host]) {
-	o.BaseListOptions.ApplyToCollection(collection)
-
-	if o.rackID != "" {
-		collection.SetParam("rack_id", o.rackID)
-	}
-	if o.locationID != "" {
-		collection.SetParam("location_id", o.locationID)
-	}
-}
-
-func newListCmd(cmdContext *base.CmdContext, hostType *HostTypeCmd) *cobra.Command {
+func newListCmd(cmdContext *base.CmdContext) *cobra.Command {
 	factory := func(verbose bool, args ...string) serverscom.Collection[serverscom.Host] {
 		scClient := cmdContext.GetClient().SetVerbose(verbose).GetScClient()
 		collection := scClient.Hosts.Collection()
-
-		if hostType != nil && hostType.typeFlag != "" {
-			collection = collection.SetParam("type", hostType.typeFlag)
-		}
 
 		return collection
 	}
 
 	opts := base.NewListOptions(
-		&hostListOptions{},
-		&base.HiddenTypeOption[serverscom.Host]{},
+		&base.BaseListOptions[serverscom.Host]{},
+		&base.LocationIDOption[serverscom.Host]{},
+		&base.RackIDOption[serverscom.Host]{},
 		&base.LabelSelectorOption[serverscom.Host]{},
 		&base.SearchPatternOption[serverscom.Host]{},
 	)
 
-	entityName := "Hosts"
-	if hostType != nil {
-		entityName = hostType.entityName
+	return base.NewListCmd("list", "hosts", factory, cmdContext, opts...)
+}
+
+func newListDSCmd(cmdContext *base.CmdContext) *cobra.Command {
+	factory := func(verbose bool, args ...string) serverscom.Collection[serverscom.DedicatedServer] {
+		scClient := cmdContext.GetClient().SetVerbose(verbose).GetScClient()
+		collection := scClient.Hosts.ListDedicatedServers()
+
+		return collection
 	}
 
-	return base.NewListCmd("list", entityName, factory, cmdContext, opts...)
+	opts := base.NewListOptions(
+		&base.BaseListOptions[serverscom.DedicatedServer]{},
+		&base.LocationIDOption[serverscom.DedicatedServer]{},
+		&base.RackIDOption[serverscom.DedicatedServer]{},
+		&base.LabelSelectorOption[serverscom.DedicatedServer]{},
+		&base.SearchPatternOption[serverscom.DedicatedServer]{},
+	)
+
+	return base.NewListCmd("list", "dedicated servers", factory, cmdContext, opts...)
+}
+
+func newListKBMCmd(cmdContext *base.CmdContext) *cobra.Command {
+	factory := func(verbose bool, args ...string) serverscom.Collection[serverscom.KubernetesBaremetalNode] {
+		scClient := cmdContext.GetClient().SetVerbose(verbose).GetScClient()
+		collection := scClient.Hosts.ListKubernetesBaremetalNodes()
+
+		return collection
+	}
+
+	opts := base.NewListOptions(
+		&base.BaseListOptions[serverscom.KubernetesBaremetalNode]{},
+		&base.LocationIDOption[serverscom.KubernetesBaremetalNode]{},
+		&base.RackIDOption[serverscom.KubernetesBaremetalNode]{},
+		&base.LabelSelectorOption[serverscom.KubernetesBaremetalNode]{},
+		&base.SearchPatternOption[serverscom.KubernetesBaremetalNode]{},
+	)
+
+	return base.NewListCmd("list", "dedicated servers", factory, cmdContext, opts...)
+}
+
+func newListSBMCmd(cmdContext *base.CmdContext) *cobra.Command {
+	factory := func(verbose bool, args ...string) serverscom.Collection[serverscom.SBMServer] {
+		scClient := cmdContext.GetClient().SetVerbose(verbose).GetScClient()
+		collection := scClient.Hosts.ListSBMServers()
+
+		return collection
+	}
+
+	opts := base.NewListOptions(
+		&base.BaseListOptions[serverscom.SBMServer]{},
+		&base.LocationIDOption[serverscom.SBMServer]{},
+		&base.RackIDOption[serverscom.SBMServer]{},
+		&base.LabelSelectorOption[serverscom.SBMServer]{},
+		&base.SearchPatternOption[serverscom.SBMServer]{},
+	)
+
+	return base.NewListCmd("list", "dedicated servers", factory, cmdContext, opts...)
 }
