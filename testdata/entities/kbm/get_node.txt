@@ -1,0 +1,2 @@
+ID       RackID   Title        LocationCode   Status   PublicIPv4Address   Created                Updated
+testId   testId   example.aa   test           active   1.2.3.4             2025-01-01T12:00:00Z   2025-01-01T12:00:00Z

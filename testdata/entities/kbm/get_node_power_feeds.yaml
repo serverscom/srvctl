@@ -1,0 +1,4 @@
+- name: testPowerFeed
+  status: "on"
+- name: testPowerFeed2
+  status: "off"

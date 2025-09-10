@@ -1,0 +1,33 @@
+id: testId
+kubernetesclusterid: testId
+kubernetesclusternodeid: testId
+kubernetesclusternodenumber: 1
+rackid: testId
+type: kubernetes_baremetal_node
+title: example.aa
+locationid: 0
+locationcode: test
+status: active
+operationalstatus: ""
+powerstatus: ""
+configuration: ""
+privateipv4address: null
+publicipv4address: 1.2.3.4
+leasestart: ""
+scheduledrelease: null
+oobipv4address: ""
+configurationdetails:
+    ramsize: 2
+    servermodelid: 1
+    servermodelname: server-model-123
+    publicuplinkid: 2
+    publicuplinkname: Public 1 Gbps without redundancy
+    privateuplinkid: 3
+    privateuplinkname: Private 1 Gbps without redundancy
+    bandwidthid: 4
+    bandwidthname: 20000 GB
+    operatingsystemid: 5
+    operatingsystemfullname: CentOS 7 x86_64
+labels: {}
+created: 2025-01-01T12:00:00Z
+updated: 2025-01-01T12:00:00Z

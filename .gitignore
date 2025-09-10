@@ -1,3 +1,6 @@
 .vscode
 vendor
 dist
+.idea/
+cp.out
+.DS_Store
