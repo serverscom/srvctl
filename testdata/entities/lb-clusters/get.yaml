@@ -1,0 +1,6 @@
+id: testId
+name: test-lb-cluster
+locationid: 1
+status: active
+created: 2025-01-01T12:00:00Z
+updated: 2025-01-01T12:00:00Z
