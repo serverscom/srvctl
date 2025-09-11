@@ -47,21 +47,14 @@ func newPowerCmd(cmdContext *base.CmdContext) *cobra.Command {
 }
 
 func powerAction(ctx context.Context, client *serverscom.Client, id string, action string) (any, error) {
-	actions := map[string]func() (any, error){
-		"on": func() (any, error) {
-			return client.Hosts.PowerOnKubernetesBaremetalNode(ctx, id)
-		},
-		"off": func() (any, error) {
-			return client.Hosts.PowerOffKubernetesBaremetalNode(ctx, id)
-		},
-		"cycle": func() (any, error) {
-			return client.Hosts.PowerCycleKubernetesBaremetalNode(ctx, id)
-		},
+	switch action {
+	case "on":
+		return client.Hosts.PowerOnKubernetesBaremetalNode(ctx, id)
+	case "off":
+		return client.Hosts.PowerOffKubernetesBaremetalNode(ctx, id)
+	case "cycle":
+		return client.Hosts.PowerCycleKubernetesBaremetalNode(ctx, id)
+	default:
+		return nil, fmt.Errorf("unsupported power action: %q", action)
 	}
-
-	if fn, ok := actions[action]; ok {
-		return fn()
-	}
-
-	return nil, fmt.Errorf("unsupported power action: %q", action)
 }
