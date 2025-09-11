@@ -335,6 +335,49 @@ func (mr *MockHostsServiceMockRecorder) GetSBMServer(ctx, id any) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetSBMServer", reflect.TypeOf((*MockHostsService)(nil).GetSBMServer), ctx, id)
 }
 
+// KubernetesBaremetalNodeDriveSlots mocks base method.
+func (m *MockHostsService) KubernetesBaremetalNodeDriveSlots(id string) serverscom.Collection[serverscom.HostDriveSlot] {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "KubernetesBaremetalNodeDriveSlots", id)
+	ret0, _ := ret[0].(serverscom.Collection[serverscom.HostDriveSlot])
+	return ret0
+}
+
+// KubernetesBaremetalNodeDriveSlots indicates an expected call of KubernetesBaremetalNodeDriveSlots.
+func (mr *MockHostsServiceMockRecorder) KubernetesBaremetalNodeDriveSlots(id any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "KubernetesBaremetalNodeDriveSlots", reflect.TypeOf((*MockHostsService)(nil).KubernetesBaremetalNodeDriveSlots), id)
+}
+
+// KubernetesBaremetalNodeNetworks mocks base method.
+func (m *MockHostsService) KubernetesBaremetalNodeNetworks(id string) serverscom.Collection[serverscom.Network] {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "KubernetesBaremetalNodeNetworks", id)
+	ret0, _ := ret[0].(serverscom.Collection[serverscom.Network])
+	return ret0
+}
+
+// KubernetesBaremetalNodeNetworks indicates an expected call of KubernetesBaremetalNodeNetworks.
+func (mr *MockHostsServiceMockRecorder) KubernetesBaremetalNodeNetworks(id any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "KubernetesBaremetalNodeNetworks", reflect.TypeOf((*MockHostsService)(nil).KubernetesBaremetalNodeNetworks), id)
+}
+
+// KubernetesBaremetalNodePowerFeeds mocks base method.
+func (m *MockHostsService) KubernetesBaremetalNodePowerFeeds(ctx context.Context, id string) ([]serverscom.HostPowerFeed, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "KubernetesBaremetalNodePowerFeeds", ctx, id)
+	ret0, _ := ret[0].([]serverscom.HostPowerFeed)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// KubernetesBaremetalNodePowerFeeds indicates an expected call of KubernetesBaremetalNodePowerFeeds.
+func (mr *MockHostsServiceMockRecorder) KubernetesBaremetalNodePowerFeeds(ctx, id any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "KubernetesBaremetalNodePowerFeeds", reflect.TypeOf((*MockHostsService)(nil).KubernetesBaremetalNodePowerFeeds), ctx, id)
+}
+
 // ListDedicatedServers mocks base method.
 func (m *MockHostsService) ListDedicatedServers() serverscom.Collection[serverscom.DedicatedServer] {
 	m.ctrl.T.Helper()

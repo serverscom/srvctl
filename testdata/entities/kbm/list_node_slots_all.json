@@ -1,0 +1,28 @@
+[
+    {
+        "position": 1,
+        "interface": "SAS",
+        "form_factor": "2.5\"",
+        "drive_model": {
+            "id": 10,
+            "name": "ssd-model-749",
+            "capacity": 100,
+            "interface": "SATA3",
+            "form_factor": "2.5",
+            "media_type": "SSD"
+        }
+    },
+    {
+        "position": 2,
+        "interface": "SAS",
+        "form_factor": "2.5\"",
+        "drive_model": {
+            "id": 10,
+            "name": "ssd-model-749",
+            "capacity": 100,
+            "interface": "SATA3",
+            "form_factor": "2.5",
+            "media_type": "SSD"
+        }
+    }
+]

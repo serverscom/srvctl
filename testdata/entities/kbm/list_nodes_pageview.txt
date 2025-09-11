@@ -1,0 +1,67 @@
+ID:                           testId
+KubernetesClusterId:          <none>
+KubernetesClusterNodeId:      <none>
+KubernetesClusterNodeNumber:  1
+RackID:                       testId
+Type:                         kubernetes_baremetal_node
+Title:                        example.aa
+LocationID:                   0
+LocationCode:                 test
+Status:                       active
+OperationalStatus:            
+PowerStatus:                  
+Configuration:                
+PrivateIPv4Address:           <none>
+PublicIPv4Address:            1.2.3.4
+LeaseStart:                   
+ScheduledRelease:             <none>
+OobIPv4Address:               
+Labels:                       <empty>
+Created:                      2025-01-01T12:00:00Z
+Updated:                      2025-01-01T12:00:00Z
+ConfigurationDetails:
+  RAMSize:                  2
+  ServerModelID:            1
+  ServerModelName:          server-model-123
+  PublicUplinkID:           2
+  PublicUplinkName:         Public 1 Gbps without redundancy
+  PrivateUplinkID:          3
+  PrivateUplinkName:        Private 1 Gbps without redundancy
+  BandwidthID:              4
+  BandwidthName:            20000 GB
+  OperatingSystemID:        5
+  OperatingSystemFullName:  CentOS 7 x86_64
+---
+ID:                           testId2
+KubernetesClusterId:          <none>
+KubernetesClusterNodeId:      <none>
+KubernetesClusterNodeNumber:  1
+RackID:                       testId
+Type:                         kubernetes_baremetal_node
+Title:                        example.bb
+LocationID:                   0
+LocationCode:                 test
+Status:                       active
+OperationalStatus:            
+PowerStatus:                  
+Configuration:                
+PrivateIPv4Address:           <none>
+PublicIPv4Address:            1.2.3.4
+LeaseStart:                   
+ScheduledRelease:             <none>
+OobIPv4Address:               
+Labels:                       <empty>
+Created:                      2025-01-01T12:00:00Z
+Updated:                      2025-01-01T12:00:00Z
+ConfigurationDetails:
+  RAMSize:                  2
+  ServerModelID:            1
+  ServerModelName:          server-model-123
+  PublicUplinkID:           2
+  PublicUplinkName:         Public 1 Gbps without redundancy
+  PrivateUplinkID:          3
+  PrivateUplinkName:        Private 1 Gbps without redundancy
+  BandwidthID:              4
+  BandwidthName:            20000 GB
+  OperatingSystemID:        5
+  OperatingSystemFullName:  CentOS 7 x86_64

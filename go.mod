@@ -6,7 +6,7 @@ require (
 	github.com/creack/pty v1.1.24
 	github.com/jmespath/go-jmespath v0.4.0
 	github.com/onsi/gomega v1.38.0
-	github.com/serverscom/serverscom-go-client v1.0.20
+	github.com/serverscom/serverscom-go-client v1.0.21
 	github.com/spf13/cobra v1.9.1
 	github.com/spf13/pflag v1.0.7
 	github.com/spf13/viper v1.20.1

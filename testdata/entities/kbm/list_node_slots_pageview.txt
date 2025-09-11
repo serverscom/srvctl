@@ -1,0 +1,21 @@
+Position:    1
+Interface:   SAS
+FormFactor:  2.5"
+DriveModel:
+  ID:          10
+  Name:        ssd-model-749
+  Capacity:    100
+  Interface:   SATA3
+  FormFactor:  2.5
+  MediaType:   SSD
+---
+Position:    2
+Interface:   SAS
+FormFactor:  2.5"
+DriveModel:
+  ID:          10
+  Name:        ssd-model-749
+  Capacity:    100
+  Interface:   SATA3
+  FormFactor:  2.5
+  MediaType:   SSD

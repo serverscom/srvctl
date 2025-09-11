@@ -1,0 +1,21 @@
+ID:                  testNetId
+Title:               Some Net
+Status:              active
+CIDR:                100.0.8.0/29
+Family:              ipv4
+InterfaceType:       public
+DistributionMethod:  gateway
+Additional:          false
+Created:             2025-01-01T12:00:00Z
+Updated:             2025-01-01T12:00:00Z
+---
+ID:                  testNetId2
+Title:               Another Net
+Status:              active
+CIDR:                100.0.8.0/29
+Family:              ipv4
+InterfaceType:       public
+DistributionMethod:  gateway
+Additional:          false
+Created:             2025-01-01T12:00:00Z
+Updated:             2025-01-01T12:00:00Z
