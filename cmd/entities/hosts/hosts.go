@@ -71,6 +71,8 @@ func NewCmd(cmdContext *base.CmdContext) *cobra.Command {
 			extraCmds: []func(*base.CmdContext) *cobra.Command{
 				newUpdateKBMCmd,
 				newListKBMCmd,
+				newListKBMNetworksCmd,
+				newListKBMDriveSlotsCmd,
 			},
 		},
 		{

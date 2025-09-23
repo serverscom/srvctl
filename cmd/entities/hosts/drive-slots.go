@@ -23,4 +23,20 @@ func newListDSDriveSlotsCmd(cmdContext *base.CmdContext) *cobra.Command {
 	return base.NewListCmd("list-drive-slots <id>", "Dedicated server drive slots", factory, cmdContext, opts)
 }
 
-// TODO add list drive slots for KBM after adding KBMDriveSlots in go client
+func newListKBMDriveSlotsCmd(cmdContext *base.CmdContext) *cobra.Command {
+	factory := func(verbose bool, args ...string) serverscom.Collection[serverscom.HostDriveSlot] {
+		scClient := cmdContext.GetClient().SetVerbose(verbose).GetScClient()
+		if len(args) == 0 {
+			log.Fatal("Missing KBM node ID")
+		}
+		id := args[0]
+		return scClient.Hosts.KubernetesBaremetalNodeDriveSlots(id)
+	}
+
+	opts := base.NewListOptions(
+		&base.BaseListOptions[serverscom.HostDriveSlot]{},
+		&base.SearchPatternOption[serverscom.HostDriveSlot]{},
+	)
+
+	return base.NewListCmd("list-drive-slots <id>", "KBM node drive slots", factory, cmdContext, opts...)
+}

@@ -3,6 +3,7 @@ package hosts
 import (
 	"errors"
 	"path/filepath"
+	"strings"
 	"testing"
 	"time"
 
@@ -81,9 +82,9 @@ var (
 		Created:              fixedTime,
 		Updated:              fixedTime,
 	}
-	netTitle      = "Some Net"
-	cidr          = "100.0.8.0/29"
-	testDSNetwork = serverscom.Network{
+	netTitle    = "Some Net"
+	cidr        = "100.0.8.0/29"
+	testNetwork = serverscom.Network{
 		ID:                 testNetworkId,
 		Title:              &netTitle,
 		Status:             "active",
@@ -94,6 +95,24 @@ var (
 		Additional:         false,
 		Created:            fixedTime,
 		Updated:            fixedTime,
+	}
+	testDriveModel = serverscom.DriveModel{
+		ID:         int64(10),
+		Name:       "ssd-model-749",
+		Capacity:   100,
+		Interface:  "SATA3",
+		FormFactor: "2.5",
+		MediaType:  "SSD",
+	}
+	testDriveSlot = serverscom.HostDriveSlot{
+		Position:   1,
+		Interface:  "SAS",
+		FormFactor: "2.5\"",
+		DriveModel: &testDriveModel,
+	}
+	testPowerFeed = serverscom.HostPowerFeed{
+		Name:   "testPowerFeed",
+		Status: "on",
 	}
 )
 
@@ -1622,7 +1641,7 @@ func TestGetDSNetworkCmd(t *testing.T) {
 			}
 			hostsServiceHandler.EXPECT().
 				GetDedicatedServerNetwork(gomock.Any(), tc.id, tc.networkID).
-				Return(&testDSNetwork, err)
+				Return(&testNetwork, err)
 
 			testCmdContext := testutils.NewTestCmdContext(scClient)
 			hostsCmd := NewCmd(testCmdContext)
@@ -1653,7 +1672,7 @@ func TestGetDSNetworkCmd(t *testing.T) {
 }
 
 func TestListDSNetworksCmd(t *testing.T) {
-	testNetwork1 := testDSNetwork
+	testNetwork1 := testNetwork
 	testNetwork1.ID = testNetworkId
 	testNetwork2 := testNetwork1
 	testNetwork2.ID = "testNetId2"
@@ -1820,7 +1839,7 @@ func TestAddDSNetworkCmd(t *testing.T) {
 			configureMock: func(mock *mocks.MockHostsService) {
 				mock.EXPECT().
 					AddDedicatedServerPublicIPv4Network(gomock.Any(), testId, expectedInputPublic).
-					Return(&testDSNetwork, nil)
+					Return(&testNetwork, nil)
 			},
 		},
 		{
@@ -1836,7 +1855,7 @@ func TestAddDSNetworkCmd(t *testing.T) {
 			configureMock: func(mock *mocks.MockHostsService) {
 				mock.EXPECT().
 					AddDedicatedServerPrivateIPv4Network(gomock.Any(), testId, expectedInputPrivate).
-					Return(&testDSNetwork, nil)
+					Return(&testNetwork, nil)
 			},
 		},
 		{
@@ -1935,7 +1954,7 @@ func TestDeleteDSNetworkCmd(t *testing.T) {
 			}
 			hostsServiceHandler.EXPECT().
 				DeleteDedicatedServerNetwork(gomock.Any(), tc.id, tc.networkID).
-				Return(&testDSNetwork, err)
+				Return(&testNetwork, err)
 
 			testCmdContext := testutils.NewTestCmdContext(scClient)
 			hostsCmd := NewCmd(testCmdContext)
@@ -1959,5 +1978,490 @@ func TestDeleteDSNetworkCmd(t *testing.T) {
 				g.Expect(builder.GetOutput()).To(BeEquivalentTo(string(tc.expectedOutput)))
 			}
 		})
+	}
+}
+
+func TestListKBMPowerFeedsCmd(t *testing.T) {
+	testPowerFeed1 := testPowerFeed
+	testPowerFeed2 := testPowerFeed1
+
+	testPowerFeed2.Name = "testPowerFeed2"
+	testPowerFeed2.Status = "off"
+
+	testCases := []struct {
+		name           string
+		id             string
+		output         string
+		args           []string
+		expectedOutput []byte
+		expectError    bool
+		configureMock  func(*mocks.MockCollection[serverscom.HostPowerFeed])
+	}{
+		{
+			name:           "get KBM node power_feeds in default format",
+			id:             testId,
+			output:         "",
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_kbm_power_feeds.txt")),
+		},
+		{
+			name:           "get KBM node power_feeds",
+			id:             testId,
+			output:         "json",
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_kbm_power_feeds.json")),
+		},
+		{
+			name:           "get KBM node power_feeds in YAML format",
+			id:             testId,
+			output:         "yaml",
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_kbm_power_feeds.yaml")),
+		},
+		{
+			name:        "get KBM node power_feeds with error",
+			id:          testId,
+			expectError: true,
+		},
+	}
+
+	mockCtrl := gomock.NewController(t)
+	defer mockCtrl.Finish()
+
+	hostsServiceHandler := mocks.NewMockHostsService(mockCtrl)
+
+	scClient := serverscom.NewClientWithEndpoint("", "")
+	scClient.Hosts = hostsServiceHandler
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			g := NewWithT(t)
+
+			var err error
+			if tc.expectError {
+				err = errors.New("some error")
+			}
+			hostsServiceHandler.EXPECT().
+				KubernetesBaremetalNodePowerFeeds(gomock.Any(), testId).
+				Return([]serverscom.HostPowerFeed{testPowerFeed1, testPowerFeed2}, err)
+
+			testCmdContext := testutils.NewTestCmdContext(scClient)
+			hostsCmd := NewCmd(testCmdContext)
+
+			args := []string{"hosts", "kbm", "list-power-feeds", tc.id}
+			if tc.output != "" {
+				args = append(args, "--output", tc.output)
+			}
+
+			builder := testutils.NewTestCommandBuilder().
+				WithCommand(hostsCmd).
+				WithArgs(args)
+
+			cmd := builder.Build()
+
+			err = cmd.Execute()
+
+			if tc.expectError {
+				g.Expect(err).To(HaveOccurred())
+			} else {
+				g.Expect(err).To(BeNil())
+				g.Expect(builder.GetOutput()).To(BeEquivalentTo(string(tc.expectedOutput)))
+			}
+		})
+	}
+}
+
+func TestListKBMNetworksCmd(t *testing.T) {
+	testNetwork1 := testNetwork
+	testNetwork1.ID = testNetworkId
+	testNetwork2 := testNetwork1
+	testNetwork2.ID = "testNetId2"
+	netTitle2 := "Another Net"
+	testNetwork2.Title = &netTitle2
+
+	testCases := []struct {
+		name           string
+		output         string
+		args           []string
+		expectedOutput []byte
+		expectError    bool
+		configureMock  func(*mocks.MockCollection[serverscom.Network])
+	}{
+		{
+			name:           "list KBM node all networks",
+			output:         "json",
+			args:           []string{"testServerId", "-A"},
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_kbm_networks_all.json")),
+			configureMock: func(mock *mocks.MockCollection[serverscom.Network]) {
+				mock.EXPECT().
+					Collect(gomock.Any()).
+					Return([]serverscom.Network{
+						testNetwork1,
+						testNetwork2,
+					}, nil)
+			},
+		},
+		{
+			name:           "list KBM node networks",
+			output:         "json",
+			args:           []string{"testServerId"},
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_kbm_networks.json")),
+			configureMock: func(mock *mocks.MockCollection[serverscom.Network]) {
+				mock.EXPECT().
+					List(gomock.Any()).
+					Return([]serverscom.Network{
+						testNetwork1,
+					}, nil)
+			},
+		},
+		{
+			name:           "list DS networks with template",
+			args:           []string{"testServerId", "--template", "{{range .}}Network: {{.ID}}  Title: {{.Title}}\n{{end}}"},
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_kbm_networks_template.txt")),
+			configureMock: func(mock *mocks.MockCollection[serverscom.Network]) {
+				mock.EXPECT().
+					List(gomock.Any()).
+					Return([]serverscom.Network{
+						testNetwork1,
+						testNetwork2,
+					}, nil)
+			},
+		},
+		{
+			name:           "list DS networks with pageView",
+			args:           []string{"testServerId", "--page-view"},
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_kbm_networks_pageview.txt")),
+			configureMock: func(mock *mocks.MockCollection[serverscom.Network]) {
+				mock.EXPECT().
+					List(gomock.Any()).
+					Return([]serverscom.Network{
+						testNetwork1,
+						testNetwork2,
+					}, nil)
+			},
+		},
+		{
+			name:        "list DS networks with error",
+			args:        []string{"testServerId"},
+			expectError: true,
+			configureMock: func(mock *mocks.MockCollection[serverscom.Network]) {
+				mock.EXPECT().
+					List(gomock.Any()).
+					Return(nil, errors.New("some error"))
+			},
+		},
+	}
+
+	mockCtrl := gomock.NewController(t)
+	defer mockCtrl.Finish()
+
+	hostsServiceHandler := mocks.NewMockHostsService(mockCtrl)
+	collectionHandler := mocks.NewMockCollection[serverscom.Network](mockCtrl)
+
+	hostsServiceHandler.EXPECT().
+		KubernetesBaremetalNodeNetworks(gomock.Any()).
+		Return(collectionHandler).
+		AnyTimes()
+
+	collectionHandler.EXPECT().
+		SetParam(gomock.Any(), gomock.Any()).
+		Return(collectionHandler).
+		AnyTimes()
+
+	scClient := serverscom.NewClientWithEndpoint("", "")
+	scClient.Hosts = hostsServiceHandler
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			g := NewWithT(t)
+
+			if tc.configureMock != nil {
+				tc.configureMock(collectionHandler)
+			}
+
+			testCmdContext := testutils.NewTestCmdContext(scClient)
+			hostsCmd := NewCmd(testCmdContext)
+
+			args := []string{"hosts", "kbm", "list-networks"}
+			if len(tc.args) > 0 {
+				args = append(args, tc.args...)
+			}
+			if tc.output != "" {
+				args = append(args, "--output", tc.output)
+			}
+
+			builder := testutils.NewTestCommandBuilder().
+				WithCommand(hostsCmd).
+				WithArgs(args)
+
+			cmd := builder.Build()
+
+			err := cmd.Execute()
+
+			if tc.expectError {
+				g.Expect(err).To(HaveOccurred())
+			} else {
+				g.Expect(err).To(BeNil())
+				g.Expect(builder.GetOutput()).To(BeEquivalentTo(string(tc.expectedOutput)))
+			}
+		})
+	}
+}
+
+func TestListKBMDriveSlotsCmd(t *testing.T) {
+	testDriveSlot1 := testDriveSlot
+	testDriveSlot2 := testDriveSlot1
+	testDriveSlot2.Position = 2
+
+	testCases := []struct {
+		name           string
+		output         string
+		args           []string
+		expectedOutput []byte
+		expectError    bool
+		configureMock  func(*mocks.MockCollection[serverscom.HostDriveSlot])
+	}{
+		{
+			name:           "list KBM node all slots",
+			output:         "json",
+			args:           []string{"testServerId", "-A"},
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_kbm_drive_slots_all.json")),
+			configureMock: func(mock *mocks.MockCollection[serverscom.HostDriveSlot]) {
+				mock.EXPECT().
+					Collect(gomock.Any()).
+					Return([]serverscom.HostDriveSlot{
+						testDriveSlot1,
+						testDriveSlot2,
+					}, nil)
+			},
+		},
+		{
+			name:           "list KBM node slots",
+			output:         "json",
+			args:           []string{"testServerId"},
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_kbm_drive_slots.json")),
+			configureMock: func(mock *mocks.MockCollection[serverscom.HostDriveSlot]) {
+				mock.EXPECT().
+					List(gomock.Any()).
+					Return([]serverscom.HostDriveSlot{
+						testDriveSlot1,
+					}, nil)
+			},
+		},
+		{
+			name:           "list KBM node slots with template",
+			args:           []string{"testServerId", "--template", "{{range .}}Position: {{.Position}}  Interface: {{.Interface}}\n{{end}}"},
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_kbm_drive_slots_template.txt")),
+			configureMock: func(mock *mocks.MockCollection[serverscom.HostDriveSlot]) {
+				mock.EXPECT().
+					List(gomock.Any()).
+					Return([]serverscom.HostDriveSlot{
+						testDriveSlot1,
+						testDriveSlot2,
+					}, nil)
+			},
+		},
+		{
+			name:           "list KBM node slots with pageView",
+			args:           []string{"testServerId", "--page-view"},
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_kbm_drive_slots_pageview.txt")),
+			configureMock: func(mock *mocks.MockCollection[serverscom.HostDriveSlot]) {
+				mock.EXPECT().
+					List(gomock.Any()).
+					Return([]serverscom.HostDriveSlot{
+						testDriveSlot1,
+						testDriveSlot2,
+					}, nil)
+			},
+		},
+		{
+			name:        "list KBM node slots with error",
+			args:        []string{"testServerId"},
+			expectError: true,
+			configureMock: func(mock *mocks.MockCollection[serverscom.HostDriveSlot]) {
+				mock.EXPECT().
+					List(gomock.Any()).
+					Return(nil, errors.New("some error"))
+			},
+		},
+	}
+
+	mockCtrl := gomock.NewController(t)
+	defer mockCtrl.Finish()
+
+	hostsServiceHandler := mocks.NewMockHostsService(mockCtrl)
+	collectionHandler := mocks.NewMockCollection[serverscom.HostDriveSlot](mockCtrl)
+
+	hostsServiceHandler.EXPECT().
+		KubernetesBaremetalNodeDriveSlots(gomock.Any()).
+		Return(collectionHandler).
+		AnyTimes()
+
+	collectionHandler.EXPECT().
+		SetParam(gomock.Any(), gomock.Any()).
+		Return(collectionHandler).
+		AnyTimes()
+
+	scClient := serverscom.NewClientWithEndpoint("", "")
+	scClient.Hosts = hostsServiceHandler
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			g := NewWithT(t)
+
+			if tc.configureMock != nil {
+				tc.configureMock(collectionHandler)
+			}
+
+			testCmdContext := testutils.NewTestCmdContext(scClient)
+			hostsCmd := NewCmd(testCmdContext)
+
+			args := []string{"hosts", "kbm", "list-drive-slots"}
+			if len(tc.args) > 0 {
+				args = append(args, tc.args...)
+			}
+			if tc.output != "" {
+				args = append(args, "--output", tc.output)
+			}
+
+			builder := testutils.NewTestCommandBuilder().
+				WithCommand(hostsCmd).
+				WithArgs(args)
+
+			cmd := builder.Build()
+
+			err := cmd.Execute()
+
+			if tc.expectError {
+				g.Expect(err).To(HaveOccurred())
+			} else {
+				g.Expect(err).To(BeNil())
+				g.Expect(builder.GetOutput()).To(BeEquivalentTo(string(tc.expectedOutput)))
+			}
+		})
+	}
+}
+
+func TestKBMPowerCmd(t *testing.T) {
+	testServer := testKBM
+	testServer.Labels = map[string]string{"new": "label"}
+
+	testCases := []struct {
+		name           string
+		id             string
+		output         string
+		args           []string
+		expectedOutput []byte
+		expectError    bool
+	}{
+		{
+			name:           "power on kbm node",
+			id:             testId,
+			args:           []string{"hosts", "kbm", "power", testId, "--command=on"},
+			output:         "json",
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "set_kbm_power.json")),
+		},
+		{
+			name:           "power off kbm node",
+			id:             testId,
+			args:           []string{"hosts", "kbm", "power", testId, "--command=off"},
+			output:         "json",
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "set_kbm_power.json")),
+		},
+		{
+			name:           "power cycle kbm node",
+			id:             testId,
+			args:           []string{"hosts", "kbm", "power", testId, "--command=cycle"},
+			output:         "json",
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "set_kbm_power.json")),
+		},
+		{
+			name:        "power on kbm node with error",
+			id:          testId,
+			args:        []string{"hosts", "kbm", "power", testId, "--command=on"},
+			expectError: true,
+		},
+		{
+			name:        "power on kbm node without flag error",
+			id:          testId,
+			args:        []string{"hosts", "kbm", "power", testId},
+			expectError: true,
+		},
+	}
+
+	mockCtrl := gomock.NewController(t)
+	defer mockCtrl.Finish()
+
+	hostsServiceHandler := mocks.NewMockHostsService(mockCtrl)
+
+	scClient := serverscom.NewClientWithEndpoint("", "")
+	scClient.Hosts = hostsServiceHandler
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			g := NewWithT(t)
+
+			var err error
+			if tc.expectError {
+				err = errors.New("some error")
+			}
+
+			var powerVal string
+			if tc.args != nil {
+				powerVal = strings.TrimPrefix(tc.args[len(tc.args)-1], "--command=")
+			}
+			expectPowerCall(hostsServiceHandler, powerVal, testId, &testServer, err)
+
+			testCmdContext := testutils.NewTestCmdContext(scClient)
+			hostsCmd := NewCmd(testCmdContext)
+
+			if tc.output != "" {
+				tc.args = append(tc.args, "--output", tc.output)
+			}
+
+			builder := testutils.NewTestCommandBuilder().
+				WithCommand(hostsCmd).
+				WithArgs(tc.args)
+
+			cmd := builder.Build()
+
+			err = cmd.Execute()
+
+			if tc.expectError {
+				g.Expect(err).To(HaveOccurred())
+			} else {
+				g.Expect(err).To(BeNil())
+				g.Expect(builder.GetOutput()).To(BeEquivalentTo(string(tc.expectedOutput)))
+			}
+		})
+	}
+}
+
+func expectPowerCall(m *mocks.MockHostsService, action string, id string, s *serverscom.KubernetesBaremetalNode, err error) {
+	calls := map[string]func() *gomock.Call{
+		"on":    func() *gomock.Call { return m.EXPECT().PowerOnKubernetesBaremetalNode(gomock.Any(), id) },
+		"off":   func() *gomock.Call { return m.EXPECT().PowerOffKubernetesBaremetalNode(gomock.Any(), id) },
+		"cycle": func() *gomock.Call { return m.EXPECT().PowerCycleKubernetesBaremetalNode(gomock.Any(), id) },
+	}
+
+	if action == "" {
+		m.EXPECT().
+			PowerOnKubernetesBaremetalNode(gomock.Any(), id).
+			Times(0)
+		m.EXPECT().
+			PowerOffKubernetesBaremetalNode(gomock.Any(), id).
+			Times(0)
+		m.EXPECT().
+			PowerCycleKubernetesBaremetalNode(gomock.Any(), id).
+			Times(0)
+
+		gomock.InOrder(
+			calls["on"]().Times(0),
+			calls["off"]().Times(0),
+			calls["cycle"]().Times(0),
+		)
+
+		return
+	}
+
+	if h, ok := calls[action]; ok {
+		h().Return(s, err).Times(1)
 	}
 }
