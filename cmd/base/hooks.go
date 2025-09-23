@@ -1,6 +1,7 @@
 package base
 
 import (
+	"errors"
 	"fmt"
 	"html/template"
 	"os"
@@ -131,7 +132,7 @@ func CheckEmptyContexts(cmdContext *CmdContext) func(cmd *cobra.Command, args []
 		manager := cmdContext.GetManager()
 
 		if len(manager.GetContexts()) == 0 {
-			return fmt.Errorf(ErrNoContexts)
+			return errors.New(ErrNoContexts)
 		}
 		return nil
 	}
