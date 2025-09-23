@@ -131,7 +131,7 @@ func CheckEmptyContexts(cmdContext *CmdContext) func(cmd *cobra.Command, args []
 		manager := cmdContext.GetManager()
 
 		if len(manager.GetContexts()) == 0 {
-			return fmt.Errorf("no contexts found, log in first: 'srvctl login <context-name>'")
+			return fmt.Errorf(ErrNoContexts)
 		}
 		return nil
 	}
