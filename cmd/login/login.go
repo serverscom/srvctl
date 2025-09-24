@@ -45,7 +45,7 @@ Example: srvctl login context-name`,
 			} else {
 				contextName = manager.GetDefaultContextName()
 				if contextName == "" {
-					return fmt.Errorf("no contexts found, log in first: 'srvctl login <context-name>'")
+					return errors.New(base.ErrNoContexts)
 				}
 			}
 

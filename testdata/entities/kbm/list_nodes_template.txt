@@ -1,2 +1,0 @@
-Title: example.aa  Type: kubernetes_baremetal_node
-Title: example.bb  Type: kubernetes_baremetal_node

@@ -49,8 +49,7 @@ func (p *KBMPowerMgr) PowerAction(ctx context.Context, client *serverscom.Client
 }
 
 func (p *KBMPowerMgr) ListPowerFeeds(ctx context.Context, client *serverscom.Client, id string) (any, error) {
-	// return client.Hosts.TODO(ctx, id)
-	return nil, nil
+	return client.Hosts.KubernetesBaremetalNodePowerFeeds(ctx, id)
 }
 
 type SBMPowerMgr struct{}
