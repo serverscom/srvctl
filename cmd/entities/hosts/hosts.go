@@ -57,6 +57,9 @@ func NewCmd(cmdContext *base.CmdContext) *cobra.Command {
 				newAddDSNetworkCmd,
 				newDeleteDSNetworkCmd,
 				newListDSCmd,
+				newListDSServicesCmd,
+				newListDSFeaturesCmd,
+				newGetDSOOBCredsCmd,
 			},
 		},
 		{
@@ -90,6 +93,9 @@ func NewCmd(cmdContext *base.CmdContext) *cobra.Command {
 				newUpdateSBMCmd,
 				newSBMReleaseCmd,
 				newListSBMCmd,
+				newListSBMPTRCmd,
+				newCreateSBMPTRCmd,
+				newDeleteSBMPTRCmd,
 			},
 		},
 	}

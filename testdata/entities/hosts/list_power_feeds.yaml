@@ -1,4 +1,6 @@
 - name: testPowerFeed
   status: "on"
+  type: physical
 - name: testPowerFeed2
   status: "off"
+  type: physical

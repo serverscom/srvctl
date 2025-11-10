@@ -145,6 +145,21 @@ func (mr *MockHostsServiceMockRecorder) CreatePTRRecordForDedicatedServer(ctx, i
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreatePTRRecordForDedicatedServer", reflect.TypeOf((*MockHostsService)(nil).CreatePTRRecordForDedicatedServer), ctx, id, input)
 }
 
+// CreatePTRRecordForSBMServer mocks base method.
+func (m *MockHostsService) CreatePTRRecordForSBMServer(ctx context.Context, id string, input serverscom.PTRRecordCreateInput) (*serverscom.PTRRecord, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreatePTRRecordForSBMServer", ctx, id, input)
+	ret0, _ := ret[0].(*serverscom.PTRRecord)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreatePTRRecordForSBMServer indicates an expected call of CreatePTRRecordForSBMServer.
+func (mr *MockHostsServiceMockRecorder) CreatePTRRecordForSBMServer(ctx, id, input any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreatePTRRecordForSBMServer", reflect.TypeOf((*MockHostsService)(nil).CreatePTRRecordForSBMServer), ctx, id, input)
+}
+
 // CreateSBMServers mocks base method.
 func (m *MockHostsService) CreateSBMServers(ctx context.Context, input serverscom.SBMServerCreateInput) ([]serverscom.SBMServer, error) {
 	m.ctrl.T.Helper()
@@ -186,6 +201,20 @@ func (m *MockHostsService) DedicatedServerDriveSlots(id string) serverscom.Colle
 func (mr *MockHostsServiceMockRecorder) DedicatedServerDriveSlots(id any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DedicatedServerDriveSlots", reflect.TypeOf((*MockHostsService)(nil).DedicatedServerDriveSlots), id)
+}
+
+// DedicatedServerFeatures mocks base method.
+func (m *MockHostsService) DedicatedServerFeatures(id string) serverscom.Collection[serverscom.DedicatedServerFeature] {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DedicatedServerFeatures", id)
+	ret0, _ := ret[0].(serverscom.Collection[serverscom.DedicatedServerFeature])
+	return ret0
+}
+
+// DedicatedServerFeatures indicates an expected call of DedicatedServerFeatures.
+func (mr *MockHostsServiceMockRecorder) DedicatedServerFeatures(id any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DedicatedServerFeatures", reflect.TypeOf((*MockHostsService)(nil).DedicatedServerFeatures), id)
 }
 
 // DedicatedServerNetworks mocks base method.
@@ -231,6 +260,20 @@ func (mr *MockHostsServiceMockRecorder) DedicatedServerPowerFeeds(ctx, id any) *
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DedicatedServerPowerFeeds", reflect.TypeOf((*MockHostsService)(nil).DedicatedServerPowerFeeds), ctx, id)
 }
 
+// DedicatedServerServices mocks base method.
+func (m *MockHostsService) DedicatedServerServices(id string) serverscom.Collection[serverscom.DedicatedServerService] {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DedicatedServerServices", id)
+	ret0, _ := ret[0].(serverscom.Collection[serverscom.DedicatedServerService])
+	return ret0
+}
+
+// DedicatedServerServices indicates an expected call of DedicatedServerServices.
+func (mr *MockHostsServiceMockRecorder) DedicatedServerServices(id any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DedicatedServerServices", reflect.TypeOf((*MockHostsService)(nil).DedicatedServerServices), id)
+}
+
 // DeleteDedicatedServerNetwork mocks base method.
 func (m *MockHostsService) DeleteDedicatedServerNetwork(ctx context.Context, serverID, networkID string) (*serverscom.Network, error) {
 	m.ctrl.T.Helper()
@@ -258,6 +301,20 @@ func (m *MockHostsService) DeletePTRRecordForDedicatedServer(ctx context.Context
 func (mr *MockHostsServiceMockRecorder) DeletePTRRecordForDedicatedServer(ctx, serverID, ptrRecordID any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeletePTRRecordForDedicatedServer", reflect.TypeOf((*MockHostsService)(nil).DeletePTRRecordForDedicatedServer), ctx, serverID, ptrRecordID)
+}
+
+// DeletePTRRecordForSBMServer mocks base method.
+func (m *MockHostsService) DeletePTRRecordForSBMServer(ctx context.Context, serverID, ptrRecordID string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeletePTRRecordForSBMServer", ctx, serverID, ptrRecordID)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DeletePTRRecordForSBMServer indicates an expected call of DeletePTRRecordForSBMServer.
+func (mr *MockHostsServiceMockRecorder) DeletePTRRecordForSBMServer(ctx, serverID, ptrRecordID any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeletePTRRecordForSBMServer", reflect.TypeOf((*MockHostsService)(nil).DeletePTRRecordForSBMServer), ctx, serverID, ptrRecordID)
 }
 
 // GetDedicatedServer mocks base method.
@@ -303,6 +360,21 @@ func (m *MockHostsService) GetDedicatedServerNetworkUsage(ctx context.Context, i
 func (mr *MockHostsServiceMockRecorder) GetDedicatedServerNetworkUsage(ctx, id any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetDedicatedServerNetworkUsage", reflect.TypeOf((*MockHostsService)(nil).GetDedicatedServerNetworkUsage), ctx, id)
+}
+
+// GetDedicatedServerOOBCredentials mocks base method.
+func (m *MockHostsService) GetDedicatedServerOOBCredentials(ctx context.Context, id string, params map[string]string) (*serverscom.DedicatedServerOOBCredentials, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetDedicatedServerOOBCredentials", ctx, id, params)
+	ret0, _ := ret[0].(*serverscom.DedicatedServerOOBCredentials)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetDedicatedServerOOBCredentials indicates an expected call of GetDedicatedServerOOBCredentials.
+func (mr *MockHostsServiceMockRecorder) GetDedicatedServerOOBCredentials(ctx, id, params any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetDedicatedServerOOBCredentials", reflect.TypeOf((*MockHostsService)(nil).GetDedicatedServerOOBCredentials), ctx, id, params)
 }
 
 // GetKubernetesBaremetalNode mocks base method.
@@ -600,19 +672,48 @@ func (mr *MockHostsServiceMockRecorder) ReleaseSBMServer(ctx, id any) *gomock.Ca
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReleaseSBMServer", reflect.TypeOf((*MockHostsService)(nil).ReleaseSBMServer), ctx, id)
 }
 
-// ScheduleReleaseForDedicatedServer mocks base method.
-func (m *MockHostsService) ScheduleReleaseForDedicatedServer(ctx context.Context, id string) (*serverscom.DedicatedServer, error) {
+// SBMServerPTRRecords mocks base method.
+func (m *MockHostsService) SBMServerPTRRecords(id string) serverscom.Collection[serverscom.PTRRecord] {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "ScheduleReleaseForDedicatedServer", ctx, id)
+	ret := m.ctrl.Call(m, "SBMServerPTRRecords", id)
+	ret0, _ := ret[0].(serverscom.Collection[serverscom.PTRRecord])
+	return ret0
+}
+
+// SBMServerPTRRecords indicates an expected call of SBMServerPTRRecords.
+func (mr *MockHostsServiceMockRecorder) SBMServerPTRRecords(id any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SBMServerPTRRecords", reflect.TypeOf((*MockHostsService)(nil).SBMServerPTRRecords), id)
+}
+
+// SBMServerPowerFeeds mocks base method.
+func (m *MockHostsService) SBMServerPowerFeeds(ctx context.Context, id string) ([]serverscom.HostPowerFeed, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "SBMServerPowerFeeds", ctx, id)
+	ret0, _ := ret[0].([]serverscom.HostPowerFeed)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// SBMServerPowerFeeds indicates an expected call of SBMServerPowerFeeds.
+func (mr *MockHostsServiceMockRecorder) SBMServerPowerFeeds(ctx, id any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SBMServerPowerFeeds", reflect.TypeOf((*MockHostsService)(nil).SBMServerPowerFeeds), ctx, id)
+}
+
+// ScheduleReleaseForDedicatedServer mocks base method.
+func (m *MockHostsService) ScheduleReleaseForDedicatedServer(ctx context.Context, id string, input serverscom.ScheduleReleaseInput) (*serverscom.DedicatedServer, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ScheduleReleaseForDedicatedServer", ctx, id, input)
 	ret0, _ := ret[0].(*serverscom.DedicatedServer)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // ScheduleReleaseForDedicatedServer indicates an expected call of ScheduleReleaseForDedicatedServer.
-func (mr *MockHostsServiceMockRecorder) ScheduleReleaseForDedicatedServer(ctx, id any) *gomock.Call {
+func (mr *MockHostsServiceMockRecorder) ScheduleReleaseForDedicatedServer(ctx, id, input any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ScheduleReleaseForDedicatedServer", reflect.TypeOf((*MockHostsService)(nil).ScheduleReleaseForDedicatedServer), ctx, id)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ScheduleReleaseForDedicatedServer", reflect.TypeOf((*MockHostsService)(nil).ScheduleReleaseForDedicatedServer), ctx, id, input)
 }
 
 // UpdateDedicatedServer mocks base method.

@@ -1,0 +1,29 @@
+ID:             testId
+Name:           Test service
+Type:           server_base
+Currency:       USD
+Label:          <none>
+StartedAt:      2025-01-01T12:00:00Z
+FinishedAt:     2025-01-01T12:00:00Z
+DateFrom:       2025-11-01
+DateTo:         2025-11-30
+UsageQuantity:  2
+Tax:            10
+Total:          100
+Subtotal:       100
+DiscountRate:   5
+---
+ID:             testId2
+Name:           Test service 2
+Type:           uplink
+Currency:       USD
+Label:          <none>
+StartedAt:      2025-01-01T12:00:00Z
+FinishedAt:     2025-01-01T12:00:00Z
+DateFrom:       2025-11-01
+DateTo:         2025-11-30
+UsageQuantity:  2
+Tax:            10
+Total:          100
+Subtotal:       100
+DiscountRate:   5
