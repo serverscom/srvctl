@@ -1,0 +1,10 @@
+[
+    {
+        "name": "disaggregated_public_ports",
+        "status": "deactivated"
+    },
+    {
+        "name": "no_public_network",
+        "status": "unavailable"
+    }
+]

@@ -113,6 +113,7 @@ var (
 	testPowerFeed = serverscom.HostPowerFeed{
 		Name:   "testPowerFeed",
 		Status: "on",
+		Type:   "physical",
 	}
 )
 
@@ -1373,7 +1374,6 @@ func TestUpdateSBMCmd(t *testing.T) {
 
 func TestScheduleReleaseDSCmd(t *testing.T) {
 	releasedServer := testDS
-	releasedServer.ScheduledRelease = &fixedTime
 	testCases := []struct {
 		name           string
 		id             string
@@ -1381,25 +1381,42 @@ func TestScheduleReleaseDSCmd(t *testing.T) {
 		args           []string
 		expectedOutput []byte
 		expectError    bool
+		configureMock  func(*mocks.MockHostsService)
 	}{
 		{
 			name:           "release dedicated server",
 			id:             testId,
 			output:         "json",
 			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "release_ds_resp.json")),
+			configureMock: func(mock *mocks.MockHostsService) {
+				mock.EXPECT().
+					ScheduleReleaseForDedicatedServer(gomock.Any(), testId, serverscom.ScheduleReleaseInput{}).
+					Return(&releasedServer, nil)
+			},
 		},
-		// TODO add after implementing release-after in client
-		// {
-		// 	name:           "release dedicated server with --release-after",
-		// 	id:             testId,
-		// 	output:         "json",
-		// 	expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "release_ds_resp.json")),
-		// 	args:           []string{"--release-after", "2025-01-01T12:34:56+03:00"},
-		// },
+		{
+			name:           "release dedicated server with --release-after",
+			id:             testId,
+			output:         "json",
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "release_ds_scheduled_resp.json")),
+			args:           []string{"--release-after", "2025-01-01T12:34:56+03:00"},
+			configureMock: func(mock *mocks.MockHostsService) {
+				releasedServer.ScheduledRelease = &fixedTime
+				mock.EXPECT().
+					ScheduleReleaseForDedicatedServer(gomock.Any(), testId, serverscom.ScheduleReleaseInput{ReleaseAfter: "2025-01-01T12:34:56+03:00"}).
+					Return(&releasedServer, nil)
+			},
+		},
 		{
 			name:        "release dedicated server with error",
 			id:          testId,
 			expectError: true,
+			configureMock: func(mock *mocks.MockHostsService) {
+				releasedServer.ScheduledRelease = &fixedTime
+				mock.EXPECT().
+					ScheduleReleaseForDedicatedServer(gomock.Any(), testId, serverscom.ScheduleReleaseInput{}).
+					Return(nil, errors.New("some error"))
+			},
 		},
 	}
 
@@ -1415,13 +1432,9 @@ func TestScheduleReleaseDSCmd(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			g := NewWithT(t)
 
-			var err error
-			if tc.expectError {
-				err = errors.New("some error")
+			if tc.configureMock != nil {
+				tc.configureMock(hostsServiceHandler)
 			}
-			hostsServiceHandler.EXPECT().
-				ScheduleReleaseForDedicatedServer(gomock.Any(), testId).
-				Return(&releasedServer, err)
 
 			testCmdContext := testutils.NewTestCmdContext(scClient)
 			hostsCmd := NewCmd(testCmdContext)
@@ -1440,7 +1453,7 @@ func TestScheduleReleaseDSCmd(t *testing.T) {
 
 			cmd := builder.Build()
 
-			err = cmd.Execute()
+			err := cmd.Execute()
 
 			if tc.expectError {
 				g.Expect(err).To(HaveOccurred())
@@ -2001,19 +2014,19 @@ func TestListKBMPowerFeedsCmd(t *testing.T) {
 			name:           "get KBM node power_feeds in default format",
 			id:             testId,
 			output:         "",
-			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_kbm_power_feeds.txt")),
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_power_feeds.txt")),
 		},
 		{
 			name:           "get KBM node power_feeds",
 			id:             testId,
 			output:         "json",
-			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_kbm_power_feeds.json")),
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_power_feeds.json")),
 		},
 		{
 			name:           "get KBM node power_feeds in YAML format",
 			id:             testId,
 			output:         "yaml",
-			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_kbm_power_feeds.yaml")),
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_power_feeds.yaml")),
 		},
 		{
 			name:        "get KBM node power_feeds with error",
@@ -2046,6 +2059,180 @@ func TestListKBMPowerFeedsCmd(t *testing.T) {
 			hostsCmd := NewCmd(testCmdContext)
 
 			args := []string{"hosts", "kbm", "list-power-feeds", tc.id}
+			if tc.output != "" {
+				args = append(args, "--output", tc.output)
+			}
+
+			builder := testutils.NewTestCommandBuilder().
+				WithCommand(hostsCmd).
+				WithArgs(args)
+
+			cmd := builder.Build()
+
+			err = cmd.Execute()
+
+			if tc.expectError {
+				g.Expect(err).To(HaveOccurred())
+			} else {
+				g.Expect(err).To(BeNil())
+				g.Expect(builder.GetOutput()).To(BeEquivalentTo(string(tc.expectedOutput)))
+			}
+		})
+	}
+}
+
+func TestListDSPowerFeedsCmd(t *testing.T) {
+	testPowerFeed1 := testPowerFeed
+	testPowerFeed2 := testPowerFeed1
+
+	testPowerFeed2.Name = "testPowerFeed2"
+	testPowerFeed2.Status = "off"
+
+	testCases := []struct {
+		name           string
+		id             string
+		output         string
+		args           []string
+		expectedOutput []byte
+		expectError    bool
+		configureMock  func(*mocks.MockCollection[serverscom.HostPowerFeed])
+	}{
+		{
+			name:           "get ds power_feeds in default format",
+			id:             testId,
+			output:         "",
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_power_feeds.txt")),
+		},
+		{
+			name:           "get ds power_feeds",
+			id:             testId,
+			output:         "json",
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_power_feeds.json")),
+		},
+		{
+			name:           "get ds power_feeds in YAML format",
+			id:             testId,
+			output:         "yaml",
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_power_feeds.yaml")),
+		},
+		{
+			name:        "get ds power_feeds with error",
+			id:          testId,
+			expectError: true,
+		},
+	}
+
+	mockCtrl := gomock.NewController(t)
+	defer mockCtrl.Finish()
+
+	hostsServiceHandler := mocks.NewMockHostsService(mockCtrl)
+
+	scClient := serverscom.NewClientWithEndpoint("", "")
+	scClient.Hosts = hostsServiceHandler
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			g := NewWithT(t)
+
+			var err error
+			if tc.expectError {
+				err = errors.New("some error")
+			}
+			hostsServiceHandler.EXPECT().
+				DedicatedServerPowerFeeds(gomock.Any(), testId).
+				Return([]serverscom.HostPowerFeed{testPowerFeed1, testPowerFeed2}, err)
+
+			testCmdContext := testutils.NewTestCmdContext(scClient)
+			hostsCmd := NewCmd(testCmdContext)
+
+			args := []string{"hosts", "ds", "list-power-feeds", tc.id}
+			if tc.output != "" {
+				args = append(args, "--output", tc.output)
+			}
+
+			builder := testutils.NewTestCommandBuilder().
+				WithCommand(hostsCmd).
+				WithArgs(args)
+
+			cmd := builder.Build()
+
+			err = cmd.Execute()
+
+			if tc.expectError {
+				g.Expect(err).To(HaveOccurred())
+			} else {
+				g.Expect(err).To(BeNil())
+				g.Expect(builder.GetOutput()).To(BeEquivalentTo(string(tc.expectedOutput)))
+			}
+		})
+	}
+}
+
+func TestListSBMPowerFeedsCmd(t *testing.T) {
+	testPowerFeed1 := testPowerFeed
+	testPowerFeed2 := testPowerFeed1
+
+	testPowerFeed2.Name = "testPowerFeed2"
+	testPowerFeed2.Status = "off"
+
+	testCases := []struct {
+		name           string
+		id             string
+		output         string
+		args           []string
+		expectedOutput []byte
+		expectError    bool
+		configureMock  func(*mocks.MockCollection[serverscom.HostPowerFeed])
+	}{
+		{
+			name:           "get sbm power_feeds in default format",
+			id:             testId,
+			output:         "",
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_power_feeds.txt")),
+		},
+		{
+			name:           "get sbm power_feeds",
+			id:             testId,
+			output:         "json",
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_power_feeds.json")),
+		},
+		{
+			name:           "get sbm power_feeds in YAML format",
+			id:             testId,
+			output:         "yaml",
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_power_feeds.yaml")),
+		},
+		{
+			name:        "get sbm power_feeds with error",
+			id:          testId,
+			expectError: true,
+		},
+	}
+
+	mockCtrl := gomock.NewController(t)
+	defer mockCtrl.Finish()
+
+	hostsServiceHandler := mocks.NewMockHostsService(mockCtrl)
+
+	scClient := serverscom.NewClientWithEndpoint("", "")
+	scClient.Hosts = hostsServiceHandler
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			g := NewWithT(t)
+
+			var err error
+			if tc.expectError {
+				err = errors.New("some error")
+			}
+			hostsServiceHandler.EXPECT().
+				SBMServerPowerFeeds(gomock.Any(), testId).
+				Return([]serverscom.HostPowerFeed{testPowerFeed1, testPowerFeed2}, err)
+
+			testCmdContext := testutils.NewTestCmdContext(scClient)
+			hostsCmd := NewCmd(testCmdContext)
+
+			args := []string{"hosts", "sbm", "list-power-feeds", tc.id}
 			if tc.output != "" {
 				args = append(args, "--output", tc.output)
 			}
@@ -2205,6 +2392,140 @@ func TestListKBMNetworksCmd(t *testing.T) {
 	}
 }
 
+func TestListDSDriveSlotsCmd(t *testing.T) {
+	testDriveSlot1 := testDriveSlot
+	testDriveSlot2 := testDriveSlot1
+	testDriveSlot2.Position = 2
+
+	testCases := []struct {
+		name           string
+		output         string
+		args           []string
+		expectedOutput []byte
+		expectError    bool
+		configureMock  func(*mocks.MockCollection[serverscom.HostDriveSlot])
+	}{
+		{
+			name:           "list ds all drive slots",
+			output:         "json",
+			args:           []string{"testServerId", "-A"},
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_drive_slots_all.json")),
+			configureMock: func(mock *mocks.MockCollection[serverscom.HostDriveSlot]) {
+				mock.EXPECT().
+					Collect(gomock.Any()).
+					Return([]serverscom.HostDriveSlot{
+						testDriveSlot1,
+						testDriveSlot2,
+					}, nil)
+			},
+		},
+		{
+			name:           "list ds drive slots",
+			output:         "json",
+			args:           []string{"testServerId"},
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_drive_slots.json")),
+			configureMock: func(mock *mocks.MockCollection[serverscom.HostDriveSlot]) {
+				mock.EXPECT().
+					List(gomock.Any()).
+					Return([]serverscom.HostDriveSlot{
+						testDriveSlot1,
+					}, nil)
+			},
+		},
+		{
+			name:           "list ds drive slots with template",
+			args:           []string{"testServerId", "--template", "{{range .}}Position: {{.Position}}  Interface: {{.Interface}}\n{{end}}"},
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_drive_slots_template.txt")),
+			configureMock: func(mock *mocks.MockCollection[serverscom.HostDriveSlot]) {
+				mock.EXPECT().
+					List(gomock.Any()).
+					Return([]serverscom.HostDriveSlot{
+						testDriveSlot1,
+						testDriveSlot2,
+					}, nil)
+			},
+		},
+		{
+			name:           "list ds drive slots with pageView",
+			args:           []string{"testServerId", "--page-view"},
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_drive_slots_pageview.txt")),
+			configureMock: func(mock *mocks.MockCollection[serverscom.HostDriveSlot]) {
+				mock.EXPECT().
+					List(gomock.Any()).
+					Return([]serverscom.HostDriveSlot{
+						testDriveSlot1,
+						testDriveSlot2,
+					}, nil)
+			},
+		},
+		{
+			name:        "list ds drive slots with error",
+			args:        []string{"testServerId"},
+			expectError: true,
+			configureMock: func(mock *mocks.MockCollection[serverscom.HostDriveSlot]) {
+				mock.EXPECT().
+					List(gomock.Any()).
+					Return(nil, errors.New("some error"))
+			},
+		},
+	}
+
+	mockCtrl := gomock.NewController(t)
+	defer mockCtrl.Finish()
+
+	hostsServiceHandler := mocks.NewMockHostsService(mockCtrl)
+	collectionHandler := mocks.NewMockCollection[serverscom.HostDriveSlot](mockCtrl)
+
+	hostsServiceHandler.EXPECT().
+		DedicatedServerDriveSlots(gomock.Any()).
+		Return(collectionHandler).
+		AnyTimes()
+
+	collectionHandler.EXPECT().
+		SetParam(gomock.Any(), gomock.Any()).
+		Return(collectionHandler).
+		AnyTimes()
+
+	scClient := serverscom.NewClientWithEndpoint("", "")
+	scClient.Hosts = hostsServiceHandler
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			g := NewWithT(t)
+
+			if tc.configureMock != nil {
+				tc.configureMock(collectionHandler)
+			}
+
+			testCmdContext := testutils.NewTestCmdContext(scClient)
+			hostsCmd := NewCmd(testCmdContext)
+
+			args := []string{"hosts", "ds", "list-drive-slots"}
+			if len(tc.args) > 0 {
+				args = append(args, tc.args...)
+			}
+			if tc.output != "" {
+				args = append(args, "--output", tc.output)
+			}
+
+			builder := testutils.NewTestCommandBuilder().
+				WithCommand(hostsCmd).
+				WithArgs(args)
+
+			cmd := builder.Build()
+
+			err := cmd.Execute()
+
+			if tc.expectError {
+				g.Expect(err).To(HaveOccurred())
+			} else {
+				g.Expect(err).To(BeNil())
+				g.Expect(builder.GetOutput()).To(BeEquivalentTo(string(tc.expectedOutput)))
+			}
+		})
+	}
+}
+
 func TestListKBMDriveSlotsCmd(t *testing.T) {
 	testDriveSlot1 := testDriveSlot
 	testDriveSlot2 := testDriveSlot1
@@ -2219,10 +2540,10 @@ func TestListKBMDriveSlotsCmd(t *testing.T) {
 		configureMock  func(*mocks.MockCollection[serverscom.HostDriveSlot])
 	}{
 		{
-			name:           "list KBM node all slots",
+			name:           "list KBM node all drive slots",
 			output:         "json",
 			args:           []string{"testServerId", "-A"},
-			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_kbm_drive_slots_all.json")),
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_drive_slots_all.json")),
 			configureMock: func(mock *mocks.MockCollection[serverscom.HostDriveSlot]) {
 				mock.EXPECT().
 					Collect(gomock.Any()).
@@ -2233,10 +2554,10 @@ func TestListKBMDriveSlotsCmd(t *testing.T) {
 			},
 		},
 		{
-			name:           "list KBM node slots",
+			name:           "list KBM node drive slots",
 			output:         "json",
 			args:           []string{"testServerId"},
-			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_kbm_drive_slots.json")),
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_drive_slots.json")),
 			configureMock: func(mock *mocks.MockCollection[serverscom.HostDriveSlot]) {
 				mock.EXPECT().
 					List(gomock.Any()).
@@ -2246,9 +2567,9 @@ func TestListKBMDriveSlotsCmd(t *testing.T) {
 			},
 		},
 		{
-			name:           "list KBM node slots with template",
+			name:           "list KBM node drive slots with template",
 			args:           []string{"testServerId", "--template", "{{range .}}Position: {{.Position}}  Interface: {{.Interface}}\n{{end}}"},
-			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_kbm_drive_slots_template.txt")),
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_drive_slots_template.txt")),
 			configureMock: func(mock *mocks.MockCollection[serverscom.HostDriveSlot]) {
 				mock.EXPECT().
 					List(gomock.Any()).
@@ -2259,9 +2580,9 @@ func TestListKBMDriveSlotsCmd(t *testing.T) {
 			},
 		},
 		{
-			name:           "list KBM node slots with pageView",
+			name:           "list KBM node drive slots with pageView",
 			args:           []string{"testServerId", "--page-view"},
-			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_kbm_drive_slots_pageview.txt")),
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_drive_slots_pageview.txt")),
 			configureMock: func(mock *mocks.MockCollection[serverscom.HostDriveSlot]) {
 				mock.EXPECT().
 					List(gomock.Any()).
@@ -2272,7 +2593,7 @@ func TestListKBMDriveSlotsCmd(t *testing.T) {
 			},
 		},
 		{
-			name:        "list KBM node slots with error",
+			name:        "list KBM node drive slots with error",
 			args:        []string{"testServerId"},
 			expectError: true,
 			configureMock: func(mock *mocks.MockCollection[serverscom.HostDriveSlot]) {

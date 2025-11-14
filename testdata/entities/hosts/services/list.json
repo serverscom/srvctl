@@ -1,0 +1,18 @@
+[
+    {
+        "id": "testId",
+        "name": "Test service",
+        "type": "server_base",
+        "currency": "USD",
+        "label": null,
+        "started_at": "2025-01-01T12:00:00Z",
+        "finished_at": "2025-01-01T12:00:00Z",
+        "date_from": "2025-11-01",
+        "date_to": "2025-11-30",
+        "usage_quantity": 2,
+        "tax": 10,
+        "total": 100,
+        "subtotal": 100,
+        "discount_rate": 5
+    }
+]

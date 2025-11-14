@@ -1,6 +1,7 @@
 package hosts
 
 import (
+	serverscom "github.com/serverscom/serverscom-go-client/pkg"
 	"github.com/serverscom/srvctl/cmd/base"
 	"github.com/spf13/cobra"
 )
@@ -34,7 +35,6 @@ func newDSAbortReleaseCmd(cmdContext *base.CmdContext) *cobra.Command {
 	return cmd
 }
 
-// TODO add input in go client to pass releaseAfter
 func newDSScheduleReleaseCmd(cmdContext *base.CmdContext) *cobra.Command {
 	var releaseAfter string
 
@@ -51,7 +51,8 @@ func newDSScheduleReleaseCmd(cmdContext *base.CmdContext) *cobra.Command {
 			scClient := cmdContext.GetClient().SetVerbose(manager.GetVerbose(cmd)).GetScClient()
 
 			id := args[0]
-			server, err := scClient.Hosts.ScheduleReleaseForDedicatedServer(ctx, id)
+			input := serverscom.ScheduleReleaseInput{ReleaseAfter: releaseAfter}
+			server, err := scClient.Hosts.ScheduleReleaseForDedicatedServer(ctx, id, input)
 			if err != nil {
 				return err
 			}

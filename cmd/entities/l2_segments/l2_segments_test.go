@@ -35,11 +35,12 @@ var (
 	}
 
 	testL2LocationGroup = serverscom.L2LocationGroup{
-		ID:          10,
-		Name:        testL2SegmentName,
-		Code:        "testCode",
-		GroupType:   "public",
-		LocationIDs: []int64{1, 2, 3},
+		ID:           10,
+		Name:         testL2SegmentName,
+		Code:         "testCode",
+		GroupType:    "public",
+		LocationIDs:  []int64{1, 2, 3},
+		Hyperscalers: []string{"AWS", "Azure"},
 	}
 
 	testL2Member = serverscom.L2Member{

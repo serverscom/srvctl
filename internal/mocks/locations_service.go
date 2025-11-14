@@ -143,6 +143,21 @@ func (mr *MockLocationsServiceMockRecorder) GetOperatingSystemOption(ctx, locati
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetOperatingSystemOption", reflect.TypeOf((*MockLocationsService)(nil).GetOperatingSystemOption), ctx, locationID, serverModelID, operatingSystemID)
 }
 
+// GetRemoteBlockStorageFlavor mocks base method.
+func (m *MockLocationsService) GetRemoteBlockStorageFlavor(ctx context.Context, locationID, flavorID int64) (*serverscom.RemoteBlockStorageFlavor, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetRemoteBlockStorageFlavor", ctx, locationID, flavorID)
+	ret0, _ := ret[0].(*serverscom.RemoteBlockStorageFlavor)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetRemoteBlockStorageFlavor indicates an expected call of GetRemoteBlockStorageFlavor.
+func (mr *MockLocationsServiceMockRecorder) GetRemoteBlockStorageFlavor(ctx, locationID, flavorID any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetRemoteBlockStorageFlavor", reflect.TypeOf((*MockLocationsService)(nil).GetRemoteBlockStorageFlavor), ctx, locationID, flavorID)
+}
+
 // GetSBMFlavorOption mocks base method.
 func (m *MockLocationsService) GetSBMFlavorOption(ctx context.Context, locationID, sbmFlavorModelID int64) (*serverscom.SBMFlavor, error) {
 	m.ctrl.T.Helper()
@@ -229,6 +244,20 @@ func (m *MockLocationsService) RAMOptions(locationID, serverModelID int64) serve
 func (mr *MockLocationsServiceMockRecorder) RAMOptions(locationID, serverModelID any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RAMOptions", reflect.TypeOf((*MockLocationsService)(nil).RAMOptions), locationID, serverModelID)
+}
+
+// RemoteBlockStorageFlavors mocks base method.
+func (m *MockLocationsService) RemoteBlockStorageFlavors(locationID int64) serverscom.Collection[serverscom.RemoteBlockStorageFlavor] {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "RemoteBlockStorageFlavors", locationID)
+	ret0, _ := ret[0].(serverscom.Collection[serverscom.RemoteBlockStorageFlavor])
+	return ret0
+}
+
+// RemoteBlockStorageFlavors indicates an expected call of RemoteBlockStorageFlavors.
+func (mr *MockLocationsServiceMockRecorder) RemoteBlockStorageFlavors(locationID any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RemoteBlockStorageFlavors", reflect.TypeOf((*MockLocationsService)(nil).RemoteBlockStorageFlavors), locationID)
 }
 
 // SBMFlavorOptions mocks base method.

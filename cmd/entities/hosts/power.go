@@ -68,8 +68,7 @@ func (p *SBMPowerMgr) PowerAction(ctx context.Context, client *serverscom.Client
 }
 
 func (p *SBMPowerMgr) ListPowerFeeds(ctx context.Context, client *serverscom.Client, id string) (any, error) {
-	// return client.Hosts.TODO(ctx, id)
-	return nil, nil
+	return client.Hosts.SBMServerPowerFeeds(ctx, id)
 }
 
 func newPowerCmd(cmdContext *base.CmdContext, hostType *HostTypeCmd) *cobra.Command {

@@ -17,6 +17,9 @@ var (
 	HostDriveSlotType                        = reflect.TypeOf(serverscom.HostDriveSlot{})
 	HostPTRRecordType                        = reflect.TypeOf(serverscom.PTRRecord{})
 	HostNetworkType                          = reflect.TypeOf(serverscom.Network{})
+	HostFeatureType                          = reflect.TypeOf(serverscom.DedicatedServerFeature{})
+	HostServiceType                          = reflect.TypeOf(serverscom.DedicatedServerService{})
+	HostOOBCredsType                         = reflect.TypeOf(serverscom.DedicatedServerOOBCredentials{})
 	HostListDefaultFields                    = []string{"ID", "Type", "Title", "LocationCode", "Status", "PublicIPv4Address"}
 	DedicatedServerListDefaultFields         = []string{"ID", "Title", "RackID", "LocationCode", "Status", "PublicIPv4Address"}
 	KubernetesBaremetalNodeListDefaultFields = []string{"ID", "KubernetesClusterNodeNumber", "Title", "LocationCode", "Status", "PublicIPv4Address"}
@@ -273,6 +276,51 @@ func RegisterHostsSubDefinitions() {
 		},
 	}
 	if err := Registry.Register(hostNetworkEntity); err != nil {
+		log.Fatal(err)
+	}
+
+	hostFeatureEntity := &Entity{
+		fields: []Field{
+			{ID: "Name", Name: "Name", Path: "Name", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
+			{ID: "Status", Name: "Status", Path: "Status", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
+		},
+		eType: HostFeatureType,
+	}
+	if err := Registry.Register(hostFeatureEntity); err != nil {
+		log.Fatal(err)
+	}
+
+	hostServiceEntity := &Entity{
+		fields: []Field{
+			{ID: "ID", Name: "ID", Path: "ID", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
+			{ID: "Name", Name: "Name", Path: "Name", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
+			{ID: "Type", Name: "Type", Path: "Type", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
+			{ID: "Currency", Name: "Currency", Path: "Currency", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
+			{ID: "Label", Name: "Label", Path: "Label", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
+			{ID: "StartedAt", Name: "StartedAt", Path: "StartedAt", ListHandlerFunc: timeHandler, PageViewHandlerFunc: timeHandler, Default: true},
+			{ID: "FinishedAt", Name: "FinishedAt", Path: "FinishedAt", ListHandlerFunc: timeHandler, PageViewHandlerFunc: timeHandler, Default: true},
+			{ID: "DateFrom", Name: "DateFrom", Path: "DateFrom", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
+			{ID: "DateTo", Name: "DateTo", Path: "DateTo", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
+			{ID: "UsageQuantity", Name: "UsageQuantity", Path: "UsageQuantity", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
+			{ID: "Tax", Name: "Tax", Path: "Tax", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
+			{ID: "Total", Name: "Total", Path: "Total", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
+			{ID: "Subtotal", Name: "Subtotal", Path: "Subtotal", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
+			{ID: "DiscountRate", Name: "DiscountRate", Path: "DiscountRate", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
+		},
+		eType: HostServiceType,
+	}
+	if err := Registry.Register(hostServiceEntity); err != nil {
+		log.Fatal(err)
+	}
+
+	hostOOBCredsEntity := &Entity{
+		fields: []Field{
+			{ID: "Login", Name: "Login", Path: "Login", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
+			{ID: "Secret", Name: "Secret", Path: "Secret", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
+		},
+		eType: HostOOBCredsType,
+	}
+	if err := Registry.Register(hostOOBCredsEntity); err != nil {
 		log.Fatal(err)
 	}
 }

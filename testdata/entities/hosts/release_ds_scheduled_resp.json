@@ -12,7 +12,7 @@
     "private_ipv4_address": null,
     "public_ipv4_address": "1.2.3.4",
     "lease_start_at": "",
-    "scheduled_release_at": null,
+    "scheduled_release_at": "2025-01-01T12:00:00Z",
     "oob_ipv4_address": "",
     "configuration_details": {
         "ram_size": 2,
