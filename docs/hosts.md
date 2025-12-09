@@ -35,8 +35,6 @@ srvctl hosts sbm
 - `--page-view` - enables the page view format.
 
 - `-t`, `--template` - a Go template string for advanced customization. Example: `--template "{{range .}}CustomTitle: {{.Title}}\n{{ end }}"` 
-
-- Global flags
 ### Examples
 
 A command to list all account hosts showing their ID, Title and Status:
@@ -94,9 +92,9 @@ srvctl hosts ds get-network ex4mp1eID_server --network-id ex4mp1eID_network
 srvctl hosts ds get-network ex4mp1eID_server --fingerprint GPGKEYEX4MP1E
 ```
 
-`ls`, `list` - lists dedicated servers of the account. Use `–help` to see available flags.
+`list` - lists dedicated servers of the account. Use `–help` to see available flags.
 ```
-srvctl hosts ds list ex4mp1eID --all
+srvctl hosts ds list --all
 ```
 
 `list-connections` - lists connections for the selected dedicated server. Use `–help` to see available flags.
@@ -147,9 +145,6 @@ srvctl hosts ds schedule-release ex4mp1eID --release-after 2022-05-24T12:48:00+0
 ```
 srvctl hosts ds update ex4mp1eID --label environment=production --label team=frontend
 ```
-### Flags
-
-Global flags
 ## hosts ds add
 
 A command to create a dedicated server. It allows to pass parameters of the server in two ways:
