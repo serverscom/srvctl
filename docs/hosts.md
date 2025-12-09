@@ -1,11 +1,11 @@
 ## hosts
 
 A host is a bare metal-based service that includes dedicated servers, Kubernetes bare metal nodes and scalable bare metal. This section describes all host-related commands.
-### Usage
+#### Usage
 ```
 srvctl hosts [command] [flags]
 ```
-### Commands
+#### Commands
 
 `ds` - opens a list of commands to manage dedicated servers.
 ```
@@ -26,7 +26,7 @@ srvctl hosts list
 ```
 srvctl hosts sbm
 ```
-### Flags
+#### Flags
 
 - `-f`, `--field` -  a string that selects a field to show. To display several fields, use this flag multiple times.
 
@@ -35,7 +35,7 @@ srvctl hosts sbm
 - `--page-view` - enables the page view format.
 
 - `-t`, `--template` - a Go template string for advanced customization. Example: `--template "{{range .}}CustomTitle: {{.Title}}\n{{ end }}"` 
-### Examples
+#### Examples
 
 A command to list all account hosts showing their ID, Title and Status:
 ```
@@ -44,11 +44,11 @@ srvctl hosts list -f ID -f Title -f Status --all
 ## hosts ds
 
 A set of commands to manage dedicated servers.
-### Usage
+#### Usage
 ```
 srvctl hosts ds [command] [flags]
 ```
-### Commands
+#### Commands
 
 `abort-release` - cancels a scheduled release.
 ```
@@ -152,12 +152,12 @@ A command to create a dedicated server. It allows to pass parameters of the serv
 - Input - server parameters are described in a file, a path to the file is specified via the `-i` or `–input` flag. The path can be absolute or relative to the srvctl file.
 
 - Flags  - parameters are specified via flags inside the command and hostnames are listed as position arguments. As many arguments, as many servers of this configuration will be created.
-### Usage
+#### Usage
 ```
 srvctl hosts ds add -i [path]
 srvctl hosts ds add [flags] [hostname1] [hostnameN]
 ```
-### Flags
+#### Flags
 
 - `--location-id` - a unique identifier of a location. Use `srvctl locations list` to list all location IDs.
 
@@ -190,8 +190,8 @@ srvctl hosts ds add [flags] [hostname1] [hostnameN]
 - `--user-data-file` - a flag that collects user data from a specified directory. An example for a file located in the same directory with srvctl: `--user-data-file example.txt`
 
 - `-i`, `--input` - a flag to specify a file with order parameters (see **Create server via input**).
-### Examples
-#### Create server via input 
+#### Examples
+##### Create server via input 
 
 The `-i`, `--input` allows to provide parameters of a created server in a local file. Parameters should be described as a request body of the [Public API request](https://developers.servers.com/api-documentation/v1/#tag/Dedicated-Server/operation/CreateADedicatedServer).
 
@@ -270,7 +270,7 @@ An example of the file's content:
 ```
 
 There is also an option to use standard input (stdin) when specifying the flag this way: `--input -`
-#### Create server via flags
+##### Create server via flags
 
 It's possible to pass server parameters via flags that are described in the **Flags** section. This is an example of a command to create a dedicated server:
 ```
@@ -297,18 +297,18 @@ srvctl hosts ds add \
 ## hosts ds power
 
 A command to manage power operations on a server.
-### Usage
+#### Usage
 ```
 srvctl hosts ds power <id> [flags]
 ```
-### Flags
+#### Flags
 
 - `--command off` - a flag to power off a server.
 
 - `--command on` - a flag to power on a server.
 
 - `--command cycle` - a flag for the power cycle command.
-### Examples
+#### Examples
 
 An example of a command to switch a server off:
 ```
@@ -317,14 +317,14 @@ srvctl hosts ds power <id> --command off
 ## hosts ds reinstall
 
 A command to reinstall an operating system on a dedicated server.
-### Usage
+#### Usage
 ```
 srvctl hosts ds reinstall <id> [flags]
 ```
-### Flags
+#### Flags
 
 - `-i`, `--input` - a flag to specify a path with a file that contains reinstall parameters.
-### Examples
+#### Examples
 
 The `-i`, `--input` allows to provide parameters of a created server in a local file. Parameters should be described as a request body of the [Public API request](https://developers.servers.com/api-documentation/v1/#tag/Dedicated-Server/operation/CreateADedicatedServer).
 
