@@ -8,16 +8,18 @@ import (
 	"strings"
 )
 
-var (
-	path            string
-	name            string
-	l2Type          string
-	locationGroupID int64
-	members         []string
-	labels          []string
-)
+type AddedFlags struct {
+	InputPath       string
+	Name            string
+	Type            string
+	LocationGroupID int64
+	Members         []string
+	Labels          []string
+}
 
 func newAddCmd(cmdContext *base.CmdContext) *cobra.Command {
+	flags := &AddedFlags{}
+
 	cmd := &cobra.Command{
 		Use:   "add",
 		Short: "Add a new L2 segment",
@@ -33,17 +35,19 @@ func newAddCmd(cmdContext *base.CmdContext) *cobra.Command {
 
 			input := &serverscom.L2SegmentCreateInput{}
 
-			if cmd.Flags().Changed("input") {
-				if err := base.ReadInputJSON(path, cmd.InOrStdin(), input); err != nil {
+			if flags.InputPath != "" {
+				if err := base.ReadInputJSON(flags.InputPath, cmd.InOrStdin(), input); err != nil {
 					return err
 				}
 			} else {
-				if err := validateFlags(cmd); err != nil {
+				required := []string{"name", "type", "location-group-id", "member"}
+				if err := base.ValidateFlags(cmd, required); err != nil {
 					return err
 				}
-				if err := fillInput(cmd, input); err != nil {
-					return err
-				}
+			}
+
+			if err := flags.FillInput(cmd, input); err != nil {
+				return err
 			}
 
 			scClient := cmdContext.GetClient().SetVerbose(manager.GetVerbose(cmd)).GetScClient()
@@ -60,48 +64,28 @@ func newAddCmd(cmdContext *base.CmdContext) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&path, "input", "i", "", "path to input file or '-' to read from stdin")
-	cmd.Flags().StringVarP(&name, "name", "n", "", "A name of a L2 segment")
-	cmd.Flags().StringVarP(&l2Type, "type", "", "", "A type of a L2 segment")
-	cmd.Flags().Int64VarP(&locationGroupID, "location-group-id", "", 0, "A private-key of a L2 segment")
-	cmd.Flags().StringArrayVarP(&members, "member", "m", []string{}, "L2 segment member: id=<string>,mode=<native|trunk>")
-	cmd.Flags().StringArrayVarP(&labels, "label", "l", []string{}, "string in key=value format")
+	cmd.Flags().StringVarP(&flags.InputPath, "input", "i", "", "path to input file or '-' to read from stdin")
+	cmd.Flags().StringVarP(&flags.Name, "name", "n", "", "A name of a L2 segment")
+	cmd.Flags().StringVarP(&flags.Type, "type", "", "", "A type of a L2 segment")
+	cmd.Flags().Int64VarP(&flags.LocationGroupID, "location-group-id", "", 0, "A private-key of a L2 segment")
+	cmd.Flags().StringArrayVarP(&flags.Members, "member", "m", []string{}, "L2 segment member: id=<string>,mode=<native|trunk>")
+	cmd.Flags().StringArrayVarP(&flags.Labels, "label", "l", []string{}, "string in key=value format")
 
 	return cmd
 }
 
-func validateFlags(cmd *cobra.Command) error {
-	required := []string{"name", "type", "location-group-id", "member"}
-	var missing []string
-
-	for _, flag := range required {
-		if !cmd.Flags().Changed(flag) {
-			missing = append(missing, "--"+flag)
-		}
-	}
-
-	if len(missing) > 0 {
-		return fmt.Errorf(
-			"use --input or provide all required flags (missing: %s)",
-			strings.Join(missing, ", "),
-		)
-	}
-
-	return nil
-}
-
-func fillInput(cmd *cobra.Command, input *serverscom.L2SegmentCreateInput) error {
+func (f *AddedFlags) FillInput(cmd *cobra.Command, input *serverscom.L2SegmentCreateInput) error {
 	if cmd.Flags().Changed("name") {
-		input.Name = &name
+		input.Name = &f.Name
 	}
 	if cmd.Flags().Changed("type") {
-		input.Type = l2Type
+		input.Type = f.Type
 	}
 	if cmd.Flags().Changed("location-group-id") {
-		input.LocationGroupID = locationGroupID
+		input.LocationGroupID = f.LocationGroupID
 	}
 	if cmd.Flags().Changed("member") {
-		membersMap, err := parseMembers(members)
+		membersMap, err := parseMembers(f.Members)
 		if err != nil {
 			return err
 		}
@@ -109,7 +93,7 @@ func fillInput(cmd *cobra.Command, input *serverscom.L2SegmentCreateInput) error
 		input.Members = membersMap
 	}
 	if cmd.Flags().Changed("label") {
-		labelsMap, err := base.ParseLabels(labels)
+		labelsMap, err := base.ParseLabels(f.Labels)
 		if err != nil {
 			return err
 		}
