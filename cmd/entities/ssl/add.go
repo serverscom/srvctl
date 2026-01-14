@@ -57,7 +57,7 @@ func newAddCmd(cmdContext *base.CmdContext, sslType *SSLTypeCmd) *cobra.Command 
 					return err
 				}
 			} else {
-				required := []string{"public-key", "private-key"}
+				required := []string{"name", "public-key", "private-key"}
 				if err := base.ValidateFlags(cmd, required); err != nil {
 					return err
 				}
