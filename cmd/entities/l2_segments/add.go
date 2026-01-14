@@ -40,7 +40,7 @@ func newAddCmd(cmdContext *base.CmdContext) *cobra.Command {
 					return err
 				}
 			} else {
-				required := []string{"name", "type", "location-group-id", "member"}
+				required := []string{"type", "member"}
 				if err := base.ValidateFlags(cmd, required); err != nil {
 					return err
 				}
