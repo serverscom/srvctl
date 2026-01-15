@@ -291,13 +291,49 @@ func TestAddL2SegmentCmd(t *testing.T) {
 		expectError    bool
 	}{
 		{
-			name:           "create l2 segment",
+			name:           "create l2 segment with input",
 			output:         "json",
 			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "get.json")),
 			args:           []string{"--input", filepath.Join(fixtureBasePath, "create.json")},
 			configureMock: func(mock *mocks.MockL2SegmentsService) {
 				mock.EXPECT().
 					Create(gomock.Any(), gomock.AssignableToTypeOf(serverscom.L2SegmentCreateInput{})).
+					Return(&testL2Segment, nil)
+			},
+		},
+		{
+			name:           "create l2 segment",
+			output:         "json",
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "get.json")),
+			args: []string{
+				"--name", testL2SegmentName,
+				"--type", "public",
+				"--location-group-id", "58",
+				"--member", "id=LDdwmwa1,mode=native",
+				"--member", "id=LDdwmwa2,mode=trunk",
+				"--member", "id=LDdwmwa3,mode=native",
+				"--label", "foo=bar",
+				"--label", "bar=foo",
+			},
+			configureMock: func(mock *mocks.MockL2SegmentsService) {
+				expectedMembers := []serverscom.L2SegmentMemberInput{
+					{ID: "LDdwmwa1", Mode: "native"},
+					{ID: "LDdwmwa2", Mode: "trunk"},
+					{ID: "LDdwmwa3", Mode: "native"},
+				}
+				expectedLabels := map[string]string{
+					"foo": "bar",
+					"bar": "foo",
+				}
+
+				mock.EXPECT().
+					Create(gomock.Any(), serverscom.L2SegmentCreateInput{
+						Name:            &testL2SegmentName,
+						Type:            "public",
+						LocationGroupID: 58,
+						Members:         expectedMembers,
+						Labels:          expectedLabels,
+					}).
 					Return(&testL2Segment, nil)
 			},
 		},
