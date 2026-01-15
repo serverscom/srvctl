@@ -71,7 +71,7 @@ func TestAddCustomSSLCmd(t *testing.T) {
 		expectError    bool
 	}{
 		{
-			name:           "create custom ssl cert",
+			name:           "create custom ssl cert with input",
 			output:         "json",
 			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "get_custom.json")),
 			args:           []string{"--input", filepath.Join(fixtureBasePath, "create_custom.json")},
@@ -81,6 +81,29 @@ func TestAddCustomSSLCmd(t *testing.T) {
 						Name:       "test-ssl-custom",
 						PublicKey:  "-----BEGIN CERTIFICATE-----\n...\n-----END CERTIFICATE-----",
 						PrivateKey: "-----BEGIN RSA PRIVATE KEY-----\n...\n-----END RSA PRIVATE KEY-----",
+						Labels:     map[string]string{"foo": "bar"},
+					}).
+					Return(&testCustomSSL, nil)
+			},
+		},
+		{
+			name:           "create custom ssl cert",
+			output:         "json",
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "get_custom.json")),
+			args: []string{
+				"--name", "test-ssl-custom",
+				"--public-key", "-----TEST public-key-----",
+				"--private-key", "-----TEST private-key-----",
+				"--chain-key", "-----TEST chain-key-----",
+				"--label", "foo=bar",
+			},
+			configureMock: func(mock *mocks.MockSSLCertificatesService) {
+				mock.EXPECT().
+					CreateCustom(gomock.Any(), serverscom.SSLCertificateCreateCustomInput{
+						Name:       "test-ssl-custom",
+						PublicKey:  "-----TEST public-key-----",
+						PrivateKey: "-----TEST private-key-----",
+						ChainKey:   "-----TEST chain-key-----",
 						Labels:     map[string]string{"foo": "bar"},
 					}).
 					Return(&testCustomSSL, nil)
