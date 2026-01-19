@@ -36,7 +36,7 @@ func TestAddSSHKeysCmd(t *testing.T) {
 		expectError    bool
 	}{
 		{
-			name:           "create ssh key",
+			name:           "create ssh key with input",
 			output:         "json",
 			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "get.json")),
 			args:           []string{"--input", filepath.Join(fixtureBasePath, "create.json")},
@@ -45,6 +45,25 @@ func TestAddSSHKeysCmd(t *testing.T) {
 					Create(gomock.Any(), serverscom.SSHKeyCreateInput{
 						Name:      "test-key",
 						PublicKey: "ssh-rsa AAA",
+						Labels:    map[string]string{"foo": "bar"},
+					}).
+					Return(&testSSHKey, nil)
+			},
+		},
+		{
+			name:           "create ssh key",
+			output:         "json",
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "get.json")),
+			args: []string{
+				"--name", "test-key",
+				"--public-key", "-----TEST public-key-----",
+				"--label", "foo=bar",
+			},
+			configureMock: func(mock *mocks.MockSSHKeysService) {
+				mock.EXPECT().
+					Create(gomock.Any(), serverscom.SSHKeyCreateInput{
+						Name:      "test-key",
+						PublicKey: "-----TEST public-key-----",
 						Labels:    map[string]string{"foo": "bar"},
 					}).
 					Return(&testSSHKey, nil)
