@@ -7,22 +7,30 @@ import (
 )
 
 type AddedFlags struct {
+	Skeleton  bool
 	InputPath string
 	Name      string
 	PublicKey string
 	Labels    []string
 }
 
+type TmpInput struct {
+	Name      string            `json:"name" flag:"name" required:"true"`
+	PublicKey string            `json:"public_key" flag:"public-key" required:"true"`
+	Labels    map[string]string `json:"labels,omitempty" flag:"label"`
+}
+
 func newAddCmd(cmdContext *base.CmdContext) *cobra.Command {
 	flags := &AddedFlags{}
 
 	cmd := &cobra.Command{
-		Use:   "add --input <path>",
+		Use:   "add",
 		Short: "Add an ssh key",
 		Long:  "Add a new SSH key to account",
 		Args:  cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			manager := cmdContext.GetManager()
+			formatter := cmdContext.GetOrCreateFormatter(cmd)
 
 			ctx, cancel := base.SetupContext(cmd, manager)
 			defer cancel()
@@ -35,9 +43,15 @@ func newAddCmd(cmdContext *base.CmdContext) *cobra.Command {
 				if err := base.ReadInputJSON(flags.InputPath, cmd.InOrStdin(), input); err != nil {
 					return err
 				}
+			} else if flags.Skeleton {
+				requiredMap, err := base.RequiredFieldsMap(&TmpInput{})
+				if err != nil {
+					return err
+				}
+
+				return formatter.Format(requiredMap)
 			} else {
-				required := []string{"name", "public-key"}
-				if err := base.ValidateFlags(cmd, required); err != nil {
+				if err := base.NewValidateFlagsFn(cmd, &TmpInput{}); err != nil {
 					return err
 				}
 			}
@@ -53,13 +67,13 @@ func newAddCmd(cmdContext *base.CmdContext) *cobra.Command {
 			}
 
 			if sshKey != nil {
-				formatter := cmdContext.GetOrCreateFormatter(cmd)
 				return formatter.Format(sshKey)
 			}
 			return nil
 		},
 	}
 
+	cmd.Flags().BoolVarP(&flags.Skeleton, "skeleton", "s", false, "JSON object with structure that is required to be passed")
 	cmd.Flags().StringVarP(&flags.InputPath, "input", "i", "", "path to input file or '-' to read from stdin")
 	cmd.Flags().StringVarP(&flags.Name, "name", "n", "", "A name of a SSH key")
 	cmd.Flags().StringVarP(&flags.PublicKey, "public-key", "", "", "A public-key of a SSH key")

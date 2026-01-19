@@ -70,6 +70,17 @@ func TestAddSSHKeysCmd(t *testing.T) {
 			},
 		},
 		{
+			name:           "skeleton for ssh key input",
+			output:         "json",
+			args:           []string{"--skeleton"},
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "skeleton.json")),
+			configureMock: func(mock *mocks.MockSSHKeysService) {
+				mock.EXPECT().
+					Create(gomock.Any(), gomock.Any()).
+					Times(0)
+			},
+		},
+		{
 			name:        "create ssh key with error",
 			expectError: true,
 		},
