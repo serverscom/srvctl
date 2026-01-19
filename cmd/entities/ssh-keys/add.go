@@ -15,9 +15,9 @@ type AddedFlags struct {
 }
 
 type TmpInput struct {
-	Name      string            `json:"name" flag:"name" required:"true"`
-	PublicKey string            `json:"public_key" flag:"public-key" required:"true"`
-	Labels    map[string]string `json:"labels,omitempty" flag:"label"`
+	Name      string            `json:"name" required:"true"`
+	PublicKey string            `json:"public_key" required:"true"`
+	Labels    map[string]string `json:"labels,omitempty"`
 }
 
 func newAddCmd(cmdContext *base.CmdContext) *cobra.Command {
@@ -51,7 +51,7 @@ func newAddCmd(cmdContext *base.CmdContext) *cobra.Command {
 
 				return formatter.Format(requiredMap)
 			} else {
-				if err := base.NewValidateFlagsFn(cmd, &TmpInput{}); err != nil {
+				if err := base.ValidateFlags(cmd, []string{"name", "public-key"}); err != nil {
 					return err
 				}
 			}

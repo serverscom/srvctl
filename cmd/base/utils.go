@@ -215,44 +215,6 @@ func ValidateFlags(cmd *cobra.Command, required []string) error {
 	return nil
 }
 
-func NewValidateFlagsFn[T any](cmd *cobra.Command, input *T) error {
-	t := reflect.TypeOf(*input)
-	if t.Kind() != reflect.Struct {
-		return fmt.Errorf("pointer to struct is expected")
-	}
-
-	required := make([]string, 0, t.NumField())
-	var missing []string
-
-	for i := 0; i < t.NumField(); i++ {
-		field := t.Field(i)
-
-		if field.Tag.Get("required") == "true" {
-			flag := field.Tag.Get("flag")
-			if flag == "" || flag == "-" {
-				continue
-			}
-
-			required = append(required, flag)
-		}
-	}
-
-	for _, f := range required {
-		if !cmd.Flags().Changed(f) {
-			missing = append(missing, "--"+f)
-		}
-	}
-
-	if len(missing) > 0 {
-		return fmt.Errorf(
-			"provide all required flags (missing: %s)",
-			strings.Join(missing, ", "),
-		)
-	}
-
-	return nil
-}
-
 func RequiredFieldsMap[T any](input *T) (map[string]any, error) {
 	t := reflect.TypeOf(*input)
 	if t.Kind() != reflect.Struct {
