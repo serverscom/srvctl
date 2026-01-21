@@ -16,7 +16,7 @@ import (
 var (
 	testFingerprint      = "00:11:22:33:44:55:66:77:88:99"
 	fixtureBasePath      = filepath.Join("..", "..", "..", "testdata", "entities", "ssh-keys")
-	skeletonTemplatePath = filepath.Join("..", "..", "..", "internal", "output", "skeletons", "skeleton-templates", "ssh-keys")
+	skeletonTemplatePath = filepath.Join("..", "..", "..", "internal", "output", "skeletons", "templates", "ssh-keys")
 	fixedTime            = time.Date(2025, 1, 1, 12, 0, 0, 0, time.UTC)
 	testSSHKey           = serverscom.SSHKey{
 		Name:        "test-key",

@@ -2,12 +2,13 @@ package output
 
 import (
 	"encoding/json"
-	"html/template"
-	"io"
-
 	"github.com/serverscom/srvctl/internal/config"
+	"github.com/serverscom/srvctl/internal/output/skeletons"
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v3"
+	"html/template"
+	"io"
+	"io/fs"
 )
 
 // Formatter represents formatter struct with custom io.Writer
@@ -74,12 +75,32 @@ func (f *Formatter) Format(v any) error {
 	}
 }
 
-// formatText formats data in text format
+// FormatText formats data in text format
 func (f *Formatter) FormatText(v any) error {
 	switch data := v.(type) {
 	case ConfigInfo:
 		return f.formatConfig(data)
 	default:
 		return f.formatText(data)
+	}
+}
+
+// FormatSkeleton formats skeleton template according to format
+func (f *Formatter) FormatSkeleton(v any) error {
+	switch path := v.(type) {
+	case string:
+		raw, err := fs.ReadFile(skeletons.FS, path)
+		if err != nil {
+			return err
+		}
+
+		var data map[string]any
+		if err := json.Unmarshal(raw, &data); err != nil {
+			return err
+		}
+
+		return f.Format(data)
+	default:
+		return f.Format(v)
 	}
 }
