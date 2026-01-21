@@ -17,12 +17,6 @@ type AddedFlags struct {
 	Labels    []string
 }
 
-type TmpInput struct {
-	Name      string            `json:"name" required:"true"`
-	PublicKey string            `json:"public_key" required:"true"`
-	Labels    map[string]string `json:"labels,omitempty"`
-}
-
 func newAddCmd(cmdContext *base.CmdContext) *cobra.Command {
 	flags := &AddedFlags{}
 
