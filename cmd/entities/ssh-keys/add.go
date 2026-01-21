@@ -1,9 +1,12 @@
 package sshkeys
 
 import (
+	"encoding/json"
 	serverscom "github.com/serverscom/serverscom-go-client/pkg"
 	"github.com/serverscom/srvctl/cmd/base"
+	"github.com/serverscom/srvctl/internal/output/skeletons"
 	"github.com/spf13/cobra"
+	"io/fs"
 )
 
 type AddedFlags struct {
@@ -44,12 +47,17 @@ func newAddCmd(cmdContext *base.CmdContext) *cobra.Command {
 					return err
 				}
 			} else if flags.Skeleton {
-				requiredMap, err := base.RequiredFieldsMap(&TmpInput{})
+				raw, err := fs.ReadFile(skeletons.FS, "ssh-keys/add.json")
 				if err != nil {
 					return err
 				}
 
-				return formatter.Format(requiredMap)
+				var data map[string]any
+				if err := json.Unmarshal(raw, &data); err != nil {
+					return err
+				}
+
+				return formatter.Format(data)
 			} else {
 				if err := base.ValidateFlags(cmd, []string{"name", "public-key"}); err != nil {
 					return err
