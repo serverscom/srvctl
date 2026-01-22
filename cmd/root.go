@@ -6,6 +6,7 @@ import (
 	"github.com/serverscom/srvctl/cmd/context"
 	"github.com/serverscom/srvctl/cmd/entities/account"
 	cloudinstances "github.com/serverscom/srvctl/cmd/entities/cloud-instances"
+	cloudregions "github.com/serverscom/srvctl/cmd/entities/cloud-regions"
 	"github.com/serverscom/srvctl/cmd/entities/drivemodels"
 	"github.com/serverscom/srvctl/cmd/entities/hosts"
 	"github.com/serverscom/srvctl/cmd/entities/invoices"
@@ -76,6 +77,7 @@ func NewRootCmd(version string) *cobra.Command {
 	cmd.AddCommand(l2segments.NewCmd(cmdContext))
 	cmd.AddCommand(networkpools.NewCmd(cmdContext))
 	cmd.AddCommand(cloudinstances.NewCmd(cmdContext))
+	cmd.AddCommand(cloudregions.NewCmd(cmdContext))
 
 	return cmd
 }

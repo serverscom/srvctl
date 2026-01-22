@@ -33,4 +33,5 @@ func init() {
 	RegisterL2SegmentDefinitions()
 	RegisterNetworkPoolDefinitions()
 	RegisterCloudComputingInstanceDefinition()
+	RegisterCloudComputingRegionDefinitions()
 }

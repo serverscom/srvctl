@@ -473,3 +473,31 @@ func (o *RegionIDOption[T]) ApplyToCollection(collection serverscom.Collection[T
 		collection.SetParam("region_id", fmt.Sprintf("%d", o.regionID))
 	}
 }
+
+type InstanceIDOption[T any] struct {
+	instanceID string
+}
+
+func (o *InstanceIDOption[T]) AddFlags(cmd *cobra.Command) {
+	cmd.Flags().StringVar(&o.instanceID, "instance-id", "", "Filter results by instance ID")
+}
+
+func (o *InstanceIDOption[T]) ApplyToCollection(collection serverscom.Collection[T]) {
+	if o.instanceID != "" {
+		collection.SetParam("instance_id", o.instanceID)
+	}
+}
+
+type IsBackupOption[T any] struct {
+	isBackup bool
+}
+
+func (o *IsBackupOption[T]) AddFlags(cmd *cobra.Command) {
+	cmd.Flags().BoolVar(&o.isBackup, "is-backup", false, "Filter results by backup status (true, false)")
+}
+
+func (o *IsBackupOption[T]) ApplyToCollection(collection serverscom.Collection[T]) {
+	if o.isBackup {
+		collection.SetParam("is_backup", "true")
+	}
+}
