@@ -34,6 +34,5 @@ generate: deps
 	./internal/mocks/locations_service.go \
 	./internal/mocks/kubernetes_clusters_service.go \
 	./internal/mocks/l2_segment_service.go \
-	./internal/mocks/network_pool_service.go
 	./internal/mocks/network_pool_service.go \
 	./internal/mocks/cloud_computing_regions_service.go
