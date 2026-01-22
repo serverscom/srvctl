@@ -259,7 +259,7 @@ func TestGetCloudInstancesCmd(t *testing.T) {
 			testCmdContext := testutils.NewTestCmdContext(scClient)
 			cloudCmd := NewCmd(testCmdContext)
 
-			args := []string{"cloud-instances", "get", "--instance-id", tc.instanceID}
+			args := []string{"cloud-instances", "get", tc.instanceID}
 			if tc.output != "" {
 				args = append(args, "--output", tc.output)
 			}
