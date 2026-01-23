@@ -3,12 +3,15 @@ package loadbalancers
 import (
 	"context"
 	"fmt"
-	"log"
-
 	serverscom "github.com/serverscom/serverscom-go-client/pkg"
 	"github.com/serverscom/srvctl/cmd/base"
 	"github.com/spf13/cobra"
 )
+
+type UpdateFlags struct {
+	Skeleton  bool
+	InputPath string
+}
 
 type LBUpdater interface {
 	Update(ctx context.Context, client *serverscom.Client, id string, input any) (any, error)
@@ -44,12 +47,14 @@ func (c *LBL7UpdateMgr) NewUpdateInput() any {
 }
 
 func newUpdateCmd(cmdContext *base.CmdContext, lbType *LBTypeCmd) *cobra.Command {
-	var path string
+	flags := &UpdateFlags{}
+
 	cmd := &cobra.Command{
 		Use:   "update --input <path>",
 		Short: fmt.Sprintf("Update %s", lbType.entityName),
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
+			formatter := cmdContext.GetOrCreateFormatter(cmd)
 			manager := cmdContext.GetManager()
 			ctx, cancel := base.SetupContext(cmd, manager)
 			defer cancel()
@@ -58,8 +63,18 @@ func newUpdateCmd(cmdContext *base.CmdContext, lbType *LBTypeCmd) *cobra.Command
 
 			input := lbType.managers.updateMgr.NewUpdateInput()
 
-			if err := base.ReadInputJSON(path, cmd.InOrStdin(), input); err != nil {
-				return err
+			if flags.InputPath != "" {
+				if err := base.ReadInputJSON(flags.InputPath, cmd.InOrStdin(), input); err != nil {
+					return err
+				}
+			} else if flags.Skeleton {
+				tmplPath := fmt.Sprintf("lb/update_%s.json", cmd.Parent().Name())
+				return formatter.FormatSkeleton(tmplPath)
+			} else {
+				required := []string{"input"}
+				if err := base.ValidateFlags(cmd, required); err != nil {
+					return err
+				}
 			}
 
 			scClient := cmdContext.GetClient().SetVerbose(manager.GetVerbose(cmd)).GetScClient()
@@ -71,7 +86,6 @@ func newUpdateCmd(cmdContext *base.CmdContext, lbType *LBTypeCmd) *cobra.Command
 			}
 
 			if lb != nil {
-				formatter := cmdContext.GetOrCreateFormatter(cmd)
 				return formatter.Format(lb)
 			}
 
@@ -79,10 +93,8 @@ func newUpdateCmd(cmdContext *base.CmdContext, lbType *LBTypeCmd) *cobra.Command
 		},
 	}
 
-	cmd.Flags().StringVarP(&path, "input", "i", "", "path to input file or '-' to read from stdin")
-	if err := cmd.MarkFlagRequired("input"); err != nil {
-		log.Fatal(err)
-	}
+	cmd.Flags().StringVarP(&flags.InputPath, "input", "i", "", "path to input file or '-' to read from stdin")
+	cmd.Flags().BoolVarP(&flags.Skeleton, "skeleton", "s", false, "JSON object with structure that is required to be passed")
 
 	return cmd
 }

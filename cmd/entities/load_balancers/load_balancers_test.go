@@ -78,7 +78,7 @@ func TestAddL4LBCmd(t *testing.T) {
 			name:           "skeleton for l4 lb input",
 			output:         "json",
 			args:           []string{"--skeleton"},
-			expectedOutput: testutils.ReadFixture(filepath.Join(skeletonTemplatePath, "add.json")),
+			expectedOutput: testutils.ReadFixture(filepath.Join(skeletonTemplatePath, "add_l4.json")),
 			configureMock: func(mock *mocks.MockLoadBalancersService) {
 				mock.EXPECT().
 					CreateL4LoadBalancer(gomock.Any(), gomock.Any()).
@@ -160,7 +160,7 @@ func TestAddL7LBCmd(t *testing.T) {
 			name:           "skeleton for l7 lb input",
 			output:         "json",
 			args:           []string{"--skeleton"},
-			expectedOutput: testutils.ReadFixture(filepath.Join(skeletonTemplatePath, "add.json")),
+			expectedOutput: testutils.ReadFixture(filepath.Join(skeletonTemplatePath, "add_l7.json")),
 			configureMock: func(mock *mocks.MockLoadBalancersService) {
 				mock.EXPECT().
 					CreateL7LoadBalancer(gomock.Any(), gomock.Any()).
@@ -551,6 +551,17 @@ func TestUpdateL4LBCmd(t *testing.T) {
 			},
 		},
 		{
+			name:           "skeleton for update l4 lb input",
+			output:         "json",
+			args:           []string{"--skeleton"},
+			expectedOutput: testutils.ReadFixture(filepath.Join(skeletonTemplatePath, "update_l4.json")),
+			configureMock: func(mock *mocks.MockLoadBalancersService) {
+				mock.EXPECT().
+					UpdateL4LoadBalancer(gomock.Any(), gomock.Any(), gomock.Any()).
+					Times(0)
+			},
+		},
+		{
 			name: "update l4 lb with error",
 			id:   testId,
 			args: []string{"--input", filepath.Join(fixtureBasePath, "update_input_l4.json")},
@@ -602,7 +613,7 @@ func TestUpdateL4LBCmd(t *testing.T) {
 				g.Expect(err).To(HaveOccurred())
 			} else {
 				g.Expect(err).To(BeNil())
-				g.Expect(builder.GetOutput()).To(BeEquivalentTo(string(tc.expectedOutput)))
+				g.Expect(builder.GetOutput()).To(MatchJSON(tc.expectedOutput))
 			}
 		})
 	}
@@ -633,6 +644,17 @@ func TestUpdateL7LBCmd(t *testing.T) {
 						Labels: map[string]string{"new": "label"},
 					}).
 					Return(&updatedL7LB, nil)
+			},
+		},
+		{
+			name:           "skeleton for update l7 lb input",
+			output:         "json",
+			args:           []string{"--skeleton"},
+			expectedOutput: testutils.ReadFixture(filepath.Join(skeletonTemplatePath, "update_l7.json")),
+			configureMock: func(mock *mocks.MockLoadBalancersService) {
+				mock.EXPECT().
+					UpdateL7LoadBalancer(gomock.Any(), gomock.Any(), gomock.Any()).
+					Times(0)
 			},
 		},
 		{
@@ -687,7 +709,7 @@ func TestUpdateL7LBCmd(t *testing.T) {
 				g.Expect(err).To(HaveOccurred())
 			} else {
 				g.Expect(err).To(BeNil())
-				g.Expect(builder.GetOutput()).To(BeEquivalentTo(string(tc.expectedOutput)))
+				g.Expect(builder.GetOutput()).To(MatchJSON(tc.expectedOutput))
 			}
 		})
 	}

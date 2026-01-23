@@ -68,7 +68,8 @@ func newAddCmd(cmdContext *base.CmdContext, lbType *LBTypeCmd) *cobra.Command {
 					return err
 				}
 			} else if flags.Skeleton {
-				return formatter.FormatSkeleton("lb/add.json")
+				tmplPath := fmt.Sprintf("lb/add_%s.json", cmd.Parent().Name())
+				return formatter.FormatSkeleton(tmplPath)
 			} else {
 				required := []string{"input"}
 				if err := base.ValidateFlags(cmd, required); err != nil {
