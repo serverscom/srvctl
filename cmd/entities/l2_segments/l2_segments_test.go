@@ -432,6 +432,17 @@ func TestUpdateL2SegmentCmd(t *testing.T) {
 			},
 			expectError: true,
 		},
+		{
+			name:           "skeleton for update l2 segment input",
+			output:         "json",
+			args:           []string{"--skeleton"},
+			expectedOutput: testutils.ReadFixture(filepath.Join(skeletonTemplatePath, "update.json")),
+			configureMock: func(mock *mocks.MockL2SegmentsService) {
+				mock.EXPECT().
+					Update(gomock.Any(), gomock.Any(), gomock.Any()).
+					Times(0)
+			},
+		},
 	}
 
 	mockCtrl := gomock.NewController(t)
@@ -468,7 +479,7 @@ func TestUpdateL2SegmentCmd(t *testing.T) {
 				g.Expect(err).To(HaveOccurred())
 			} else {
 				g.Expect(err).To(BeNil())
-				g.Expect(builder.GetOutput()).To(BeEquivalentTo(string(tc.expectedOutput)))
+				g.Expect(builder.GetOutput()).To(MatchJSON(tc.expectedOutput))
 			}
 		})
 	}
@@ -553,6 +564,17 @@ func TestUpdateL2NetworksCmd(t *testing.T) {
 			},
 		},
 		{
+			name:           "skeleton for update l2 segment input",
+			output:         "json",
+			args:           []string{"--skeleton"},
+			expectedOutput: testutils.ReadFixture(filepath.Join(skeletonTemplatePath, "update_networks.json")),
+			configureMock: func(mock *mocks.MockL2SegmentsService) {
+				mock.EXPECT().
+					Update(gomock.Any(), gomock.Any(), gomock.Any()).
+					Times(0)
+			},
+		},
+		{
 			name: "update l2 segment networks with error",
 			id:   testID,
 			args: []string{"--input", filepath.Join(fixtureBasePath, "update_networks_input.json")},
@@ -600,7 +622,7 @@ func TestUpdateL2NetworksCmd(t *testing.T) {
 				g.Expect(err).To(HaveOccurred())
 			} else {
 				g.Expect(err).To(BeNil())
-				g.Expect(builder.GetOutput()).To(BeEquivalentTo(string(tc.expectedOutput)))
+				g.Expect(builder.GetOutput()).To(MatchJSON(tc.expectedOutput))
 			}
 		})
 	}
