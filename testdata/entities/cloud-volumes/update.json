@@ -1,0 +1,7 @@
+{
+    "name": "updated-volume",
+    "description": "Updated volume",
+    "labels": {
+        "new": "label"
+    }
+}
