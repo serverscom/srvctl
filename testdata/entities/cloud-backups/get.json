@@ -1,0 +1,13 @@
+{
+    "id": "backup-123",
+    "openstack_uuid": null,
+    "openstack_volume_uuid": "vol-123-openstack",
+    "region_id": 1,
+    "size": 1073741824,
+    "status": "available",
+    "labels": {
+        "env": "test"
+    },
+    "created_at": "2025-01-01T12:00:00Z",
+    "name": "test-backup"
+}

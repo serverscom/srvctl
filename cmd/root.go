@@ -5,6 +5,7 @@ import (
 	"github.com/serverscom/srvctl/cmd/config"
 	"github.com/serverscom/srvctl/cmd/context"
 	"github.com/serverscom/srvctl/cmd/entities/account"
+	cloudbackups "github.com/serverscom/srvctl/cmd/entities/cloud-backups"
 	"github.com/serverscom/srvctl/cmd/entities/drivemodels"
 	"github.com/serverscom/srvctl/cmd/entities/hosts"
 	"github.com/serverscom/srvctl/cmd/entities/invoices"
@@ -74,6 +75,7 @@ func NewRootCmd(version string) *cobra.Command {
 	cmd.AddCommand(sbmmodels.NewCmd(cmdContext))
 	cmd.AddCommand(l2segments.NewCmd(cmdContext))
 	cmd.AddCommand(networkpools.NewCmd(cmdContext))
+	cmd.AddCommand(cloudbackups.NewCmd(cmdContext))
 
 	return cmd
 }
