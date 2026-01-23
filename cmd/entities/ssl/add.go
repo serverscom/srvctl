@@ -9,6 +9,7 @@ import (
 )
 
 type AddedFlags struct {
+	Skeleton   bool
 	InputPath  string
 	Name       string
 	PublicKey  string
@@ -44,6 +45,7 @@ func newAddCmd(cmdContext *base.CmdContext, sslType *SSLTypeCmd) *cobra.Command 
 		Short: fmt.Sprintf("Create a %s", sslType.entityName),
 		Args:  cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
+			formatter := cmdContext.GetOrCreateFormatter(cmd)
 			manager := cmdContext.GetManager()
 			ctx, cancel := base.SetupContext(cmd, manager)
 			defer cancel()
@@ -56,6 +58,8 @@ func newAddCmd(cmdContext *base.CmdContext, sslType *SSLTypeCmd) *cobra.Command 
 				if err := base.ReadInputJSON(flags.InputPath, cmd.InOrStdin(), input); err != nil {
 					return err
 				}
+			} else if flags.Skeleton {
+				return formatter.FormatSkeleton("ssl/add.json")
 			} else {
 				required := []string{"name", "public-key", "private-key"}
 				if err := base.ValidateFlags(cmd, required); err != nil {
@@ -75,7 +79,6 @@ func newAddCmd(cmdContext *base.CmdContext, sslType *SSLTypeCmd) *cobra.Command 
 			}
 
 			if sslCert != nil {
-				formatter := cmdContext.GetOrCreateFormatter(cmd)
 				return formatter.Format(sslCert)
 			}
 
@@ -84,6 +87,8 @@ func newAddCmd(cmdContext *base.CmdContext, sslType *SSLTypeCmd) *cobra.Command 
 	}
 
 	cmd.Flags().StringVarP(&flags.InputPath, "input", "i", "", "path to input file or '-' to read from stdin")
+	cmd.Flags().BoolVarP(&flags.Skeleton, "skeleton", "s", false, "JSON object with structure that is required to be passed")
+
 	cmd.Flags().StringVarP(&flags.Name, "name", "n", "", "A name of a SSL certificate")
 	cmd.Flags().StringVarP(&flags.PublicKey, "public-key", "", "", "A public-key of a SSL certificate")
 	cmd.Flags().StringVarP(&flags.PrivateKey, "private-key", "", "", "A private-key of a SSL certificate")

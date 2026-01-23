@@ -1,7 +1,6 @@
 package sshkeys
 
 import (
-	"fmt"
 	serverscom "github.com/serverscom/serverscom-go-client/pkg"
 	"github.com/serverscom/srvctl/cmd/base"
 	"github.com/spf13/cobra"
@@ -39,8 +38,7 @@ func newAddCmd(cmdContext *base.CmdContext) *cobra.Command {
 					return err
 				}
 			} else if flags.Skeleton {
-				tmplPath := fmt.Sprintf("%s/%s.json", cmd.Parent().Name(), cmd.Name())
-				return formatter.FormatSkeleton(tmplPath)
+				return formatter.FormatSkeleton("ssh-keys/add.json")
 			} else {
 				required := []string{"name", "public-key"}
 				if err := base.ValidateFlags(cmd, required); err != nil {
