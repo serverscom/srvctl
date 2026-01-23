@@ -14,10 +14,11 @@ import (
 )
 
 var (
-	fixtureBasePath = filepath.Join("..", "..", "..", "testdata", "entities", "lb")
-	fixedTime       = time.Date(2025, 1, 1, 12, 0, 0, 0, time.UTC)
-	testId          = "testId"
-	testLB          = serverscom.LoadBalancer{
+	fixtureBasePath      = filepath.Join("..", "..", "..", "testdata", "entities", "lb")
+	skeletonTemplatePath = filepath.Join("..", "..", "..", "internal", "output", "skeletons", "templates", "lb")
+	fixedTime            = time.Date(2025, 1, 1, 12, 0, 0, 0, time.UTC)
+	testId               = "testId"
+	testLB               = serverscom.LoadBalancer{
 		ID:                testId,
 		Name:              "test-l4-lb",
 		Type:              "l4",
@@ -74,6 +75,17 @@ func TestAddL4LBCmd(t *testing.T) {
 			},
 		},
 		{
+			name:           "skeleton for l4 lb input",
+			output:         "json",
+			args:           []string{"--skeleton"},
+			expectedOutput: testutils.ReadFixture(filepath.Join(skeletonTemplatePath, "add.json")),
+			configureMock: func(mock *mocks.MockLoadBalancersService) {
+				mock.EXPECT().
+					CreateL4LoadBalancer(gomock.Any(), gomock.Any()).
+					Times(0)
+			},
+		},
+		{
 			name:        "with error",
 			expectError: true,
 		},
@@ -118,7 +130,7 @@ func TestAddL4LBCmd(t *testing.T) {
 				g.Expect(err).To(HaveOccurred())
 			} else {
 				g.Expect(err).To(BeNil())
-				g.Expect(builder.GetOutput()).To(BeEquivalentTo(string(tc.expectedOutput)))
+				g.Expect(builder.GetOutput()).To(MatchJSON(tc.expectedOutput))
 			}
 		})
 	}
@@ -142,6 +154,17 @@ func TestAddL7LBCmd(t *testing.T) {
 				mock.EXPECT().
 					CreateL7LoadBalancer(gomock.Any(), gomock.AssignableToTypeOf(serverscom.L7LoadBalancerCreateInput{})).
 					Return(&testL7LB, nil)
+			},
+		},
+		{
+			name:           "skeleton for l7 lb input",
+			output:         "json",
+			args:           []string{"--skeleton"},
+			expectedOutput: testutils.ReadFixture(filepath.Join(skeletonTemplatePath, "add.json")),
+			configureMock: func(mock *mocks.MockLoadBalancersService) {
+				mock.EXPECT().
+					CreateL7LoadBalancer(gomock.Any(), gomock.Any()).
+					Times(0)
 			},
 		},
 		{
@@ -189,7 +212,7 @@ func TestAddL7LBCmd(t *testing.T) {
 				g.Expect(err).To(HaveOccurred())
 			} else {
 				g.Expect(err).To(BeNil())
-				g.Expect(builder.GetOutput()).To(BeEquivalentTo(string(tc.expectedOutput)))
+				g.Expect(builder.GetOutput()).To(MatchJSON(tc.expectedOutput))
 			}
 		})
 	}
