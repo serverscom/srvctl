@@ -9,6 +9,7 @@ import (
 )
 
 type AddedFlags struct {
+	Skeleton        bool
 	InputPath       string
 	Name            string
 	Type            string
@@ -26,6 +27,7 @@ func newAddCmd(cmdContext *base.CmdContext) *cobra.Command {
 		Long:  "Add a new L2 segment",
 		Args:  cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
+			formatter := cmdContext.GetOrCreateFormatter(cmd)
 			manager := cmdContext.GetManager()
 
 			ctx, cancel := base.SetupContext(cmd, manager)
@@ -39,6 +41,8 @@ func newAddCmd(cmdContext *base.CmdContext) *cobra.Command {
 				if err := base.ReadInputJSON(flags.InputPath, cmd.InOrStdin(), input); err != nil {
 					return err
 				}
+			} else if flags.Skeleton {
+				return formatter.FormatSkeleton("l2-segments/add.json")
 			} else {
 				required := []string{"type", "member"}
 				if err := base.ValidateFlags(cmd, required); err != nil {
@@ -57,7 +61,6 @@ func newAddCmd(cmdContext *base.CmdContext) *cobra.Command {
 			}
 
 			if l2Segment != nil {
-				formatter := cmdContext.GetOrCreateFormatter(cmd)
 				return formatter.Format(l2Segment)
 			}
 			return nil
@@ -65,6 +68,8 @@ func newAddCmd(cmdContext *base.CmdContext) *cobra.Command {
 	}
 
 	cmd.Flags().StringVarP(&flags.InputPath, "input", "i", "", "path to input file or '-' to read from stdin")
+	cmd.Flags().BoolVarP(&flags.Skeleton, "skeleton", "s", false, "JSON object with structure that is required to be passed")
+
 	cmd.Flags().StringVarP(&flags.Name, "name", "n", "", "A name of a L2 segment")
 	cmd.Flags().StringVarP(&flags.Type, "type", "", "", "A type of a L2 segment")
 	cmd.Flags().Int64VarP(&flags.LocationGroupID, "location-group-id", "", 0, "A private-key of a L2 segment")
