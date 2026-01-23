@@ -65,8 +65,9 @@ func newAddCmd(cmdContext *base.CmdContext) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().BoolVarP(&flags.Skeleton, "skeleton", "s", false, "JSON object with structure that is required to be passed")
 	cmd.Flags().StringVarP(&flags.InputPath, "input", "i", "", "path to input file or '-' to read from stdin")
+	cmd.Flags().BoolVarP(&flags.Skeleton, "skeleton", "s", false, "JSON object with structure that is required to be passed")
+
 	cmd.Flags().StringVarP(&flags.Name, "name", "n", "", "A name of a SSH key")
 	cmd.Flags().StringVarP(&flags.PublicKey, "public-key", "", "", "A public-key of a SSH key")
 	cmd.Flags().StringArrayVarP(&flags.Labels, "label", "l", []string{}, "string in key=value format")

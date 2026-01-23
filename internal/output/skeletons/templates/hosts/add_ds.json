@@ -1,0 +1,50 @@
+{
+    "server_model_id": "",
+    "location_id": "",
+    "ram_size": "",
+    "uplink_models": {
+        "public": {
+            "id": "",
+            "bandwidth_model_id": ""
+        },
+        "private": {
+            "id": ""
+        }
+    },
+    "drives": {
+        "slots": [
+            {
+                "position": "",
+                "drive_model_id": ""
+            },
+            {
+                "position": "",
+                "drive_model_id": ""
+            }
+        ],
+        "layout": [
+            {
+                "slot_positions": [],
+                "raid": "",
+                "partitions": [
+                    {
+                        "target": "",
+                        "size": "",
+                        "fill": false,
+                        "fs": ""
+                    }
+                ]
+            }
+        ]
+    },
+    "hosts": [
+        {
+            "hostname": "",
+            "public_ipv4_network_id": "",
+            "private_ipv4_network_id": "",
+            "labels": {
+                "key": "value"
+            }
+        }
+    ]
+}

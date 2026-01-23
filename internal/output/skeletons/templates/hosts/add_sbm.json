@@ -1,0 +1,14 @@
+{
+    "sbm_flavor_model_id": "",
+    "location_id": "",
+    "hosts": [
+        {
+            "hostname": "",
+            "public_ipv4_network_id": "",
+            "private_ipv4_network_id": "",
+            "labels": {
+                "key": "value"
+            }
+        }
+    ]
+}

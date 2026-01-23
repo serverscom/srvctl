@@ -1,4 +1,7 @@
 {
     "name": "",
-    "public_key": ""
+    "public_key": "",
+    "labels": {
+        "key": "value"
+    }
 }
