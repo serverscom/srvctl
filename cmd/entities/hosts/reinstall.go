@@ -67,6 +67,7 @@ func newReinstallCmd(cmdContext *base.CmdContext, hostType *HostTypeCmd) *cobra.
 					return err
 				}
 			} else if flags.Skeleton {
+				formatter.SetOutput("json")
 				return formatter.FormatSkeleton("hosts/reinstall.json")
 			} else {
 				required := []string{"input"}

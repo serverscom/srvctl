@@ -150,6 +150,7 @@ func newAddDSCmd(cmdContext *base.CmdContext) *cobra.Command {
 					return err
 				}
 			} else if flags.Skeleton {
+				formatter.SetOutput("json")
 				return formatter.FormatSkeleton("hosts/add_ds.json")
 			} else {
 				required := []string{"input"}
@@ -233,6 +234,7 @@ func newAddSBMCmd(cmdContext *base.CmdContext) *cobra.Command {
 					return err
 				}
 			} else if flags.Skeleton {
+				formatter.SetOutput("json")
 				return formatter.FormatSkeleton("hosts/add_sbm.json")
 			} else {
 				required := []string{"input"}

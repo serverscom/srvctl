@@ -68,6 +68,7 @@ func newUpdateCmd(cmdContext *base.CmdContext, lbType *LBTypeCmd) *cobra.Command
 					return err
 				}
 			} else if flags.Skeleton {
+				formatter.SetOutput("json")
 				tmplPath := fmt.Sprintf("lb/update_%s.json", cmd.Parent().Name())
 				return formatter.FormatSkeleton(tmplPath)
 			} else {

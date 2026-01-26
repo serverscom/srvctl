@@ -35,6 +35,7 @@ func newUpdateL2Cmd(cmdContext *base.CmdContext) *cobra.Command {
 					return err
 				}
 			} else if flags.Skeleton {
+				formatter.SetOutput("json")
 				return formatter.FormatSkeleton("l2-segments/update.json")
 			} else {
 				required := []string{"input"}
@@ -88,6 +89,7 @@ func newUpdateL2NetworksCmd(cmdContext *base.CmdContext) *cobra.Command {
 					return err
 				}
 			} else if flags.Skeleton {
+				formatter.SetOutput("json")
 				return formatter.FormatSkeleton("l2-segments/update_networks.json")
 			} else {
 				required := []string{"input"}

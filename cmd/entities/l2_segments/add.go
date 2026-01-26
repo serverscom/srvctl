@@ -42,6 +42,7 @@ func newAddCmd(cmdContext *base.CmdContext) *cobra.Command {
 					return err
 				}
 			} else if flags.Skeleton {
+				formatter.SetOutput("json")
 				return formatter.FormatSkeleton("l2-segments/add.json")
 			} else {
 				required := []string{"type", "member"}

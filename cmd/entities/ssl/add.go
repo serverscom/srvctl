@@ -59,6 +59,7 @@ func newAddCmd(cmdContext *base.CmdContext, sslType *SSLTypeCmd) *cobra.Command 
 					return err
 				}
 			} else if flags.Skeleton {
+				formatter.SetOutput("json")
 				return formatter.FormatSkeleton("ssl/add.json")
 			} else {
 				required := []string{"name", "public-key", "private-key"}

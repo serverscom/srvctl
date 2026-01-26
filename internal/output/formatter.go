@@ -58,6 +58,11 @@ func (f *Formatter) SetTemplate(t *template.Template) {
 	f.template = t
 }
 
+// SetOutput sets output
+func (f *Formatter) SetOutput(o string) {
+	f.output = o
+}
+
 // Format formats data according to format
 func (f *Formatter) Format(v any) error {
 	switch f.output {

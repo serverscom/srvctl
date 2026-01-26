@@ -38,6 +38,7 @@ func newAddCmd(cmdContext *base.CmdContext) *cobra.Command {
 					return err
 				}
 			} else if flags.Skeleton {
+				formatter.SetOutput("json")
 				return formatter.FormatSkeleton("ssh-keys/add.json")
 			} else {
 				required := []string{"name", "public-key"}
