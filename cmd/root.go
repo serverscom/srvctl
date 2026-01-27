@@ -5,6 +5,10 @@ import (
 	"github.com/serverscom/srvctl/cmd/config"
 	"github.com/serverscom/srvctl/cmd/context"
 	"github.com/serverscom/srvctl/cmd/entities/account"
+	cloudbackups "github.com/serverscom/srvctl/cmd/entities/cloud-backups"
+	cloudinstances "github.com/serverscom/srvctl/cmd/entities/cloud-instances"
+	cloudregions "github.com/serverscom/srvctl/cmd/entities/cloud-regions"
+	cloudvolumes "github.com/serverscom/srvctl/cmd/entities/cloud-volumes"
 	"github.com/serverscom/srvctl/cmd/entities/drivemodels"
 	"github.com/serverscom/srvctl/cmd/entities/hosts"
 	"github.com/serverscom/srvctl/cmd/entities/invoices"
@@ -74,6 +78,10 @@ func NewRootCmd(version string) *cobra.Command {
 	cmd.AddCommand(sbmmodels.NewCmd(cmdContext))
 	cmd.AddCommand(l2segments.NewCmd(cmdContext))
 	cmd.AddCommand(networkpools.NewCmd(cmdContext))
+	cmd.AddCommand(cloudinstances.NewCmd(cmdContext))
+	cmd.AddCommand(cloudregions.NewCmd(cmdContext))
+	cmd.AddCommand(cloudvolumes.NewCmd(cmdContext))
+	cmd.AddCommand(cloudbackups.NewCmd(cmdContext))
 
 	return cmd
 }

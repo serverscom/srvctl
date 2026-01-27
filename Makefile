@@ -20,6 +20,10 @@ generate: deps
 	mockgen --destination ./internal/mocks/kubernetes_clusters_service.go --package=mocks --source ./vendor/github.com/serverscom/serverscom-go-client/pkg/kubernetes_clusters.go
 	mockgen --destination ./internal/mocks/l2_segment_service.go --package=mocks --source ./vendor/github.com/serverscom/serverscom-go-client/pkg/l2_segments.go
 	mockgen --destination ./internal/mocks/network_pool_service.go --package=mocks --source ./vendor/github.com/serverscom/serverscom-go-client/pkg/network_pools.go
+	mockgen --destination ./internal/mocks/cloud_instances_service.go --package=mocks --source ./vendor/github.com/serverscom/serverscom-go-client/pkg/cloud_computing_instances.go
+	mockgen --destination ./internal/mocks/cloud_computing_regions_service.go --package=mocks --source ./vendor/github.com/serverscom/serverscom-go-client/pkg/cloud_computing_regions.go
+	mockgen --destination ./internal/mocks/cloud_block_storage_volumes_service.go --package=mocks --source ./vendor/github.com/serverscom/serverscom-go-client/pkg/cloud_block_storage_volumes.go
+	mockgen --destination ./internal/mocks/cloud_block_storage_backups_service.go --package=mocks --source ./vendor/github.com/serverscom/serverscom-go-client/pkg/cloud_block_storage_backups.go
 	sed -i '' 's|github.com/serverscom/srvctl/vendor/github.com/serverscom/serverscom-go-client/pkg|github.com/serverscom/serverscom-go-client/pkg|g' \
 	./internal/mocks/ssh_service.go \
 	./internal/mocks/hosts_service.go \
@@ -33,4 +37,8 @@ generate: deps
 	./internal/mocks/locations_service.go \
 	./internal/mocks/kubernetes_clusters_service.go \
 	./internal/mocks/l2_segment_service.go \
-	./internal/mocks/network_pool_service.go
+	./internal/mocks/network_pool_service.go \
+	./internal/mocks/cloud_instances_service.go \
+	./internal/mocks/cloud_computing_regions_service.go \
+	./internal/mocks/cloud_block_storage_volumes_service.go \
+	./internal/mocks/cloud_block_storage_backups_service.go

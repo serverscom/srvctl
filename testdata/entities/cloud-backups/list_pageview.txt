@@ -1,0 +1,19 @@
+ID:                     backup-123
+Name:                   test-backup
+Status:                 available
+Size:                   1073741824
+Region ID:              1
+Openstack UUID:         <none>
+Openstack Volume UUID:  vol-123-openstack
+Labels:                 env=test
+Created:                2025-01-01T12:00:00Z
+---
+ID:                     backup-456
+Name:                   test-backup-2
+Status:                 available
+Size:                   2147483648
+Region ID:              1
+Openstack UUID:         <none>
+Openstack Volume UUID:  vol-456-openstack
+Labels:                 env=prod
+Created:                2025-01-02T12:00:00Z
