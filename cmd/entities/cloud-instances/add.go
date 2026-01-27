@@ -1,15 +1,17 @@
 package cloudinstances
 
 import (
-	"log"
-
 	serverscom "github.com/serverscom/serverscom-go-client/pkg"
 	"github.com/serverscom/srvctl/cmd/base"
 	"github.com/spf13/cobra"
 )
 
+type AddedFlags struct {
+	InputPath string
+}
+
 func newAddCmd(cmdContext *base.CmdContext) *cobra.Command {
-	var path string
+	flags := &AddedFlags{}
 
 	cmd := &cobra.Command{
 		Use:   "add --input <path>",
@@ -23,7 +25,7 @@ func newAddCmd(cmdContext *base.CmdContext) *cobra.Command {
 			base.SetupProxy(cmd, manager)
 
 			input := serverscom.CloudComputingInstanceCreateInput{}
-			if err := base.ReadInputJSON(path, cmd.InOrStdin(), &input); err != nil {
+			if err := base.ReadInputJSON(flags.InputPath, cmd.InOrStdin(), &input); err != nil {
 				return err
 			}
 
@@ -41,10 +43,8 @@ func newAddCmd(cmdContext *base.CmdContext) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&path, "input", "i", "", "path to input file or '-' to read from stdin")
-	if err := cmd.MarkFlagRequired("input"); err != nil {
-		log.Fatal(err)
-	}
+	cmd.Flags().StringVarP(&flags.InputPath, "input", "i", "", "path to input file or '-' to read from stdin")
+	_ = cmd.MarkFlagRequired("input")
 
 	return cmd
 }
