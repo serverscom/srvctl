@@ -32,5 +32,7 @@ func init() {
 	RegisterRAMOptionDefinition()
 	RegisterL2SegmentDefinitions()
 	RegisterNetworkPoolDefinitions()
+	RegisterCloudComputingInstanceDefinition()
+	RegisterCloudComputingRegionDefinitions()
 	RegisterCloudVolumeDefinition()
 }
