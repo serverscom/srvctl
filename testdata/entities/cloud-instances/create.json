@@ -1,0 +1,9 @@
+{
+    "name": "test-instance",
+    "flavor_id": "flavor-1",
+    "image_id": "image-1",
+    "region_id": 1,
+    "labels": {
+        "env": "test"
+    }
+}
