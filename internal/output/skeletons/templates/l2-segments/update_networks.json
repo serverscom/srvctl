@@ -1,0 +1,11 @@
+{
+  "create": [
+    {
+      "mask": "",
+      "distribution_method": ""
+    }
+  ],
+  "delete": [
+    "id"
+  ]
+}

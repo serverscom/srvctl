@@ -7,6 +7,7 @@ import (
 )
 
 type AddedFlags struct {
+	Skeleton  bool
 	InputPath string
 	Name      string
 	PublicKey string
@@ -17,13 +18,18 @@ func newAddCmd(cmdContext *base.CmdContext) *cobra.Command {
 	flags := &AddedFlags{}
 
 	cmd := &cobra.Command{
-		Use:   "add --input <path>",
+		Use:   "add",
 		Short: "Add an ssh key",
 		Long:  "Add a new SSH key to account",
 		Args:  cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			manager := cmdContext.GetManager()
+			formatter := cmdContext.GetOrCreateFormatter(cmd)
 
+			if flags.Skeleton {
+				return formatter.FormatSkeleton("ssh-keys/add.json")
+			}
+
+			manager := cmdContext.GetManager()
 			ctx, cancel := base.SetupContext(cmd, manager)
 			defer cancel()
 
@@ -53,7 +59,6 @@ func newAddCmd(cmdContext *base.CmdContext) *cobra.Command {
 			}
 
 			if sshKey != nil {
-				formatter := cmdContext.GetOrCreateFormatter(cmd)
 				return formatter.Format(sshKey)
 			}
 			return nil
@@ -61,6 +66,8 @@ func newAddCmd(cmdContext *base.CmdContext) *cobra.Command {
 	}
 
 	cmd.Flags().StringVarP(&flags.InputPath, "input", "i", "", "path to input file or '-' to read from stdin")
+	cmd.Flags().BoolVarP(&flags.Skeleton, "skeleton", "s", false, "JSON object with structure that is required to be passed")
+
 	cmd.Flags().StringVarP(&flags.Name, "name", "n", "", "A name of a SSH key")
 	cmd.Flags().StringVarP(&flags.PublicKey, "public-key", "", "", "A public-key of a SSH key")
 	cmd.Flags().StringArrayVarP(&flags.Labels, "label", "l", []string{}, "string in key=value format")

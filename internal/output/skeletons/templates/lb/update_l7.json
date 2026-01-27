@@ -1,0 +1,20 @@
+{
+    "id": "",
+    "name": "",
+    "type": "l7",
+    "domains": [
+        "test.com"
+    ],
+    "status": "",
+    "external_addresses": [
+        "127.0.0.1"
+    ],
+    "location_id": "",
+    "geoip": false,
+    "store_logs": false,
+    "store_logs_region_id": "",
+    "cluster_id": "",
+    "labels": {
+        "key": "value"
+    }
+}

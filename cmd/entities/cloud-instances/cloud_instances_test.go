@@ -14,10 +14,11 @@ import (
 )
 
 var (
-	fixtureBasePath     = filepath.Join("..", "..", "..", "testdata", "entities", "cloud-instances")
-	fixedTime           = time.Date(2025, 1, 1, 12, 0, 0, 0, time.UTC)
-	testCloudInstanceID = "test-instance-id"
-	testCloudInstance   = serverscom.CloudComputingInstance{
+	fixtureBasePath      = filepath.Join("..", "..", "..", "testdata", "entities", "cloud-instances")
+	skeletonTemplatePath = filepath.Join("..", "..", "..", "internal", "output", "skeletons", "templates", "cloud-instances")
+	fixedTime            = time.Date(2025, 1, 1, 12, 0, 0, 0, time.UTC)
+	testCloudInstanceID  = "test-instance-id"
+	testCloudInstance    = serverscom.CloudComputingInstance{
 		ID:                 testCloudInstanceID,
 		Name:               "test-instance",
 		RegionID:           1,
@@ -309,6 +310,17 @@ func TestAddCloudInstancesCmd(t *testing.T) {
 			},
 		},
 		{
+			name:           "skeleton for cloud instance input",
+			output:         "json",
+			args:           []string{"--skeleton"},
+			expectedOutput: testutils.ReadFixture(filepath.Join(skeletonTemplatePath, "add.json")),
+			configureMock: func(mock *mocks.MockCloudComputingInstancesService) {
+				mock.EXPECT().
+					Create(gomock.Any(), gomock.Any()).
+					Times(0)
+			},
+		},
+		{
 			name:        "create cloud instance with error",
 			expectError: true,
 		},
@@ -353,7 +365,7 @@ func TestAddCloudInstancesCmd(t *testing.T) {
 				g.Expect(err).To(HaveOccurred())
 			} else {
 				g.Expect(err).To(BeNil())
-				g.Expect(builder.GetOutput()).To(BeEquivalentTo(string(tc.expectedOutput)))
+				g.Expect(builder.GetOutput()).To(MatchJSON(tc.expectedOutput))
 			}
 		})
 	}

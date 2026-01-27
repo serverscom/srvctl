@@ -15,13 +15,14 @@ import (
 )
 
 var (
-	fixtureBasePath     = filepath.Join("..", "..", "..", "testdata", "entities", "ssl")
-	fixedTime           = time.Date(2025, 1, 1, 12, 0, 0, 0, time.UTC)
-	expiresTime         = fixedTime.AddDate(10, 0, 0)
-	testSha1Fingerpring = "21e84c9a3878673b377f0adf053290e8fc25cb80"
-	testIssuer          = "servers.com"
-	testId              = "testId"
-	testSSL             = serverscom.SSLCertificate{
+	fixtureBasePath      = filepath.Join("..", "..", "..", "testdata", "entities", "ssl")
+	skeletonTemplatePath = filepath.Join("..", "..", "..", "internal", "output", "skeletons", "templates", "ssl")
+	fixedTime            = time.Date(2025, 1, 1, 12, 0, 0, 0, time.UTC)
+	expiresTime          = fixedTime.AddDate(10, 0, 0)
+	testSha1Fingerpring  = "21e84c9a3878673b377f0adf053290e8fc25cb80"
+	testIssuer           = "servers.com"
+	testId               = "testId"
+	testSSL              = serverscom.SSLCertificate{
 		ID:              testId,
 		Name:            "test-ssl-custom",
 		Type:            "custom",
@@ -110,6 +111,17 @@ func TestAddCustomSSLCmd(t *testing.T) {
 			},
 		},
 		{
+			name:           "skeleton for custom ssl cert input",
+			output:         "json",
+			args:           []string{"--skeleton"},
+			expectedOutput: testutils.ReadFixture(filepath.Join(skeletonTemplatePath, "add.json")),
+			configureMock: func(mock *mocks.MockSSLCertificatesService) {
+				mock.EXPECT().
+					CreateCustom(gomock.Any(), gomock.Any()).
+					Times(0)
+			},
+		},
+		{
 			name:        "with error",
 			expectError: true,
 		},
@@ -154,7 +166,7 @@ func TestAddCustomSSLCmd(t *testing.T) {
 				g.Expect(err).To(HaveOccurred())
 			} else {
 				g.Expect(err).To(BeNil())
-				g.Expect(builder.GetOutput()).To(BeEquivalentTo(string(tc.expectedOutput)))
+				g.Expect(builder.GetOutput()).To(MatchJSON(tc.expectedOutput))
 			}
 		})
 	}

@@ -14,10 +14,11 @@ import (
 )
 
 var (
-	fixtureBasePath = filepath.Join("..", "..", "..", "testdata", "entities", "lb")
-	fixedTime       = time.Date(2025, 1, 1, 12, 0, 0, 0, time.UTC)
-	testId          = "testId"
-	testLB          = serverscom.LoadBalancer{
+	fixtureBasePath      = filepath.Join("..", "..", "..", "testdata", "entities", "lb")
+	skeletonTemplatePath = filepath.Join("..", "..", "..", "internal", "output", "skeletons", "templates", "lb")
+	fixedTime            = time.Date(2025, 1, 1, 12, 0, 0, 0, time.UTC)
+	testId               = "testId"
+	testLB               = serverscom.LoadBalancer{
 		ID:                testId,
 		Name:              "test-l4-lb",
 		Type:              "l4",
@@ -74,6 +75,17 @@ func TestAddL4LBCmd(t *testing.T) {
 			},
 		},
 		{
+			name:           "skeleton for l4 lb input",
+			output:         "json",
+			args:           []string{"--skeleton"},
+			expectedOutput: testutils.ReadFixture(filepath.Join(skeletonTemplatePath, "add_l4.json")),
+			configureMock: func(mock *mocks.MockLoadBalancersService) {
+				mock.EXPECT().
+					CreateL4LoadBalancer(gomock.Any(), gomock.Any()).
+					Times(0)
+			},
+		},
+		{
 			name:        "with error",
 			expectError: true,
 		},
@@ -118,7 +130,7 @@ func TestAddL4LBCmd(t *testing.T) {
 				g.Expect(err).To(HaveOccurred())
 			} else {
 				g.Expect(err).To(BeNil())
-				g.Expect(builder.GetOutput()).To(BeEquivalentTo(string(tc.expectedOutput)))
+				g.Expect(builder.GetOutput()).To(MatchJSON(tc.expectedOutput))
 			}
 		})
 	}
@@ -142,6 +154,17 @@ func TestAddL7LBCmd(t *testing.T) {
 				mock.EXPECT().
 					CreateL7LoadBalancer(gomock.Any(), gomock.AssignableToTypeOf(serverscom.L7LoadBalancerCreateInput{})).
 					Return(&testL7LB, nil)
+			},
+		},
+		{
+			name:           "skeleton for l7 lb input",
+			output:         "json",
+			args:           []string{"--skeleton"},
+			expectedOutput: testutils.ReadFixture(filepath.Join(skeletonTemplatePath, "add_l7.json")),
+			configureMock: func(mock *mocks.MockLoadBalancersService) {
+				mock.EXPECT().
+					CreateL7LoadBalancer(gomock.Any(), gomock.Any()).
+					Times(0)
 			},
 		},
 		{
@@ -189,7 +212,7 @@ func TestAddL7LBCmd(t *testing.T) {
 				g.Expect(err).To(HaveOccurred())
 			} else {
 				g.Expect(err).To(BeNil())
-				g.Expect(builder.GetOutput()).To(BeEquivalentTo(string(tc.expectedOutput)))
+				g.Expect(builder.GetOutput()).To(MatchJSON(tc.expectedOutput))
 			}
 		})
 	}
@@ -528,6 +551,17 @@ func TestUpdateL4LBCmd(t *testing.T) {
 			},
 		},
 		{
+			name:           "skeleton for update l4 lb input",
+			output:         "json",
+			args:           []string{"--skeleton"},
+			expectedOutput: testutils.ReadFixture(filepath.Join(skeletonTemplatePath, "update_l4.json")),
+			configureMock: func(mock *mocks.MockLoadBalancersService) {
+				mock.EXPECT().
+					UpdateL4LoadBalancer(gomock.Any(), gomock.Any(), gomock.Any()).
+					Times(0)
+			},
+		},
+		{
 			name: "update l4 lb with error",
 			id:   testId,
 			args: []string{"--input", filepath.Join(fixtureBasePath, "update_input_l4.json")},
@@ -579,7 +613,7 @@ func TestUpdateL4LBCmd(t *testing.T) {
 				g.Expect(err).To(HaveOccurred())
 			} else {
 				g.Expect(err).To(BeNil())
-				g.Expect(builder.GetOutput()).To(BeEquivalentTo(string(tc.expectedOutput)))
+				g.Expect(builder.GetOutput()).To(MatchJSON(tc.expectedOutput))
 			}
 		})
 	}
@@ -610,6 +644,17 @@ func TestUpdateL7LBCmd(t *testing.T) {
 						Labels: map[string]string{"new": "label"},
 					}).
 					Return(&updatedL7LB, nil)
+			},
+		},
+		{
+			name:           "skeleton for update l7 lb input",
+			output:         "json",
+			args:           []string{"--skeleton"},
+			expectedOutput: testutils.ReadFixture(filepath.Join(skeletonTemplatePath, "update_l7.json")),
+			configureMock: func(mock *mocks.MockLoadBalancersService) {
+				mock.EXPECT().
+					UpdateL7LoadBalancer(gomock.Any(), gomock.Any(), gomock.Any()).
+					Times(0)
 			},
 		},
 		{
@@ -664,7 +709,7 @@ func TestUpdateL7LBCmd(t *testing.T) {
 				g.Expect(err).To(HaveOccurred())
 			} else {
 				g.Expect(err).To(BeNil())
-				g.Expect(builder.GetOutput()).To(BeEquivalentTo(string(tc.expectedOutput)))
+				g.Expect(builder.GetOutput()).To(MatchJSON(tc.expectedOutput))
 			}
 		})
 	}
