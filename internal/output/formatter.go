@@ -71,6 +71,7 @@ func (f *Formatter) Format(v any) error {
 		if err != nil {
 			return err
 		}
+		data = append(data, '\n')
 		_, err = f.writer.Write(data)
 		return err
 	case "yaml":
@@ -99,10 +100,5 @@ func (f *Formatter) FormatSkeleton(path string) error {
 		return err
 	}
 
-	var data map[string]any
-	if err := json.Unmarshal(raw, &data); err != nil {
-		return err
-	}
-
-	return f.Format(data)
+	return f.Format(json.RawMessage(raw))
 }
