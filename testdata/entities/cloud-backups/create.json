@@ -1,0 +1,9 @@
+{
+    "volume_id": "vol-123-openstack",
+    "name": "test-backup",
+    "incremental": false,
+    "force": false,
+    "labels": {
+        "env": "test"
+    }
+}

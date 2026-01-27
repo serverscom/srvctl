@@ -35,4 +35,5 @@ func init() {
 	RegisterCloudComputingInstanceDefinition()
 	RegisterCloudComputingRegionDefinitions()
 	RegisterCloudVolumeDefinition()
+	RegisterCloudBackupDefinition()
 }
