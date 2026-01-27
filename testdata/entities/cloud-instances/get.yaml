@@ -1,0 +1,22 @@
+name: test-instance
+id: test-instance-id
+regionid: 1
+regioncode: AMS1
+openstackuuid: uuid-123
+status: active
+flavorid: flavor-1
+flavorname: m1.small
+imageid: image-1
+imagename: Ubuntu 20.04
+publicipv4address: 1.2.3.4
+privateipv4address: 10.0.0.1
+localipv4address: 192.168.0.1
+publicipv6address: 2001:db8::1
+gpnenabled: true
+ipv6enabled: true
+backupcopies: 2
+publicportblocked: false
+labels:
+    env: test
+created: 2025-01-01T12:00:00Z
+updated: 2025-01-01T12:00:00Z
