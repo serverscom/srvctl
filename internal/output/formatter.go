@@ -90,24 +90,19 @@ func (f *Formatter) FormatText(v any) error {
 	}
 }
 
-// FormatSkeleton formats skeleton template according to format
-func (f *Formatter) FormatSkeleton(v any) error {
+// FormatSkeleton formats skeleton template in json format
+func (f *Formatter) FormatSkeleton(path string) error {
 	f.SetOutput("json")
 
-	switch path := v.(type) {
-	case string:
-		raw, err := fs.ReadFile(skeletons.FS, path)
-		if err != nil {
-			return err
-		}
-
-		var data map[string]any
-		if err := json.Unmarshal(raw, &data); err != nil {
-			return err
-		}
-
-		return f.Format(data)
-	default:
-		return f.Format(v)
+	raw, err := fs.ReadFile(skeletons.FS, path)
+	if err != nil {
+		return err
 	}
+
+	var data map[string]any
+	if err := json.Unmarshal(raw, &data); err != nil {
+		return err
+	}
+
+	return f.Format(data)
 }
