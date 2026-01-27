@@ -34,4 +34,5 @@ func init() {
 	RegisterNetworkPoolDefinitions()
 	RegisterCloudComputingInstanceDefinition()
 	RegisterCloudComputingRegionDefinitions()
+	RegisterCloudVolumeDefinition()
 }

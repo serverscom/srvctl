@@ -1,0 +1,7 @@
+ID:           vol-12345
+Name:         test-volume
+Region ID:    1
+Size:         100
+Description:  Test volume
+Labels:       foo=bar
+Created:      2025-01-01T12:00:00Z
