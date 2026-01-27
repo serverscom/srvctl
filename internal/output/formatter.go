@@ -92,6 +92,8 @@ func (f *Formatter) FormatText(v any) error {
 
 // FormatSkeleton formats skeleton template according to format
 func (f *Formatter) FormatSkeleton(v any) error {
+	f.SetOutput("json")
+
 	switch path := v.(type) {
 	case string:
 		raw, err := fs.ReadFile(skeletons.FS, path)

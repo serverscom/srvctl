@@ -55,6 +55,12 @@ func newAddCmd(cmdContext *base.CmdContext, lbType *LBTypeCmd) *cobra.Command {
 		Args:  cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			formatter := cmdContext.GetOrCreateFormatter(cmd)
+
+			if flags.Skeleton {
+				tmplPath := fmt.Sprintf("lb/add_%s.json", cmd.Parent().Name())
+				return formatter.FormatSkeleton(tmplPath)
+			}
+
 			manager := cmdContext.GetManager()
 			ctx, cancel := base.SetupContext(cmd, manager)
 			defer cancel()
@@ -67,10 +73,6 @@ func newAddCmd(cmdContext *base.CmdContext, lbType *LBTypeCmd) *cobra.Command {
 				if err := base.ReadInputJSON(flags.InputPath, cmd.InOrStdin(), input); err != nil {
 					return err
 				}
-			} else if flags.Skeleton {
-				formatter.SetOutput("json")
-				tmplPath := fmt.Sprintf("lb/add_%s.json", cmd.Parent().Name())
-				return formatter.FormatSkeleton(tmplPath)
 			} else {
 				required := []string{"input"}
 				if err := base.ValidateFlags(cmd, required); err != nil {

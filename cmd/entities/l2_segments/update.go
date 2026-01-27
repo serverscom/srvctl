@@ -21,8 +21,12 @@ func newUpdateL2Cmd(cmdContext *base.CmdContext) *cobra.Command {
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			formatter := cmdContext.GetOrCreateFormatter(cmd)
-			manager := cmdContext.GetManager()
 
+			if flags.Skeleton {
+				return formatter.FormatSkeleton("l2-segments/update.json")
+			}
+
+			manager := cmdContext.GetManager()
 			ctx, cancel := base.SetupContext(cmd, manager)
 			defer cancel()
 
@@ -34,9 +38,6 @@ func newUpdateL2Cmd(cmdContext *base.CmdContext) *cobra.Command {
 				if err := base.ReadInputJSON(flags.InputPath, cmd.InOrStdin(), input); err != nil {
 					return err
 				}
-			} else if flags.Skeleton {
-				formatter.SetOutput("json")
-				return formatter.FormatSkeleton("l2-segments/update.json")
 			} else {
 				required := []string{"input"}
 				if err := base.ValidateFlags(cmd, required); err != nil {
@@ -75,8 +76,12 @@ func newUpdateL2NetworksCmd(cmdContext *base.CmdContext) *cobra.Command {
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			formatter := cmdContext.GetOrCreateFormatter(cmd)
-			manager := cmdContext.GetManager()
 
+			if flags.Skeleton {
+				return formatter.FormatSkeleton("l2-segments/update_networks.json")
+			}
+
+			manager := cmdContext.GetManager()
 			ctx, cancel := base.SetupContext(cmd, manager)
 			defer cancel()
 
@@ -88,9 +93,6 @@ func newUpdateL2NetworksCmd(cmdContext *base.CmdContext) *cobra.Command {
 				if err := base.ReadInputJSON(flags.InputPath, cmd.InOrStdin(), input); err != nil {
 					return err
 				}
-			} else if flags.Skeleton {
-				formatter.SetOutput("json")
-				return formatter.FormatSkeleton("l2-segments/update_networks.json")
 			} else {
 				required := []string{"input"}
 				if err := base.ValidateFlags(cmd, required); err != nil {

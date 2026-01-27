@@ -28,8 +28,12 @@ func newAddCmd(cmdContext *base.CmdContext) *cobra.Command {
 		Args:  cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			formatter := cmdContext.GetOrCreateFormatter(cmd)
-			manager := cmdContext.GetManager()
 
+			if flags.Skeleton {
+				return formatter.FormatSkeleton("l2-segments/add.json")
+			}
+
+			manager := cmdContext.GetManager()
 			ctx, cancel := base.SetupContext(cmd, manager)
 			defer cancel()
 
@@ -41,9 +45,6 @@ func newAddCmd(cmdContext *base.CmdContext) *cobra.Command {
 				if err := base.ReadInputJSON(flags.InputPath, cmd.InOrStdin(), input); err != nil {
 					return err
 				}
-			} else if flags.Skeleton {
-				formatter.SetOutput("json")
-				return formatter.FormatSkeleton("l2-segments/add.json")
 			} else {
 				required := []string{"type", "member"}
 				if err := base.ValidateFlags(cmd, required); err != nil {

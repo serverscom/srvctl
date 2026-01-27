@@ -137,6 +137,11 @@ func newAddDSCmd(cmdContext *base.CmdContext) *cobra.Command {
 		Args:  cobra.ArbitraryArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			formatter := cmdContext.GetOrCreateFormatter(cmd)
+
+			if flags.Skeleton {
+				return formatter.FormatSkeleton("hosts/add_ds.json")
+			}
+
 			manager := cmdContext.GetManager()
 			ctx, cancel := base.SetupContext(cmd, manager)
 			defer cancel()
@@ -149,9 +154,6 @@ func newAddDSCmd(cmdContext *base.CmdContext) *cobra.Command {
 				if err := base.ReadInputJSON(flags.InputPath, cmd.InOrStdin(), &input); err != nil {
 					return err
 				}
-			} else if flags.Skeleton {
-				formatter.SetOutput("json")
-				return formatter.FormatSkeleton("hosts/add_ds.json")
 			} else {
 				required := []string{"input"}
 				if err := base.ValidateFlags(cmd, required); err != nil {
@@ -221,6 +223,11 @@ func newAddSBMCmd(cmdContext *base.CmdContext) *cobra.Command {
 		Args:  cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			formatter := cmdContext.GetOrCreateFormatter(cmd)
+
+			if flags.Skeleton {
+				return formatter.FormatSkeleton("hosts/add_sbm.json")
+			}
+
 			manager := cmdContext.GetManager()
 			ctx, cancel := base.SetupContext(cmd, manager)
 			defer cancel()
@@ -233,9 +240,6 @@ func newAddSBMCmd(cmdContext *base.CmdContext) *cobra.Command {
 				if err := base.ReadInputJSON(flags.InputPath, cmd.InOrStdin(), &input); err != nil {
 					return err
 				}
-			} else if flags.Skeleton {
-				formatter.SetOutput("json")
-				return formatter.FormatSkeleton("hosts/add_sbm.json")
 			} else {
 				required := []string{"input"}
 				if err := base.ValidateFlags(cmd, required); err != nil {

@@ -23,9 +23,13 @@ func newAddCmd(cmdContext *base.CmdContext) *cobra.Command {
 		Long:  "Add a new SSH key to account",
 		Args:  cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			manager := cmdContext.GetManager()
 			formatter := cmdContext.GetOrCreateFormatter(cmd)
 
+			if flags.Skeleton {
+				return formatter.FormatSkeleton("ssh-keys/add.json")
+			}
+
+			manager := cmdContext.GetManager()
 			ctx, cancel := base.SetupContext(cmd, manager)
 			defer cancel()
 
@@ -37,9 +41,6 @@ func newAddCmd(cmdContext *base.CmdContext) *cobra.Command {
 				if err := base.ReadInputJSON(flags.InputPath, cmd.InOrStdin(), input); err != nil {
 					return err
 				}
-			} else if flags.Skeleton {
-				formatter.SetOutput("json")
-				return formatter.FormatSkeleton("ssh-keys/add.json")
 			} else {
 				required := []string{"name", "public-key"}
 				if err := base.ValidateFlags(cmd, required); err != nil {

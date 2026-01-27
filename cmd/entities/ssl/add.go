@@ -46,6 +46,11 @@ func newAddCmd(cmdContext *base.CmdContext, sslType *SSLTypeCmd) *cobra.Command 
 		Args:  cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			formatter := cmdContext.GetOrCreateFormatter(cmd)
+
+			if flags.Skeleton {
+				return formatter.FormatSkeleton("ssl/add.json")
+			}
+
 			manager := cmdContext.GetManager()
 			ctx, cancel := base.SetupContext(cmd, manager)
 			defer cancel()
@@ -58,9 +63,6 @@ func newAddCmd(cmdContext *base.CmdContext, sslType *SSLTypeCmd) *cobra.Command 
 				if err := base.ReadInputJSON(flags.InputPath, cmd.InOrStdin(), input); err != nil {
 					return err
 				}
-			} else if flags.Skeleton {
-				formatter.SetOutput("json")
-				return formatter.FormatSkeleton("ssl/add.json")
 			} else {
 				required := []string{"name", "public-key", "private-key"}
 				if err := base.ValidateFlags(cmd, required); err != nil {
