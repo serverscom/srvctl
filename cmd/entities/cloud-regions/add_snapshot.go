@@ -1,7 +1,6 @@
 package cloudregions
 
 import (
-	"log"
 	"strconv"
 
 	serverscom "github.com/serverscom/serverscom-go-client/pkg"
@@ -9,9 +8,13 @@ import (
 	"github.com/spf13/cobra"
 )
 
+type AddedFlags struct {
+	Name       string
+	InstanceID string
+}
+
 func newAddSnapshotCmd(cmdContext *base.CmdContext) *cobra.Command {
-	var name string
-	var instanceID string
+	flags := &AddedFlags{}
 
 	cmd := &cobra.Command{
 		Use:   "add-snapshot <region-id>",
@@ -31,8 +34,8 @@ func newAddSnapshotCmd(cmdContext *base.CmdContext) *cobra.Command {
 			scClient := cmdContext.GetClient().SetVerbose(manager.GetVerbose(cmd)).GetScClient()
 
 			input := serverscom.CloudSnapshotCreateInput{
-				Name:       name,
-				InstanceID: instanceID,
+				Name:       flags.Name,
+				InstanceID: flags.InstanceID,
 			}
 
 			snapshot, err := scClient.CloudComputingRegions.CreateSnapshot(ctx, regionID, input)
@@ -45,15 +48,11 @@ func newAddSnapshotCmd(cmdContext *base.CmdContext) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVar(&name, "name", "", "Snapshot name")
-	cmd.Flags().StringVar(&instanceID, "instance-id", "", "Instance ID")
+	cmd.Flags().StringVar(&flags.Name, "name", "", "Snapshot name")
+	cmd.Flags().StringVar(&flags.InstanceID, "instance-id", "", "Instance ID")
 
-	if err := cmd.MarkFlagRequired("name"); err != nil {
-		log.Fatal(err)
-	}
-	if err := cmd.MarkFlagRequired("instance-id"); err != nil {
-		log.Fatal(err)
-	}
+	_ = cmd.MarkFlagRequired("name")
+	_ = cmd.MarkFlagRequired("instance-id")
 
 	return cmd
 }
