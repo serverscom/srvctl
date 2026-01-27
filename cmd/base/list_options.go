@@ -460,6 +460,20 @@ func (o *RackIDOption[T]) ApplyToCollection(collection serverscom.Collection[T])
 	}
 }
 
+type RegionIDOption[T any] struct {
+	regionID int
+}
+
+func (o *RegionIDOption[T]) AddFlags(cmd *cobra.Command) {
+	cmd.Flags().IntVar(&o.regionID, "region-id", 0, "Filter results by region ID")
+}
+
+func (o *RegionIDOption[T]) ApplyToCollection(collection serverscom.Collection[T]) {
+	if o.regionID != 0 {
+		collection.SetParam("region_id", fmt.Sprintf("%d", o.regionID))
+	}
+}
+
 type InstanceIDOption[T any] struct {
 	instanceID string
 }
