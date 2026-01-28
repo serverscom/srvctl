@@ -213,15 +213,16 @@ func (g *Generator) generateMarkdown(cmd *cobra.Command, extra *ExtraContent, co
 func (g *Generator) buildOptionsSection(cmd *cobra.Command) string {
 	var buf bytes.Buffer
 
-	// Local flags
-	if cmd.LocalFlags().HasFlags() {
-		buf.WriteString("## Local Flags\n\n")
+	// Local flags (defined on this command)
+	if cmd.LocalFlags().HasAvailableFlags() {
 		g.formatFlags(&buf, cmd.LocalFlags())
 	}
 
-	// Inherited flags (global)
-	if cmd.InheritedFlags().HasFlags() {
-		buf.WriteString("## Global Flags\n\n")
+	// Inherited flags (from parent commands)
+	if cmd.InheritedFlags().HasAvailableFlags() {
+		if buf.Len() > 0 {
+			buf.WriteString("\n")
+		}
 		g.formatFlags(&buf, cmd.InheritedFlags())
 	}
 
@@ -234,20 +235,31 @@ func (g *Generator) formatFlags(buf *bytes.Buffer, flags *pflag.FlagSet) {
 		if flag.Hidden {
 			return
 		}
-		fmt.Fprintf(buf, "**--%s**", flag.Name)
-		if flag.Shorthand != "" {
-			fmt.Fprintf(buf, ", **-%s**", flag.Shorthand)
-		}
+		var flagTypeLong, flagTypeShort string
 		if flag.Value.Type() != "bool" {
-			fmt.Fprintf(buf, " *%s*", flag.Value.Type())
+			typeName := flag.Value.Type()
+			// Handle empty type or special cases
+			if typeName == "" || typeName == "[]" {
+				typeName = "value"
+			}
+			flagTypeLong = fmt.Sprintf("`=[<%s>]`", typeName)
+			flagTypeShort = fmt.Sprintf("`[<%s>]`", typeName)
 		}
-		buf.WriteString("\n\n")
+
+		// Write flag name and type
+		fmt.Fprintf(buf, "**--%s**%s", flag.Name, flagTypeLong)
+		if flag.Shorthand != "" {
+			fmt.Fprintf(buf, ", **-%s**%s", flag.Shorthand, flagTypeShort)
+		}
+		buf.WriteString("\n")
+
 		if flag.Usage != "" {
-			fmt.Fprintf(buf, "  %s\n\n", flag.Usage)
+			fmt.Fprintf(buf, "        %s", flag.Usage)
 		}
 		if flag.DefValue != "" && flag.DefValue != "false" && flag.DefValue != "[]" && flag.DefValue != "0" {
-			fmt.Fprintf(buf, "  Default: `%s`\n\n", flag.DefValue)
+			fmt.Fprintf(buf, ". The default is `%s`.", flag.DefValue)
 		}
+		buf.WriteString("\n\n")
 	})
 }
 
@@ -259,9 +271,9 @@ func (g *Generator) buildSubCommandsSection(cmd *cobra.Command) string {
 		if subCmd.Hidden || subCmd.Deprecated != "" {
 			continue
 		}
-		fmt.Fprintf(&buf, "**%s**\n\n", subCmd.Name())
+		fmt.Fprintf(&buf, "**%s**\n", subCmd.Name())
 		if subCmd.Short != "" {
-			fmt.Fprintf(&buf, "  %s\n\n", subCmd.Short)
+			fmt.Fprintf(&buf, "        %s\n\n", subCmd.Short)
 		}
 	}
 
