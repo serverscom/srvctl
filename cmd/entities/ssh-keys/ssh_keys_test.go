@@ -14,10 +14,11 @@ import (
 )
 
 var (
-	testFingerprint = "00:11:22:33:44:55:66:77:88:99"
-	fixtureBasePath = filepath.Join("..", "..", "..", "testdata", "entities", "ssh-keys")
-	fixedTime       = time.Date(2025, 1, 1, 12, 0, 0, 0, time.UTC)
-	testSSHKey      = serverscom.SSHKey{
+	testFingerprint      = "00:11:22:33:44:55:66:77:88:99"
+	fixtureBasePath      = filepath.Join("..", "..", "..", "testdata", "entities", "ssh-keys")
+	skeletonTemplatePath = filepath.Join("..", "..", "..", "internal", "output", "skeletons", "templates", "ssh-keys")
+	fixedTime            = time.Date(2025, 1, 1, 12, 0, 0, 0, time.UTC)
+	testSSHKey           = serverscom.SSHKey{
 		Name:        "test-key",
 		Fingerprint: testFingerprint,
 		Labels:      map[string]string{"foo": "bar"},
@@ -70,6 +71,17 @@ func TestAddSSHKeysCmd(t *testing.T) {
 			},
 		},
 		{
+			name:           "skeleton for ssh key input",
+			output:         "json",
+			args:           []string{"--skeleton"},
+			expectedOutput: testutils.ReadFixture(filepath.Join(skeletonTemplatePath, "add.json")),
+			configureMock: func(mock *mocks.MockSSHKeysService) {
+				mock.EXPECT().
+					Create(gomock.Any(), gomock.Any()).
+					Times(0)
+			},
+		},
+		{
 			name:        "create ssh key with error",
 			expectError: true,
 		},
@@ -114,7 +126,7 @@ func TestAddSSHKeysCmd(t *testing.T) {
 				g.Expect(err).To(HaveOccurred())
 			} else {
 				g.Expect(err).To(BeNil())
-				g.Expect(builder.GetOutput()).To(BeEquivalentTo(string(tc.expectedOutput)))
+				g.Expect(builder.GetOutput()).To(MatchJSON(tc.expectedOutput))
 			}
 		})
 	}

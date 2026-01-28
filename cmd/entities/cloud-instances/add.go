@@ -7,6 +7,7 @@ import (
 )
 
 type AddedFlags struct {
+	Skeleton  bool
 	InputPath string
 }
 
@@ -14,10 +15,16 @@ func newAddCmd(cmdContext *base.CmdContext) *cobra.Command {
 	flags := &AddedFlags{}
 
 	cmd := &cobra.Command{
-		Use:   "add --input <path>",
+		Use:   "add",
 		Short: "Add cloud instance",
 		Args:  cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
+			formatter := cmdContext.GetOrCreateFormatter(cmd)
+
+			if flags.Skeleton {
+				return formatter.FormatSkeleton("cloud-instances/add.json")
+			}
+
 			manager := cmdContext.GetManager()
 			ctx, cancel := base.SetupContext(cmd, manager)
 			defer cancel()
@@ -25,8 +32,16 @@ func newAddCmd(cmdContext *base.CmdContext) *cobra.Command {
 			base.SetupProxy(cmd, manager)
 
 			input := serverscom.CloudComputingInstanceCreateInput{}
-			if err := base.ReadInputJSON(flags.InputPath, cmd.InOrStdin(), &input); err != nil {
-				return err
+
+			if flags.InputPath != "" {
+				if err := base.ReadInputJSON(flags.InputPath, cmd.InOrStdin(), &input); err != nil {
+					return err
+				}
+			} else {
+				required := []string{"input"}
+				if err := base.ValidateFlags(cmd, required); err != nil {
+					return err
+				}
 			}
 
 			scClient := cmdContext.GetClient().SetVerbose(manager.GetVerbose(cmd)).GetScClient()
@@ -36,7 +51,6 @@ func newAddCmd(cmdContext *base.CmdContext) *cobra.Command {
 			}
 
 			if out != nil {
-				formatter := cmdContext.GetOrCreateFormatter(cmd)
 				return formatter.Format(out)
 			}
 			return nil
@@ -44,7 +58,7 @@ func newAddCmd(cmdContext *base.CmdContext) *cobra.Command {
 	}
 
 	cmd.Flags().StringVarP(&flags.InputPath, "input", "i", "", "path to input file or '-' to read from stdin")
-	_ = cmd.MarkFlagRequired("input")
+	cmd.Flags().BoolVarP(&flags.Skeleton, "skeleton", "s", false, "JSON object with structure that is required to be passed")
 
 	return cmd
 }

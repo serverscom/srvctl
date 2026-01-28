@@ -1,0 +1,9 @@
+{
+    "name": "",
+    "flavor_id": "",
+    "image_id": "",
+    "region_id": "",
+    "labels": {
+        "key": "value"
+    }
+}

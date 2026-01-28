@@ -1,0 +1,15 @@
+{
+    "id": "",
+    "name": "",
+    "type": "l4",
+    "status": "",
+    "external_addresses": [
+        "127.0.0.1"
+    ],
+    "location_id": "",
+    "store_logs": false,
+    "cluster_id": "",
+    "labels": {
+        "key": "value"
+    }
+}

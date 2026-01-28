@@ -1,0 +1,30 @@
+{
+    "name": "",
+    "location_id": "",
+    "cluster_id": "",
+    "vhost_zones": [
+        {
+            "id": "",
+            "ports": [],
+            "udp": true,
+            "proxy_protocol": true,
+            "upstream_id": ""
+        }
+    ],
+    "upstream_zones": [
+        {
+            "id": "",
+            "udp": true,
+            "upstreams": [
+                {
+                    "ip": "",
+                    "port": "",
+                    "weight": ""
+                }
+            ]
+        }
+    ],
+    "labels": {
+        "key": "value"
+    }
+}
