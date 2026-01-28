@@ -1,3 +1,5 @@
+.PHONY: docs
+
 deps:
 	go mod tidy
 	go mod vendor
@@ -44,4 +46,4 @@ generate: deps
 	./internal/mocks/cloud_block_storage_backups_service.go
 
 docs:
-  go run cmd/gendoc/main.go
+	go run cmd/gendoc/main.go
