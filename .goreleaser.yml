@@ -2,6 +2,10 @@ version: 2
 before:
   hooks:
     - go mod tidy
+    - go run cmd/gendoc/main.go
+    - mkdir -p dist
+    - zip -r dist/srvctl-docs-generated_{{ .Version }}.zip docs/generated
+
 builds:
   - binary: srvctl
     flags:
@@ -52,3 +56,7 @@ archives:
 checksum:
   name_template: '{{ .ProjectName }}_{{ .Version }}_SHA256SUMS'
   algorithm: sha256
+
+release:
+  extra_files:
+    - glob: dist/srvctl-docs-generated_*.zip
