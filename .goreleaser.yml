@@ -3,8 +3,8 @@ before:
   hooks:
     - go mod tidy
     - go run cmd/gendoc/main.go
-    - mkdir -p dist
-    - zip -r dist/srvctl-docs-generated_{{ .Version }}.zip docs/generated
+    - mkdir -p /tmp/srvctl-docs
+    - zip -r /tmp/srvctl-docs/srvctl-docs-generated_{{ .Version }}.zip docs/generated
 
 builds:
   - binary: srvctl
@@ -22,32 +22,21 @@ builds:
       - amd64
       - arm64
 
-dockers:
-  - build_flag_templates: [--platform=linux/amd64]
-    image_templates:
-      - "ghcr.io/serverscom/{{ .ProjectName }}:{{ if not .IsSnapshot }}v{{ end }}{{ .Version }}-amd64"
-      - "ghcr.io/serverscom/{{ .ProjectName }}:latest-amd64"
-    dockerfile: Dockerfile
-    use: buildx
-  - build_flag_templates: [--platform=linux/arm64]
-    image_templates:
-      - "ghcr.io/serverscom/{{ .ProjectName }}:{{ if not .IsSnapshot }}v{{ end }}{{ .Version }}-arm64"
-      - "ghcr.io/serverscom/{{ .ProjectName }}:latest-arm64"
-    dockerfile: Dockerfile
-    use: buildx
-
-docker_manifests:
-  - name_template: "ghcr.io/serverscom/{{ .ProjectName }}:{{ if not .IsSnapshot }}v{{ end }}{{ .Version }}"
-    image_templates:
-      - "ghcr.io/serverscom/{{ .ProjectName }}:{{ if not .IsSnapshot }}v{{ end }}{{ .Version }}-amd64"
-      - "ghcr.io/serverscom/{{ .ProjectName }}:{{ if not .IsSnapshot }}v{{ end }}{{ .Version }}-arm64"
-  - name_template: "ghcr.io/serverscom/{{ .ProjectName }}:latest"
-    image_templates:
-      - "ghcr.io/serverscom/{{ .ProjectName }}:latest-amd64"
-      - "ghcr.io/serverscom/{{ .ProjectName }}:latest-arm64"
+dockers_v2:
+  - images:
+      - "ghcr.io/serverscom/{{ .ProjectName }}"
+    tags:
+      - "{{ if not .IsSnapshot }}v{{ end }}{{ .Version }}"
+      - "{{ if not .IsSnapshot }}latest{{ end }}"
+    labels:
+      "org.opencontainers.image.created": "{{.Date}}"
+      "org.opencontainers.image.title": "{{.ProjectName}}"
+      "org.opencontainers.image.revision": "{{.FullCommit}}"
+      "org.opencontainers.image.version": "{{.Version}}"
+      "org.opencontainers.image.source": "{{.GitURL}}"
 
 archives:
-  - format: zip
+  - formats: [zip]
     name_template: >-
       {{ .ProjectName }}_
       {{- .Version }}_
@@ -59,4 +48,4 @@ checksum:
 
 release:
   extra_files:
-    - glob: dist/srvctl-docs-generated_*.zip
+    - glob: /tmp/srvctl-docs/srvctl-docs-generated_*.zip
