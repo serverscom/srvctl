@@ -42,3 +42,6 @@ generate: deps
 	./internal/mocks/cloud_computing_regions_service.go \
 	./internal/mocks/cloud_block_storage_volumes_service.go \
 	./internal/mocks/cloud_block_storage_backups_service.go
+
+docs:
+  go run cmd/gendoc/main.go
