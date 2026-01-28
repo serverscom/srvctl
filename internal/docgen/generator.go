@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 	"text/template"
+	"time"
 
 	"github.com/cpuguy83/go-md2man/v2/md2man"
 	"github.com/spf13/cobra"
@@ -27,9 +28,10 @@ type ExtraContent struct {
 	Examples    string
 }
 
-const docTemplate = `# NAME
+const docTemplate = `% "{{.NameUpper}}" "1" "{{.Date}}" "" ""
+# NAME
 
-{{.Name}} - {{.Short}}
+**{{.Name}}** - {{.Short}}
 
 # SYNOPSIS
 
@@ -170,15 +172,14 @@ func (g *Generator) readExtraContent(commandPath string) (*ExtraContent, error) 
 // generateMarkdown generates markdown documentation for a command
 func (g *Generator) generateMarkdown(cmd *cobra.Command, extra *ExtraContent, commandPath string) (string, error) {
 	// Build description section
-	description := strings.TrimSpace(cmd.Long)
-	if description == "" {
-		description = cmd.Short
-	}
+	var description string
 	if extra.Description != "" {
-		if description != "" {
-			description += "\n\n"
+		description = strings.TrimSpace(extra.Description)
+	} else {
+		description = strings.TrimSpace(cmd.Long)
+		if description == "" {
+			description = cmd.Short
 		}
-		description += strings.TrimSpace(extra.Description)
 	}
 
 	// Build options section
@@ -190,11 +191,19 @@ func (g *Generator) generateMarkdown(cmd *cobra.Command, extra *ExtraContent, co
 	// Build examples section
 	examples := strings.TrimSpace(extra.Examples)
 
+	now := time.Now()
+	curDate := now.Format("January 2006")
+
+	// Format UseLine with command in bold
+	useLine := g.formatUseLine(cmd.UseLine())
+
 	// Prepare data for template
 	data := map[string]string{
 		"Name":        commandPath,
+		"NameUpper":   strings.ToUpper(commandPath),
+		"Date":        curDate,
 		"Short":       cmd.Short,
-		"UseLine":     cmd.UseLine(),
+		"UseLine":     useLine,
 		"Description": description,
 		"Options":     options,
 		"SubCommands": subCommands,
@@ -238,9 +247,9 @@ func (g *Generator) formatFlags(buf *bytes.Buffer, flags *pflag.FlagSet) {
 		var flagTypeLong, flagTypeShort string
 		if flag.Value.Type() != "bool" {
 			typeName := flag.Value.Type()
-			// Handle empty type or special cases
-			if typeName == "" || typeName == "[]" {
-				typeName = "value"
+			// Simplify stringToX types
+			if strings.HasPrefix(typeName, "stringTo") {
+				typeName = "string"
 			}
 			flagTypeLong = fmt.Sprintf("`=[<%s>]`", typeName)
 			flagTypeShort = fmt.Sprintf("`[<%s>]`", typeName)
@@ -278,6 +287,28 @@ func (g *Generator) buildSubCommandsSection(cmd *cobra.Command) string {
 	}
 
 	return strings.TrimSpace(buf.String())
+}
+
+// formatUseLine formats the UseLine by bolding only the command part
+// Leaves arguments like <arg>, [flags], etc. unformatted
+func (g *Generator) formatUseLine(useLine string) string {
+	parts := strings.Fields(useLine)
+	var result strings.Builder
+
+	for i, part := range parts {
+		if i > 0 {
+			result.WriteString(" ")
+		}
+
+		// Bold command parts, leave arguments/flags as-is
+		if strings.HasPrefix(part, "<") || strings.HasPrefix(part, "[") {
+			result.WriteString(part)
+		} else {
+			result.WriteString("**" + part + "**")
+		}
+	}
+
+	return result.String()
 }
 
 // convertToMan converts markdown to man page format
