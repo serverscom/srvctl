@@ -3,8 +3,8 @@ before:
   hooks:
     - go mod tidy
     - go run cmd/gendoc/main.go
-    - mkdir -p /tmp/srvctl-docs
-    - zip -r /tmp/srvctl-docs/srvctl-docs-generated_{{ .Version }}.zip docs/generated
+    - mkdir -p .release-docs
+    - zip -r .release-docs/srvctl-docs-generated_{{ .Version }}.zip docs/generated
 
 builds:
   - binary: srvctl
@@ -59,4 +59,4 @@ checksum:
 
 release:
   extra_files:
-    - glob: /tmp/srvctl-docs/srvctl-docs-generated_*.zip
+    - glob: .release-docs/srvctl-docs-generated_*.zip
