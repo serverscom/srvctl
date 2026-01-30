@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 	"text/template"
 	"time"
@@ -30,30 +31,24 @@ type ExtraContent struct {
 
 const docTemplate = `% "{{.NameUpper}}" "1" "{{.Date}}" "" ""
 # NAME
-
 **{{.Name}}** - {{.Short}}
 
 # SYNOPSIS
-
 {{.UseLine}}
 
 # DESCRIPTION
-
 {{.Description}}
 
 # OPTIONS
-
 {{.Options}}
 
 {{if .SubCommands}}
 # SUB COMMANDS
-
 {{.SubCommands}}
 {{end}}
 
 {{if .Examples}}
 # EXAMPLES
-
 {{.Examples}}
 {{end}}
 `
@@ -315,7 +310,11 @@ func (g *Generator) formatUseLine(useLine string) string {
 func (g *Generator) convertToMan(markdown string, outputPath string) error {
 	manContent := md2man.Render([]byte(markdown))
 
-	if err := os.WriteFile(outputPath, manContent, 0644); err != nil {
+	// Replace empty lines with a single dot (roff separator)
+	emptyLineRegex := regexp.MustCompile(`\n\n+`)
+	result := emptyLineRegex.ReplaceAllString(string(manContent), "\n.\n")
+
+	if err := os.WriteFile(outputPath, []byte(result), 0644); err != nil {
 		return fmt.Errorf("failed to write man page: %w", err)
 	}
 
