@@ -5,8 +5,10 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 	"text/template"
+	"time"
 
 	"github.com/cpuguy83/go-md2man/v2/md2man"
 	"github.com/spf13/cobra"
@@ -27,31 +29,26 @@ type ExtraContent struct {
 	Examples    string
 }
 
-const docTemplate = `# NAME
-
-{{.Name}} - {{.Short}}
+const docTemplate = `% "{{.NameUpper}}" "1" "{{.Date}}" "" ""
+# NAME
+**{{.Name}}** - {{.Short}}
 
 # SYNOPSIS
-
 {{.UseLine}}
 
 # DESCRIPTION
-
 {{.Description}}
 
 # OPTIONS
-
 {{.Options}}
 
 {{if .SubCommands}}
 # SUB COMMANDS
-
 {{.SubCommands}}
 {{end}}
 
 {{if .Examples}}
 # EXAMPLES
-
 {{.Examples}}
 {{end}}
 `
@@ -170,15 +167,14 @@ func (g *Generator) readExtraContent(commandPath string) (*ExtraContent, error) 
 // generateMarkdown generates markdown documentation for a command
 func (g *Generator) generateMarkdown(cmd *cobra.Command, extra *ExtraContent, commandPath string) (string, error) {
 	// Build description section
-	description := strings.TrimSpace(cmd.Long)
-	if description == "" {
-		description = cmd.Short
-	}
+	var description string
 	if extra.Description != "" {
-		if description != "" {
-			description += "\n\n"
+		description = strings.TrimSpace(extra.Description)
+	} else {
+		description = strings.TrimSpace(cmd.Long)
+		if description == "" {
+			description = cmd.Short
 		}
-		description += strings.TrimSpace(extra.Description)
 	}
 
 	// Build options section
@@ -190,11 +186,19 @@ func (g *Generator) generateMarkdown(cmd *cobra.Command, extra *ExtraContent, co
 	// Build examples section
 	examples := strings.TrimSpace(extra.Examples)
 
+	now := time.Now()
+	curDate := now.Format("January 2006")
+
+	// Format UseLine with command in bold
+	useLine := g.formatUseLine(cmd.UseLine())
+
 	// Prepare data for template
 	data := map[string]string{
 		"Name":        commandPath,
+		"NameUpper":   strings.ToUpper(commandPath),
+		"Date":        curDate,
 		"Short":       cmd.Short,
-		"UseLine":     cmd.UseLine(),
+		"UseLine":     useLine,
 		"Description": description,
 		"Options":     options,
 		"SubCommands": subCommands,
@@ -213,15 +217,16 @@ func (g *Generator) generateMarkdown(cmd *cobra.Command, extra *ExtraContent, co
 func (g *Generator) buildOptionsSection(cmd *cobra.Command) string {
 	var buf bytes.Buffer
 
-	// Local flags
-	if cmd.LocalFlags().HasFlags() {
-		buf.WriteString("## Local Flags\n\n")
+	// Local flags (defined on this command)
+	if cmd.LocalFlags().HasAvailableFlags() {
 		g.formatFlags(&buf, cmd.LocalFlags())
 	}
 
-	// Inherited flags (global)
-	if cmd.InheritedFlags().HasFlags() {
-		buf.WriteString("## Global Flags\n\n")
+	// Inherited flags (from parent commands)
+	if cmd.InheritedFlags().HasAvailableFlags() {
+		if buf.Len() > 0 {
+			buf.WriteString("\n")
+		}
 		g.formatFlags(&buf, cmd.InheritedFlags())
 	}
 
@@ -234,20 +239,31 @@ func (g *Generator) formatFlags(buf *bytes.Buffer, flags *pflag.FlagSet) {
 		if flag.Hidden {
 			return
 		}
-		fmt.Fprintf(buf, "**--%s**", flag.Name)
-		if flag.Shorthand != "" {
-			fmt.Fprintf(buf, ", **-%s**", flag.Shorthand)
-		}
+		var flagTypeLong, flagTypeShort string
 		if flag.Value.Type() != "bool" {
-			fmt.Fprintf(buf, " *%s*", flag.Value.Type())
+			typeName := flag.Value.Type()
+			// Simplify stringToX types
+			if strings.HasPrefix(typeName, "stringTo") {
+				typeName = "string"
+			}
+			flagTypeLong = fmt.Sprintf("`=[<%s>]`", typeName)
+			flagTypeShort = fmt.Sprintf("`[<%s>]`", typeName)
 		}
-		buf.WriteString("\n\n")
+
+		// Write flag name and type
+		fmt.Fprintf(buf, "**--%s**%s", flag.Name, flagTypeLong)
+		if flag.Shorthand != "" {
+			fmt.Fprintf(buf, ", **-%s**%s", flag.Shorthand, flagTypeShort)
+		}
+		buf.WriteString("\n")
+
 		if flag.Usage != "" {
-			fmt.Fprintf(buf, "  %s\n\n", flag.Usage)
+			fmt.Fprintf(buf, "        %s", flag.Usage)
 		}
 		if flag.DefValue != "" && flag.DefValue != "false" && flag.DefValue != "[]" && flag.DefValue != "0" {
-			fmt.Fprintf(buf, "  Default: `%s`\n\n", flag.DefValue)
+			fmt.Fprintf(buf, ". The default is `%s`.", flag.DefValue)
 		}
+		buf.WriteString("\n\n")
 	})
 }
 
@@ -259,20 +275,46 @@ func (g *Generator) buildSubCommandsSection(cmd *cobra.Command) string {
 		if subCmd.Hidden || subCmd.Deprecated != "" {
 			continue
 		}
-		fmt.Fprintf(&buf, "**%s**\n\n", subCmd.Name())
+		fmt.Fprintf(&buf, "**%s**\n", subCmd.Name())
 		if subCmd.Short != "" {
-			fmt.Fprintf(&buf, "  %s\n\n", subCmd.Short)
+			fmt.Fprintf(&buf, "        %s\n\n", subCmd.Short)
 		}
 	}
 
 	return strings.TrimSpace(buf.String())
 }
 
+// formatUseLine formats the UseLine by bolding only the command part
+// Leaves arguments like <arg>, [flags], etc. unformatted
+func (g *Generator) formatUseLine(useLine string) string {
+	parts := strings.Fields(useLine)
+	var result strings.Builder
+
+	for i, part := range parts {
+		if i > 0 {
+			result.WriteString(" ")
+		}
+
+		// Bold command parts, leave arguments/flags as-is
+		if strings.HasPrefix(part, "<") || strings.HasPrefix(part, "[") {
+			result.WriteString(part)
+		} else {
+			result.WriteString("**" + part + "**")
+		}
+	}
+
+	return result.String()
+}
+
 // convertToMan converts markdown to man page format
 func (g *Generator) convertToMan(markdown string, outputPath string) error {
 	manContent := md2man.Render([]byte(markdown))
 
-	if err := os.WriteFile(outputPath, manContent, 0644); err != nil {
+	// Replace empty lines with a single dot (roff separator)
+	emptyLineRegex := regexp.MustCompile(`\n\n+`)
+	result := emptyLineRegex.ReplaceAllString(string(manContent), "\n.\n")
+
+	if err := os.WriteFile(outputPath, []byte(result), 0644); err != nil {
 		return fmt.Errorf("failed to write man page: %w", err)
 	}
 
