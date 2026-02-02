@@ -39,14 +39,13 @@ func NewRootCmd(version string) *cobra.Command {
 	cmdContext := &base.CmdContext{}
 
 	cmd := &cobra.Command{
-		Use:               "srvctl",
+		Use:               "srvctl [command] [flags]",
 		Short:             "CLI tool for servers.com API",
 		Long:              `A command line interface for managing servers.com resources`,
 		Version:           version,
 		PersistentPreRunE: base.InitCmdContext(cmdContext),
 		SilenceUsage:      true,
 	}
-
 	// Global flags
 	base.AddGlobalFlags(cmd)
 
