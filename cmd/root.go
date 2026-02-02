@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"github.com/serverscom/srvctl/cmd/base"
+	"github.com/serverscom/srvctl/cmd/completion"
 	"github.com/serverscom/srvctl/cmd/config"
 	"github.com/serverscom/srvctl/cmd/context"
 	"github.com/serverscom/srvctl/cmd/entities/account"
@@ -55,6 +56,7 @@ func NewRootCmd(version string) *cobra.Command {
 	cmd.AddCommand(login.NewCmd(cmdContext, clientFactory))
 	cmd.AddCommand(context.NewCmd(cmdContext))
 	cmd.AddCommand(config.NewCmd(cmdContext))
+	cmd.AddCommand(completion.NewCmd())
 
 	// resources comands
 	cmd.AddCommand(sshkeys.NewCmd(cmdContext))
