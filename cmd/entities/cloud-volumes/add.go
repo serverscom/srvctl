@@ -7,6 +7,7 @@ import (
 )
 
 type AddFlags struct {
+	Skeleton         bool
 	InputPath        string
 	Name             string
 	RegionID         int
@@ -23,11 +24,17 @@ func newAddCmd(cmdContext *base.CmdContext) *cobra.Command {
 	flags := &AddFlags{}
 
 	cmd := &cobra.Command{
-		Use:   "add --input <path>",
+		Use:   "add",
 		Short: "Add a cloud volume",
 		Long:  "Add a new cloud volume to a Cloud region",
 		Args:  cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
+			formatter := cmdContext.GetOrCreateFormatter(cmd)
+
+			if flags.Skeleton {
+				return formatter.FormatSkeleton("cloud-volumes/add.json")
+			}
+
 			manager := cmdContext.GetManager()
 
 			ctx, cancel := base.SetupContext(cmd, manager)
@@ -59,7 +66,6 @@ func newAddCmd(cmdContext *base.CmdContext) *cobra.Command {
 			}
 
 			if volume != nil {
-				formatter := cmdContext.GetOrCreateFormatter(cmd)
 				return formatter.Format(volume)
 			}
 			return nil
@@ -67,6 +73,8 @@ func newAddCmd(cmdContext *base.CmdContext) *cobra.Command {
 	}
 
 	cmd.Flags().StringVarP(&flags.InputPath, "input", "i", "", "path to input file or '-' to read from stdin")
+	cmd.Flags().BoolVarP(&flags.Skeleton, "skeleton", "s", false, "JSON object with structure that is required to be passed")
+
 	cmd.Flags().StringVarP(&flags.Name, "name", "n", "", "A name of the cloud volume")
 	cmd.Flags().IntVar(&flags.RegionID, "region-id", 0, "ID of the cloud region")
 	cmd.Flags().IntVar(&flags.Size, "size", 0, "Size of the volume in GB")
