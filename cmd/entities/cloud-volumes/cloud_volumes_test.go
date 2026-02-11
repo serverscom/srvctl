@@ -14,11 +14,12 @@ import (
 )
 
 var (
-	testVolumeID    = "vol-12345"
-	testInstanceID  = "instance-123"
-	fixtureBasePath = filepath.Join("..", "..", "..", "testdata", "entities", "cloud-volumes")
-	fixedTime       = time.Date(2025, 1, 1, 12, 0, 0, 0, time.UTC)
-	testVolume      = serverscom.CloudBlockStorageVolume{
+	testVolumeID         = "vol-12345"
+	testInstanceID       = "instance-123"
+	fixtureBasePath      = filepath.Join("..", "..", "..", "testdata", "entities", "cloud-volumes")
+	skeletonTemplatePath = filepath.Join("..", "..", "..", "internal", "output", "skeletons", "templates", "cloud-volumes")
+	fixedTime            = time.Date(2025, 1, 1, 12, 0, 0, 0, time.UTC)
+	testVolume           = serverscom.CloudBlockStorageVolume{
 		ID:          testVolumeID,
 		Name:        "test-volume",
 		RegionID:    1,
@@ -260,6 +261,17 @@ func TestAddCloudVolumesCmd(t *testing.T) {
 			},
 		},
 		{
+			name:           "skeleton for cloud volume input",
+			output:         "json",
+			args:           []string{"--skeleton"},
+			expectedOutput: testutils.ReadFixture(filepath.Join(skeletonTemplatePath, "add.json")),
+			configureMock: func(mock *mocks.MockCloudBlockStorageVolumesService) {
+				mock.EXPECT().
+					Create(gomock.Any(), gomock.Any()).
+					Times(0)
+			},
+		},
+		{
 			name:        "create volume with error",
 			expectError: true,
 			args:        []string{"--name", "test-volume", "--region-id", "1"},
@@ -302,7 +314,7 @@ func TestAddCloudVolumesCmd(t *testing.T) {
 				g.Expect(err).To(HaveOccurred())
 			} else {
 				g.Expect(err).To(BeNil())
-				g.Expect(builder.GetOutput()).To(BeEquivalentTo(string(tc.expectedOutput)))
+				g.Expect(builder.GetOutput()).To(MatchJSON(tc.expectedOutput))
 			}
 		})
 	}
