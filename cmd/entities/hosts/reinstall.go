@@ -52,7 +52,7 @@ func newReinstallCmd(cmdContext *base.CmdContext, hostType *HostTypeCmd) *cobra.
 	cmd := &cobra.Command{
 		Use:   "reinstall <id>",
 		Short: fmt.Sprintf("Reinstall OS for a  %s", hostType.entityName),
-		Args:  cobra.ExactArgs(1),
+		Args:  base.SkeletonOrExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			formatter := cmdContext.GetOrCreateFormatter(cmd)
 

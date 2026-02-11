@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"path/filepath"
+	"slices"
 	"testing"
 	"time"
 
@@ -460,7 +461,12 @@ func TestUpdateL2SegmentCmd(t *testing.T) {
 			testCmdContext := testutils.NewTestCmdContext(scClient)
 			l2Cmd := NewCmd(testCmdContext)
 
-			args := []string{"l2-segments", "update", tc.id}
+			args := make([]string, 0, 3+len(tc.args))
+			args = append(args, "l2-segments", "update")
+
+			if !slices.Contains(tc.args, "--skeleton") {
+				args = append(args, tc.id)
+			}
 			if len(tc.args) > 0 {
 				args = append(args, tc.args...)
 			}
@@ -603,7 +609,12 @@ func TestUpdateL2NetworksCmd(t *testing.T) {
 			testCmdContext := testutils.NewTestCmdContext(scClient)
 			l2Cmd := NewCmd(testCmdContext)
 
-			args := []string{"l2-segments", "update-networks", tc.id}
+			args := make([]string, 0, 3+len(tc.args))
+			args = append(args, "l2-segments", "update-networks")
+
+			if !slices.Contains(tc.args, "--skeleton") {
+				args = append(args, tc.id)
+			}
 			if len(tc.args) > 0 {
 				args = append(args, tc.args...)
 			}

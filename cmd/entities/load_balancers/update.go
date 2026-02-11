@@ -50,9 +50,9 @@ func newUpdateCmd(cmdContext *base.CmdContext, lbType *LBTypeCmd) *cobra.Command
 	flags := &UpdateFlags{}
 
 	cmd := &cobra.Command{
-		Use:   "update --input <path>",
+		Use:   "update <id>",
 		Short: fmt.Sprintf("Update %s", lbType.entityName),
-		Args:  cobra.ExactArgs(1),
+		Args:  base.SkeletonOrExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			formatter := cmdContext.GetOrCreateFormatter(cmd)
 

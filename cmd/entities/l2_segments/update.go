@@ -18,7 +18,7 @@ func newUpdateL2Cmd(cmdContext *base.CmdContext) *cobra.Command {
 		Use:   "update <l2_segment_id>",
 		Short: "Update an L2 segment",
 		Long:  "Update an L2 segment by id",
-		Args:  cobra.ExactArgs(1),
+		Args:  base.SkeletonOrExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			formatter := cmdContext.GetOrCreateFormatter(cmd)
 
@@ -73,7 +73,7 @@ func newUpdateL2NetworksCmd(cmdContext *base.CmdContext) *cobra.Command {
 		Use:   "update-networks <l2_segment_id>",
 		Short: "Update an L2 segment networks",
 		Long:  "Update an L2 segment networks by id",
-		Args:  cobra.ExactArgs(1),
+		Args:  base.SkeletonOrExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			formatter := cmdContext.GetOrCreateFormatter(cmd)
 

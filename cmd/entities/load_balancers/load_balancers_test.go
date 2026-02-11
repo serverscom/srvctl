@@ -3,6 +3,7 @@ package loadbalancers
 import (
 	"errors"
 	"path/filepath"
+	"slices"
 	"testing"
 	"time"
 
@@ -593,7 +594,12 @@ func TestUpdateL4LBCmd(t *testing.T) {
 			testCmdContext := testutils.NewTestCmdContext(scClient)
 			lbCmd := NewCmd(testCmdContext)
 
-			args := []string{"lb", "l4", "update", tc.id}
+			args := make([]string, 0, 4+len(tc.args))
+			args = append(args, "lb", "l4", "update")
+
+			if !slices.Contains(tc.args, "--skeleton") {
+				args = append(args, tc.id)
+			}
 			if len(tc.args) > 0 {
 				args = append(args, tc.args...)
 			}
@@ -689,7 +695,12 @@ func TestUpdateL7LBCmd(t *testing.T) {
 			testCmdContext := testutils.NewTestCmdContext(scClient)
 			lbCmd := NewCmd(testCmdContext)
 
-			args := []string{"lb", "l7", "update", tc.id}
+			args := make([]string, 0, 4+len(tc.args))
+			args = append(args, "lb", "l7", "update")
+
+			if !slices.Contains(tc.args, "--skeleton") {
+				args = append(args, tc.id)
+			}
 			if len(tc.args) > 0 {
 				args = append(args, tc.args...)
 			}
