@@ -216,11 +216,10 @@ func ValidateFlags(cmd *cobra.Command, required []string) error {
 
 func SkeletonOrExactArgs(n int) cobra.PositionalArgs {
 	return func(cmd *cobra.Command, args []string) error {
-		required := n
 		if cmd.Flags().Changed("skeleton") {
-			required = 0
+			return nil
 		}
 
-		return cobra.ExactArgs(required)(cmd, args)
+		return cobra.ExactArgs(n)(cmd, args)
 	}
 }
