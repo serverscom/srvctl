@@ -16,10 +16,6 @@
             {
                 "position": "",
                 "drive_model_id": ""
-            },
-            {
-                "position": "",
-                "drive_model_id": ""
             }
         ],
         "layout": [
@@ -37,6 +33,7 @@
             }
         ]
     },
+    "ipv6": true,
     "hosts": [
         {
             "hostname": "",
@@ -46,5 +43,6 @@
                 "key": "value"
             }
         }
-    ]
+    ],
+    "operating_system_id": ""
 }

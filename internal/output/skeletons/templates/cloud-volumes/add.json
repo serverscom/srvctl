@@ -1,8 +1,9 @@
 {
     "name": "",
+    "description": "",
+    "attach_instance_id": "",
     "region_id": "",
     "size": "",
-    "description": "",
     "labels": {
         "key": "value"
     }

@@ -1,14 +1,33 @@
 {
-    "id": "",
-    "name": "",
-    "type": "l4",
-    "status": "",
-    "external_addresses": [
-        "127.0.0.1"
-    ],
-    "location_id": "",
-    "store_logs": false,
     "cluster_id": "",
+    "shared_cluster": "",
+    "name": "",
+    "store_logs": true,
+    "store_logs_region_id": "",
+    "new_external_ips_count": "",
+    "delete_external_ips": [],
+    "vhost_zones": [
+        {
+            "id": "",
+            "ports": [],
+            "udp": true,
+            "proxy_protocol": true,
+            "upstream_id": ""
+        }
+    ],
+    "upstream_zones": [
+        {
+            "id": "",
+            "udp": true,
+            "upstreams": [
+                {
+                    "ip": "",
+                    "port": "",
+                    "weight": ""
+                }
+            ]
+        }
+    ],
     "labels": {
         "key": "value"
     }

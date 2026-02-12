@@ -2,7 +2,11 @@
     "name": "",
     "flavor_id": "",
     "image_id": "",
+    "gpn_enabled": false,
+    "ipv6_enabled": true,
     "region_id": "",
+    "user_data": "",
+    "ssh_key_fingerprint": "",
     "labels": {
         "key": "value"
     }
