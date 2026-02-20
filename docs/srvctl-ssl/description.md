@@ -1,0 +1,1 @@
+You can manage your SSL certificates by performing commands listed in `srvctl ssl --help`. Two certificate types are supported: custom certificates (`ssl custom`) and Let's Encrypt certificates (`ssl le`).
