@@ -94,4 +94,53 @@
 | [srvctl cloud-volumes delete](srvctl-cloud-volumes-delete/description.md) | Cloud Volumes | This command deletes the selected cloud volume. |
 | [srvctl cloud-volumes volume-attach](srvctl-cloud-volumes-volume-attach/description.md) | Cloud Volumes | This command attaches a cloud volume to a cloud instance. |
 | [srvctl cloud-volumes volume-detach](srvctl-cloud-volumes-volume-detach/description.md) | Cloud Volumes | This command detaches a cloud volume from a cloud instance. |
+| [srvctl drive-models](srvctl-drive-models/description.md) | Drive Models | This command allows to manage drive models. |
+| [srvctl drive-models list](srvctl-drive-models-list/description.md) | Drive Models | This command lists drive models for the specified server model. |
+| [srvctl drive-models get](srvctl-drive-models-get/description.md) | Drive Models | This command provides information for the selected drive model. |
+| [srvctl k8s](srvctl-k8s/description.md) | Kubernetes | This command allows to manage Kubernetes clusters. |
+| [srvctl k8s list](srvctl-k8s-list/description.md) | Kubernetes | This command lists Kubernetes clusters of the account. |
+| [srvctl k8s list-nodes](srvctl-k8s-list-nodes/description.md) | Kubernetes | This command lists nodes of the selected Kubernetes cluster. |
+| [srvctl k8s get](srvctl-k8s-get/description.md) | Kubernetes | This command provides information for the selected Kubernetes cluster. |
+| [srvctl k8s get-node](srvctl-k8s-get-node/description.md) | Kubernetes | This command provides information for the selected Kubernetes cluster node. |
+| [srvctl k8s update](srvctl-k8s-update/description.md) | Kubernetes | This command updates labels for the selected Kubernetes cluster. |
+| [srvctl lb-clusters](srvctl-lb-clusters/description.md) | LB Clusters | This command allows to manage load balancer clusters. |
+| [srvctl lb-clusters list](srvctl-lb-clusters-list/description.md) | LB Clusters | This command lists load balancer clusters of the account. |
+| [srvctl lb-clusters get](srvctl-lb-clusters-get/description.md) | LB Clusters | This command provides information for the selected load balancer cluster. |
+| [srvctl lb](srvctl-lb/description.md) | Load Balancers | This command allows to manage load balancers of different types (l4, l7). |
+| [srvctl lb list](srvctl-lb-list/description.md) | Load Balancers | This command lists all load balancers of the account. |
+| [srvctl lb l4](srvctl-lb-l4/description.md) | Load Balancers / L4 | This command allows to manage L4 load balancers. |
+| [srvctl lb l4 list](srvctl-lb-l4-list/description.md) | Load Balancers / L4 | This command lists L4 load balancers of the account. |
+| [srvctl lb l4 get](srvctl-lb-l4-get/description.md) | Load Balancers / L4 | This command provides information for the selected L4 load balancer. |
+| [srvctl lb l4 add](srvctl-lb-l4-add/description.md) | Load Balancers / L4 | A command to create a new L4 load balancer. |
+| [srvctl lb l4 update](srvctl-lb-l4-update/description.md) | Load Balancers / L4 | This command updates the selected L4 load balancer. |
+| [srvctl lb l4 delete](srvctl-lb-l4-delete/description.md) | Load Balancers / L4 | This command deletes the selected L4 load balancer. |
+| [srvctl lb l7](srvctl-lb-l7/description.md) | Load Balancers / L7 | This command allows to manage L7 load balancers. |
+| [srvctl lb l7 list](srvctl-lb-l7-list/description.md) | Load Balancers / L7 | This command lists L7 load balancers of the account. |
+| [srvctl lb l7 get](srvctl-lb-l7-get/description.md) | Load Balancers / L7 | This command provides information for the selected L7 load balancer. |
+| [srvctl lb l7 add](srvctl-lb-l7-add/description.md) | Load Balancers / L7 | A command to create a new L7 load balancer. |
+| [srvctl lb l7 update](srvctl-lb-l7-update/description.md) | Load Balancers / L7 | This command updates the selected L7 load balancer. |
+| [srvctl lb l7 delete](srvctl-lb-l7-delete/description.md) | Load Balancers / L7 | This command deletes the selected L7 load balancer. |
+| [srvctl network-pools](srvctl-network-pools/description.md) | Network Pools | This command allows to manage network pools. |
+| [srvctl network-pools list](srvctl-network-pools-list/description.md) | Network Pools | This command lists network pools of the account. |
+| [srvctl network-pools list-subnets](srvctl-network-pools-list-subnets/description.md) | Network Pools | This command lists subnets of the selected network pool. |
+| [srvctl network-pools get](srvctl-network-pools-get/description.md) | Network Pools | This command provides information for the selected network pool. |
+| [srvctl network-pools get-subnet](srvctl-network-pools-get-subnet/description.md) | Network Pools | This command provides information for the selected subnetwork. |
+| [srvctl network-pools add-subnet](srvctl-network-pools-add-subnet/description.md) | Network Pools | A command to create a new subnetwork in the selected network pool. |
+| [srvctl network-pools update](srvctl-network-pools-update/description.md) | Network Pools | This command updates parameters and labels for the selected network pool. |
+| [srvctl network-pools update-subnet](srvctl-network-pools-update-subnet/description.md) | Network Pools | This command updates the selected subnetwork in the network pool. |
+| [srvctl network-pools delete](srvctl-network-pools-delete/description.md) | Network Pools | This command deletes the selected subnetwork from the network pool. |
+| [srvctl sbm-models](srvctl-sbm-models/description.md) | SBM Models | This command allows to manage SBM flavor models. |
+| [srvctl sbm-models list](srvctl-sbm-models-list/description.md) | SBM Models | This command lists SBM flavor models for the specified location. |
+| [srvctl sbm-models get](srvctl-sbm-models-get/description.md) | SBM Models | This command provides information for the selected SBM flavor model. |
+| [srvctl sbm-os-options](srvctl-sbm-os-options/description.md) | SBM OS Options | This command allows to manage SBM operating system options. |
+| [srvctl sbm-os-options list](srvctl-sbm-os-options-list/description.md) | SBM OS Options | This command lists available operating system options for the selected SBM flavor. |
+| [srvctl sbm-os-options get](srvctl-sbm-os-options-get/description.md) | SBM OS Options | This command provides information for the selected SBM operating system option. |
+| [srvctl server-os-options](srvctl-server-os-options/description.md) | Server OS Options | This command allows to manage server operating system options. |
+| [srvctl server-os-options list](srvctl-server-os-options-list/description.md) | Server OS Options | This command lists available operating system options for the selected server model. |
+| [srvctl server-os-options get](srvctl-server-os-options-get/description.md) | Server OS Options | This command provides information for the selected server operating system option. |
+| [srvctl server-ram-options](srvctl-server-ram-options/description.md) | Server RAM Options | This command allows to manage RAM options for a server model. |
+| [srvctl server-ram-options list](srvctl-server-ram-options-list/description.md) | Server RAM Options | This command lists available RAM options for the selected server model. |
+| [srvctl server-models](srvctl-server-models/description.md) | Server Models | This command allows to manage server models. |
+| [srvctl server-models list](srvctl-server-models-list/description.md) | Server Models | This command lists server models for the specified location. |
+| [srvctl server-models get](srvctl-server-models-get/description.md) | Server Models | This command provides information for the selected server model. |
 
