@@ -1,1 +1,1 @@
-This command reinstalls the operating system on the selected cloud instance. The `--image-id` flag is required.
+This command reinstalls the operating system on the selected cloud instance. The `--image-id` flag is required. Use the [List images PAPI request](https://developers.servers.com/api-documentation/v1/#tag/Cloud-Image/operation/ListCloudImages) to get IDs.
