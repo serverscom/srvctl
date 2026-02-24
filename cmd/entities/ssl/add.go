@@ -3,12 +3,20 @@ package ssl
 import (
 	"context"
 	"fmt"
-	"log"
-
 	serverscom "github.com/serverscom/serverscom-go-client/pkg"
 	"github.com/serverscom/srvctl/cmd/base"
 	"github.com/spf13/cobra"
 )
+
+type AddedFlags struct {
+	Skeleton   bool
+	InputPath  string
+	Name       string
+	PublicKey  string
+	PrivateKey string
+	ChainKey   string
+	Labels     []string
+}
 
 type SSLCreator interface {
 	Create(ctx context.Context, client *serverscom.Client, input any) (any, error)
@@ -30,12 +38,19 @@ func (c *SSLCustomCreateMgr) NewCreateInput() any {
 }
 
 func newAddCmd(cmdContext *base.CmdContext, sslType *SSLTypeCmd) *cobra.Command {
-	var path string
+	flags := &AddedFlags{}
+
 	cmd := &cobra.Command{
-		Use:   "add --input <path>",
+		Use:   "add",
 		Short: fmt.Sprintf("Create a %s", sslType.entityName),
 		Args:  cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
+			formatter := cmdContext.GetOrCreateFormatter(cmd)
+
+			if flags.Skeleton {
+				return formatter.FormatSkeleton("ssl/add.json")
+			}
+
 			manager := cmdContext.GetManager()
 			ctx, cancel := base.SetupContext(cmd, manager)
 			defer cancel()
@@ -44,7 +59,18 @@ func newAddCmd(cmdContext *base.CmdContext, sslType *SSLTypeCmd) *cobra.Command 
 
 			input := sslType.managers.createMgr.NewCreateInput()
 
-			if err := base.ReadInputJSON(path, cmd.InOrStdin(), input); err != nil {
+			if flags.InputPath != "" {
+				if err := base.ReadInputJSON(flags.InputPath, cmd.InOrStdin(), input); err != nil {
+					return err
+				}
+			} else {
+				required := []string{"name", "public-key", "private-key"}
+				if err := base.ValidateFlags(cmd, required); err != nil {
+					return err
+				}
+			}
+
+			if err := flags.FillInput(cmd, input); err != nil {
 				return err
 			}
 
@@ -56,7 +82,6 @@ func newAddCmd(cmdContext *base.CmdContext, sslType *SSLTypeCmd) *cobra.Command 
 			}
 
 			if sslCert != nil {
-				formatter := cmdContext.GetOrCreateFormatter(cmd)
 				return formatter.Format(sslCert)
 			}
 
@@ -64,10 +89,44 @@ func newAddCmd(cmdContext *base.CmdContext, sslType *SSLTypeCmd) *cobra.Command 
 		},
 	}
 
-	cmd.Flags().StringVarP(&path, "input", "i", "", "path to input file or '-' to read from stdin")
-	if err := cmd.MarkFlagRequired("input"); err != nil {
-		log.Fatal(err)
-	}
+	cmd.Flags().StringVarP(&flags.InputPath, "input", "i", "", "path to input file or '-' to read from stdin")
+	cmd.Flags().BoolVarP(&flags.Skeleton, "skeleton", "s", false, "JSON object with structure that is required to be passed")
+
+	cmd.Flags().StringVarP(&flags.Name, "name", "n", "", "A name of a SSL certificate")
+	cmd.Flags().StringVarP(&flags.PublicKey, "public-key", "", "", "A public-key of a SSL certificate")
+	cmd.Flags().StringVarP(&flags.PrivateKey, "private-key", "", "", "A private-key of a SSL certificate")
+	cmd.Flags().StringVarP(&flags.ChainKey, "chain-key", "", "", "A chain-key of a SSL certificate")
+	cmd.Flags().StringArrayVarP(&flags.Labels, "label", "l", []string{}, "string in key=value format")
 
 	return cmd
+}
+
+func (f *AddedFlags) FillInput(cmd *cobra.Command, input any) error {
+	sslInput, ok := input.(*serverscom.SSLCertificateCreateCustomInput)
+	if !ok {
+		return fmt.Errorf("invalid input type for custom SSL")
+	}
+
+	if cmd.Flags().Changed("name") {
+		sslInput.Name = f.Name
+	}
+	if cmd.Flags().Changed("public-key") {
+		sslInput.PublicKey = f.PublicKey
+	}
+	if cmd.Flags().Changed("private-key") {
+		sslInput.PrivateKey = f.PrivateKey
+	}
+	if cmd.Flags().Changed("chain-key") {
+		sslInput.ChainKey = f.ChainKey
+	}
+	if cmd.Flags().Changed("label") {
+		labelsMap, err := base.ParseLabels(f.Labels)
+		if err != nil {
+			return err
+		}
+
+		sslInput.Labels = labelsMap
+	}
+
+	return nil
 }

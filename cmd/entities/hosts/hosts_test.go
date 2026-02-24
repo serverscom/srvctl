@@ -15,13 +15,14 @@ import (
 )
 
 var (
-	testId           = "testId"
-	testNetworkId    = "testNetId"
-	fixtureBasePath  = filepath.Join("..", "..", "..", "testdata", "entities", "hosts")
-	fixedTime        = time.Date(2025, 1, 1, 12, 0, 0, 0, time.UTC)
-	testPublicIP     = "1.2.3.4"
-	testLocationCode = "test"
-	testHost         = serverscom.Host{
+	testId               = "testId"
+	testNetworkId        = "testNetId"
+	fixtureBasePath      = filepath.Join("..", "..", "..", "testdata", "entities", "hosts")
+	skeletonTemplatePath = filepath.Join("..", "..", "..", "internal", "output", "skeletons", "templates", "hosts")
+	fixedTime            = time.Date(2025, 1, 1, 12, 0, 0, 0, time.UTC)
+	testPublicIP         = "1.2.3.4"
+	testLocationCode     = "test"
+	testHost             = serverscom.Host{
 		ID:                testId,
 		Title:             "example.aa",
 		Status:            "active",
@@ -341,6 +342,17 @@ func TestAddDSCmd(t *testing.T) {
 			},
 		},
 		{
+			name:           "skeleton for dedicated server input",
+			output:         "json",
+			args:           []string{"--skeleton"},
+			expectedOutput: testutils.ReadFixture(filepath.Join(skeletonTemplatePath, "add_ds.json")),
+			configureMock: func(mock *mocks.MockHostsService) {
+				mock.EXPECT().
+					CreateDedicatedServers(gomock.Any(), gomock.Any()).
+					Times(0)
+			},
+		},
+		{
 			name:        "create dedicated server with error",
 			expectError: true,
 		},
@@ -385,7 +397,7 @@ func TestAddDSCmd(t *testing.T) {
 				g.Expect(err).To(HaveOccurred())
 			} else {
 				g.Expect(err).To(BeNil())
-				g.Expect(builder.GetOutput()).To(BeEquivalentTo(string(tc.expectedOutput)))
+				g.Expect(builder.GetOutput()).To(MatchJSON(tc.expectedOutput))
 			}
 		})
 	}
@@ -422,6 +434,17 @@ func TestAddSBMCmd(t *testing.T) {
 						},
 					}).
 					Return([]serverscom.SBMServer{testSBM}, nil)
+			},
+		},
+		{
+			name:           "skeleton for SBM server input",
+			output:         "json",
+			args:           []string{"--skeleton"},
+			expectedOutput: testutils.ReadFixture(filepath.Join(skeletonTemplatePath, "add_sbm.json")),
+			configureMock: func(mock *mocks.MockHostsService) {
+				mock.EXPECT().
+					CreateSBMServers(gomock.Any(), gomock.Any()).
+					Times(0)
 			},
 		},
 		{
@@ -469,7 +492,7 @@ func TestAddSBMCmd(t *testing.T) {
 				g.Expect(err).To(HaveOccurred())
 			} else {
 				g.Expect(err).To(BeNil())
-				g.Expect(builder.GetOutput()).To(BeEquivalentTo(string(tc.expectedOutput)))
+				g.Expect(builder.GetOutput()).To(MatchJSON(tc.expectedOutput))
 			}
 		})
 	}

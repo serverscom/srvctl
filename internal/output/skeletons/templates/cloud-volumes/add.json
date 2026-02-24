@@ -1,0 +1,10 @@
+{
+    "name": "",
+    "description": "",
+    "attach_instance_id": "",
+    "region_id": "",
+    "size": "",
+    "labels": {
+        "key": "value"
+    }
+}

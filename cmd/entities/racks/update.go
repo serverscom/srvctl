@@ -12,9 +12,9 @@ func newUpdateCmd(cmdContext *base.CmdContext) *cobra.Command {
 	var labels []string
 
 	cmd := &cobra.Command{
-		Use:   "update <fingerprint>",
+		Use:   "update <rack-id>",
 		Short: "Update a private rack",
-		Long:  "Update a private rack by id",
+		Long:  "Update a private rack by <rack-id>",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			manager := cmdContext.GetManager()

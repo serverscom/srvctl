@@ -1,0 +1,10 @@
+[
+    {
+        "id": "flavor-123",
+        "name": "Test Flavor"
+    },
+    {
+        "id": "flavor-456",
+        "name": "Test Flavor 2"
+    }
+]

@@ -194,3 +194,32 @@ func fetchItems[T any](ctx context.Context, collection serverscom.Collection[T],
 
 	return collection.List(ctx)
 }
+
+func ValidateFlags(cmd *cobra.Command, required []string) error {
+	var missing []string
+
+	for _, flag := range required {
+		if !cmd.Flags().Changed(flag) {
+			missing = append(missing, "--"+flag)
+		}
+	}
+
+	if len(missing) > 0 {
+		return fmt.Errorf(
+			"provide all required flags (missing: %s)",
+			strings.Join(missing, ", "),
+		)
+	}
+
+	return nil
+}
+
+func SkeletonOrExactArgs(n int) cobra.PositionalArgs {
+	return func(cmd *cobra.Command, args []string) error {
+		if cmd.Flags().Changed("skeleton") {
+			return nil
+		}
+
+		return cobra.ExactArgs(n)(cmd, args)
+	}
+}

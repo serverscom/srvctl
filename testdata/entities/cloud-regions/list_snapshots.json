@@ -1,0 +1,11 @@
+[
+    {
+        "id": "snap-123",
+        "name": "Test Snapshot",
+        "image_size": 1024,
+        "min_disk": 10,
+        "status": "available",
+        "is_backup": false,
+        "file_url": "https://test.example.com/snap-123"
+    }
+]

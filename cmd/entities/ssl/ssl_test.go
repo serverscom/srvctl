@@ -15,13 +15,14 @@ import (
 )
 
 var (
-	fixtureBasePath     = filepath.Join("..", "..", "..", "testdata", "entities", "ssl")
-	fixedTime           = time.Date(2025, 1, 1, 12, 0, 0, 0, time.UTC)
-	expiresTime         = fixedTime.AddDate(10, 0, 0)
-	testSha1Fingerpring = "21e84c9a3878673b377f0adf053290e8fc25cb80"
-	testIssuer          = "servers.com"
-	testId              = "testId"
-	testSSL             = serverscom.SSLCertificate{
+	fixtureBasePath      = filepath.Join("..", "..", "..", "testdata", "entities", "ssl")
+	skeletonTemplatePath = filepath.Join("..", "..", "..", "internal", "output", "skeletons", "templates", "ssl")
+	fixedTime            = time.Date(2025, 1, 1, 12, 0, 0, 0, time.UTC)
+	expiresTime          = fixedTime.AddDate(10, 0, 0)
+	testSha1Fingerpring  = "21e84c9a3878673b377f0adf053290e8fc25cb80"
+	testIssuer           = "servers.com"
+	testId               = "testId"
+	testSSL              = serverscom.SSLCertificate{
 		ID:              testId,
 		Name:            "test-ssl-custom",
 		Type:            "custom",
@@ -71,7 +72,7 @@ func TestAddCustomSSLCmd(t *testing.T) {
 		expectError    bool
 	}{
 		{
-			name:           "create custom ssl cert",
+			name:           "create custom ssl cert with input",
 			output:         "json",
 			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "get_custom.json")),
 			args:           []string{"--input", filepath.Join(fixtureBasePath, "create_custom.json")},
@@ -84,6 +85,40 @@ func TestAddCustomSSLCmd(t *testing.T) {
 						Labels:     map[string]string{"foo": "bar"},
 					}).
 					Return(&testCustomSSL, nil)
+			},
+		},
+		{
+			name:           "create custom ssl cert",
+			output:         "json",
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "get_custom.json")),
+			args: []string{
+				"--name", "test-ssl-custom",
+				"--public-key", "-----TEST public-key-----",
+				"--private-key", "-----TEST private-key-----",
+				"--chain-key", "-----TEST chain-key-----",
+				"--label", "foo=bar",
+			},
+			configureMock: func(mock *mocks.MockSSLCertificatesService) {
+				mock.EXPECT().
+					CreateCustom(gomock.Any(), serverscom.SSLCertificateCreateCustomInput{
+						Name:       "test-ssl-custom",
+						PublicKey:  "-----TEST public-key-----",
+						PrivateKey: "-----TEST private-key-----",
+						ChainKey:   "-----TEST chain-key-----",
+						Labels:     map[string]string{"foo": "bar"},
+					}).
+					Return(&testCustomSSL, nil)
+			},
+		},
+		{
+			name:           "skeleton for custom ssl cert input",
+			output:         "json",
+			args:           []string{"--skeleton"},
+			expectedOutput: testutils.ReadFixture(filepath.Join(skeletonTemplatePath, "add.json")),
+			configureMock: func(mock *mocks.MockSSLCertificatesService) {
+				mock.EXPECT().
+					CreateCustom(gomock.Any(), gomock.Any()).
+					Times(0)
 			},
 		},
 		{
@@ -131,7 +166,7 @@ func TestAddCustomSSLCmd(t *testing.T) {
 				g.Expect(err).To(HaveOccurred())
 			} else {
 				g.Expect(err).To(BeNil())
-				g.Expect(builder.GetOutput()).To(BeEquivalentTo(string(tc.expectedOutput)))
+				g.Expect(builder.GetOutput()).To(MatchJSON(tc.expectedOutput))
 			}
 		})
 	}

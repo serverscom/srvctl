@@ -1,0 +1,1 @@
+You can get information about your Private Racks by performing commands listed in `srvctl racks --help`.

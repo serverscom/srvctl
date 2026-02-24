@@ -2,10 +2,8 @@ package hosts
 
 import (
 	"fmt"
-	"log"
-	"os"
-
 	"maps"
+	"os"
 
 	serverscom "github.com/serverscom/serverscom-go-client/pkg"
 	"github.com/serverscom/srvctl/cmd/base"
@@ -14,6 +12,7 @@ import (
 )
 
 type AddDSFlags struct {
+	Skeleton          bool
 	InputPath         string
 	LocationID        int
 	ServerModelID     int
@@ -30,6 +29,11 @@ type AddDSFlags struct {
 	UserDataFile      string
 	UserData          string
 	Labels            map[string]string
+}
+
+type AddSBMFlags struct {
+	Skeleton  bool
+	InputPath string
 }
 
 func applyFlagsToInput(
@@ -132,6 +136,11 @@ func newAddDSCmd(cmdContext *base.CmdContext) *cobra.Command {
 		Short: "Create a dedicated server",
 		Args:  cobra.ArbitraryArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
+			formatter := cmdContext.GetOrCreateFormatter(cmd)
+
+			if flags.Skeleton {
+				return formatter.FormatSkeleton("hosts/add_ds.json")
+			}
 
 			manager := cmdContext.GetManager()
 			ctx, cancel := base.SetupContext(cmd, manager)
@@ -143,6 +152,11 @@ func newAddDSCmd(cmdContext *base.CmdContext) *cobra.Command {
 
 			if flags.InputPath != "" {
 				if err := base.ReadInputJSON(flags.InputPath, cmd.InOrStdin(), &input); err != nil {
+					return err
+				}
+			} else {
+				required := []string{"input"}
+				if err := base.ValidateFlags(cmd, required); err != nil {
 					return err
 				}
 			}
@@ -171,7 +185,6 @@ func newAddDSCmd(cmdContext *base.CmdContext) *cobra.Command {
 			}
 
 			if server != nil {
-				formatter := cmdContext.GetOrCreateFormatter(cmd)
 				return formatter.Format(server)
 			}
 
@@ -180,6 +193,7 @@ func newAddDSCmd(cmdContext *base.CmdContext) *cobra.Command {
 	}
 
 	cmd.Flags().StringVarP(&flags.InputPath, "input", "i", "", "path to input file or '-' to read from stdin")
+	cmd.Flags().BoolVarP(&flags.Skeleton, "skeleton", "s", false, "JSON object with structure that is required to be passed")
 
 	cmd.Flags().IntVar(&flags.LocationID, "location-id", 0, "Create the server(s) in the specific location ID")
 	cmd.Flags().IntVar(&flags.ServerModelID, "server-model-id", 0, "Use specific server model ID to create the server")
@@ -201,12 +215,19 @@ func newAddDSCmd(cmdContext *base.CmdContext) *cobra.Command {
 }
 
 func newAddSBMCmd(cmdContext *base.CmdContext) *cobra.Command {
-	var path string
+	flags := &AddSBMFlags{}
+
 	cmd := &cobra.Command{
 		Use:   "add --input <path>",
 		Short: "Create an SBM server",
 		Args:  cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
+			formatter := cmdContext.GetOrCreateFormatter(cmd)
+
+			if flags.Skeleton {
+				return formatter.FormatSkeleton("hosts/add_sbm.json")
+			}
+
 			manager := cmdContext.GetManager()
 			ctx, cancel := base.SetupContext(cmd, manager)
 			defer cancel()
@@ -215,8 +236,15 @@ func newAddSBMCmd(cmdContext *base.CmdContext) *cobra.Command {
 
 			input := serverscom.SBMServerCreateInput{}
 
-			if err := base.ReadInputJSON(path, cmd.InOrStdin(), &input); err != nil {
-				return err
+			if flags.InputPath != "" {
+				if err := base.ReadInputJSON(flags.InputPath, cmd.InOrStdin(), &input); err != nil {
+					return err
+				}
+			} else {
+				required := []string{"input"}
+				if err := base.ValidateFlags(cmd, required); err != nil {
+					return err
+				}
 			}
 
 			scClient := cmdContext.GetClient().SetVerbose(manager.GetVerbose(cmd)).GetScClient()
@@ -227,7 +255,6 @@ func newAddSBMCmd(cmdContext *base.CmdContext) *cobra.Command {
 			}
 
 			if server != nil {
-				formatter := cmdContext.GetOrCreateFormatter(cmd)
 				return formatter.Format(server)
 			}
 
@@ -235,10 +262,8 @@ func newAddSBMCmd(cmdContext *base.CmdContext) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVarP(&path, "input", "i", "", "path to input file or '-' to read from stdin")
-	if err := cmd.MarkFlagRequired("input"); err != nil {
-		log.Fatal(err)
-	}
+	cmd.Flags().StringVarP(&flags.InputPath, "input", "i", "", "path to input file or '-' to read from stdin")
+	cmd.Flags().BoolVarP(&flags.Skeleton, "skeleton", "s", false, "JSON object with structure that is required to be passed")
 
 	return cmd
 }

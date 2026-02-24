@@ -1,0 +1,46 @@
+{
+    "name": "",
+    "location_id": "",
+    "cluster_id": "",
+    "store_logs": true,
+    "store_logs_region_id": "",
+    "geoip": "true",
+    "vhost_zones": [
+        {
+            "id": "",
+            "ports": [],
+            "ssl": true,
+            "http2": true,
+            "ssl_certificate_id": "",
+            "proxy_protocol": true,
+            "upstream_id": "",
+            "domains": [],
+            "location_zones": [
+                {
+                    "location": "",
+                    "upstream_path": "",
+                    "upstream_id": ""
+                }
+            ],
+            "real_ip_header": {
+                "name": "",
+                "networks": []
+            }
+        }
+    ],
+    "upstream_zones": [
+        {
+            "id": "",
+            "upstreams": [
+                {
+                    "ip": "",
+                    "port": "",
+                    "weight": ""
+                }
+            ]
+        }
+    ],
+    "labels": {
+        "key": "value"
+    }
+}

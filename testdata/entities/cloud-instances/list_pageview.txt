@@ -1,0 +1,43 @@
+ID:                  test-instance-id
+Name:                test-instance
+RegionID:            1
+RegionCode:          AMS1
+OpenstackUUID:       uuid-123
+Status:              active
+FlavorID:            flavor-1
+FlavorName:          m1.small
+ImageID:             image-1
+ImageName:           Ubuntu 20.04
+PublicIPv4Address:   1.2.3.4
+PrivateIPv4Address:  10.0.0.1
+LocalIPv4Address:    192.168.0.1
+PublicIPv6Address:   2001:db8::1
+GPNEnabled:          true
+IPv6Enabled:         true
+BackupCopies:        2
+PublicPortBlocked:   false
+Labels:              env=test
+Created:             2025-01-01T12:00:00Z
+Updated:             2025-01-01T12:00:00Z
+---
+ID:                  test-instance-id2
+Name:                test-instance 2
+RegionID:            1
+RegionCode:          FRA1
+OpenstackUUID:       uuid-123
+Status:              inactive
+FlavorID:            flavor-1
+FlavorName:          m1.small
+ImageID:             image-1
+ImageName:           Ubuntu 20.04
+PublicIPv4Address:   1.2.3.4
+PrivateIPv4Address:  10.0.0.1
+LocalIPv4Address:    192.168.0.1
+PublicIPv6Address:   2001:db8::1
+GPNEnabled:          true
+IPv6Enabled:         true
+BackupCopies:        2
+PublicPortBlocked:   false
+Labels:              env=test
+Created:             2025-01-01T12:00:00Z
+Updated:             2025-01-01T12:00:00Z

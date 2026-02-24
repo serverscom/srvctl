@@ -1,0 +1,27 @@
+[
+    {
+        "name": "test-instance",
+        "id": "test-instance-id",
+        "region_id": 1,
+        "region_code": "AMS1",
+        "openstack_uuid": "uuid-123",
+        "status": "active",
+        "flavor_id": "flavor-1",
+        "flavor_name": "m1.small",
+        "image_id": "image-1",
+        "image_name": "Ubuntu 20.04",
+        "public_ipv4_address": "1.2.3.4",
+        "private_ipv4_address": "10.0.0.1",
+        "local_ipv4_address": "192.168.0.1",
+        "public_ipv6_address": "2001:db8::1",
+        "gpn_enabled": true,
+        "ipv6_enabled": true,
+        "backup_copies": 2,
+        "public_port_blocked": false,
+        "labels": {
+            "env": "test"
+        },
+        "created_at": "2025-01-01T12:00:00Z",
+        "updated_at": "2025-01-01T12:00:00Z"
+    }
+]

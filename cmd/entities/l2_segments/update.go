@@ -1,32 +1,48 @@
 package l2segments
 
 import (
-	"log"
-
 	serverscom "github.com/serverscom/serverscom-go-client/pkg"
 	"github.com/serverscom/srvctl/cmd/base"
 	"github.com/spf13/cobra"
 )
 
+type UpdateFlags struct {
+	Skeleton  bool
+	InputPath string
+}
+
 func newUpdateL2Cmd(cmdContext *base.CmdContext) *cobra.Command {
-	var path string
+	flags := &UpdateFlags{}
 
 	cmd := &cobra.Command{
 		Use:   "update <l2_segment_id>",
 		Short: "Update an L2 segment",
 		Long:  "Update an L2 segment by id",
-		Args:  cobra.ExactArgs(1),
+		Args:  base.SkeletonOrExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			manager := cmdContext.GetManager()
+			formatter := cmdContext.GetOrCreateFormatter(cmd)
 
+			if flags.Skeleton {
+				return formatter.FormatSkeleton("l2-segments/update.json")
+			}
+
+			manager := cmdContext.GetManager()
 			ctx, cancel := base.SetupContext(cmd, manager)
 			defer cancel()
 
 			base.SetupProxy(cmd, manager)
 
 			input := &serverscom.L2SegmentUpdateInput{}
-			if err := base.ReadInputJSON(path, cmd.InOrStdin(), input); err != nil {
-				return err
+
+			if flags.InputPath != "" {
+				if err := base.ReadInputJSON(flags.InputPath, cmd.InOrStdin(), input); err != nil {
+					return err
+				}
+			} else {
+				required := []string{"input"}
+				if err := base.ValidateFlags(cmd, required); err != nil {
+					return err
+				}
 			}
 
 			scClient := cmdContext.GetClient().SetVerbose(manager.GetVerbose(cmd)).GetScClient()
@@ -38,40 +54,50 @@ func newUpdateL2Cmd(cmdContext *base.CmdContext) *cobra.Command {
 			}
 
 			if l2Segment != nil {
-				formatter := cmdContext.GetOrCreateFormatter(cmd)
 				return formatter.Format(l2Segment)
 			}
 			return nil
 		},
 	}
 
-	cmd.Flags().StringVarP(&path, "input", "i", "", "path to input file or '-' to read from stdin")
-	if err := cmd.MarkFlagRequired("input"); err != nil {
-		log.Fatal(err)
-	}
+	cmd.Flags().StringVarP(&flags.InputPath, "input", "i", "", "path to input file or '-' to read from stdin")
+	cmd.Flags().BoolVarP(&flags.Skeleton, "skeleton", "s", false, "JSON object with structure that is required to be passed")
 
 	return cmd
 }
 
 func newUpdateL2NetworksCmd(cmdContext *base.CmdContext) *cobra.Command {
-	var path string
+	flags := &UpdateFlags{}
 
 	cmd := &cobra.Command{
 		Use:   "update-networks <l2_segment_id>",
 		Short: "Update an L2 segment networks",
 		Long:  "Update an L2 segment networks by id",
-		Args:  cobra.ExactArgs(1),
+		Args:  base.SkeletonOrExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			manager := cmdContext.GetManager()
+			formatter := cmdContext.GetOrCreateFormatter(cmd)
 
+			if flags.Skeleton {
+				return formatter.FormatSkeleton("l2-segments/update_networks.json")
+			}
+
+			manager := cmdContext.GetManager()
 			ctx, cancel := base.SetupContext(cmd, manager)
 			defer cancel()
 
 			base.SetupProxy(cmd, manager)
 
 			input := &serverscom.L2SegmentChangeNetworksInput{}
-			if err := base.ReadInputJSON(path, cmd.InOrStdin(), input); err != nil {
-				return err
+
+			if flags.InputPath != "" {
+				if err := base.ReadInputJSON(flags.InputPath, cmd.InOrStdin(), input); err != nil {
+					return err
+				}
+			} else {
+				required := []string{"input"}
+				if err := base.ValidateFlags(cmd, required); err != nil {
+					return err
+				}
 			}
 
 			scClient := cmdContext.GetClient().SetVerbose(manager.GetVerbose(cmd)).GetScClient()
@@ -83,17 +109,14 @@ func newUpdateL2NetworksCmd(cmdContext *base.CmdContext) *cobra.Command {
 			}
 
 			if l2Segment != nil {
-				formatter := cmdContext.GetOrCreateFormatter(cmd)
 				return formatter.Format(l2Segment)
 			}
 			return nil
 		},
 	}
 
-	cmd.Flags().StringVarP(&path, "input", "i", "", "path to input file or '-' to read from stdin")
-	if err := cmd.MarkFlagRequired("input"); err != nil {
-		log.Fatal(err)
-	}
+	cmd.Flags().StringVarP(&flags.InputPath, "input", "i", "", "path to input file or '-' to read from stdin")
+	cmd.Flags().BoolVarP(&flags.Skeleton, "skeleton", "s", false, "JSON object with structure that is required to be passed")
 
 	return cmd
 }

@@ -1,0 +1,12 @@
+id: vol-12345
+openstackuuid: null
+regionid: 1
+size: 100
+status: ""
+bootable: false
+labels:
+    foo: bar
+created: 2025-01-01T12:00:00Z
+description: Test volume
+name: test-volume
+attachments: []

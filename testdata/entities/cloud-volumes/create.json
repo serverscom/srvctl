@@ -1,0 +1,9 @@
+{
+    "name": "test-volume",
+    "region_id": 1,
+    "size": 100,
+    "description": "Test volume",
+    "labels": {
+        "foo": "bar"
+    }
+}

@@ -1,0 +1,7 @@
+ID          snap-123                         
+Name        Test Snapshot                    
+Image Size  1024                             
+Min Disk    10                               
+Status      available                        
+Is Backup   false                            
+File URL    https://test.example.com/snap-123

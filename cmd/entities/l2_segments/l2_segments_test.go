@@ -15,10 +15,11 @@ import (
 )
 
 var (
-	fixtureBasePath   = filepath.Join("..", "..", "..", "testdata", "entities", "l2-segments")
-	testID            = "testId"
-	testL2SegmentName = "testName"
-	fixedTime         = time.Date(2025, 1, 1, 12, 0, 0, 0, time.UTC)
+	fixtureBasePath      = filepath.Join("..", "..", "..", "testdata", "entities", "l2-segments")
+	skeletonTemplatePath = filepath.Join("..", "..", "..", "internal", "output", "skeletons", "templates", "l2-segments")
+	testID               = "testId"
+	testL2SegmentName    = "testName"
+	fixedTime            = time.Date(2025, 1, 1, 12, 0, 0, 0, time.UTC)
 
 	testL2Segment = serverscom.L2Segment{
 		ID:                testID,
@@ -291,7 +292,7 @@ func TestAddL2SegmentCmd(t *testing.T) {
 		expectError    bool
 	}{
 		{
-			name:           "create l2 segment",
+			name:           "create l2 segment with input",
 			output:         "json",
 			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "get.json")),
 			args:           []string{"--input", filepath.Join(fixtureBasePath, "create.json")},
@@ -299,6 +300,53 @@ func TestAddL2SegmentCmd(t *testing.T) {
 				mock.EXPECT().
 					Create(gomock.Any(), gomock.AssignableToTypeOf(serverscom.L2SegmentCreateInput{})).
 					Return(&testL2Segment, nil)
+			},
+		},
+		{
+			name:           "create l2 segment",
+			output:         "json",
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "get.json")),
+			args: []string{
+				"--name", testL2SegmentName,
+				"--type", "public",
+				"--location-group-id", "58",
+				"--member", "id=LDdwmwa1,mode=native",
+				"--member", "id=LDdwmwa2,mode=trunk",
+				"--member", "id=LDdwmwa3,mode=native",
+				"--label", "foo=bar",
+				"--label", "bar=foo",
+			},
+			configureMock: func(mock *mocks.MockL2SegmentsService) {
+				expectedMembers := []serverscom.L2SegmentMemberInput{
+					{ID: "LDdwmwa1", Mode: "native"},
+					{ID: "LDdwmwa2", Mode: "trunk"},
+					{ID: "LDdwmwa3", Mode: "native"},
+				}
+				expectedLabels := map[string]string{
+					"foo": "bar",
+					"bar": "foo",
+				}
+
+				mock.EXPECT().
+					Create(gomock.Any(), serverscom.L2SegmentCreateInput{
+						Name:            &testL2SegmentName,
+						Type:            "public",
+						LocationGroupID: 58,
+						Members:         expectedMembers,
+						Labels:          expectedLabels,
+					}).
+					Return(&testL2Segment, nil)
+			},
+		},
+		{
+			name:           "skeleton for l2 segment input",
+			output:         "json",
+			args:           []string{"--skeleton"},
+			expectedOutput: testutils.ReadFixture(filepath.Join(skeletonTemplatePath, "add.json")),
+			configureMock: func(mock *mocks.MockL2SegmentsService) {
+				mock.EXPECT().
+					Create(gomock.Any(), gomock.Any()).
+					Times(0)
 			},
 		},
 		{
@@ -342,7 +390,7 @@ func TestAddL2SegmentCmd(t *testing.T) {
 				g.Expect(err).To(HaveOccurred())
 			} else {
 				g.Expect(err).To(BeNil())
-				g.Expect(builder.GetOutput()).To(BeEquivalentTo(string(tc.expectedOutput)))
+				g.Expect(builder.GetOutput()).To(MatchJSON(tc.expectedOutput))
 			}
 		})
 	}
@@ -384,6 +432,17 @@ func TestUpdateL2SegmentCmd(t *testing.T) {
 			},
 			expectError: true,
 		},
+		{
+			name:           "skeleton for update l2 segment input",
+			output:         "json",
+			args:           []string{"--skeleton"},
+			expectedOutput: testutils.ReadFixture(filepath.Join(skeletonTemplatePath, "update.json")),
+			configureMock: func(mock *mocks.MockL2SegmentsService) {
+				mock.EXPECT().
+					Update(gomock.Any(), gomock.Any(), gomock.Any()).
+					Times(0)
+			},
+		},
 	}
 
 	mockCtrl := gomock.NewController(t)
@@ -420,7 +479,7 @@ func TestUpdateL2SegmentCmd(t *testing.T) {
 				g.Expect(err).To(HaveOccurred())
 			} else {
 				g.Expect(err).To(BeNil())
-				g.Expect(builder.GetOutput()).To(BeEquivalentTo(string(tc.expectedOutput)))
+				g.Expect(builder.GetOutput()).To(MatchJSON(tc.expectedOutput))
 			}
 		})
 	}
@@ -505,6 +564,17 @@ func TestUpdateL2NetworksCmd(t *testing.T) {
 			},
 		},
 		{
+			name:           "skeleton for update l2 segment input",
+			output:         "json",
+			args:           []string{"--skeleton"},
+			expectedOutput: testutils.ReadFixture(filepath.Join(skeletonTemplatePath, "update_networks.json")),
+			configureMock: func(mock *mocks.MockL2SegmentsService) {
+				mock.EXPECT().
+					Update(gomock.Any(), gomock.Any(), gomock.Any()).
+					Times(0)
+			},
+		},
+		{
 			name: "update l2 segment networks with error",
 			id:   testID,
 			args: []string{"--input", filepath.Join(fixtureBasePath, "update_networks_input.json")},
@@ -552,7 +622,7 @@ func TestUpdateL2NetworksCmd(t *testing.T) {
 				g.Expect(err).To(HaveOccurred())
 			} else {
 				g.Expect(err).To(BeNil())
-				g.Expect(builder.GetOutput()).To(BeEquivalentTo(string(tc.expectedOutput)))
+				g.Expect(builder.GetOutput()).To(MatchJSON(tc.expectedOutput))
 			}
 		})
 	}

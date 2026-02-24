@@ -2,12 +2,13 @@ package output
 
 import (
 	"encoding/json"
-	"html/template"
-	"io"
-
 	"github.com/serverscom/srvctl/internal/config"
+	"github.com/serverscom/srvctl/internal/output/skeletons"
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v3"
+	"html/template"
+	"io"
+	"io/fs"
 )
 
 // Formatter represents formatter struct with custom io.Writer
@@ -57,6 +58,11 @@ func (f *Formatter) SetTemplate(t *template.Template) {
 	f.template = t
 }
 
+// SetOutput sets output
+func (f *Formatter) SetOutput(o string) {
+	f.output = o
+}
+
 // Format formats data according to format
 func (f *Formatter) Format(v any) error {
 	switch f.output {
@@ -65,6 +71,7 @@ func (f *Formatter) Format(v any) error {
 		if err != nil {
 			return err
 		}
+		data = append(data, '\n')
 		_, err = f.writer.Write(data)
 		return err
 	case "yaml":
@@ -74,7 +81,7 @@ func (f *Formatter) Format(v any) error {
 	}
 }
 
-// formatText formats data in text format
+// FormatText formats data in text format
 func (f *Formatter) FormatText(v any) error {
 	switch data := v.(type) {
 	case ConfigInfo:
@@ -82,4 +89,16 @@ func (f *Formatter) FormatText(v any) error {
 	default:
 		return f.formatText(data)
 	}
+}
+
+// FormatSkeleton formats skeleton template in json format
+func (f *Formatter) FormatSkeleton(path string) error {
+	f.SetOutput("json")
+
+	raw, err := fs.ReadFile(skeletons.FS, path)
+	if err != nil {
+		return err
+	}
+
+	return f.Format(json.RawMessage(raw))
 }

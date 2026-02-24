@@ -1,0 +1,15 @@
+{
+    "id": "vol-12345",
+    "openstack_uuid": null,
+    "region_id": 1,
+    "size": 100,
+    "status": "",
+    "bootable": false,
+    "labels": {
+        "foo": "bar"
+    },
+    "created_at": "2025-01-01T12:00:00Z",
+    "description": "Test volume",
+    "name": "test-volume",
+    "attachments": null
+}
