@@ -1,19 +1,13 @@
 A command to get the JSON structure required to update an L4 load balancer:
 
 ```
-srvctl lb l4 update --skeleton
+srvctl lb l4 update ex4mp1eID --skeleton
 ```
 
 A command to update the L4 load balancer with the "ex4mp1eID" ID using a JSON file:
 
 ```
 srvctl lb l4 update ex4mp1eID --input /path/to/input.json
-```
-
-A command to update the L4 load balancer using stdin:
-
-```
-cat input.json | srvctl lb l4 update ex4mp1eID --input -
 ```
 
 JSON structure example:
