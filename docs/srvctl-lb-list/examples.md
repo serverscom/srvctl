@@ -13,7 +13,7 @@ srvctl lb list --all
 A command to filter load balancers by location:
 
 ```
-srvctl lb list --location-id "LON1"
+srvctl lb list --location-id 5
 ```
 
 A command to filter load balancers by cluster:
