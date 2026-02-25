@@ -13,7 +13,7 @@ srvctl network-pools list --all
 A command to filter network pools by location:
 
 ```
-srvctl network-pools list --location-id "LON1"
+srvctl network-pools list --location-id 42
 ```
 
 A command to filter network pools by type:
