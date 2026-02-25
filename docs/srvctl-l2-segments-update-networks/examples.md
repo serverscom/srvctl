@@ -1,7 +1,7 @@
 A command to show the skeleton JSON structure required to update L2 segment networks:
 
 ```
-srvctl l2-segments update-networks --skeleton
+srvctl l2-segments update-networks ex4mp1eID --skeleton
 ```
 
 A command to update networks for the L2 segment with the "ex4mp1eID" ID using an input file:
