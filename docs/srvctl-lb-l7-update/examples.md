@@ -10,12 +10,6 @@ A command to update the L7 load balancer with the "ex4mp1eID" ID using a JSON fi
 srvctl lb l7 update ex4mp1eID --input /path/to/input.json
 ```
 
-A command to update the L7 load balancer using stdin:
-
-```
-cat input.json | srvctl lb l7 update ex4mp1eID --input -
-```
-
 JSON structure example:
 
 ```json
