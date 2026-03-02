@@ -46,6 +46,7 @@ func getServerModelOptionsEntities() (map[string]entities.EntityInterface, error
 		return nil, err
 	}
 
+	result["server-models"] = listEntity
 	result["get"] = getEntity
 	result["list"] = listEntity
 
