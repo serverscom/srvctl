@@ -45,7 +45,11 @@ func newListMembersCmd(cmdContext *base.CmdContext) *cobra.Command {
 		&base.L2SegmentGroupTypeOption[serverscom.L2Member]{},
 	)
 
-	return base.NewListCmd("list-members", "l2 segment members", factory, cmdContext, opts...)
+	cmd := base.NewListCmd("list-members", "l2 segment members", factory, cmdContext, opts...)
+	cmd.Use = "list-members <l2-segment-id>"
+	cmd.Args = cobra.ExactArgs(1)
+
+	return cmd
 }
 
 func newListNetworksCmd(cmdContext *base.CmdContext) *cobra.Command {
@@ -60,5 +64,9 @@ func newListNetworksCmd(cmdContext *base.CmdContext) *cobra.Command {
 		&base.L2SegmentGroupTypeOption[serverscom.Network]{},
 	)
 
-	return base.NewListCmd("list-networks", "l2 segment networks", factory, cmdContext, opts...)
+	cmd := base.NewListCmd("list-networks", "l2 segment networks", factory, cmdContext, opts...)
+	cmd.Use = "list-networks <l2-segment-id>"
+	cmd.Args = cobra.ExactArgs(1)
+
+	return cmd
 }

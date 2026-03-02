@@ -4,7 +4,6 @@ import (
 	serverscom "github.com/serverscom/serverscom-go-client/pkg"
 	"github.com/serverscom/srvctl/cmd/base"
 	"github.com/spf13/cobra"
-	"log"
 )
 
 func newListCmd(cmdContext *base.CmdContext) *cobra.Command {
@@ -26,9 +25,6 @@ func newListCmd(cmdContext *base.CmdContext) *cobra.Command {
 func newListNodesCmd(cmdContext *base.CmdContext) *cobra.Command {
 	factory := func(verbose bool, args ...string) serverscom.Collection[serverscom.KubernetesClusterNode] {
 		scClient := cmdContext.GetClient().SetVerbose(verbose).GetScClient()
-		if len(args) == 0 {
-			log.Fatal("Missing k8s-cluster ID")
-		}
 		return scClient.KubernetesClusters.Nodes(args[0])
 	}
 
@@ -38,5 +34,9 @@ func newListNodesCmd(cmdContext *base.CmdContext) *cobra.Command {
 		&base.LabelSelectorOption[serverscom.KubernetesClusterNode]{},
 	)
 
-	return base.NewListCmd("list-nodes <cluster-id>", "kubernetes cluster nodes by ID", factory, cmdContext, opts...)
+	cmd := base.NewListCmd("list-nodes", "kubernetes cluster nodes", factory, cmdContext, opts...)
+	cmd.Use = "list-nodes <cluster-id>"
+	cmd.Args = cobra.ExactArgs(1)
+
+	return cmd
 }
