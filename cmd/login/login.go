@@ -34,6 +34,11 @@ func NewCmd(cmdContext *base.CmdContext, clientFactory client.ClientFactory) *co
 Example: srvctl login context-name`,
 		Args: cobra.MaximumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
+			// login only if SC_TOKEN env is not set
+			if os.Getenv("SC_TOKEN") != "" {
+				return errors.New("SC_TOKEN env is set. Please unset it before using login command.")
+			}
+
 			if !term.IsTerminal(int(os.Stdout.Fd())) {
 				return errors.New("TTY required to enter the token.")
 			}
@@ -47,6 +52,7 @@ Example: srvctl login context-name`,
 				if contextName == "" {
 					return errors.New(base.ErrNoContexts)
 				}
+				return fmt.Errorf("no context name provided. Using default context: %q", contextName)
 			}
 
 			if err := validator.ValidateContextName(contextName); err != nil {
