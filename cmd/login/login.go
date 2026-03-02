@@ -73,7 +73,6 @@ Example: srvctl login context-name`,
 			if !cmd.Flags().Changed("endpoint") && force {
 				endpoint = manager.GetEndpoint(contextName)
 			}
-			fmt.Println(endpoint)
 
 			if err := validator.ValidateEndpoint(endpoint); err != nil {
 				return err
