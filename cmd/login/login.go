@@ -52,7 +52,9 @@ Example: srvctl login context-name`,
 				if contextName == "" {
 					return errors.New(base.ErrNoContexts)
 				}
-				return fmt.Errorf("no context name provided. Using default context: %q", contextName)
+				if !force {
+					return fmt.Errorf("no context name provided. Using default context: %q. Use --force to override", contextName)
+				}
 			}
 
 			if err := validator.ValidateContextName(contextName); err != nil {
@@ -63,6 +65,15 @@ Example: srvctl login context-name`,
 			if existingCtx != nil && !force {
 				return fmt.Errorf("context %q already exists. Use --force to override", contextName)
 			}
+			if existingCtx == nil && force {
+				return fmt.Errorf("context %q does not exist. Cannot use --force to override", contextName)
+			}
+
+			// if endpoint is not provided and force is used get it from context
+			if !cmd.Flags().Changed("endpoint") && force {
+				endpoint = manager.GetEndpoint(contextName)
+			}
+			fmt.Println(endpoint)
 
 			if err := validator.ValidateEndpoint(endpoint); err != nil {
 				return err
