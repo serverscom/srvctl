@@ -437,7 +437,7 @@ type AttachedSubnetworksOption[T any] struct {
 }
 
 func (o *AttachedSubnetworksOption[T]) AddFlags(cmd *cobra.Command) {
-	cmd.Flags().BoolVar(&o.attached, "attached", false, "Filter only subnetworks that are attached to a dedicated server")
+	cmd.Flags().BoolVar(&o.attached, "attached", false, "Filter only subnetworks that are attached to server")
 }
 
 func (o *AttachedSubnetworksOption[T]) ApplyToCollection(collection serverscom.Collection[T]) {

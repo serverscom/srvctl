@@ -18,17 +18,17 @@ type HostReinstaller interface {
 	NewReinstallInput() any
 }
 
-type DSReinstallMgr struct{}
+type EBMReinstallMgr struct{}
 
-func (r *DSReinstallMgr) Reinstall(ctx context.Context, client *serverscom.Client, id string, input any) (any, error) {
-	dsInput, ok := input.(*serverscom.OperatingSystemReinstallInput)
+func (r *EBMReinstallMgr) Reinstall(ctx context.Context, client *serverscom.Client, id string, input any) (any, error) {
+	ebmInput, ok := input.(*serverscom.OperatingSystemReinstallInput)
 	if !ok {
-		return nil, fmt.Errorf("invalid input type for dedicated server")
+		return nil, fmt.Errorf("invalid input type for enterprise bare metal server")
 	}
-	return client.Hosts.ReinstallOperatingSystemForDedicatedServer(ctx, id, *dsInput)
+	return client.Hosts.ReinstallOperatingSystemForDedicatedServer(ctx, id, *ebmInput)
 }
 
-func (c *DSReinstallMgr) NewReinstallInput() any {
+func (c *EBMReinstallMgr) NewReinstallInput() any {
 	return &serverscom.OperatingSystemReinstallInput{}
 }
 

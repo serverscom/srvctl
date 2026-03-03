@@ -6,7 +6,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func newListDSDriveSlotsCmd(cmdContext *base.CmdContext) *cobra.Command {
+func newListEBMDriveSlotsCmd(cmdContext *base.CmdContext) *cobra.Command {
 	factory := func(verbose bool, args ...string) serverscom.Collection[serverscom.HostDriveSlot] {
 		scClient := cmdContext.GetClient().SetVerbose(verbose).GetScClient()
 		return scClient.Hosts.DedicatedServerDriveSlots(args[0])
@@ -14,7 +14,7 @@ func newListDSDriveSlotsCmd(cmdContext *base.CmdContext) *cobra.Command {
 
 	opts := &base.BaseListOptions[serverscom.HostDriveSlot]{}
 
-	cmd := base.NewListCmd("list-drive-slots", "Dedicated server drive slots", factory, cmdContext, opts)
+	cmd := base.NewListCmd("list-drive-slots", "Enterprise bare metal server drive slots", factory, cmdContext, opts)
 	cmd.Use = "list-drive-slots <id>"
 	cmd.Args = cobra.ExactArgs(1)
 

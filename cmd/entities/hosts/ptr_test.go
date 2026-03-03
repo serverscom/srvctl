@@ -26,7 +26,7 @@ var (
 	}
 )
 
-func TestListDSPTRCmd(t *testing.T) {
+func TestListEBMPTRCmd(t *testing.T) {
 	testPTR1 := testPTR
 	testPTR2 := testPTR
 	testPTR1.ID += "1"
@@ -126,7 +126,7 @@ func TestListDSPTRCmd(t *testing.T) {
 			testCmdContext := testutils.NewTestCmdContext(scClient)
 			cmd := NewCmd(testCmdContext)
 
-			args := append([]string{"hosts", "ds", "list-ptr"}, tc.args...)
+			args := append([]string{"hosts", "ebm", "list-ptr"}, tc.args...)
 			if tc.output != "" {
 				args = append(args, "--output", tc.output)
 			}
@@ -146,7 +146,7 @@ func TestListDSPTRCmd(t *testing.T) {
 	}
 }
 
-func TestCreateDSPTRCmd(t *testing.T) {
+func TestCreateEBMPTRCmd(t *testing.T) {
 	testCases := []struct {
 		name           string
 		args           []string
@@ -203,7 +203,7 @@ func TestCreateDSPTRCmd(t *testing.T) {
 			testCmdContext := testutils.NewTestCmdContext(scClient)
 			cmd := NewCmd(testCmdContext)
 
-			args := []string{"hosts", "ds", "add-ptr"}
+			args := []string{"hosts", "ebm", "add-ptr"}
 			if len(tc.args) > 0 {
 				args = append(args, tc.args...)
 			}
@@ -226,7 +226,7 @@ func TestCreateDSPTRCmd(t *testing.T) {
 	}
 }
 
-func TestDeleteDSPTRCmd(t *testing.T) {
+func TestDeleteEBMPTRCmd(t *testing.T) {
 	testCases := []struct {
 		name        string
 		serverID    string
@@ -266,7 +266,7 @@ func TestDeleteDSPTRCmd(t *testing.T) {
 			testCmdContext := testutils.NewTestCmdContext(scClient)
 			cmd := NewCmd(testCmdContext)
 
-			args := []string{"hosts", "ds", "delete-ptr", tc.serverID, "--ptr-id", tc.ptrID}
+			args := []string{"hosts", "ebm", "delete-ptr", tc.serverID, "--ptr-id", tc.ptrID}
 			builder := testutils.NewTestCommandBuilder().
 				WithCommand(cmd).
 				WithArgs(args)

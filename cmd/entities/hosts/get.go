@@ -13,9 +13,9 @@ type HostGetter interface {
 	Get(ctx context.Context, client *serverscom.Client, id string) (any, error)
 }
 
-type DSGetMgr struct{}
+type EBMGetMgr struct{}
 
-func (g *DSGetMgr) Get(ctx context.Context, client *serverscom.Client, id string) (any, error) {
+func (g *EBMGetMgr) Get(ctx context.Context, client *serverscom.Client, id string) (any, error) {
 	return client.Hosts.GetDedicatedServer(ctx, id)
 }
 

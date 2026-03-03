@@ -16,7 +16,7 @@ var (
 	featuresFixtureBasePath = filepath.Join("..", "..", "..", "testdata", "entities", "hosts", "features")
 )
 
-func TestListDSFeaturesCmd(t *testing.T) {
+func TestListEBMFeaturesCmd(t *testing.T) {
 	testFeature1 := serverscom.DedicatedServerFeature{
 		Name:   "disaggregated_public_ports",
 		Status: "deactivated",
@@ -119,7 +119,7 @@ func TestListDSFeaturesCmd(t *testing.T) {
 			testCmdContext := testutils.NewTestCmdContext(scClient)
 			cmd := NewCmd(testCmdContext)
 
-			args := append([]string{"hosts", "ds", "list-features"}, tc.args...)
+			args := append([]string{"hosts", "ebm", "list-features"}, tc.args...)
 			if tc.output != "" {
 				args = append(args, "--output", tc.output)
 			}

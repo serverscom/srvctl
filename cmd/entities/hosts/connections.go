@@ -6,7 +6,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func newListDSConnectionsCmd(cmdContext *base.CmdContext) *cobra.Command {
+func newListEBMConnectionsCmd(cmdContext *base.CmdContext) *cobra.Command {
 	factory := func(verbose bool, args ...string) serverscom.Collection[serverscom.HostConnection] {
 		scClient := cmdContext.GetClient().SetVerbose(verbose).GetScClient()
 		return scClient.Hosts.DedicatedServerConnections(args[0])
@@ -14,7 +14,7 @@ func newListDSConnectionsCmd(cmdContext *base.CmdContext) *cobra.Command {
 
 	opts := &base.BaseListOptions[serverscom.HostConnection]{}
 
-	cmd := base.NewListCmd("list-connections", "Dedicated server connections", factory, cmdContext, opts)
+	cmd := base.NewListCmd("list-connections", "Enterprise bare metal server connections", factory, cmdContext, opts)
 	cmd.Use = "list-connections <id>"
 	cmd.Args = cobra.ExactArgs(1)
 

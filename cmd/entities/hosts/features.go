@@ -6,7 +6,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func newListDSFeaturesCmd(cmdContext *base.CmdContext) *cobra.Command {
+func newListEBMFeaturesCmd(cmdContext *base.CmdContext) *cobra.Command {
 	factory := func(verbose bool, args ...string) serverscom.Collection[serverscom.DedicatedServerFeature] {
 		scClient := cmdContext.GetClient().SetVerbose(verbose).GetScClient()
 		return scClient.Hosts.DedicatedServerFeatures(args[0])
@@ -14,7 +14,7 @@ func newListDSFeaturesCmd(cmdContext *base.CmdContext) *cobra.Command {
 
 	opts := &base.BaseListOptions[serverscom.DedicatedServerFeature]{}
 
-	cmd := base.NewListCmd("list-features", "Dedicated server features", factory, cmdContext, opts)
+	cmd := base.NewListCmd("list-features", "Enterprise bare metal server features", factory, cmdContext, opts)
 	cmd.Use = "list-features <id>"
 	cmd.Args = cobra.ExactArgs(1)
 
