@@ -8,7 +8,6 @@ import (
 	serverscom "github.com/serverscom/serverscom-go-client/pkg"
 	"github.com/serverscom/srvctl/cmd/base"
 	"github.com/spf13/cobra"
-	"github.com/spf13/pflag"
 )
 
 type AddEBMFlags struct {
@@ -32,49 +31,52 @@ type AddEBMFlags struct {
 }
 
 type AddSBMFlags struct {
-	Skeleton  bool
-	InputPath string
+	Skeleton          bool
+	InputPath         string
+	LocationID        int
+	SBMFlavorModelID  int
+	OperatingSystemID int
+	SSHKeyFingerprint []string
+	UserDataFile      string
+	UserData          string
 }
 
-func applyFlagsToInput(
-	input *serverscom.DedicatedServerCreateInput,
-	flags *AddEBMFlags,
-	pflags *pflag.FlagSet,
-) error {
+func (f *AddEBMFlags) FillInput(cmd *cobra.Command, input *serverscom.DedicatedServerCreateInput) error {
+	pflags := cmd.Flags()
 	if pflags.Changed("location-id") {
-		input.LocationID = int64(flags.LocationID)
+		input.LocationID = int64(f.LocationID)
 	}
 	if pflags.Changed("server-model-id") {
-		input.ServerModelID = int64(flags.ServerModelID)
+		input.ServerModelID = int64(f.ServerModelID)
 	}
 	if pflags.Changed("operating-system-id") {
-		val := int64(flags.OperatingSystemID)
+		val := int64(f.OperatingSystemID)
 		input.OperatingSystemID = &val
 	}
 	if pflags.Changed("feature") {
-		input.Features = flags.Features
+		input.Features = f.Features
 	}
 	if pflags.Changed("ram-size") {
-		input.RAMSize = flags.RAMSize
+		input.RAMSize = f.RAMSize
 	}
 	if pflags.Changed("public-uplink-id") {
 		if input.UplinkModels.Public == nil {
 			input.UplinkModels.Public = &serverscom.DedicatedServerPublicUplinkInput{}
 		}
-		input.UplinkModels.Public.ID = int64(flags.PublicUplinkID)
+		input.UplinkModels.Public.ID = int64(f.PublicUplinkID)
 	}
 	if pflags.Changed("public-bandwidth-id") {
 		if input.UplinkModels.Public == nil {
 			input.UplinkModels.Public = &serverscom.DedicatedServerPublicUplinkInput{}
 		}
-		input.UplinkModels.Public.BandwidthModelID = int64(flags.PublicBandwidthID)
+		input.UplinkModels.Public.BandwidthModelID = int64(f.PublicBandwidthID)
 	}
 	if pflags.Changed("private-uplink-id") {
-		input.UplinkModels.Private.ID = int64(flags.PrivateUplinkID)
+		input.UplinkModels.Private.ID = int64(f.PrivateUplinkID)
 	}
 
 	if pflags.Changed("drive-slots") {
-		slots, err := parseDriveSlots(flags.DriveSlots)
+		slots, err := parseDriveSlots(f.DriveSlots)
 		if err != nil {
 			return err
 		}
@@ -82,7 +84,7 @@ func applyFlagsToInput(
 	}
 
 	if pflags.Changed("layout") {
-		layouts, err := parseLayout(flags.Layout)
+		layouts, err := parseLayout(f.Layout)
 		if err != nil {
 			return err
 		}
@@ -93,7 +95,7 @@ func applyFlagsToInput(
 		if len(input.Drives.Layout) == 0 {
 			return fmt.Errorf("partition given but layout is empty")
 		}
-		partitions, err := parsePartitions(flags.Partitions)
+		partitions, err := parsePartitions(f.Partitions)
 		if err != nil {
 			return err
 		}
@@ -103,13 +105,13 @@ func applyFlagsToInput(
 		}
 	}
 	if pflags.Changed("ipv6") {
-		input.IPv6 = flags.IPv6
+		input.IPv6 = f.IPv6
 	}
 	if pflags.Changed("user-data") && pflags.Changed("user-data-file") {
 		return fmt.Errorf("'user-data' and 'user-data-file' can't be used together")
 	}
 	if pflags.Changed("user-data-file") {
-		data, err := os.ReadFile(flags.UserDataFile)
+		data, err := os.ReadFile(f.UserDataFile)
 		if err != nil {
 			return fmt.Errorf("can't read user-data-file: %v", err)
 		}
@@ -117,13 +119,45 @@ func applyFlagsToInput(
 		input.UserData = &dataStr
 	}
 	if pflags.Changed("user-data") {
-		input.UserData = &flags.UserData
+		input.UserData = &f.UserData
 	}
 
 	if pflags.Changed("labels") {
 		for i := range input.Hosts {
-			maps.Copy(input.Hosts[i].Labels, flags.Labels)
+			maps.Copy(input.Hosts[i].Labels, f.Labels)
 		}
+	}
+	return nil
+}
+
+func (f *AddSBMFlags) FillInput(cmd *cobra.Command, input *serverscom.SBMServerCreateInput) error {
+	pflags := cmd.Flags()
+	if pflags.Changed("location-id") {
+		input.LocationID = int64(f.LocationID)
+	}
+	if pflags.Changed("sbm-flavor-model-id") {
+		input.FlavorModelID = int64(f.SBMFlavorModelID)
+	}
+	if pflags.Changed("operating-system-id") {
+		val := int64(f.OperatingSystemID)
+		input.OperatingSystemID = &val
+	}
+	if pflags.Changed("ssh-key-fingerprint") {
+		input.SSHKeyFingerprints = f.SSHKeyFingerprint
+	}
+	if pflags.Changed("user-data") && pflags.Changed("user-data-file") {
+		return fmt.Errorf("'user-data' and 'user-data-file' can't be used together")
+	}
+	if pflags.Changed("user-data-file") {
+		data, err := os.ReadFile(f.UserDataFile)
+		if err != nil {
+			return fmt.Errorf("can't read user-data-file: %v", err)
+		}
+		dataStr := string(data)
+		input.UserData = &dataStr
+	}
+	if pflags.Changed("user-data") {
+		input.UserData = &f.UserData
 	}
 	return nil
 }
@@ -155,7 +189,7 @@ func newAddEBMCmd(cmdContext *base.CmdContext) *cobra.Command {
 					return err
 				}
 			} else {
-				required := []string{"input"}
+				required := []string{"location-id", "server-model-id", "private-uplink-id", "ram-size", "drive-slots", "layout"}
 				if err := base.ValidateFlags(cmd, required); err != nil {
 					return err
 				}
@@ -172,7 +206,7 @@ func newAddEBMCmd(cmdContext *base.CmdContext) *cobra.Command {
 				})
 			}
 
-			err := applyFlagsToInput(&input, flags, cmd.Flags())
+			err := flags.FillInput(cmd, &input)
 			if err != nil {
 				return err
 			}
@@ -218,9 +252,9 @@ func newAddSBMCmd(cmdContext *base.CmdContext) *cobra.Command {
 	flags := &AddSBMFlags{}
 
 	cmd := &cobra.Command{
-		Use:   "add --input <path>",
+		Use:   "add",
 		Short: "Create an SBM server",
-		Args:  cobra.ExactArgs(0),
+		Args:  cobra.ArbitraryArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			formatter := cmdContext.GetOrCreateFormatter(cmd)
 
@@ -241,10 +275,24 @@ func newAddSBMCmd(cmdContext *base.CmdContext) *cobra.Command {
 					return err
 				}
 			} else {
-				required := []string{"input"}
+				required := []string{"location-id", "sbm-flavor-model-id", "operating-system-id"}
 				if err := base.ValidateFlags(cmd, required); err != nil {
 					return err
 				}
+			}
+
+			if len(input.Hosts) == 0 && len(args) == 0 {
+				return fmt.Errorf("no hosts found from positional args and no hosts found from input, can't continue")
+			}
+
+			for _, hostname := range args {
+				input.Hosts = append(input.Hosts, serverscom.SBMServerHostInput{
+					Hostname: hostname,
+				})
+			}
+
+			if err := flags.FillInput(cmd, &input); err != nil {
+				return err
 			}
 
 			scClient := cmdContext.GetClient().SetVerbose(manager.GetVerbose(cmd)).GetScClient()
@@ -264,6 +312,13 @@ func newAddSBMCmd(cmdContext *base.CmdContext) *cobra.Command {
 
 	cmd.Flags().StringVarP(&flags.InputPath, "input", "i", "", "path to input file or '-' to read from stdin")
 	cmd.Flags().BoolVarP(&flags.Skeleton, "skeleton", "s", false, "JSON object with structure that is required to be passed")
+
+	cmd.Flags().IntVar(&flags.LocationID, "location-id", 0, "A unique identifier of a location")
+	cmd.Flags().IntVar(&flags.SBMFlavorModelID, "sbm-flavor-model-id", 0, "A unique identifier of an SBM flavor")
+	cmd.Flags().IntVar(&flags.OperatingSystemID, "operating-system-id", 0, "A unique identifier of an operating system")
+	cmd.Flags().StringArrayVar(&flags.SSHKeyFingerprint, "ssh-key-fingerprint", nil, "Fingerprint of an SSH key to access the server")
+	cmd.Flags().StringVar(&flags.UserDataFile, "user-data-file", "", "Path to user data which should be read")
+	cmd.Flags().StringVar(&flags.UserData, "user-data", "", "Content of user data")
 
 	return cmd
 }

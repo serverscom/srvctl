@@ -437,6 +437,34 @@ func TestAddSBMCmd(t *testing.T) {
 			},
 		},
 		{
+			name:           "create SBM server with params",
+			output:         "json",
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "create_sbm_resp.json")),
+			args: []string{
+				"--location-id", "5678",
+				"--sbm-flavor-model-id", "1234",
+				"--operating-system-id", "9999",
+				"--ssh-key-fingerprint", "48:81:0c:43:99:12:71:5e:ba:fd:e7:2f:20:d7:95:e8",
+				"example.aa",
+			},
+			configureMock: func(mock *mocks.MockHostsService) {
+				osID := int64(9999)
+				mock.EXPECT().
+					CreateSBMServers(gomock.Any(), serverscom.SBMServerCreateInput{
+						FlavorModelID:      1234,
+						LocationID:         5678,
+						OperatingSystemID:  &osID,
+						SSHKeyFingerprints: []string{"48:81:0c:43:99:12:71:5e:ba:fd:e7:2f:20:d7:95:e8"},
+						Hosts: []serverscom.SBMServerHostInput{
+							{
+								Hostname: "example.aa",
+							},
+						},
+					}).
+					Return([]serverscom.SBMServer{testSBM}, nil)
+			},
+		},
+		{
 			name:           "skeleton for SBM server input",
 			output:         "json",
 			args:           []string{"--skeleton"},
