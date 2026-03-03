@@ -34,6 +34,11 @@ func NewCmd(cmdContext *base.CmdContext, clientFactory client.ClientFactory) *co
 Example: srvctl login context-name`,
 		Args: cobra.MaximumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
+			// login only if SC_TOKEN env is not set
+			if os.Getenv("SC_TOKEN") != "" {
+				return errors.New("SC_TOKEN env is set. Please unset it before using login command.")
+			}
+
 			if !term.IsTerminal(int(os.Stdout.Fd())) {
 				return errors.New("TTY required to enter the token.")
 			}
@@ -47,6 +52,9 @@ Example: srvctl login context-name`,
 				if contextName == "" {
 					return errors.New(base.ErrNoContexts)
 				}
+				if !force {
+					return fmt.Errorf("no context name provided. Using default context: %q. Use --force to override", contextName)
+				}
 			}
 
 			if err := validator.ValidateContextName(contextName); err != nil {
@@ -56,6 +64,14 @@ Example: srvctl login context-name`,
 			existingCtx, _ := manager.GetContext(contextName)
 			if existingCtx != nil && !force {
 				return fmt.Errorf("context %q already exists. Use --force to override", contextName)
+			}
+			if existingCtx == nil && force {
+				return fmt.Errorf("context %q does not exist. Cannot use --force to override", contextName)
+			}
+
+			// if endpoint is not provided and force is used get it from context
+			if !cmd.Flags().Changed("endpoint") && force {
+				endpoint = manager.GetEndpoint(contextName)
 			}
 
 			if err := validator.ValidateEndpoint(endpoint); err != nil {
