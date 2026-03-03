@@ -1,8 +1,6 @@
 package hosts
 
 import (
-	"log"
-
 	serverscom "github.com/serverscom/serverscom-go-client/pkg"
 	"github.com/serverscom/srvctl/cmd/base"
 	"github.com/spf13/cobra"
@@ -11,16 +9,16 @@ import (
 func newListDSPTRCmd(cmdContext *base.CmdContext) *cobra.Command {
 	factory := func(verbose bool, args ...string) serverscom.Collection[serverscom.PTRRecord] {
 		scClient := cmdContext.GetClient().SetVerbose(verbose).GetScClient()
-		if len(args) == 0 {
-			log.Fatal("Missing dedicated server ID")
-		}
-		id := args[0]
-		return scClient.Hosts.DedicatedServerPTRRecords(id)
+		return scClient.Hosts.DedicatedServerPTRRecords(args[0])
 	}
 
 	opts := &base.BaseListOptions[serverscom.PTRRecord]{}
 
-	return base.NewListCmd("list-ptr <id>", "Dedicated server PTR records", factory, cmdContext, opts)
+	cmd := base.NewListCmd("list-ptr", "Dedicated server PTR records", factory, cmdContext, opts)
+	cmd.Use = "list-ptr <id>"
+	cmd.Args = cobra.ExactArgs(1)
+
+	return cmd
 }
 
 func newCreateDSPTRCmd(cmdContext *base.CmdContext) *cobra.Command {
@@ -116,16 +114,16 @@ func newDeleteDSPTRCmd(cmdContext *base.CmdContext) *cobra.Command {
 func newListSBMPTRCmd(cmdContext *base.CmdContext) *cobra.Command {
 	factory := func(verbose bool, args ...string) serverscom.Collection[serverscom.PTRRecord] {
 		scClient := cmdContext.GetClient().SetVerbose(verbose).GetScClient()
-		if len(args) == 0 {
-			log.Fatal("Missing SBM server ID")
-		}
-		id := args[0]
-		return scClient.Hosts.SBMServerPTRRecords(id)
+		return scClient.Hosts.SBMServerPTRRecords(args[0])
 	}
 
 	opts := &base.BaseListOptions[serverscom.PTRRecord]{}
 
-	return base.NewListCmd("list-ptr <id>", "SBM server PTR records", factory, cmdContext, opts)
+	cmd := base.NewListCmd("list-ptr", "SBM server PTR records", factory, cmdContext, opts)
+	cmd.Use = "list-ptr <id>"
+	cmd.Args = cobra.ExactArgs(1)
+
+	return cmd
 }
 
 func newCreateSBMPTRCmd(cmdContext *base.CmdContext) *cobra.Command {

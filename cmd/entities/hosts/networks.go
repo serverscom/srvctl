@@ -1,8 +1,6 @@
 package hosts
 
 import (
-	"log"
-
 	serverscom "github.com/serverscom/serverscom-go-client/pkg"
 	"github.com/serverscom/srvctl/cmd/base"
 	"github.com/spf13/cobra"
@@ -11,11 +9,7 @@ import (
 func newListDSNetworksCmd(cmdContext *base.CmdContext) *cobra.Command {
 	factory := func(verbose bool, args ...string) serverscom.Collection[serverscom.Network] {
 		scClient := cmdContext.GetClient().SetVerbose(verbose).GetScClient()
-		if len(args) == 0 {
-			log.Fatal("Missing dedicated server ID")
-		}
-		id := args[0]
-		return scClient.Hosts.DedicatedServerNetworks(id)
+		return scClient.Hosts.DedicatedServerNetworks(args[0])
 	}
 
 	opts := base.NewListOptions(
@@ -27,7 +21,11 @@ func newListDSNetworksCmd(cmdContext *base.CmdContext) *cobra.Command {
 		&base.AdditionalOption[serverscom.Network]{},
 	)
 
-	return base.NewListCmd("list-networks <id>", "Dedicated server networks", factory, cmdContext, opts...)
+	cmd := base.NewListCmd("list-networks", "Dedicated server networks", factory, cmdContext, opts...)
+	cmd.Use = "list-networks <id>"
+	cmd.Args = cobra.ExactArgs(1)
+
+	return cmd
 }
 
 func newGetDSNetworkCmd(cmdContext *base.CmdContext) *cobra.Command {
@@ -160,11 +158,7 @@ func newDeleteDSNetworkCmd(cmdContext *base.CmdContext) *cobra.Command {
 func newListKBMNetworksCmd(cmdContext *base.CmdContext) *cobra.Command {
 	factory := func(verbose bool, args ...string) serverscom.Collection[serverscom.Network] {
 		scClient := cmdContext.GetClient().SetVerbose(verbose).GetScClient()
-		if len(args) == 0 {
-			log.Fatal("Missing KBM node ID")
-		}
-		id := args[0]
-		return scClient.Hosts.KubernetesBaremetalNodeNetworks(id)
+		return scClient.Hosts.KubernetesBaremetalNodeNetworks(args[0])
 	}
 
 	opts := base.NewListOptions(
@@ -176,5 +170,9 @@ func newListKBMNetworksCmd(cmdContext *base.CmdContext) *cobra.Command {
 		&base.AdditionalOption[serverscom.Network]{},
 	)
 
-	return base.NewListCmd("list-networks <id>", "KBM node networks", factory, cmdContext, opts...)
+	cmd := base.NewListCmd("list-networks", "KBM node networks", factory, cmdContext, opts...)
+	cmd.Use = "list-networks <id>"
+	cmd.Args = cobra.ExactArgs(1)
+
+	return cmd
 }
