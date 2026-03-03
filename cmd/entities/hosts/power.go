@@ -14,9 +14,9 @@ type HostPowerer interface {
 	ListPowerFeeds(ctx context.Context, client *serverscom.Client, id string) (any, error)
 }
 
-type DSPowerMgr struct{}
+type EBMPowerMgr struct{}
 
-func (p *DSPowerMgr) PowerAction(ctx context.Context, client *serverscom.Client, id string, action string) (any, error) {
+func (p *EBMPowerMgr) PowerAction(ctx context.Context, client *serverscom.Client, id string, action string) (any, error) {
 	switch action {
 	case "on":
 		return client.Hosts.PowerOnDedicatedServer(ctx, id)
@@ -29,7 +29,7 @@ func (p *DSPowerMgr) PowerAction(ctx context.Context, client *serverscom.Client,
 	}
 }
 
-func (p *DSPowerMgr) ListPowerFeeds(ctx context.Context, client *serverscom.Client, id string) (any, error) {
+func (p *EBMPowerMgr) ListPowerFeeds(ctx context.Context, client *serverscom.Client, id string) (any, error) {
 	return client.Hosts.DedicatedServerPowerFeeds(ctx, id)
 }
 

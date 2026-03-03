@@ -5,12 +5,12 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func newGetDSOOBCredsCmd(cmdContext *base.CmdContext) *cobra.Command {
+func newGetEBMOOBCredsCmd(cmdContext *base.CmdContext) *cobra.Command {
 	var fingerprint string
 
 	cmd := &cobra.Command{
 		Use:   "get-oob-credentials <id>",
-		Short: ("Get a dedicated server oob credentials"),
+		Short: ("Get an enterprise bare metal server oob credentials"),
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			manager := cmdContext.GetManager()

@@ -6,7 +6,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func newListDSServicesCmd(cmdContext *base.CmdContext) *cobra.Command {
+func newListEBMServicesCmd(cmdContext *base.CmdContext) *cobra.Command {
 	factory := func(verbose bool, args ...string) serverscom.Collection[serverscom.DedicatedServerService] {
 		scClient := cmdContext.GetClient().SetVerbose(verbose).GetScClient()
 		return scClient.Hosts.DedicatedServerServices(args[0])
@@ -14,7 +14,7 @@ func newListDSServicesCmd(cmdContext *base.CmdContext) *cobra.Command {
 
 	opts := &base.BaseListOptions[serverscom.DedicatedServerService]{}
 
-	cmd := base.NewListCmd("list-services", "Dedicated server services", factory, cmdContext, opts)
+	cmd := base.NewListCmd("list-services", "Enterprise bare metal server services", factory, cmdContext, opts)
 	cmd.Use = "list-services <id>"
 	cmd.Args = cobra.ExactArgs(1)
 

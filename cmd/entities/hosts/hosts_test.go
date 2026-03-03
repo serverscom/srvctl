@@ -241,7 +241,7 @@ func TestListHostsCmd(t *testing.T) {
 	}
 }
 
-func TestAddDSCmd(t *testing.T) {
+func TestAddEBMCmd(t *testing.T) {
 	expectedInput := serverscom.DedicatedServerCreateInput{
 		ServerModelID: 1234,
 		LocationID:    5678,
@@ -302,10 +302,10 @@ func TestAddDSCmd(t *testing.T) {
 		expectError    bool
 	}{
 		{
-			name:           "create dedicated server",
+			name:           "create ebm server",
 			output:         "json",
-			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "create_ds_resp.json")),
-			args:           []string{"--input", filepath.Join(fixtureBasePath, "create_ds_input.json")},
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "create_ebm_resp.json")),
+			args:           []string{"--input", filepath.Join(fixtureBasePath, "create_ebm_input.json")},
 			configureMock: func(mock *mocks.MockHostsService) {
 				mock.EXPECT().
 					CreateDedicatedServers(gomock.Any(), expectedInput).
@@ -313,11 +313,11 @@ func TestAddDSCmd(t *testing.T) {
 			},
 		},
 		{
-			name:           "create dedicated server with merge input with flags",
+			name:           "create ebm server with merge input with flags",
 			output:         "json",
-			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "create_ds_resp.json")),
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "create_ebm_resp.json")),
 			args: []string{
-				"--input", filepath.Join(fixtureBasePath, "create_ds_input.json"),
+				"--input", filepath.Join(fixtureBasePath, "create_ebm_input.json"),
 				"--layout", "slot=3,slot=4,raid=0",
 				"--partition", "slot=3,slot=4,target=/boot,fs=ext4,size=500",
 			},
@@ -342,10 +342,10 @@ func TestAddDSCmd(t *testing.T) {
 			},
 		},
 		{
-			name:           "skeleton for dedicated server input",
+			name:           "skeleton for ebm server input",
 			output:         "json",
 			args:           []string{"--skeleton"},
-			expectedOutput: testutils.ReadFixture(filepath.Join(skeletonTemplatePath, "add_ds.json")),
+			expectedOutput: testutils.ReadFixture(filepath.Join(skeletonTemplatePath, "add_ebm.json")),
 			configureMock: func(mock *mocks.MockHostsService) {
 				mock.EXPECT().
 					CreateDedicatedServers(gomock.Any(), gomock.Any()).
@@ -353,7 +353,7 @@ func TestAddDSCmd(t *testing.T) {
 			},
 		},
 		{
-			name:        "create dedicated server with error",
+			name:        "create ebm server with error",
 			expectError: true,
 		},
 	}
@@ -377,7 +377,7 @@ func TestAddDSCmd(t *testing.T) {
 			testCmdContext := testutils.NewTestCmdContext(scClient)
 			sshCmd := NewCmd(testCmdContext)
 
-			args := []string{"hosts", "ds", "add"}
+			args := []string{"hosts", "ebm", "add"}
 			if len(tc.args) > 0 {
 				args = append(args, tc.args...)
 			}
@@ -498,7 +498,7 @@ func TestAddSBMCmd(t *testing.T) {
 	}
 }
 
-func TestGetDSCmd(t *testing.T) {
+func TestGetEBMCmd(t *testing.T) {
 	testCases := []struct {
 		name           string
 		id             string
@@ -507,25 +507,25 @@ func TestGetDSCmd(t *testing.T) {
 		expectError    bool
 	}{
 		{
-			name:           "get dedicated server in default format",
+			name:           "get ebm server in default format",
 			id:             testId,
 			output:         "",
-			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "get_ds.txt")),
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "get_ebm.txt")),
 		},
 		{
-			name:           "get dedicated server in JSON format",
+			name:           "get ebm server in JSON format",
 			id:             testId,
 			output:         "json",
-			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "get_ds.json")),
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "get_ebm.json")),
 		},
 		{
-			name:           "get dedicated server in YAML format",
+			name:           "get ebm server in YAML format",
 			id:             testId,
 			output:         "yaml",
-			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "get_ds.yaml")),
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "get_ebm.yaml")),
 		},
 		{
-			name:        "get dedicated server with error",
+			name:        "get ebm server with error",
 			id:          testId,
 			expectError: true,
 		},
@@ -554,7 +554,7 @@ func TestGetDSCmd(t *testing.T) {
 			testCmdContext := testutils.NewTestCmdContext(scClient)
 			hostsCmd := NewCmd(testCmdContext)
 
-			args := []string{"hosts", "ds", "get", tc.id}
+			args := []string{"hosts", "ebm", "get", tc.id}
 			if tc.output != "" {
 				args = append(args, "--output", tc.output)
 			}
@@ -735,7 +735,7 @@ func TestGetSBMCmd(t *testing.T) {
 	}
 }
 
-func TestListDSCmd(t *testing.T) {
+func TestListEBMCmd(t *testing.T) {
 	testServer1 := testDS
 	testServer1.Type = "dedicated_server"
 	testServer2 := testServer1
@@ -751,10 +751,10 @@ func TestListDSCmd(t *testing.T) {
 		configureMock  func(*mocks.MockCollection[serverscom.DedicatedServer])
 	}{
 		{
-			name:           "list all dedicated servers",
+			name:           "list all ebm servers",
 			output:         "json",
 			args:           []string{"-A"},
-			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_ds_all.json")),
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_ebm_all.json")),
 			configureMock: func(mock *mocks.MockCollection[serverscom.DedicatedServer]) {
 				mock.EXPECT().
 					Collect(gomock.Any()).
@@ -765,9 +765,9 @@ func TestListDSCmd(t *testing.T) {
 			},
 		},
 		{
-			name:           "list dedicated servers",
+			name:           "list ebm servers",
 			output:         "json",
-			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_ds.json")),
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_ebm.json")),
 			configureMock: func(mock *mocks.MockCollection[serverscom.DedicatedServer]) {
 				mock.EXPECT().
 					List(gomock.Any()).
@@ -777,9 +777,9 @@ func TestListDSCmd(t *testing.T) {
 			},
 		},
 		{
-			name:           "list dedicated servers with template",
+			name:           "list ebm servers with template",
 			args:           []string{"--template", "{{range .}}Title: {{.Title}}  Type: {{.Type}}\n{{end}}"},
-			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_ds_template.txt")),
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_ebm_template.txt")),
 			configureMock: func(mock *mocks.MockCollection[serverscom.DedicatedServer]) {
 				mock.EXPECT().
 					List(gomock.Any()).
@@ -790,9 +790,9 @@ func TestListDSCmd(t *testing.T) {
 			},
 		},
 		{
-			name:           "list dedicated servers with pageView",
+			name:           "list ebm servers with pageView",
 			args:           []string{"--page-view"},
-			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_ds_pageview.txt")),
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_ebm_pageview.txt")),
 			configureMock: func(mock *mocks.MockCollection[serverscom.DedicatedServer]) {
 				mock.EXPECT().
 					List(gomock.Any()).
@@ -803,7 +803,7 @@ func TestListDSCmd(t *testing.T) {
 			},
 		},
 		{
-			name:        "list dedicated servers with error",
+			name:        "list ebm servers with error",
 			expectError: true,
 			configureMock: func(mock *mocks.MockCollection[serverscom.DedicatedServer]) {
 				mock.EXPECT().
@@ -843,7 +843,7 @@ func TestListDSCmd(t *testing.T) {
 			testCmdContext := testutils.NewTestCmdContext(scClient)
 			hostsCmd := NewCmd(testCmdContext)
 
-			args := []string{"hosts", "ds", "list"}
+			args := []string{"hosts", "ebm", "list"}
 			if len(tc.args) > 0 {
 				args = append(args, tc.args...)
 			}
@@ -885,7 +885,7 @@ func TestListKBMCmd(t *testing.T) {
 		configureMock  func(*mocks.MockCollection[serverscom.KubernetesBaremetalNode])
 	}{
 		{
-			name:           "list all KMB nodes",
+			name:           "list all KBM nodes",
 			output:         "json",
 			args:           []string{"-A"},
 			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_kbm_all.json")),
@@ -1137,7 +1137,7 @@ func TestListSBMCmd(t *testing.T) {
 	}
 }
 
-func TestUpdateDSCmd(t *testing.T) {
+func TestUpdateEBMCmd(t *testing.T) {
 	newServer := testDS
 	newServer.Labels = map[string]string{"new": "label"}
 
@@ -1151,10 +1151,10 @@ func TestUpdateDSCmd(t *testing.T) {
 		expectError    bool
 	}{
 		{
-			name:           "update dedicated server",
+			name:           "update ebm server",
 			id:             testId,
 			output:         "json",
-			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "update_ds_resp.json")),
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "update_ebm_resp.json")),
 			args:           []string{"--label", "new=label"},
 			configureMock: func(mock *mocks.MockHostsService) {
 				mock.EXPECT().
@@ -1165,7 +1165,7 @@ func TestUpdateDSCmd(t *testing.T) {
 			},
 		},
 		{
-			name: "update dedicated server with error",
+			name: "update ebm server with error",
 			id:   testId,
 			configureMock: func(mock *mocks.MockHostsService) {
 				mock.EXPECT().
@@ -1197,7 +1197,7 @@ func TestUpdateDSCmd(t *testing.T) {
 			testCmdContext := testutils.NewTestCmdContext(scClient)
 			sshCmd := NewCmd(testCmdContext)
 
-			args := []string{"hosts", "ds", "update", tc.id}
+			args := []string{"hosts", "ebm", "update", tc.id}
 			if len(tc.args) > 0 {
 				args = append(args, tc.args...)
 			}
@@ -1395,7 +1395,7 @@ func TestUpdateSBMCmd(t *testing.T) {
 	}
 }
 
-func TestScheduleReleaseDSCmd(t *testing.T) {
+func TestScheduleReleaseEBMCmd(t *testing.T) {
 	releasedServer := testDS
 	testCases := []struct {
 		name           string
@@ -1407,10 +1407,10 @@ func TestScheduleReleaseDSCmd(t *testing.T) {
 		configureMock  func(*mocks.MockHostsService)
 	}{
 		{
-			name:           "release dedicated server",
+			name:           "release ebm server",
 			id:             testId,
 			output:         "json",
-			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "release_ds_resp.json")),
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "release_ebm_resp.json")),
 			configureMock: func(mock *mocks.MockHostsService) {
 				mock.EXPECT().
 					ScheduleReleaseForDedicatedServer(gomock.Any(), testId, serverscom.ScheduleReleaseInput{}).
@@ -1418,10 +1418,10 @@ func TestScheduleReleaseDSCmd(t *testing.T) {
 			},
 		},
 		{
-			name:           "release dedicated server with --release-after",
+			name:           "release ebm server with --release-after",
 			id:             testId,
 			output:         "json",
-			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "release_ds_scheduled_resp.json")),
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "release_ebm_scheduled_resp.json")),
 			args:           []string{"--release-after", "2025-01-01T12:34:56+03:00"},
 			configureMock: func(mock *mocks.MockHostsService) {
 				releasedServer.ScheduledRelease = &fixedTime
@@ -1431,7 +1431,7 @@ func TestScheduleReleaseDSCmd(t *testing.T) {
 			},
 		},
 		{
-			name:        "release dedicated server with error",
+			name:        "release ebm server with error",
 			id:          testId,
 			expectError: true,
 			configureMock: func(mock *mocks.MockHostsService) {
@@ -1462,7 +1462,7 @@ func TestScheduleReleaseDSCmd(t *testing.T) {
 			testCmdContext := testutils.NewTestCmdContext(scClient)
 			hostsCmd := NewCmd(testCmdContext)
 
-			args := []string{"hosts", "ds", "schedule-release", tc.id}
+			args := []string{"hosts", "ebm", "schedule-release", tc.id}
 			if len(tc.args) > 0 {
 				args = append(args, tc.args...)
 			}
@@ -1488,7 +1488,7 @@ func TestScheduleReleaseDSCmd(t *testing.T) {
 	}
 }
 
-func TestAbortReleaseDSCmd(t *testing.T) {
+func TestAbortReleaseEBMCmd(t *testing.T) {
 	testCases := []struct {
 		name           string
 		id             string
@@ -1497,13 +1497,13 @@ func TestAbortReleaseDSCmd(t *testing.T) {
 		expectError    bool
 	}{
 		{
-			name:           "abort release dedicated server",
+			name:           "abort release ebm server",
 			id:             testId,
 			output:         "json",
-			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "get_ds.json")),
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "get_ebm.json")),
 		},
 		{
-			name:        "abort release dedicated server with error",
+			name:        "abort release ebm server with error",
 			id:          testId,
 			expectError: true,
 		},
@@ -1532,7 +1532,7 @@ func TestAbortReleaseDSCmd(t *testing.T) {
 			testCmdContext := testutils.NewTestCmdContext(scClient)
 			hostsCmd := NewCmd(testCmdContext)
 
-			args := []string{"hosts", "ds", "abort-release", tc.id}
+			args := []string{"hosts", "ebm", "abort-release", tc.id}
 			if tc.output != "" {
 				args = append(args, "--output", tc.output)
 			}
@@ -1622,7 +1622,7 @@ func TestReleaseSBMCmd(t *testing.T) {
 	}
 }
 
-func TestGetDSNetworkCmd(t *testing.T) {
+func TestGetEBMNetworkCmd(t *testing.T) {
 	testCases := []struct {
 		name           string
 		id             string
@@ -1636,21 +1636,21 @@ func TestGetDSNetworkCmd(t *testing.T) {
 			id:             testId,
 			networkID:      testNetworkId,
 			output:         "",
-			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "get_ds_network.txt")),
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "get_ebm_network.txt")),
 		},
 		{
 			name:           "get DS network in JSON format",
 			id:             testId,
 			networkID:      testNetworkId,
 			output:         "json",
-			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "get_ds_network.json")),
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "get_ebm_network.json")),
 		},
 		{
 			name:           "get DS network in YAML format",
 			id:             testId,
 			networkID:      testNetworkId,
 			output:         "yaml",
-			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "get_ds_network.yaml")),
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "get_ebm_network.yaml")),
 		},
 		{
 			name:        "get DS network with error",
@@ -1683,7 +1683,7 @@ func TestGetDSNetworkCmd(t *testing.T) {
 			hostsCmd := NewCmd(testCmdContext)
 
 			args := []string{
-				"hosts", "ds", "get-network", tc.id,
+				"hosts", "ebm", "get-network", tc.id,
 				"--network-id", tc.networkID,
 			}
 			if tc.output != "" {
@@ -1707,7 +1707,7 @@ func TestGetDSNetworkCmd(t *testing.T) {
 	}
 }
 
-func TestListDSNetworksCmd(t *testing.T) {
+func TestListEBMNetworksCmd(t *testing.T) {
 	testNetwork1 := testNetwork
 	testNetwork1.ID = testNetworkId
 	testNetwork2 := testNetwork1
@@ -1727,7 +1727,7 @@ func TestListDSNetworksCmd(t *testing.T) {
 			name:           "list all DS networks",
 			output:         "json",
 			args:           []string{"testServerId", "-A"},
-			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_ds_networks_all.json")),
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_ebm_networks_all.json")),
 			configureMock: func(mock *mocks.MockCollection[serverscom.Network]) {
 				mock.EXPECT().
 					Collect(gomock.Any()).
@@ -1741,7 +1741,7 @@ func TestListDSNetworksCmd(t *testing.T) {
 			name:           "list DS networks",
 			output:         "json",
 			args:           []string{"testServerId"},
-			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_ds_networks.json")),
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_ebm_networks.json")),
 			configureMock: func(mock *mocks.MockCollection[serverscom.Network]) {
 				mock.EXPECT().
 					List(gomock.Any()).
@@ -1753,7 +1753,7 @@ func TestListDSNetworksCmd(t *testing.T) {
 		{
 			name:           "list DS networks with template",
 			args:           []string{"testServerId", "--template", "{{range .}}Network: {{.ID}}  Title: {{.Title}}\n{{end}}"},
-			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_ds_networks_template.txt")),
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_ebm_networks_template.txt")),
 			configureMock: func(mock *mocks.MockCollection[serverscom.Network]) {
 				mock.EXPECT().
 					List(gomock.Any()).
@@ -1766,7 +1766,7 @@ func TestListDSNetworksCmd(t *testing.T) {
 		{
 			name:           "list DS networks with pageView",
 			args:           []string{"testServerId", "--page-view"},
-			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_ds_networks_pageview.txt")),
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_ebm_networks_pageview.txt")),
 			configureMock: func(mock *mocks.MockCollection[serverscom.Network]) {
 				mock.EXPECT().
 					List(gomock.Any()).
@@ -1818,7 +1818,7 @@ func TestListDSNetworksCmd(t *testing.T) {
 			testCmdContext := testutils.NewTestCmdContext(scClient)
 			hostsCmd := NewCmd(testCmdContext)
 
-			args := []string{"hosts", "ds", "list-networks"}
+			args := []string{"hosts", "ebm", "list-networks"}
 			if len(tc.args) > 0 {
 				args = append(args, tc.args...)
 			}
@@ -1844,7 +1844,7 @@ func TestListDSNetworksCmd(t *testing.T) {
 	}
 }
 
-func TestAddDSNetworkCmd(t *testing.T) {
+func TestAddEBMNetworkCmd(t *testing.T) {
 	expectedInputPublic := serverscom.NetworkInput{
 		DistributionMethod: "route",
 		Mask:               32,
@@ -1871,7 +1871,7 @@ func TestAddDSNetworkCmd(t *testing.T) {
 				"--mask", "32",
 				"--distribution-method", "route",
 			},
-			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "get_ds_network.json")),
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "get_ebm_network.json")),
 			configureMock: func(mock *mocks.MockHostsService) {
 				mock.EXPECT().
 					AddDedicatedServerPublicIPv4Network(gomock.Any(), testId, expectedInputPublic).
@@ -1887,7 +1887,7 @@ func TestAddDSNetworkCmd(t *testing.T) {
 				"--mask", "29",
 				"--distribution-method", "gateway",
 			},
-			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "get_ds_network.json")),
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "get_ebm_network.json")),
 			configureMock: func(mock *mocks.MockHostsService) {
 				mock.EXPECT().
 					AddDedicatedServerPrivateIPv4Network(gomock.Any(), testId, expectedInputPrivate).
@@ -1925,7 +1925,7 @@ func TestAddDSNetworkCmd(t *testing.T) {
 			testCmdContext := testutils.NewTestCmdContext(scClient)
 			hostsCmd := NewCmd(testCmdContext)
 
-			args := append([]string{"hosts", "ds", "add-network"}, tc.args...)
+			args := append([]string{"hosts", "ebm", "add-network"}, tc.args...)
 			if tc.output != "" {
 				args = append(args, "--output", tc.output)
 			}
@@ -1948,7 +1948,7 @@ func TestAddDSNetworkCmd(t *testing.T) {
 	}
 }
 
-func TestDeleteDSNetworkCmd(t *testing.T) {
+func TestDeleteEBMNetworkCmd(t *testing.T) {
 	testCases := []struct {
 		name           string
 		id             string
@@ -1962,7 +1962,7 @@ func TestDeleteDSNetworkCmd(t *testing.T) {
 			id:             testId,
 			networkID:      testNetworkId,
 			output:         "json",
-			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "get_ds_network.json")),
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "get_ebm_network.json")),
 		},
 		{
 			name:        "delete DS network with error",
@@ -1995,7 +1995,7 @@ func TestDeleteDSNetworkCmd(t *testing.T) {
 			testCmdContext := testutils.NewTestCmdContext(scClient)
 			hostsCmd := NewCmd(testCmdContext)
 
-			args := []string{"hosts", "ds", "delete-network", tc.id, "--network-id", tc.networkID}
+			args := []string{"hosts", "ebm", "delete-network", tc.id, "--network-id", tc.networkID}
 			if tc.output != "" {
 				args = append(args, "--output", tc.output)
 			}
@@ -2104,7 +2104,7 @@ func TestListKBMPowerFeedsCmd(t *testing.T) {
 	}
 }
 
-func TestListDSPowerFeedsCmd(t *testing.T) {
+func TestListEBMPowerFeedsCmd(t *testing.T) {
 	testPowerFeed1 := testPowerFeed
 	testPowerFeed2 := testPowerFeed1
 
@@ -2168,7 +2168,7 @@ func TestListDSPowerFeedsCmd(t *testing.T) {
 			testCmdContext := testutils.NewTestCmdContext(scClient)
 			hostsCmd := NewCmd(testCmdContext)
 
-			args := []string{"hosts", "ds", "list-power-feeds", tc.id}
+			args := []string{"hosts", "ebm", "list-power-feeds", tc.id}
 			if tc.output != "" {
 				args = append(args, "--output", tc.output)
 			}
@@ -2415,7 +2415,7 @@ func TestListKBMNetworksCmd(t *testing.T) {
 	}
 }
 
-func TestListDSDriveSlotsCmd(t *testing.T) {
+func TestListEBMDriveSlotsCmd(t *testing.T) {
 	testDriveSlot1 := testDriveSlot
 	testDriveSlot2 := testDriveSlot1
 	testDriveSlot2.Position = 2
@@ -2523,7 +2523,7 @@ func TestListDSDriveSlotsCmd(t *testing.T) {
 			testCmdContext := testutils.NewTestCmdContext(scClient)
 			hostsCmd := NewCmd(testCmdContext)
 
-			args := []string{"hosts", "ds", "list-drive-slots"}
+			args := []string{"hosts", "ebm", "list-drive-slots"}
 			if len(tc.args) > 0 {
 				args = append(args, tc.args...)
 			}

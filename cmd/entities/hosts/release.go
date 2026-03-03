@@ -6,10 +6,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func newDSAbortReleaseCmd(cmdContext *base.CmdContext) *cobra.Command {
+func newEBMAbortReleaseCmd(cmdContext *base.CmdContext) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "abort-release <id>",
-		Short: "Abort release for a dedicated server",
+		Short: "Abort release for an enterprise bare metal server",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			manager := cmdContext.GetManager()
@@ -35,12 +35,12 @@ func newDSAbortReleaseCmd(cmdContext *base.CmdContext) *cobra.Command {
 	return cmd
 }
 
-func newDSScheduleReleaseCmd(cmdContext *base.CmdContext) *cobra.Command {
+func newEBMScheduleReleaseCmd(cmdContext *base.CmdContext) *cobra.Command {
 	var releaseAfter string
 
 	cmd := &cobra.Command{
 		Use:   "schedule-release <id>",
-		Short: "Schedule release for a dedicated server",
+		Short: "Schedule release for an enterprise bare metal server",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			manager := cmdContext.GetManager()

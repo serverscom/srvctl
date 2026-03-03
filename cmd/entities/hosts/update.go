@@ -11,12 +11,12 @@ import (
 // Use separate update command for each type of host just for simplicity.
 // Solution with common cmd using generics/interfaces become more difficult to support.
 
-func newUpdateDSCmd(cmdContext *base.CmdContext) *cobra.Command {
+func newUpdateEBMCmd(cmdContext *base.CmdContext) *cobra.Command {
 	var labels []string
 
 	cmd := &cobra.Command{
 		Use:   "update <id>",
-		Short: "Update dedicated server",
+		Short: "Update enterprise bare metal server",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			manager := cmdContext.GetManager()

@@ -6,7 +6,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func newListDSNetworksCmd(cmdContext *base.CmdContext) *cobra.Command {
+func newListEBMNetworksCmd(cmdContext *base.CmdContext) *cobra.Command {
 	factory := func(verbose bool, args ...string) serverscom.Collection[serverscom.Network] {
 		scClient := cmdContext.GetClient().SetVerbose(verbose).GetScClient()
 		return scClient.Hosts.DedicatedServerNetworks(args[0])
@@ -21,19 +21,19 @@ func newListDSNetworksCmd(cmdContext *base.CmdContext) *cobra.Command {
 		&base.AdditionalOption[serverscom.Network]{},
 	)
 
-	cmd := base.NewListCmd("list-networks", "Dedicated server networks", factory, cmdContext, opts...)
+	cmd := base.NewListCmd("list-networks", "Enterprise bare metal server networks", factory, cmdContext, opts...)
 	cmd.Use = "list-networks <id>"
 	cmd.Args = cobra.ExactArgs(1)
 
 	return cmd
 }
 
-func newGetDSNetworkCmd(cmdContext *base.CmdContext) *cobra.Command {
+func newGetEBMNetworkCmd(cmdContext *base.CmdContext) *cobra.Command {
 	var networkID string
 
 	cmd := &cobra.Command{
 		Use:   "get-network <id>",
-		Short: ("Get a dedicated server network"),
+		Short: ("Get an enterprise bare metal server network"),
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			manager := cmdContext.GetManager()
@@ -63,7 +63,7 @@ func newGetDSNetworkCmd(cmdContext *base.CmdContext) *cobra.Command {
 	return cmd
 }
 
-func newAddDSNetworkCmd(cmdContext *base.CmdContext) *cobra.Command {
+func newAddEBMNetworkCmd(cmdContext *base.CmdContext) *cobra.Command {
 	var (
 		networkType        string
 		mask               int
@@ -72,7 +72,7 @@ func newAddDSNetworkCmd(cmdContext *base.CmdContext) *cobra.Command {
 
 	cmd := &cobra.Command{
 		Use:   "add-network <id>",
-		Short: "Add private/public IPv4 network to dedicated server",
+		Short: "Add private/public IPv4 network to enterprise bare metal server",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			id := args[0]
@@ -120,12 +120,12 @@ func newAddDSNetworkCmd(cmdContext *base.CmdContext) *cobra.Command {
 	return cmd
 }
 
-func newDeleteDSNetworkCmd(cmdContext *base.CmdContext) *cobra.Command {
+func newDeleteEBMNetworkCmd(cmdContext *base.CmdContext) *cobra.Command {
 	var networkID string
 
 	cmd := &cobra.Command{
 		Use:   "delete-network <id>",
-		Short: ("Delete a dedicated server network"),
+		Short: ("Delete an enterprise bare metal server network"),
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			manager := cmdContext.GetManager()

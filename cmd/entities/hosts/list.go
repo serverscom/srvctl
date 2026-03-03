@@ -25,7 +25,7 @@ func newListCmd(cmdContext *base.CmdContext) *cobra.Command {
 	return base.NewListCmd("list", "hosts", factory, cmdContext, opts...)
 }
 
-func newListDSCmd(cmdContext *base.CmdContext) *cobra.Command {
+func newListEBMCmd(cmdContext *base.CmdContext) *cobra.Command {
 	factory := func(verbose bool, args ...string) serverscom.Collection[serverscom.DedicatedServer] {
 		scClient := cmdContext.GetClient().SetVerbose(verbose).GetScClient()
 		collection := scClient.Hosts.ListDedicatedServers()
@@ -41,7 +41,7 @@ func newListDSCmd(cmdContext *base.CmdContext) *cobra.Command {
 		&base.SearchPatternOption[serverscom.DedicatedServer]{},
 	)
 
-	return base.NewListCmd("list", "dedicated servers", factory, cmdContext, opts...)
+	return base.NewListCmd("list", "enterprise bare metal servers", factory, cmdContext, opts...)
 }
 
 func newListKBMCmd(cmdContext *base.CmdContext) *cobra.Command {
@@ -60,7 +60,7 @@ func newListKBMCmd(cmdContext *base.CmdContext) *cobra.Command {
 		&base.SearchPatternOption[serverscom.KubernetesBaremetalNode]{},
 	)
 
-	return base.NewListCmd("list", "dedicated servers", factory, cmdContext, opts...)
+	return base.NewListCmd("list", "kubernetes bare metal nodes", factory, cmdContext, opts...)
 }
 
 func newListSBMCmd(cmdContext *base.CmdContext) *cobra.Command {
@@ -79,5 +79,5 @@ func newListSBMCmd(cmdContext *base.CmdContext) *cobra.Command {
 		&base.SearchPatternOption[serverscom.SBMServer]{},
 	)
 
-	return base.NewListCmd("list", "dedicated servers", factory, cmdContext, opts...)
+	return base.NewListCmd("list", "sbm servers", factory, cmdContext, opts...)
 }

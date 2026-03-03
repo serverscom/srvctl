@@ -11,7 +11,7 @@ import (
 	"github.com/spf13/pflag"
 )
 
-type AddDSFlags struct {
+type AddEBMFlags struct {
 	Skeleton          bool
 	InputPath         string
 	LocationID        int
@@ -38,7 +38,7 @@ type AddSBMFlags struct {
 
 func applyFlagsToInput(
 	input *serverscom.DedicatedServerCreateInput,
-	flags *AddDSFlags,
+	flags *AddEBMFlags,
 	pflags *pflag.FlagSet,
 ) error {
 	if pflags.Changed("location-id") {
@@ -128,18 +128,18 @@ func applyFlagsToInput(
 	return nil
 }
 
-func newAddDSCmd(cmdContext *base.CmdContext) *cobra.Command {
-	flags := &AddDSFlags{}
+func newAddEBMCmd(cmdContext *base.CmdContext) *cobra.Command {
+	flags := &AddEBMFlags{}
 
 	cmd := &cobra.Command{
 		Use:   "add",
-		Short: "Create a dedicated server",
+		Short: "Create an enterprise bare metal server",
 		Args:  cobra.ArbitraryArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			formatter := cmdContext.GetOrCreateFormatter(cmd)
 
 			if flags.Skeleton {
-				return formatter.FormatSkeleton("hosts/add_ds.json")
+				return formatter.FormatSkeleton("hosts/add_ebm.json")
 			}
 
 			manager := cmdContext.GetManager()

@@ -20,7 +20,7 @@ var (
 	}
 )
 
-func TestGetDSOOBCredsCmd(t *testing.T) {
+func TestGetEBMOOBCredsCmd(t *testing.T) {
 	testCases := []struct {
 		name           string
 		id             string
@@ -29,25 +29,25 @@ func TestGetDSOOBCredsCmd(t *testing.T) {
 		expectError    bool
 	}{
 		{
-			name:           "get dedicated server oob creds in default format",
+			name:           "get ebm server oob creds in default format",
 			id:             testId,
 			output:         "",
 			expectedOutput: testutils.ReadFixture(filepath.Join(oobFixtureBasePath, "get.txt")),
 		},
 		{
-			name:           "get dedicated server oob creds in JSON format",
+			name:           "get ebm server oob creds in JSON format",
 			id:             testId,
 			output:         "json",
 			expectedOutput: testutils.ReadFixture(filepath.Join(oobFixtureBasePath, "get.json")),
 		},
 		{
-			name:           "get dedicated server oob creds in YAML format",
+			name:           "get ebm server oob creds in YAML format",
 			id:             testId,
 			output:         "yaml",
 			expectedOutput: testutils.ReadFixture(filepath.Join(oobFixtureBasePath, "get.yaml")),
 		},
 		{
-			name:        "get dedicated server oob creds with error",
+			name:        "get ebm server oob creds with error",
 			id:          testId,
 			expectError: true,
 		},
@@ -76,7 +76,7 @@ func TestGetDSOOBCredsCmd(t *testing.T) {
 			testCmdContext := testutils.NewTestCmdContext(scClient)
 			hostsCmd := NewCmd(testCmdContext)
 
-			args := []string{"hosts", "ds", "get-oob-credentials", tc.id, "--fingerprint", "test"}
+			args := []string{"hosts", "ebm", "get-oob-credentials", tc.id, "--fingerprint", "test"}
 			if tc.output != "" {
 				args = append(args, "--output", tc.output)
 			}

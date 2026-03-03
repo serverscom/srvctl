@@ -6,7 +6,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func newListDSPTRCmd(cmdContext *base.CmdContext) *cobra.Command {
+func newListEBMPTRCmd(cmdContext *base.CmdContext) *cobra.Command {
 	factory := func(verbose bool, args ...string) serverscom.Collection[serverscom.PTRRecord] {
 		scClient := cmdContext.GetClient().SetVerbose(verbose).GetScClient()
 		return scClient.Hosts.DedicatedServerPTRRecords(args[0])
@@ -14,14 +14,14 @@ func newListDSPTRCmd(cmdContext *base.CmdContext) *cobra.Command {
 
 	opts := &base.BaseListOptions[serverscom.PTRRecord]{}
 
-	cmd := base.NewListCmd("list-ptr", "Dedicated server PTR records", factory, cmdContext, opts)
+	cmd := base.NewListCmd("list-ptr", "Enterprise bare metal server PTR records", factory, cmdContext, opts)
 	cmd.Use = "list-ptr <id>"
 	cmd.Args = cobra.ExactArgs(1)
 
 	return cmd
 }
 
-func newCreateDSPTRCmd(cmdContext *base.CmdContext) *cobra.Command {
+func newCreateEBMPTRCmd(cmdContext *base.CmdContext) *cobra.Command {
 	var (
 		ip       string
 		domain   string
@@ -32,7 +32,7 @@ func newCreateDSPTRCmd(cmdContext *base.CmdContext) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "add-ptr <server_id>",
 		Short: "Create a PTR record",
-		Long:  "Create a PTR record for a dedicated server",
+		Long:  "Create a PTR record for an enterprise bare metal server",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			manager := cmdContext.GetManager()
@@ -82,13 +82,13 @@ func newCreateDSPTRCmd(cmdContext *base.CmdContext) *cobra.Command {
 	return cmd
 }
 
-func newDeleteDSPTRCmd(cmdContext *base.CmdContext) *cobra.Command {
+func newDeleteEBMPTRCmd(cmdContext *base.CmdContext) *cobra.Command {
 	var recordID string
 
 	cmd := &cobra.Command{
 		Use:   "delete-ptr <server_id>",
 		Short: "Delete a PTR record",
-		Long:  "Delete a PTR record for a dedicated server",
+		Long:  "Delete a PTR record for an enterprise bare metal server",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			manager := cmdContext.GetManager()

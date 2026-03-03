@@ -4,29 +4,29 @@
 
 | Command | Type | Description |
 |---------|------|-------------|
-| [srvctl hosts](srvctl-hosts/description.md) | Hosts | A host is a bare metal-based service that includes dedicated servers, Kubernetes bare metal nodes and scalable bare metal. (ds, kbm, sbm) |
-| [srvctl hosts ds](srvctl-hosts-ds/description.md) | Hosts / Dedicated Servers | This command allows to manage dedicated servers (Enterprise bare metal). |
-| [srvctl hosts ds abort-release](srvctl-hosts-ds-abort-release/description.md) | Hosts / Dedicated Servers | This command cancels the scheduled release for the selected dedicated server. |
-| [srvctl hosts ds add](srvctl-hosts-ds-add/description.md) | Hosts / Dedicated Servers | A command to create a dedicated server. |
-| [srvctl hosts ds add-network](srvctl-hosts-ds-add-network/description.md) | Hosts / Dedicated Servers | This command adds a network to the selected server. |
-| [srvctl hosts ds add-ptr](srvctl-hosts-ds-add-ptr/description.md) | Hosts / Dedicated Servers | This command adds a PTR record to the selected server. |
-| [srvctl hosts ds delete-network](srvctl-hosts-ds-delete-network/description.md) | Hosts / Dedicated Servers | This command deletes a specified network for the selected server. |
-| [srvctl hosts ds delete-ptr](srvctl-hosts-ds-delete-ptr/description.md) | Hosts / Dedicated Servers | This command deletes a specified PTR record for the selected server. |
-| [srvctl hosts ds get](srvctl-hosts-ds-get/description.md) | Hosts / Dedicated Servers | This command provides information for the selected server. |
-| [srvctl hosts ds get-network](srvctl-hosts-ds-get-network/description.md) | Hosts / Dedicated Servers | This command provides information about a specified network of the selected server. |
-| [srvctl hosts ds get-oob-credentials](srvctl-hosts-ds-get-oob-credentials/description.md) | Hosts / Dedicated Servers | This command provides OOB credentials for the selected server. |
-| [srvctl hosts ds list-connections](srvctl-hosts-ds-list-connections/description.md) | Hosts / Dedicated Servers | This command lists connections for the selected dedicated server. |
-| [srvctl hosts ds list-drive-slots](srvctl-hosts-ds-list-drive-slots/description.md) | Hosts / Dedicated Servers | This command lists drive slots for the selected dedicated server. |
-| [srvctl hosts ds list-features](srvctl-hosts-ds-list-features/description.md) | Hosts / Dedicated Servers | This command lists features for the selected dedicated server. |
-| [srvctl hosts ds list-networks](srvctl-hosts-ds-list-networks/description.md) | Hosts / Dedicated Servers | This command lists networks for the selected dedicated server. |
-| [srvctl hosts ds list-power-feeds](srvctl-hosts-ds-list-power-feeds/description.md) | Hosts / Dedicated Servers | This command lists power feeds for the selected dedicated server. |
-| [srvctl hosts ds list-ptr](srvctl-hosts-ds-list-ptr/description.md) | Hosts / Dedicated Servers | This command lists PTR records for the selected dedicated server. |
-| [srvctl hosts ds list-services](srvctl-hosts-ds-list-services/description.md) | Hosts / Dedicated Servers | This command lists services for the selected dedicated server. |
-| [srvctl hosts ds ls](srvctl-hosts-ds-ls/description.md) | Hosts / Dedicated Servers | This command lists dedicated servers of the account. |
-| [srvctl hosts ds power](srvctl-hosts-ds-power/description.md) | Hosts / Dedicated Servers | This command manages power operations for the selected dedicated server. |
-| [srvctl hosts ds reinstall](srvctl-hosts-ds-reinstall/description.md) | Hosts / Dedicated Servers | This command reinstalls an operating system for the selected dedicated server. |
-| [srvctl hosts ds schedule-release](srvctl-hosts-ds-schedule-release/description.md) | Hosts / Dedicated Servers | This command schedules release on YYYY-MM-DDTHH:MM:SS+HH:MM (dateTtime+time zone from UTC) for the selected dedicated server. |
-| [srvctl hosts ds update](srvctl-hosts-ds-update/description.md) | Hosts / Dedicated Servers | This command updates parameters and labels for the selected dedicated server. |
+| [srvctl hosts](srvctl-hosts/description.md) | Hosts | A host is a bare metal-based service that includes enterprise bare metal servers, Kubernetes bare metal nodes and scalable bare metal. (ebm, kbm, sbm) |
+| [srvctl hosts ebm](srvctl-hosts-ebm/description.md) | Hosts / Enterprise Bare Metal | This command allows to manage enterprise bare metal servers. |
+| [srvctl hosts ebm abort-release](srvctl-hosts-ebm-abort-release/description.md) | Hosts / Enterprise Bare Metal | This command cancels the scheduled release for the selected enterprise bare metal server. |
+| [srvctl hosts ebm add](srvctl-hosts-ebm-add/description.md) | Hosts / Enterprise Bare Metal | A command to create an enterprise bare metal server. |
+| [srvctl hosts ebm add-network](srvctl-hosts-ebm-add-network/description.md) | Hosts / Enterprise Bare Metal | This command adds a network to the selected server. |
+| [srvctl hosts ebm add-ptr](srvctl-hosts-ebm-add-ptr/description.md) | Hosts / Enterprise Bare Metal | This command adds a PTR record to the selected server. |
+| [srvctl hosts ebm delete-network](srvctl-hosts-ebm-delete-network/description.md) | Hosts / Enterprise Bare Metal | This command deletes a specified network for the selected server. |
+| [srvctl hosts ebm delete-ptr](srvctl-hosts-ebm-delete-ptr/description.md) | Hosts / Enterprise Bare Metal | This command deletes a specified PTR record for the selected server. |
+| [srvctl hosts ebm get](srvctl-hosts-ebm-get/description.md) | Hosts / Enterprise Bare Metal | This command provides information for the selected server. |
+| [srvctl hosts ebm get-network](srvctl-hosts-ebm-get-network/description.md) | Hosts / Enterprise Bare Metal | This command provides information about a specified network of the selected server. |
+| [srvctl hosts ebm get-oob-credentials](srvctl-hosts-ebm-get-oob-credentials/description.md) | Hosts / Enterprise Bare Metal | This command provides OOB credentials for the selected server. |
+| [srvctl hosts ebm list-connections](srvctl-hosts-ebm-list-connections/description.md) | Hosts / Enterprise Bare Metal | This command lists connections for the selected enterprise bare metal server. |
+| [srvctl hosts ebm list-drive-slots](srvctl-hosts-ebm-list-drive-slots/description.md) | Hosts / Enterprise Bare Metal | This command lists drive slots for the selected enterprise bare metal server. |
+| [srvctl hosts ebm list-features](srvctl-hosts-ebm-list-features/description.md) | Hosts / Enterprise Bare Metal | This command lists features for the selected enterprise bare metal server. |
+| [srvctl hosts ebm list-networks](srvctl-hosts-ebm-list-networks/description.md) | Hosts / Enterprise Bare Metal | This command lists networks for the selected enterprise bare metal server. |
+| [srvctl hosts ebm list-power-feeds](srvctl-hosts-ebm-list-power-feeds/description.md) | Hosts / Enterprise Bare Metal | This command lists power feeds for the selected enterprise bare metal server. |
+| [srvctl hosts ebm list-ptr](srvctl-hosts-ebm-list-ptr/description.md) | Hosts / Enterprise Bare Metal | This command lists PTR records for the selected enterprise bare metal server. |
+| [srvctl hosts ebm list-services](srvctl-hosts-ebm-list-services/description.md) | Hosts / Enterprise Bare Metal | This command lists services for the selected enterprise bare metal server. |
+| [srvctl hosts ebm ls](srvctl-hosts-ebm-ls/description.md) | Hosts / Enterprise Bare Metal | This command lists enterprise bare metal servers of the account. |
+| [srvctl hosts ebm power](srvctl-hosts-ebm-power/description.md) | Hosts / Enterprise Bare Metal | This command manages power operations for the selected enterprise bare metal server. |
+| [srvctl hosts ebm reinstall](srvctl-hosts-ebm-reinstall/description.md) | Hosts / Enterprise Bare Metal | This command reinstalls an operating system for the selected enterprise bare metal server. |
+| [srvctl hosts ebm schedule-release](srvctl-hosts-ebm-schedule-release/description.md) | Hosts / Enterprise Bare Metal | This command schedules release on YYYY-MM-DDTHH:MM:SS+HH:MM (dateTtime+time zone from UTC) for the selected enterprise bare metal server. |
+| [srvctl hosts ebm update](srvctl-hosts-ebm-update/description.md) | Hosts / Enterprise Bare Metal | This command updates parameters and labels for the selected enterprise bare metal server. |
 | [srvctl l2-segments](srvctl-l2-segments/description.md) | L2 Segments | This command allows to manage L2 segments. |
 | [srvctl l2-segments list](srvctl-l2-segments-list/description.md) | L2 Segments | This command lists L2 segments of the account. |
 | [srvctl l2-segments list-groups](srvctl-l2-segments-list-groups/description.md) | L2 Segments | This command lists L2 segment location groups. |

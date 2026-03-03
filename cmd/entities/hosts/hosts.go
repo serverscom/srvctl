@@ -33,33 +33,33 @@ func NewCmd(cmdContext *base.CmdContext) *cobra.Command {
 
 	hostTypeCmds := []HostTypeCmd{
 		{
-			use:        "ds",
-			shortDesc:  "Manage dedicated servers",
-			entityName: "Dedicated servers",
+			use:        "ebm",
+			shortDesc:  "Manage enterprise bare metal servers",
+			entityName: "Enterprise Bare Metal",
 			typeFlag:   "dedicated_server",
 			managers: HostManagers{
-				getMgr:       &DSGetMgr{},
-				powerMgr:     &DSPowerMgr{},
-				reinstallMgr: &DSReinstallMgr{},
+				getMgr:       &EBMGetMgr{},
+				powerMgr:     &EBMPowerMgr{},
+				reinstallMgr: &EBMReinstallMgr{},
 			},
 			extraCmds: []func(*base.CmdContext) *cobra.Command{
-				newAddDSCmd,
-				newUpdateDSCmd,
-				newListDSDriveSlotsCmd,
-				newListDSConnectionsCmd,
-				newListDSPTRCmd,
-				newCreateDSPTRCmd,
-				newDeleteDSPTRCmd,
-				newDSAbortReleaseCmd,
-				newDSScheduleReleaseCmd,
-				newListDSNetworksCmd,
-				newGetDSNetworkCmd,
-				newAddDSNetworkCmd,
-				newDeleteDSNetworkCmd,
-				newListDSCmd,
-				newListDSServicesCmd,
-				newListDSFeaturesCmd,
-				newGetDSOOBCredsCmd,
+				newAddEBMCmd,
+				newUpdateEBMCmd,
+				newListEBMDriveSlotsCmd,
+				newListEBMConnectionsCmd,
+				newListEBMPTRCmd,
+				newCreateEBMPTRCmd,
+				newDeleteEBMPTRCmd,
+				newEBMAbortReleaseCmd,
+				newEBMScheduleReleaseCmd,
+				newListEBMNetworksCmd,
+				newGetEBMNetworkCmd,
+				newAddEBMNetworkCmd,
+				newDeleteEBMNetworkCmd,
+				newListEBMCmd,
+				newListEBMServicesCmd,
+				newListEBMFeaturesCmd,
+				newGetEBMOOBCredsCmd,
 			},
 		},
 		{
@@ -103,7 +103,7 @@ func NewCmd(cmdContext *base.CmdContext) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "hosts",
 		Short: "Manage hosts",
-		Long:  "Manage hosts of different types ( dedicated server, kubernetes baremetal node, scalable baremetal server)",
+		Long:  "Manage hosts of different types ( enterprise bare metal, kubernetes baremetal node, scalable baremetal server)",
 		PersistentPreRunE: base.CombinePreRunE(
 			base.CheckFormatterFlags(cmdContext, entitiesMap),
 			base.CheckEmptyContexts(cmdContext),
@@ -157,11 +157,11 @@ func getHostsEntities() (map[string]entities.EntityInterface, error) {
 	}
 	result["hosts"] = hostsEntity
 
-	dsEntity, err := entities.Registry.GetEntityFromValue(serverscom.DedicatedServer{})
+	ebmEntity, err := entities.Registry.GetEntityFromValue(serverscom.DedicatedServer{})
 	if err != nil {
 		return nil, err
 	}
-	result["ds"] = dsEntity
+	result["ebm"] = ebmEntity
 
 	kbmEntity, err := entities.Registry.GetEntityFromValue(serverscom.KubernetesBaremetalNode{})
 	if err != nil {

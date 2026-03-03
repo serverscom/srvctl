@@ -31,7 +31,7 @@ var (
 	}
 )
 
-func TestListDSServicesCmd(t *testing.T) {
+func TestListEBMServicesCmd(t *testing.T) {
 	testService1 := testDSService
 	testService2 := testDSService
 	testService2.ID += "2"
@@ -131,7 +131,7 @@ func TestListDSServicesCmd(t *testing.T) {
 			testCmdContext := testutils.NewTestCmdContext(scClient)
 			cmd := NewCmd(testCmdContext)
 
-			args := append([]string{"hosts", "ds", "list-services"}, tc.args...)
+			args := append([]string{"hosts", "ebm", "list-services"}, tc.args...)
 			if tc.output != "" {
 				args = append(args, "--output", tc.output)
 			}
