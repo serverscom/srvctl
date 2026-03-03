@@ -1,8 +1,6 @@
 package hosts
 
 import (
-	"log"
-
 	serverscom "github.com/serverscom/serverscom-go-client/pkg"
 	"github.com/serverscom/srvctl/cmd/base"
 	"github.com/spf13/cobra"
@@ -11,14 +9,14 @@ import (
 func newListDSFeaturesCmd(cmdContext *base.CmdContext) *cobra.Command {
 	factory := func(verbose bool, args ...string) serverscom.Collection[serverscom.DedicatedServerFeature] {
 		scClient := cmdContext.GetClient().SetVerbose(verbose).GetScClient()
-		if len(args) == 0 {
-			log.Fatal("Missing dedicated server ID")
-		}
-		id := args[0]
-		return scClient.Hosts.DedicatedServerFeatures(id)
+		return scClient.Hosts.DedicatedServerFeatures(args[0])
 	}
 
 	opts := &base.BaseListOptions[serverscom.DedicatedServerFeature]{}
 
-	return base.NewListCmd("list-features <id>", "Dedicated server features", factory, cmdContext, opts)
+	cmd := base.NewListCmd("list-features", "Dedicated server features", factory, cmdContext, opts)
+	cmd.Use = "list-features <id>"
+	cmd.Args = cobra.ExactArgs(1)
+
+	return cmd
 }

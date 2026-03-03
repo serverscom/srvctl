@@ -1,8 +1,6 @@
 package hosts
 
 import (
-	"log"
-
 	serverscom "github.com/serverscom/serverscom-go-client/pkg"
 	"github.com/serverscom/srvctl/cmd/base"
 	"github.com/spf13/cobra"
@@ -11,26 +9,22 @@ import (
 func newListDSDriveSlotsCmd(cmdContext *base.CmdContext) *cobra.Command {
 	factory := func(verbose bool, args ...string) serverscom.Collection[serverscom.HostDriveSlot] {
 		scClient := cmdContext.GetClient().SetVerbose(verbose).GetScClient()
-		if len(args) == 0 {
-			log.Fatal("Missing dedicated server ID")
-		}
-		id := args[0]
-		return scClient.Hosts.DedicatedServerDriveSlots(id)
+		return scClient.Hosts.DedicatedServerDriveSlots(args[0])
 	}
 
 	opts := &base.BaseListOptions[serverscom.HostDriveSlot]{}
 
-	return base.NewListCmd("list-drive-slots <id>", "Dedicated server drive slots", factory, cmdContext, opts)
+	cmd := base.NewListCmd("list-drive-slots", "Dedicated server drive slots", factory, cmdContext, opts)
+	cmd.Use = "list-drive-slots <id>"
+	cmd.Args = cobra.ExactArgs(1)
+
+	return cmd
 }
 
 func newListKBMDriveSlotsCmd(cmdContext *base.CmdContext) *cobra.Command {
 	factory := func(verbose bool, args ...string) serverscom.Collection[serverscom.HostDriveSlot] {
 		scClient := cmdContext.GetClient().SetVerbose(verbose).GetScClient()
-		if len(args) == 0 {
-			log.Fatal("Missing KBM node ID")
-		}
-		id := args[0]
-		return scClient.Hosts.KubernetesBaremetalNodeDriveSlots(id)
+		return scClient.Hosts.KubernetesBaremetalNodeDriveSlots(args[0])
 	}
 
 	opts := base.NewListOptions(
@@ -38,5 +32,9 @@ func newListKBMDriveSlotsCmd(cmdContext *base.CmdContext) *cobra.Command {
 		&base.SearchPatternOption[serverscom.HostDriveSlot]{},
 	)
 
-	return base.NewListCmd("list-drive-slots <id>", "KBM node drive slots", factory, cmdContext, opts...)
+	cmd := base.NewListCmd("list-drive-slots", "KBM node drive slots", factory, cmdContext, opts...)
+	cmd.Use = "list-drive-slots <id>"
+	cmd.Args = cobra.ExactArgs(1)
+
+	return cmd
 }

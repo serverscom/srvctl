@@ -34,5 +34,9 @@ func newListNodesCmd(cmdContext *base.CmdContext) *cobra.Command {
 		&base.LabelSelectorOption[serverscom.KubernetesClusterNode]{},
 	)
 
-	return base.NewListCmd("list-nodes <cluster-id>", "kubernetes cluster nodes by ID", factory, cmdContext, opts...)
+	cmd := base.NewListCmd("list-nodes", "kubernetes cluster nodes", factory, cmdContext, opts...)
+	cmd.Use = "list-nodes <cluster-id>"
+	cmd.Args = cobra.ExactArgs(1)
+
+	return cmd
 }

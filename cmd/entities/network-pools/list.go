@@ -35,5 +35,9 @@ func newListSubnetsCmd(cmdContext *base.CmdContext) *cobra.Command {
 		&base.AttachedSubnetworksOption[serverscom.Subnetwork]{},
 	)
 
-	return base.NewListCmd("list-subnets", "subnets for a network pool", factory, cmdContext, opts...)
+	cmd := base.NewListCmd("list-subnets", "subnets for a network pool", factory, cmdContext, opts...)
+	cmd.Use = "list-subnets <network-pool-id>"
+	cmd.Args = cobra.ExactArgs(1)
+
+	return cmd
 }
