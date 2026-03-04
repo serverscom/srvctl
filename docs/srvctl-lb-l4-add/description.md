@@ -1,1 +1,1 @@
-A command to create a new L4 load balancer.
+A command to create a new L4 load balancer. LB parameters should be described in a file, a path to the file is specified via the `-i` or `--input` flag. The path can be absolute or relative to the srvctl file. There is also an option to use standard input (stdin) when specifying the flag this way: `--input -`. Use the `--skeleton` flag to see JSON structure of the file.

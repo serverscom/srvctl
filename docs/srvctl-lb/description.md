@@ -1,1 +1,1 @@
-This command allows to manage load balancers of different types (l4, l7).
+This command allows to manage load balancers. Select the specific type (`l4` or `l7`) to see available operations for each one.
