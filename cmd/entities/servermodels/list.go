@@ -21,6 +21,7 @@ func newListCmd(cmdContext *base.CmdContext) *cobra.Command {
 	)
 
 	cmd := base.NewListCmd("list", "server-models", factory, cmdContext, opts...)
+	cmd.Use = "list --location-id <location-id>"
 
 	cmd.Flags().Int64Var(&locationID, "location-id", 0, "Location ID (required)")
 	_ = cmd.MarkFlagRequired("location-id")
