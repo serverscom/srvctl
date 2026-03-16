@@ -112,6 +112,19 @@ func TestListCloudInstancesCmd(t *testing.T) {
 			},
 		},
 		{
+			name:           "list cloud instances by region-code",
+			args:           []string{"--region-code", "AMS1"},
+			output:         "json",
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list.json")),
+			configureMock: func(mock *mocks.MockCollection[serverscom.CloudComputingInstance]) {
+				mock.EXPECT().
+					List(gomock.Any()).
+					Return([]serverscom.CloudComputingInstance{
+						testInstance1,
+					}, nil)
+			},
+		},
+		{
 			name:           "list cloud instances with template",
 			args:           []string{"--template", "{{range .}}Name: {{.Name}}\n{{end}}"},
 			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_template.txt")),

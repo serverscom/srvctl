@@ -474,6 +474,20 @@ func (o *RegionIDOption[T]) ApplyToCollection(collection serverscom.Collection[T
 	}
 }
 
+type RegionCodeOption[T any] struct {
+	regionCode string
+}
+
+func (o *RegionCodeOption[T]) AddFlags(cmd *cobra.Command) {
+	cmd.Flags().StringVar(&o.regionCode, "region-code", "", "Filter results by region code")
+}
+
+func (o *RegionCodeOption[T]) ApplyToCollection(collection serverscom.Collection[T]) {
+	if o.regionCode != "" {
+		collection.SetParam("region_code", o.regionCode)
+	}
+}
+
 type InstanceIDOption[T any] struct {
 	instanceID string
 }

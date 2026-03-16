@@ -17,6 +17,7 @@ func newListCmd(cmdContext *base.CmdContext) *cobra.Command {
 	opts := base.NewListOptions(
 		&base.BaseListOptions[serverscom.CloudComputingInstance]{},
 		&base.RegionIDOption[serverscom.CloudComputingInstance]{},
+		&base.RegionCodeOption[serverscom.CloudComputingInstance]{},
 		&base.LocationIDOption[serverscom.CloudComputingInstance]{},
 		&base.LabelSelectorOption[serverscom.CloudComputingInstance]{},
 	)
