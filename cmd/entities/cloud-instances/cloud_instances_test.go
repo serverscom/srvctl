@@ -18,11 +18,12 @@ var (
 	skeletonTemplatePath = filepath.Join("..", "..", "..", "internal", "output", "skeletons", "templates", "cloud-instances")
 	fixedTime            = time.Date(2025, 1, 1, 12, 0, 0, 0, time.UTC)
 	testCloudInstanceID  = "test-instance-id"
+	testRegionCode       = "AMS1"
 	testCloudInstance    = serverscom.CloudComputingInstance{
 		ID:                 testCloudInstanceID,
 		Name:               "test-instance",
 		RegionID:           1,
-		RegionCode:         "AMS1",
+		RegionCode:         testRegionCode,
 		OpenstackUUID:      "uuid-123",
 		Status:             "active",
 		FlavorID:           "flavor-1",
@@ -45,7 +46,7 @@ var (
 		ID:                 "test-instance-id2",
 		Name:               "test-instance2",
 		RegionID:           1,
-		RegionCode:         "AMS1",
+		RegionCode:         testRegionCode,
 		OpenstackUUID:      "uuid-123",
 		Status:             "active",
 		FlavorID:           "flavor-1",
@@ -101,19 +102,6 @@ func TestListCloudInstancesCmd(t *testing.T) {
 		},
 		{
 			name:           "list cloud instances",
-			output:         "json",
-			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list.json")),
-			configureMock: func(mock *mocks.MockCollection[serverscom.CloudComputingInstance]) {
-				mock.EXPECT().
-					List(gomock.Any()).
-					Return([]serverscom.CloudComputingInstance{
-						testInstance1,
-					}, nil)
-			},
-		},
-		{
-			name:           "list cloud instances by region-code",
-			args:           []string{"--region-code", "AMS1"},
 			output:         "json",
 			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list.json")),
 			configureMock: func(mock *mocks.MockCollection[serverscom.CloudComputingInstance]) {

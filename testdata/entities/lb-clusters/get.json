@@ -2,6 +2,7 @@
     "id": "testId",
     "name": "test-lb-cluster",
     "location_id": 1,
+    "location_code": "test",
     "status": "active",
     "created_at": "2025-01-01T12:00:00Z",
     "updated_at": "2025-01-01T12:00:00Z"

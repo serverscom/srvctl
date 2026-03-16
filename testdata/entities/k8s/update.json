@@ -3,6 +3,7 @@
     "name": "test-cluster",
     "status": "active",
     "location_id": 1,
+    "location_code": "test-location",
     "labels": {
         "new": "label"
     },

@@ -2,6 +2,7 @@ id: backup-123
 openstackuuid: null
 openstackvolumeuuid: vol-123-openstack
 regionid: 1
+regioncode: AMS1
 size: 1073741824
 status: available
 labels:

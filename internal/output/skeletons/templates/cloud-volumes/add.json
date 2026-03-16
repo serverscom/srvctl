@@ -3,6 +3,7 @@
     "description": "",
     "attach_instance_id": "",
     "region_id": "",
+    "region_code": "AMS1",
     "size": "",
     "labels": {
         "key": "value"

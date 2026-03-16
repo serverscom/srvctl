@@ -8,6 +8,10 @@
             1,
             2
         ],
+        "location_codes": [
+            "test-location1",
+            "test-location2"
+        ],
         "labels": {
             "environment": "testing"
         },

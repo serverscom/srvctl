@@ -10,6 +10,7 @@
         "127.0.0.1"
     ],
     "location_id": 1,
+    "location_code": "test",
     "geoip": false,
     "store_logs": false,
     "store_logs_region_id": 0,

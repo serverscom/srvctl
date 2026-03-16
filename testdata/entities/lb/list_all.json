@@ -8,6 +8,7 @@
             "127.0.0.1"
         ],
         "location_id": 1,
+        "location_code": "test",
         "cluster_id": null,
         "labels": {
             "foo": "bar"
@@ -24,6 +25,7 @@
             "127.0.0.1"
         ],
         "location_id": 1,
+        "location_code": "test",
         "cluster_id": null,
         "labels": {
             "foo": "bar"

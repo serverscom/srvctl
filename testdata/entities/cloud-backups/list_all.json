@@ -4,6 +4,7 @@
         "openstack_uuid": null,
         "openstack_volume_uuid": "vol-123-openstack",
         "region_id": 1,
+        "region_code": "AMS1",
         "size": 1073741824,
         "status": "available",
         "labels": {
@@ -17,6 +18,7 @@
         "openstack_uuid": null,
         "openstack_volume_uuid": "vol-456-openstack",
         "region_id": 1,
+        "region_code": "AMS1",
         "size": 2147483648,
         "status": "available",
         "labels": {

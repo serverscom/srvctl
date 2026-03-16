@@ -20,12 +20,14 @@ var (
 	fixtureBasePath         = filepath.Join("..", "..", "..", "testdata", "entities", "cloud-backups")
 	fixedTime               = time.Date(2025, 1, 1, 12, 0, 0, 0, time.UTC)
 	fixedTime2              = time.Date(2025, 1, 2, 12, 0, 0, 0, time.UTC)
+	testRegionCode          = "AMS1"
 	testBackupOpenstackUUID *string
 	testBackup              = serverscom.CloudBlockStorageBackup{
 		ID:                  testBackupID,
 		OpenstackUUID:       testBackupOpenstackUUID,
 		OpenstackVolumeUUID: testVolumeUUID,
 		RegionID:            1,
+		RegionCode:          testRegionCode,
 		Size:                1073741824,
 		Status:              "available",
 		Labels:              map[string]string{"env": "test"},
@@ -37,6 +39,7 @@ var (
 		OpenstackUUID:       testBackupOpenstackUUID,
 		OpenstackVolumeUUID: testVolumeUUID2,
 		RegionID:            1,
+		RegionCode:          testRegionCode,
 		Size:                2147483648,
 		Status:              "available",
 		Labels:              map[string]string{"env": "prod"},

@@ -21,12 +21,13 @@ var (
 	fixtureBasePath       = filepath.Join("..", "..", "..", "testdata", "entities", "k8s")
 	fixedTime             = time.Date(2025, 1, 1, 12, 0, 0, 0, time.UTC)
 	testKubernetesCluster = serverscom.KubernetesCluster{
-		ID:         testId,
-		Name:       "test-cluster",
-		Status:     "active",
-		LocationID: 1,
-		Created:    fixedTime,
-		Updated:    fixedTime,
+		ID:           testId,
+		Name:         "test-cluster",
+		Status:       "active",
+		LocationID:   1,
+		LocationCode: "test-location",
+		Created:      fixedTime,
+		Updated:      fixedTime,
 	}
 	testKubernetesClusterNode = serverscom.KubernetesClusterNode{
 		ID:                 testNodeId,

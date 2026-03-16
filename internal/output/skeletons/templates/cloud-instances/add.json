@@ -5,6 +5,7 @@
     "gpn_enabled": false,
     "ipv6_enabled": true,
     "region_id": "",
+    "region_code": "AMS1",
     "user_data": "",
     "ssh_key_fingerprint": "",
     "labels": {

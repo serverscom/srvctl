@@ -120,6 +120,21 @@ func (o *LocationIDOption[T]) ApplyToCollection(collection serverscom.Collection
 	}
 }
 
+// location code option
+type LocationCodeOption[T any] struct {
+	locationCode string
+}
+
+func (o *LocationCodeOption[T]) AddFlags(cmd *cobra.Command) {
+	cmd.Flags().StringVar(&o.locationCode, "location-code", "", "Filter results by location code")
+}
+
+func (o *LocationCodeOption[T]) ApplyToCollection(collection serverscom.Collection[T]) {
+	if o.locationCode != "" {
+		collection.SetParam("location_code", o.locationCode)
+	}
+}
+
 // cluster id option
 type ClusterIDOption[T any] struct {
 	clusterID string

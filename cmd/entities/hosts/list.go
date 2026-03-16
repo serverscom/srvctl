@@ -17,6 +17,7 @@ func newListCmd(cmdContext *base.CmdContext) *cobra.Command {
 	opts := base.NewListOptions(
 		&base.BaseListOptions[serverscom.Host]{},
 		&base.LocationIDOption[serverscom.Host]{},
+		&base.LocationCodeOption[serverscom.Host]{},
 		&base.RackIDOption[serverscom.Host]{},
 		&base.LabelSelectorOption[serverscom.Host]{},
 		&base.SearchPatternOption[serverscom.Host]{},
@@ -36,6 +37,7 @@ func newListEBMCmd(cmdContext *base.CmdContext) *cobra.Command {
 	opts := base.NewListOptions(
 		&base.BaseListOptions[serverscom.DedicatedServer]{},
 		&base.LocationIDOption[serverscom.DedicatedServer]{},
+		&base.LocationCodeOption[serverscom.DedicatedServer]{},
 		&base.RackIDOption[serverscom.DedicatedServer]{},
 		&base.LabelSelectorOption[serverscom.DedicatedServer]{},
 		&base.SearchPatternOption[serverscom.DedicatedServer]{},
@@ -55,6 +57,7 @@ func newListKBMCmd(cmdContext *base.CmdContext) *cobra.Command {
 	opts := base.NewListOptions(
 		&base.BaseListOptions[serverscom.KubernetesBaremetalNode]{},
 		&base.LocationIDOption[serverscom.KubernetesBaremetalNode]{},
+		&base.LocationCodeOption[serverscom.KubernetesBaremetalNode]{},
 		&base.RackIDOption[serverscom.KubernetesBaremetalNode]{},
 		&base.LabelSelectorOption[serverscom.KubernetesBaremetalNode]{},
 		&base.SearchPatternOption[serverscom.KubernetesBaremetalNode]{},
@@ -74,6 +77,7 @@ func newListSBMCmd(cmdContext *base.CmdContext) *cobra.Command {
 	opts := base.NewListOptions(
 		&base.BaseListOptions[serverscom.SBMServer]{},
 		&base.LocationIDOption[serverscom.SBMServer]{},
+		&base.LocationCodeOption[serverscom.SBMServer]{},
 		&base.RackIDOption[serverscom.SBMServer]{},
 		&base.LabelSelectorOption[serverscom.SBMServer]{},
 		&base.SearchPatternOption[serverscom.SBMServer]{},
