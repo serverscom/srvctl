@@ -1,6 +1,7 @@
 ID:           vol-12345
 Name:         test-volume
 Region ID:    1
+RegionCode:   test
 Size:         100
 Description:  Test volume
 Labels:       foo=bar

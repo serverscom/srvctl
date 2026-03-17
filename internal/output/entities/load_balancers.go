@@ -11,7 +11,7 @@ var (
 	LoadBalancerType              = reflect.TypeOf(serverscom.LoadBalancer{})
 	L4LoadBalancerType            = reflect.TypeOf(serverscom.L4LoadBalancer{})
 	L7LoadBalancerType            = reflect.TypeOf(serverscom.L7LoadBalancer{})
-	LoadBalancerListDefaultFields = []string{"ID", "Name", "Type", "Status", "LocationID", "ClusterID"}
+	LoadBalancerListDefaultFields = []string{"ID", "Name", "Type", "Status", "LocationID", "LocationCode", "ClusterID"}
 )
 
 func RegisterLoadBalancerDefinitions() {
@@ -24,6 +24,7 @@ func RegisterLoadBalancerDefinitions() {
 			{ID: "Status", Name: "Status", Path: "Status", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
 			{ID: "ExternalAddresses", Name: "ExternalAddresses", Path: "ExternalAddresses", PageViewHandlerFunc: slicePvHandler},
 			{ID: "LocationID", Name: "LocationID", Path: "LocationID", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
+			{ID: "LocationCode", Name: "LocationCode", Path: "LocationCode", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
 			{ID: "ClusterID", Name: "ClusterID", Path: "ClusterID", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
 			{ID: "Labels", Name: "Labels", Path: "Labels", PageViewHandlerFunc: mapPvHandler},
 			{ID: "Created", Name: "Created", Path: "Created", ListHandlerFunc: timeHandler, PageViewHandlerFunc: timeHandler, Default: true},
@@ -47,6 +48,7 @@ func RegisterLoadBalancerDefinitions() {
 			{ID: "Status", Name: "Status", Path: "Status", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
 			{ID: "ExternalAddresses", Name: "ExternalAddresses", Path: "ExternalAddresses", PageViewHandlerFunc: slicePvHandler},
 			{ID: "LocationID", Name: "LocationID", Path: "LocationID", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
+			{ID: "LocationCode", Name: "LocationCode", Path: "LocationCode", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
 			{ID: "StoreLogs", Name: "StoreLogs", Path: "StoreLogs", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
 			{ID: "ClusterID", Name: "ClusterID", Path: "ClusterID", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
 			{ID: "Labels", Name: "Labels", Path: "Labels", PageViewHandlerFunc: mapPvHandler},
@@ -71,6 +73,7 @@ func RegisterLoadBalancerDefinitions() {
 			{ID: "Status", Name: "Status", Path: "Status", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
 			{ID: "ExternalAddresses", Name: "ExternalAddresses", Path: "ExternalAddresses", PageViewHandlerFunc: slicePvHandler},
 			{ID: "LocationID", Name: "LocationID", Path: "LocationID", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
+			{ID: "LocationCode", Name: "LocationCode", Path: "LocationCode", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
 			{ID: "Geoip", Name: "Geoip", Path: "Geoip", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
 			{ID: "StoreLogs", Name: "StoreLogs", Path: "StoreLogs", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
 			{ID: "StoreLogsRegionID", Name: "StoreLogsRegionID", Path: "StoreLogsRegionID", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},

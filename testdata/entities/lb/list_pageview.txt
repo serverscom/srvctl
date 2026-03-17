@@ -4,6 +4,7 @@ Type:               l4
 Status:             active
 ExternalAddresses:  127.0.0.1
 LocationID:         1
+LocationCode:       test
 ClusterID:          <none>
 Labels:             foo=bar
 Created:            2025-01-01T12:00:00Z
@@ -15,6 +16,7 @@ Type:               l7
 Status:             active
 ExternalAddresses:  127.0.0.1
 LocationID:         1
+LocationCode:       test
 ClusterID:          <none>
 Labels:             foo=bar
 Created:            2025-01-01T12:00:00Z

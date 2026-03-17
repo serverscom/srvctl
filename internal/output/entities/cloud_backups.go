@@ -9,7 +9,7 @@ import (
 
 var (
 	CloudBlockStorageBackupType              = reflect.TypeOf(serverscom.CloudBlockStorageBackup{})
-	CloudBlockStorageBackupListDefaultFields = []string{"ID", "Name", "Status", "Size"}
+	CloudBlockStorageBackupListDefaultFields = []string{"ID", "Name", "Status", "Size", "RegionCode"}
 )
 
 func RegisterCloudBackupDefinition() {
@@ -20,6 +20,7 @@ func RegisterCloudBackupDefinition() {
 			{ID: "Status", Name: "Status", Path: "Status", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
 			{ID: "Size", Name: "Size", Path: "Size", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
 			{ID: "RegionID", Name: "Region ID", Path: "RegionID", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
+			{ID: "RegionCode", Name: "RegionCode", Path: "RegionCode", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
 			{ID: "OpenstackUUID", Name: "Openstack UUID", Path: "OpenstackUUID", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
 			{ID: "OpenstackVolumeUUID", Name: "Openstack Volume UUID", Path: "OpenstackVolumeUUID", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
 			{ID: "Labels", Name: "Labels", Path: "Labels", PageViewHandlerFunc: mapPvHandler},
