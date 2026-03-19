@@ -9,7 +9,7 @@ import (
 
 var (
 	NetworkPoolType              = reflect.TypeOf(serverscom.NetworkPool{})
-	NetworkPoolListDefaultFields = []string{"ID", "Title", "CIDR", "Type"}
+	NetworkPoolListDefaultFields = []string{"ID", "Title", "CIDR", "Type", "LocationCodes"}
 
 	SubnetworkType              = reflect.TypeOf(serverscom.Subnetwork{})
 	SubnetworkListDefaultFields = []string{"ID", "Title", "CIDR", "Attached", "InterfaceType"}
@@ -23,6 +23,7 @@ func RegisterNetworkPoolDefinitions() {
 			{ID: "CIDR", Name: "CIDR", Path: "CIDR", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
 			{ID: "Type", Name: "Type", Path: "Type", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
 			{ID: "LocationIDs", Name: "LocationIDs", Path: "LocationIDs", PageViewHandlerFunc: slicePvHandler},
+			{ID: "LocationCodes", Name: "LocationCodes", Path: "LocationCodes", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
 			{ID: "Labels", Name: "Labels", Path: "Labels", PageViewHandlerFunc: mapPvHandler},
 			{ID: "Created", Name: "Created", Path: "Created", ListHandlerFunc: timeHandler, PageViewHandlerFunc: timeHandler, Default: true},
 			{ID: "Updated", Name: "Updated", Path: "Updated", ListHandlerFunc: timeHandler, PageViewHandlerFunc: timeHandler, Default: true},

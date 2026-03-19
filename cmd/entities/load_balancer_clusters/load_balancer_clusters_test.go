@@ -15,16 +15,18 @@ import (
 )
 
 var (
-	testId          = "testId"
-	fixtureBasePath = filepath.Join("..", "..", "..", "testdata", "entities", "lb-clusters")
-	fixedTime       = time.Date(2025, 1, 1, 12, 0, 0, 0, time.UTC)
-	testLbCluster   = serverscom.LoadBalancerCluster{
-		ID:         testId,
-		Name:       "test-lb-cluster",
-		LocationID: 1,
-		Status:     "active",
-		Created:    fixedTime,
-		Updated:    fixedTime,
+	testId           = "testId"
+	fixtureBasePath  = filepath.Join("..", "..", "..", "testdata", "entities", "lb-clusters")
+	fixedTime        = time.Date(2025, 1, 1, 12, 0, 0, 0, time.UTC)
+	testLocationCode = "test"
+	testLbCluster    = serverscom.LoadBalancerCluster{
+		ID:           testId,
+		Name:         "test-lb-cluster",
+		LocationID:   1,
+		LocationCode: testLocationCode,
+		Status:       "active",
+		Created:      fixedTime,
+		Updated:      fixedTime,
 	}
 )
 

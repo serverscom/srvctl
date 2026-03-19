@@ -5,6 +5,9 @@ type: private
 locationids:
     - 1
     - 2
+locationcodes:
+    - test-location1
+    - test-location2
 labels:
     environment: testing
 created: 2025-01-01T12:00:00Z

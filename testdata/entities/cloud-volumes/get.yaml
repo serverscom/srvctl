@@ -1,6 +1,7 @@
 id: vol-12345
 openstackuuid: null
 regionid: 1
+regioncode: test
 size: 100
 status: ""
 bootable: false

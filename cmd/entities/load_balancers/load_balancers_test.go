@@ -18,11 +18,13 @@ var (
 	skeletonTemplatePath = filepath.Join("..", "..", "..", "internal", "output", "skeletons", "templates", "lb")
 	fixedTime            = time.Date(2025, 1, 1, 12, 0, 0, 0, time.UTC)
 	testId               = "testId"
+	testLocationCode     = "test"
 	testLB               = serverscom.LoadBalancer{
 		ID:                testId,
 		Name:              "test-l4-lb",
 		Type:              "l4",
 		LocationID:        1,
+		LocationCode:      testLocationCode,
 		ExternalAddresses: []string{"127.0.0.1"},
 		Status:            "active",
 		Labels:            map[string]string{"foo": "bar"},
@@ -34,6 +36,7 @@ var (
 		Name:              "test-l4-lb",
 		Type:              "l4",
 		LocationID:        1,
+		LocationCode:      testLocationCode,
 		ExternalAddresses: []string{"127.0.0.1"},
 		Status:            "active",
 		Labels:            map[string]string{"foo": "bar"},
@@ -45,6 +48,7 @@ var (
 		Name:              "test-l7-lb",
 		Type:              "l7",
 		LocationID:        1,
+		LocationCode:      testLocationCode,
 		ExternalAddresses: []string{"127.0.0.1"},
 		Domains:           []string{"test.com"},
 		Status:            "active",

@@ -1,6 +1,7 @@
 {
     "name": "test-volume",
     "region_id": 1,
+    "region_code": "test",
     "size": 100,
     "description": "Test volume",
     "labels": {

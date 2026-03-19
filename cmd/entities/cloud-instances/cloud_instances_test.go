@@ -18,11 +18,12 @@ var (
 	skeletonTemplatePath = filepath.Join("..", "..", "..", "internal", "output", "skeletons", "templates", "cloud-instances")
 	fixedTime            = time.Date(2025, 1, 1, 12, 0, 0, 0, time.UTC)
 	testCloudInstanceID  = "test-instance-id"
+	testRegionCode       = "AMS1"
 	testCloudInstance    = serverscom.CloudComputingInstance{
 		ID:                 testCloudInstanceID,
 		Name:               "test-instance",
 		RegionID:           1,
-		RegionCode:         "AMS1",
+		RegionCode:         testRegionCode,
 		OpenstackUUID:      "uuid-123",
 		Status:             "active",
 		FlavorID:           "flavor-1",
@@ -45,7 +46,7 @@ var (
 		ID:                 "test-instance-id2",
 		Name:               "test-instance2",
 		RegionID:           1,
-		RegionCode:         "AMS1",
+		RegionCode:         testRegionCode,
 		OpenstackUUID:      "uuid-123",
 		Status:             "active",
 		FlavorID:           "flavor-1",

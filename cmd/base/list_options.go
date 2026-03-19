@@ -120,6 +120,21 @@ func (o *LocationIDOption[T]) ApplyToCollection(collection serverscom.Collection
 	}
 }
 
+// location code option
+type LocationCodeOption[T any] struct {
+	locationCode string
+}
+
+func (o *LocationCodeOption[T]) AddFlags(cmd *cobra.Command) {
+	cmd.Flags().StringVar(&o.locationCode, "location-code", "", "Filter results by location code")
+}
+
+func (o *LocationCodeOption[T]) ApplyToCollection(collection serverscom.Collection[T]) {
+	if o.locationCode != "" {
+		collection.SetParam("location_code", o.locationCode)
+	}
+}
+
 // cluster id option
 type ClusterIDOption[T any] struct {
 	clusterID string
@@ -471,6 +486,20 @@ func (o *RegionIDOption[T]) AddFlags(cmd *cobra.Command) {
 func (o *RegionIDOption[T]) ApplyToCollection(collection serverscom.Collection[T]) {
 	if o.regionID != 0 {
 		collection.SetParam("region_id", fmt.Sprintf("%d", o.regionID))
+	}
+}
+
+type RegionCodeOption[T any] struct {
+	regionCode string
+}
+
+func (o *RegionCodeOption[T]) AddFlags(cmd *cobra.Command) {
+	cmd.Flags().StringVar(&o.regionCode, "region-code", "", "Filter results by region code")
+}
+
+func (o *RegionCodeOption[T]) ApplyToCollection(collection serverscom.Collection[T]) {
+	if o.regionCode != "" {
+		collection.SetParam("region_code", o.regionCode)
 	}
 }
 

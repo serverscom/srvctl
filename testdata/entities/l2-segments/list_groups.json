@@ -9,6 +9,11 @@
             2,
             3
         ],
+        "location_codes": [
+            "location1",
+            "location2",
+            "location3"
+        ],
         "hyperscalers": [
             "AWS",
             "Azure"

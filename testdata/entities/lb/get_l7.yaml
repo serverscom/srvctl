@@ -7,6 +7,7 @@ status: active
 externaladdresses:
     - 127.0.0.1
 locationid: 1
+locationcode: test
 geoip: false
 storelogs: false
 storelogsregionid: 0

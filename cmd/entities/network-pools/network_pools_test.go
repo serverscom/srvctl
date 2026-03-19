@@ -24,11 +24,12 @@ var (
 	cidr         = "192.168.0.0/24"
 
 	testNetworkPool = serverscom.NetworkPool{
-		ID:          testID,
-		Title:       &networkTitle,
-		CIDR:        cidr,
-		Type:        "private",
-		LocationIDs: []int{1, 2},
+		ID:            testID,
+		Title:         &networkTitle,
+		CIDR:          cidr,
+		Type:          "private",
+		LocationIDs:   []int{1, 2},
+		LocationCodes: []string{"test-location1", "test-location2"},
 		Labels: map[string]string{
 			"environment": "testing",
 		},

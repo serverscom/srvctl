@@ -3,6 +3,7 @@ Name:                   test-backup
 Status:                 available
 Size:                   1073741824
 Region ID:              1
+RegionCode:             AMS1
 Openstack UUID:         <none>
 Openstack Volume UUID:  vol-123-openstack
 Labels:                 env=test
@@ -13,6 +14,7 @@ Name:                   test-backup-2
 Status:                 available
 Size:                   2147483648
 Region ID:              1
+RegionCode:             AMS1
 Openstack UUID:         <none>
 Openstack Volume UUID:  vol-456-openstack
 Labels:                 env=prod

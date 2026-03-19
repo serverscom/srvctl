@@ -1,19 +1,21 @@
-ID:            10
-Name:          testName
-Code:          testCode
-GroupType:     public
-LocationIDs:   1
-               2
-               3
-Hyperscalers:  AWS
-               Azure
+ID:             10
+Name:           testName
+Code:           testCode
+GroupType:      public
+LocationIDs:    1
+                2
+                3
+LocationCodes:  [location1 location2 location3]
+Hyperscalers:   AWS
+                Azure
 ---
-ID:            11
-Name:          testName2
-Code:          testCode
-GroupType:     public
-LocationIDs:   1
-               2
-               3
-Hyperscalers:  AWS
-               Azure
+ID:             11
+Name:           testName2
+Code:           testCode
+GroupType:      public
+LocationIDs:    1
+                2
+                3
+LocationCodes:  [location1 location2 location3]
+Hyperscalers:   AWS
+                Azure

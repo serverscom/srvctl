@@ -46,6 +46,7 @@ func RegisterL2SegmentDefinitions() {
 			{ID: "Code", Name: "Code", Path: "Code", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
 			{ID: "GroupType", Name: "GroupType", Path: "GroupType", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
 			{ID: "LocationIDs", Name: "LocationIDs", Path: "LocationIDs", PageViewHandlerFunc: slicePvHandler},
+			{ID: "LocationCodes", Name: "LocationCodes", Path: "LocationCodes", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
 			{ID: "Hyperscalers", Name: "Hyperscalers", Path: "Hyperscalers", PageViewHandlerFunc: slicePvHandler},
 		},
 		eType: L2SegmentLocationGroupType,

@@ -10,7 +10,7 @@ import (
 var (
 	KubernetesClusterType                  = reflect.TypeOf(serverscom.KubernetesCluster{})
 	KubernetesClusterNodeType              = reflect.TypeOf(serverscom.KubernetesClusterNode{})
-	KubernetesClusterListDefaultFields     = []string{"ID", "Name", "Status", "LocationID"}
+	KubernetesClusterListDefaultFields     = []string{"ID", "Name", "Status", "LocationID", "LocationCode"}
 	KubernetesClusterNodeListDefaultFields = []string{"ID", "Number", "Hostname", "Type", "Role", "Status", "PrivateIPv4Address", "PublicIPv4Address"}
 )
 
@@ -21,6 +21,7 @@ func RegisterKubernetesClusterDefinition() {
 			{ID: "Name", Name: "Name", Path: "Name", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
 			{ID: "Status", Name: "Status", Path: "Status", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
 			{ID: "LocationID", Name: "LocationID", Path: "LocationID", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
+			{ID: "LocationCode", Name: "LocationCode", Path: "LocationCode", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
 			{ID: "Labels", Name: "Labels", Path: "Labels", PageViewHandlerFunc: mapPvHandler},
 			{ID: "Created", Name: "Created", Path: "Created", ListHandlerFunc: timeHandler, PageViewHandlerFunc: timeHandler, Default: true},
 			{ID: "Updated", Name: "Updated", Path: "Updated", ListHandlerFunc: timeHandler, PageViewHandlerFunc: timeHandler, Default: true},

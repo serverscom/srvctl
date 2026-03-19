@@ -7,6 +7,7 @@
         "127.0.0.1"
     ],
     "location_id": 1,
+    "location_code": "test",
     "store_logs": false,
     "cluster_id": null,
     "labels": {

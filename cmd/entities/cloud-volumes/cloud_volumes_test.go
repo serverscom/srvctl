@@ -19,10 +19,12 @@ var (
 	fixtureBasePath      = filepath.Join("..", "..", "..", "testdata", "entities", "cloud-volumes")
 	skeletonTemplatePath = filepath.Join("..", "..", "..", "internal", "output", "skeletons", "templates", "cloud-volumes")
 	fixedTime            = time.Date(2025, 1, 1, 12, 0, 0, 0, time.UTC)
+	testRegionCode       = "test"
 	testVolume           = serverscom.CloudBlockStorageVolume{
 		ID:          testVolumeID,
 		Name:        "test-volume",
 		RegionID:    1,
+		RegionCode:  testRegionCode,
 		Size:        100,
 		Description: testutils.PtrString("Test volume"),
 		Labels:      map[string]string{"foo": "bar"},

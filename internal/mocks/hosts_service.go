@@ -71,6 +71,126 @@ func (mr *MockHostsServiceMockRecorder) ActivateDedicatedServerPubliIPv6Network(
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ActivateDedicatedServerPubliIPv6Network", reflect.TypeOf((*MockHostsService)(nil).ActivateDedicatedServerPubliIPv6Network), ctx, id)
 }
 
+// ActivateDisaggregatedPrivatePortsFeature mocks base method.
+func (m *MockHostsService) ActivateDisaggregatedPrivatePortsFeature(ctx context.Context, serverID string) (*serverscom.DedicatedServerFeature, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ActivateDisaggregatedPrivatePortsFeature", ctx, serverID)
+	ret0, _ := ret[0].(*serverscom.DedicatedServerFeature)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ActivateDisaggregatedPrivatePortsFeature indicates an expected call of ActivateDisaggregatedPrivatePortsFeature.
+func (mr *MockHostsServiceMockRecorder) ActivateDisaggregatedPrivatePortsFeature(ctx, serverID any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ActivateDisaggregatedPrivatePortsFeature", reflect.TypeOf((*MockHostsService)(nil).ActivateDisaggregatedPrivatePortsFeature), ctx, serverID)
+}
+
+// ActivateDisaggregatedPublicPortsFeature mocks base method.
+func (m *MockHostsService) ActivateDisaggregatedPublicPortsFeature(ctx context.Context, serverID string) (*serverscom.DedicatedServerFeature, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ActivateDisaggregatedPublicPortsFeature", ctx, serverID)
+	ret0, _ := ret[0].(*serverscom.DedicatedServerFeature)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ActivateDisaggregatedPublicPortsFeature indicates an expected call of ActivateDisaggregatedPublicPortsFeature.
+func (mr *MockHostsServiceMockRecorder) ActivateDisaggregatedPublicPortsFeature(ctx, serverID any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ActivateDisaggregatedPublicPortsFeature", reflect.TypeOf((*MockHostsService)(nil).ActivateDisaggregatedPublicPortsFeature), ctx, serverID)
+}
+
+// ActivateHostRescueModeFeature mocks base method.
+func (m *MockHostsService) ActivateHostRescueModeFeature(ctx context.Context, serverID string, input serverscom.HostRescueModeFeatureInput) (*serverscom.DedicatedServerFeature, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ActivateHostRescueModeFeature", ctx, serverID, input)
+	ret0, _ := ret[0].(*serverscom.DedicatedServerFeature)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ActivateHostRescueModeFeature indicates an expected call of ActivateHostRescueModeFeature.
+func (mr *MockHostsServiceMockRecorder) ActivateHostRescueModeFeature(ctx, serverID, input any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ActivateHostRescueModeFeature", reflect.TypeOf((*MockHostsService)(nil).ActivateHostRescueModeFeature), ctx, serverID, input)
+}
+
+// ActivateNoPrivateIpFeature mocks base method.
+func (m *MockHostsService) ActivateNoPrivateIpFeature(ctx context.Context, serverID string) (*serverscom.DedicatedServerFeature, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ActivateNoPrivateIpFeature", ctx, serverID)
+	ret0, _ := ret[0].(*serverscom.DedicatedServerFeature)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ActivateNoPrivateIpFeature indicates an expected call of ActivateNoPrivateIpFeature.
+func (mr *MockHostsServiceMockRecorder) ActivateNoPrivateIpFeature(ctx, serverID any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ActivateNoPrivateIpFeature", reflect.TypeOf((*MockHostsService)(nil).ActivateNoPrivateIpFeature), ctx, serverID)
+}
+
+// ActivateNoPublicIpAddressFeature mocks base method.
+func (m *MockHostsService) ActivateNoPublicIpAddressFeature(ctx context.Context, serverID string) (*serverscom.DedicatedServerFeature, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ActivateNoPublicIpAddressFeature", ctx, serverID)
+	ret0, _ := ret[0].(*serverscom.DedicatedServerFeature)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ActivateNoPublicIpAddressFeature indicates an expected call of ActivateNoPublicIpAddressFeature.
+func (mr *MockHostsServiceMockRecorder) ActivateNoPublicIpAddressFeature(ctx, serverID any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ActivateNoPublicIpAddressFeature", reflect.TypeOf((*MockHostsService)(nil).ActivateNoPublicIpAddressFeature), ctx, serverID)
+}
+
+// ActivateNoPublicNetworkFeature mocks base method.
+func (m *MockHostsService) ActivateNoPublicNetworkFeature(ctx context.Context, serverID string) (*serverscom.DedicatedServerFeature, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ActivateNoPublicNetworkFeature", ctx, serverID)
+	ret0, _ := ret[0].(*serverscom.DedicatedServerFeature)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ActivateNoPublicNetworkFeature indicates an expected call of ActivateNoPublicNetworkFeature.
+func (mr *MockHostsServiceMockRecorder) ActivateNoPublicNetworkFeature(ctx, serverID any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ActivateNoPublicNetworkFeature", reflect.TypeOf((*MockHostsService)(nil).ActivateNoPublicNetworkFeature), ctx, serverID)
+}
+
+// ActivateOobPublicAccessFeature mocks base method.
+func (m *MockHostsService) ActivateOobPublicAccessFeature(ctx context.Context, serverID string) (*serverscom.DedicatedServerFeature, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ActivateOobPublicAccessFeature", ctx, serverID)
+	ret0, _ := ret[0].(*serverscom.DedicatedServerFeature)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ActivateOobPublicAccessFeature indicates an expected call of ActivateOobPublicAccessFeature.
+func (mr *MockHostsServiceMockRecorder) ActivateOobPublicAccessFeature(ctx, serverID any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ActivateOobPublicAccessFeature", reflect.TypeOf((*MockHostsService)(nil).ActivateOobPublicAccessFeature), ctx, serverID)
+}
+
+// ActivatePrivateIpxeBootFeature mocks base method.
+func (m *MockHostsService) ActivatePrivateIpxeBootFeature(ctx context.Context, serverID string, input serverscom.PrivateIpxeBootFeatureInput) (*serverscom.DedicatedServerFeature, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ActivatePrivateIpxeBootFeature", ctx, serverID, input)
+	ret0, _ := ret[0].(*serverscom.DedicatedServerFeature)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ActivatePrivateIpxeBootFeature indicates an expected call of ActivatePrivateIpxeBootFeature.
+func (mr *MockHostsServiceMockRecorder) ActivatePrivateIpxeBootFeature(ctx, serverID, input any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ActivatePrivateIpxeBootFeature", reflect.TypeOf((*MockHostsService)(nil).ActivatePrivateIpxeBootFeature), ctx, serverID, input)
+}
+
 // AddDedicatedServerPrivateIPv4Network mocks base method.
 func (m *MockHostsService) AddDedicatedServerPrivateIPv4Network(ctx context.Context, id string, input serverscom.NetworkInput) (*serverscom.Network, error) {
 	m.ctrl.T.Helper()
@@ -99,6 +219,21 @@ func (m *MockHostsService) AddDedicatedServerPublicIPv4Network(ctx context.Conte
 func (mr *MockHostsServiceMockRecorder) AddDedicatedServerPublicIPv4Network(ctx, id, input any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddDedicatedServerPublicIPv4Network", reflect.TypeOf((*MockHostsService)(nil).AddDedicatedServerPublicIPv4Network), ctx, id, input)
+}
+
+// AttachSSHKeysToDedicatedServer mocks base method.
+func (m *MockHostsService) AttachSSHKeysToDedicatedServer(ctx context.Context, id string, input serverscom.SSHKeyAttachInput) ([]serverscom.SSHKey, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "AttachSSHKeysToDedicatedServer", ctx, id, input)
+	ret0, _ := ret[0].([]serverscom.SSHKey)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// AttachSSHKeysToDedicatedServer indicates an expected call of AttachSSHKeysToDedicatedServer.
+func (mr *MockHostsServiceMockRecorder) AttachSSHKeysToDedicatedServer(ctx, id, input any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AttachSSHKeysToDedicatedServer", reflect.TypeOf((*MockHostsService)(nil).AttachSSHKeysToDedicatedServer), ctx, id, input)
 }
 
 // Collection mocks base method.
@@ -173,6 +308,126 @@ func (m *MockHostsService) CreateSBMServers(ctx context.Context, input serversco
 func (mr *MockHostsServiceMockRecorder) CreateSBMServers(ctx, input any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateSBMServers", reflect.TypeOf((*MockHostsService)(nil).CreateSBMServers), ctx, input)
+}
+
+// DeactivateDisaggregatedPrivatePortsFeature mocks base method.
+func (m *MockHostsService) DeactivateDisaggregatedPrivatePortsFeature(ctx context.Context, serverID string) (*serverscom.DedicatedServerFeature, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeactivateDisaggregatedPrivatePortsFeature", ctx, serverID)
+	ret0, _ := ret[0].(*serverscom.DedicatedServerFeature)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// DeactivateDisaggregatedPrivatePortsFeature indicates an expected call of DeactivateDisaggregatedPrivatePortsFeature.
+func (mr *MockHostsServiceMockRecorder) DeactivateDisaggregatedPrivatePortsFeature(ctx, serverID any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeactivateDisaggregatedPrivatePortsFeature", reflect.TypeOf((*MockHostsService)(nil).DeactivateDisaggregatedPrivatePortsFeature), ctx, serverID)
+}
+
+// DeactivateDisaggregatedPublicPortsFeature mocks base method.
+func (m *MockHostsService) DeactivateDisaggregatedPublicPortsFeature(ctx context.Context, serverID string) (*serverscom.DedicatedServerFeature, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeactivateDisaggregatedPublicPortsFeature", ctx, serverID)
+	ret0, _ := ret[0].(*serverscom.DedicatedServerFeature)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// DeactivateDisaggregatedPublicPortsFeature indicates an expected call of DeactivateDisaggregatedPublicPortsFeature.
+func (mr *MockHostsServiceMockRecorder) DeactivateDisaggregatedPublicPortsFeature(ctx, serverID any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeactivateDisaggregatedPublicPortsFeature", reflect.TypeOf((*MockHostsService)(nil).DeactivateDisaggregatedPublicPortsFeature), ctx, serverID)
+}
+
+// DeactivateHostRescueModeFeature mocks base method.
+func (m *MockHostsService) DeactivateHostRescueModeFeature(ctx context.Context, serverID string) (*serverscom.DedicatedServerFeature, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeactivateHostRescueModeFeature", ctx, serverID)
+	ret0, _ := ret[0].(*serverscom.DedicatedServerFeature)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// DeactivateHostRescueModeFeature indicates an expected call of DeactivateHostRescueModeFeature.
+func (mr *MockHostsServiceMockRecorder) DeactivateHostRescueModeFeature(ctx, serverID any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeactivateHostRescueModeFeature", reflect.TypeOf((*MockHostsService)(nil).DeactivateHostRescueModeFeature), ctx, serverID)
+}
+
+// DeactivateNoPrivateIpFeature mocks base method.
+func (m *MockHostsService) DeactivateNoPrivateIpFeature(ctx context.Context, serverID string) (*serverscom.DedicatedServerFeature, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeactivateNoPrivateIpFeature", ctx, serverID)
+	ret0, _ := ret[0].(*serverscom.DedicatedServerFeature)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// DeactivateNoPrivateIpFeature indicates an expected call of DeactivateNoPrivateIpFeature.
+func (mr *MockHostsServiceMockRecorder) DeactivateNoPrivateIpFeature(ctx, serverID any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeactivateNoPrivateIpFeature", reflect.TypeOf((*MockHostsService)(nil).DeactivateNoPrivateIpFeature), ctx, serverID)
+}
+
+// DeactivateNoPublicIpAddressFeature mocks base method.
+func (m *MockHostsService) DeactivateNoPublicIpAddressFeature(ctx context.Context, serverID string) (*serverscom.DedicatedServerFeature, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeactivateNoPublicIpAddressFeature", ctx, serverID)
+	ret0, _ := ret[0].(*serverscom.DedicatedServerFeature)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// DeactivateNoPublicIpAddressFeature indicates an expected call of DeactivateNoPublicIpAddressFeature.
+func (mr *MockHostsServiceMockRecorder) DeactivateNoPublicIpAddressFeature(ctx, serverID any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeactivateNoPublicIpAddressFeature", reflect.TypeOf((*MockHostsService)(nil).DeactivateNoPublicIpAddressFeature), ctx, serverID)
+}
+
+// DeactivateNoPublicNetworkFeature mocks base method.
+func (m *MockHostsService) DeactivateNoPublicNetworkFeature(ctx context.Context, serverID string) (*serverscom.DedicatedServerFeature, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeactivateNoPublicNetworkFeature", ctx, serverID)
+	ret0, _ := ret[0].(*serverscom.DedicatedServerFeature)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// DeactivateNoPublicNetworkFeature indicates an expected call of DeactivateNoPublicNetworkFeature.
+func (mr *MockHostsServiceMockRecorder) DeactivateNoPublicNetworkFeature(ctx, serverID any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeactivateNoPublicNetworkFeature", reflect.TypeOf((*MockHostsService)(nil).DeactivateNoPublicNetworkFeature), ctx, serverID)
+}
+
+// DeactivateOobPublicAccessFeature mocks base method.
+func (m *MockHostsService) DeactivateOobPublicAccessFeature(ctx context.Context, serverID string) (*serverscom.DedicatedServerFeature, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeactivateOobPublicAccessFeature", ctx, serverID)
+	ret0, _ := ret[0].(*serverscom.DedicatedServerFeature)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// DeactivateOobPublicAccessFeature indicates an expected call of DeactivateOobPublicAccessFeature.
+func (mr *MockHostsServiceMockRecorder) DeactivateOobPublicAccessFeature(ctx, serverID any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeactivateOobPublicAccessFeature", reflect.TypeOf((*MockHostsService)(nil).DeactivateOobPublicAccessFeature), ctx, serverID)
+}
+
+// DeactivatePrivateIpxeBootFeature mocks base method.
+func (m *MockHostsService) DeactivatePrivateIpxeBootFeature(ctx context.Context, serverID string) (*serverscom.DedicatedServerFeature, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeactivatePrivateIpxeBootFeature", ctx, serverID)
+	ret0, _ := ret[0].(*serverscom.DedicatedServerFeature)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// DeactivatePrivateIpxeBootFeature indicates an expected call of DeactivatePrivateIpxeBootFeature.
+func (mr *MockHostsServiceMockRecorder) DeactivatePrivateIpxeBootFeature(ctx, serverID any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeactivatePrivateIpxeBootFeature", reflect.TypeOf((*MockHostsService)(nil).DeactivatePrivateIpxeBootFeature), ctx, serverID)
 }
 
 // DedicatedServerConnections mocks base method.
@@ -317,6 +572,20 @@ func (mr *MockHostsServiceMockRecorder) DeletePTRRecordForSBMServer(ctx, serverI
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeletePTRRecordForSBMServer", reflect.TypeOf((*MockHostsService)(nil).DeletePTRRecordForSBMServer), ctx, serverID, ptrRecordID)
 }
 
+// DetachSSHKeyFromDedicatedServer mocks base method.
+func (m *MockHostsService) DetachSSHKeyFromDedicatedServer(ctx context.Context, serverID, fingerprint string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DetachSSHKeyFromDedicatedServer", ctx, serverID, fingerprint)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DetachSSHKeyFromDedicatedServer indicates an expected call of DetachSSHKeyFromDedicatedServer.
+func (mr *MockHostsServiceMockRecorder) DetachSSHKeyFromDedicatedServer(ctx, serverID, fingerprint any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DetachSSHKeyFromDedicatedServer", reflect.TypeOf((*MockHostsService)(nil).DetachSSHKeyFromDedicatedServer), ctx, serverID, fingerprint)
+}
+
 // GetDedicatedServer mocks base method.
 func (m *MockHostsService) GetDedicatedServer(ctx context.Context, id string) (*serverscom.DedicatedServer, error) {
 	m.ctrl.T.Helper()
@@ -448,6 +717,21 @@ func (m *MockHostsService) KubernetesBaremetalNodePowerFeeds(ctx context.Context
 func (mr *MockHostsServiceMockRecorder) KubernetesBaremetalNodePowerFeeds(ctx, id any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "KubernetesBaremetalNodePowerFeeds", reflect.TypeOf((*MockHostsService)(nil).KubernetesBaremetalNodePowerFeeds), ctx, id)
+}
+
+// ListDedicatedServerSSHKeys mocks base method.
+func (m *MockHostsService) ListDedicatedServerSSHKeys(ctx context.Context, id string) ([]serverscom.SSHKey, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListDedicatedServerSSHKeys", ctx, id)
+	ret0, _ := ret[0].([]serverscom.SSHKey)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ListDedicatedServerSSHKeys indicates an expected call of ListDedicatedServerSSHKeys.
+func (mr *MockHostsServiceMockRecorder) ListDedicatedServerSSHKeys(ctx, id any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListDedicatedServerSSHKeys", reflect.TypeOf((*MockHostsService)(nil).ListDedicatedServerSSHKeys), ctx, id)
 }
 
 // ListDedicatedServers mocks base method.

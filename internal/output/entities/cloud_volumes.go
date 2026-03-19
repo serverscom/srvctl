@@ -9,7 +9,7 @@ import (
 
 var (
 	CloudVolumeType              = reflect.TypeOf(serverscom.CloudBlockStorageVolume{})
-	CloudVolumeListDefaultFields = []string{"ID", "Name", "RegionID", "Size", "Description"}
+	CloudVolumeListDefaultFields = []string{"ID", "Name", "RegionID", "RegionCode", "Size", "Description"}
 )
 
 func RegisterCloudVolumeDefinition() {
@@ -18,6 +18,7 @@ func RegisterCloudVolumeDefinition() {
 			{ID: "ID", Name: "ID", Path: "ID", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
 			{ID: "Name", Name: "Name", Path: "Name", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
 			{ID: "RegionID", Name: "Region ID", Path: "RegionID", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
+			{ID: "RegionCode", Name: "RegionCode", Path: "RegionCode", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
 			{ID: "Size", Name: "Size", Path: "Size", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
 			{ID: "Description", Name: "Description", Path: "Description", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
 			{ID: "Labels", Name: "Labels", Path: "Labels", PageViewHandlerFunc: mapPvHandler},
