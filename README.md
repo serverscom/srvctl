@@ -1,38 +1,53 @@
-# srvctl
+# srvctl - CLI for Servers.com infrastructure
+
+[![Go Reference](https://pkg.go.dev/badge/github.com/serverscom/srvctl.svg)](https://pkg.go.dev/github.com/serverscom/srvctl) [![Go Report Card](https://goreportcard.com/badge/github.com/serverscom/srvctl)](https://goreportcard.com/report/github.com/serverscom/srvctl)
 
 ## Description
 
-`srvctl` is a command line app to manage servers.com resources.
+Manage your Servers.com bare metal servers, cloud servers, and infrastructure directly from the terminal.
 
-## Installation
+`srvctl` wraps the Servers.com Public API into a fast, scriptable command-line interface built in Go.
 
-Homebrew:
+## Quick Start
 
-```bash
+### Homebrew (macOS & Linux):
+
+```sh
 brew tap serverscom/serverscom
 brew install srvctl
 ```
 
+### Docker:
+
+```sh
+docker pull ghcr.io/serverscom/srvctl:latest
+docker run --rm -it ghcr.io/serverscom/srvctl:latest --help
+```
+
+### Binary releases:
+Download the latest release for your OS and architecture from the [Releases page](https://github.com/serverscom/srvctl/releases).
+
 ## Usage
 
-We need to define the context for your credentials, and global settings before we start using `srvctl`. 
-In order to initiate CLI usage, we have to define the context, that will be used by the CLI.
+### Authentication
 
-It's done by using `srvctl login <context-name>` command. For the example below, we're using `default` context.
+Create a context with your [Servers.com API token](https://portal.servers.com/login):
 
-```bash
-$ srvctl login default #prompts to enter your API token. 
-Enter API token: ....
+```sh
+$ srvctl login default 
+Enter API token: *****
 
 Successfully logged in with context "default"
 Context "default" set as default
 ```
 
-Config file will be located in `$XDG_CONFIG_HOME/srvctl/config.yaml`, if XDG_CONFIG_HOME exists.
-Otherwise it will rely on `$HOME/.config/srvctl/config.yaml`. 
-Additionally, you can define a custom path `SRVCTL_CONFIG_PATH`.
+### Configuration
 
-Config file supports multiple context options, allowing you to use various configs for each of them:
+The config file is stored at `$XDG_CONFIG_HOME/srvctl/config.yaml`, if XDG_CONFIG_HOME exists.
+Otherwise it will rely on `$HOME/.config/srvctl/config.yaml`. 
+You can override this with the `SRVCTL_CONFIG_PATH` environment variable.
+
+`srvctl` supports multiple contexts, allowing you to manage several Servers.com accounts or API endpoints from a single installation:
 
 ```yaml
 globalConfig: {}
@@ -79,3 +94,11 @@ $ srvctl hosts ds list --help
 ```
 
 Man pages are based on the documentation info located in `/docs` directory.
+
+## Contributing
+
+Contributions are welcome! Please open an issue or submit a pull request.
+
+## License
+
+`srvctl` is released under the Apache 2.0 License.
