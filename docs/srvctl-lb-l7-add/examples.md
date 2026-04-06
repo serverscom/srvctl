@@ -10,12 +10,6 @@ A command to create a new L7 load balancer using a JSON file:
 srvctl lb l7 add --input /path/to/input.json
 ```
 
-A command to create a new L7 load balancer using stdin:
-
-```
-cat input.json | srvctl lb l7 add --input -
-```
-
 JSON structure example:
 
 ```json

@@ -1,9 +1,3 @@
-A command to show the skeleton JSON structure required to create a cloud volume:
-
-```
-srvctl cloud-volumes add --skeleton
-```
-
 An example of a command for a file in the same directory with srvctl:
 
 ```

@@ -1,1 +1,1 @@
-This command upgrades the selected cloud instance to a new flavor.
+This command upgrades the selected cloud instance to a new flavor. You are able to revert upgrade to the previous configuration or approve the changes within 72 hours. After 72 hours, it will be automatically approved.

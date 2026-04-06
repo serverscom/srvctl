@@ -1,1 +1,1 @@
-This command creates a new snapshot for the selected cloud region. The `--name` and `--instance-id` flags are required.
+This command creates a snapshot for the selected instance within a cloud region. The `--name` and `--instance-id` flags are required.

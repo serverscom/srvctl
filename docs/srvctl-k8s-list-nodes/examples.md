@@ -13,5 +13,5 @@ srvctl k8s list-nodes ex4mp1eClusterID --search-pattern "worker"
 A command to filter nodes by label:
 
 ```
-srvctl k8s list-nodes ex4mp1eClusterID --label-selector "role=worker"
+srvctl k8s list-nodes ex4mp1eClusterID --label-selector "team=devops"
 ```

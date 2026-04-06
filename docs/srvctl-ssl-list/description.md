@@ -1,1 +1,1 @@
-This command lists all SSL certificates of the account regardless of type. Use `--help` to see available flags.
+This command lists all custom and Let's Encrypt SSL certificates of the account. Use `--help` to see available flags.

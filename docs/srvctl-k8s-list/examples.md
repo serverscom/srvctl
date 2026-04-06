@@ -7,7 +7,7 @@ srvctl k8s list
 A command to filter Kubernetes clusters by location:
 
 ```
-srvctl k8s list --location-id "LON1"
+srvctl k8s list --location-id 1
 ```
 
 A command to filter Kubernetes clusters by label:

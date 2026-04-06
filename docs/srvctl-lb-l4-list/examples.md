@@ -7,7 +7,7 @@ srvctl lb l4 list
 A command to filter L4 load balancers by location:
 
 ```
-srvctl lb l4 list --location-id "LON1"
+srvctl lb l4 list --location-id 5
 ```
 
 A command to filter L4 load balancers by cluster:
