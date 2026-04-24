@@ -36,4 +36,6 @@ func init() {
 	RegisterCloudComputingRegionDefinitions()
 	RegisterCloudVolumeDefinition()
 	RegisterCloudBackupDefinition()
+	RegisterRbsVolumeDefinitions()
+	RegisterRbsVolumeCredentialsDefinition()
 }

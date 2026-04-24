@@ -1,0 +1,19 @@
+[
+    {
+        "id": "testID1",
+        "name": "rbs-volume1",
+        "size": 0,
+        "status": "",
+        "labels": {
+            "foo": "bar"
+        },
+        "location_id": 0,
+        "location_code": "",
+        "flavor_id": 0,
+        "flavor_name": "",
+        "iops": 0,
+        "bandwidth": 0,
+        "created_at": "2025-01-01T12:00:00Z",
+        "updated_at": "2025-01-01T12:00:00Z"
+    }
+]

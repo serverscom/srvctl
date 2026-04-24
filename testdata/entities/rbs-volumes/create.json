@@ -1,0 +1,9 @@
+{
+    "name": "rbs-volume",
+    "size": 100,
+    "location_id": 1,
+    "flavor_id": 2,
+    "labels": {
+        "foo": "bar"
+    }
+}
