@@ -19,6 +19,14 @@ var (
 		Name:   "disaggregated_public_ports",
 		Status: "activation",
 	}
+	testPrivateIpxeBootResult = serverscom.DedicatedServerFeature{
+		Name:   "private_ipxe_boot",
+		Status: "activation",
+	}
+	testHostRescueModeResult = serverscom.DedicatedServerFeature{
+		Name:   "host_rescue_mode",
+		Status: "activation",
+	}
 )
 
 func TestListEBMFeaturesCmd(t *testing.T) {
@@ -170,6 +178,63 @@ func TestEBMFeatureSetCmd(t *testing.T) {
 				mock.EXPECT().
 					DeactivateDisaggregatedPublicPortsFeature(gomock.Any(), testServerID).
 					Return(&testFeatureResult, nil)
+			},
+		},
+		{
+			name:           "activate private_ipxe_boot with ipxe-config",
+			args:           []string{testServerID, "--feature", "private_ipxe_boot", "--state", "activate", "--ipxe-config", "#!ipxe\nchain http://boot.example.com", "--output", "json"},
+			expectedOutput: testutils.ReadFixture(filepath.Join(featuresFixtureBasePath, "feature_set_private_ipxe_boot.json")),
+			configureMock: func(mock *mocks.MockHostsService) {
+				mock.EXPECT().
+					ActivatePrivateIpxeBootFeature(gomock.Any(), testServerID, serverscom.PrivateIpxeBootFeatureInput{
+						IPXEConfig: "#!ipxe\nchain http://boot.example.com",
+					}).
+					Return(&testPrivateIpxeBootResult, nil)
+			},
+		},
+		{
+			name:           "deactivate private_ipxe_boot",
+			args:           []string{testServerID, "--feature", "private_ipxe_boot", "--state", "deactivate", "--output", "json"},
+			expectedOutput: testutils.ReadFixture(filepath.Join(featuresFixtureBasePath, "feature_set_private_ipxe_boot.json")),
+			configureMock: func(mock *mocks.MockHostsService) {
+				mock.EXPECT().
+					DeactivatePrivateIpxeBootFeature(gomock.Any(), testServerID).
+					Return(&testPrivateIpxeBootResult, nil)
+			},
+		},
+		{
+			name:           "activate host_rescue_mode with password auth",
+			args:           []string{testServerID, "--feature", "host_rescue_mode", "--state", "activate", "--auth-methods", "password", "--output", "json"},
+			expectedOutput: testutils.ReadFixture(filepath.Join(featuresFixtureBasePath, "feature_set_host_rescue_mode.json")),
+			configureMock: func(mock *mocks.MockHostsService) {
+				mock.EXPECT().
+					ActivateHostRescueModeFeature(gomock.Any(), testServerID, serverscom.HostRescueModeFeatureInput{
+						AuthMethods: []string{"password"},
+					}).
+					Return(&testHostRescueModeResult, nil)
+			},
+		},
+		{
+			name:           "activate host_rescue_mode with ssh_key auth",
+			args:           []string{testServerID, "--feature", "host_rescue_mode", "--state", "activate", "--auth-methods", "ssh_key", "--ssh-key-fingerprints", "aa:bb:cc", "--output", "json"},
+			expectedOutput: testutils.ReadFixture(filepath.Join(featuresFixtureBasePath, "feature_set_host_rescue_mode.json")),
+			configureMock: func(mock *mocks.MockHostsService) {
+				mock.EXPECT().
+					ActivateHostRescueModeFeature(gomock.Any(), testServerID, serverscom.HostRescueModeFeatureInput{
+						AuthMethods:        []string{"ssh_key"},
+						SSHKeyFingerprints: []string{"aa:bb:cc"},
+					}).
+					Return(&testHostRescueModeResult, nil)
+			},
+		},
+		{
+			name:           "deactivate host_rescue_mode",
+			args:           []string{testServerID, "--feature", "host_rescue_mode", "--state", "deactivate", "--output", "json"},
+			expectedOutput: testutils.ReadFixture(filepath.Join(featuresFixtureBasePath, "feature_set_host_rescue_mode.json")),
+			configureMock: func(mock *mocks.MockHostsService) {
+				mock.EXPECT().
+					DeactivateHostRescueModeFeature(gomock.Any(), testServerID).
+					Return(&testHostRescueModeResult, nil)
 			},
 		},
 		{

@@ -25,8 +25,11 @@ func newListEBMFeaturesCmd(cmdContext *base.CmdContext) *cobra.Command {
 }
 
 type featureSetFlags struct {
-	Feature string
-	State   string
+	Feature            string
+	State              string
+	IPXEConfig         string
+	AuthMethods        []string
+	SSHKeyFingerprints []string
 }
 
 func newEBMFeatureSetCmd(cmdContext *base.CmdContext) *cobra.Command {
@@ -52,7 +55,7 @@ func newEBMFeatureSetCmd(cmdContext *base.CmdContext) *cobra.Command {
 
 			switch flags.State {
 			case "activate":
-				result, err = activateEBMFeature(ctx, scClient, id, flags.Feature)
+				result, err = activateEBMFeature(ctx, scClient, id, flags)
 			case "deactivate":
 				result, err = deactivateEBMFeature(ctx, scClient, id, flags.Feature)
 			default:
@@ -74,6 +77,9 @@ func newEBMFeatureSetCmd(cmdContext *base.CmdContext) *cobra.Command {
 
 	cmd.Flags().StringVar(&flags.Feature, "feature", "", "feature name (required)")
 	cmd.Flags().StringVar(&flags.State, "state", "", "desired state: activate or deactivate (required)")
+	cmd.Flags().StringVar(&flags.IPXEConfig, "ipxe-config", "", "iPXE config script (for private_ipxe_boot)")
+	cmd.Flags().StringArrayVar(&flags.AuthMethods, "auth-methods", nil, "auth methods: password, ssh_key (for host_rescue_mode)")
+	cmd.Flags().StringArrayVar(&flags.SSHKeyFingerprints, "ssh-key-fingerprints", nil, "SSH key fingerprints (for host_rescue_mode with ssh_key auth)")
 
 	_ = cmd.MarkFlagRequired("feature")
 	_ = cmd.MarkFlagRequired("state")
@@ -81,8 +87,8 @@ func newEBMFeatureSetCmd(cmdContext *base.CmdContext) *cobra.Command {
 	return cmd
 }
 
-func activateEBMFeature(ctx context.Context, client *serverscom.Client, id, feature string) (*serverscom.DedicatedServerFeature, error) {
-	switch feature {
+func activateEBMFeature(ctx context.Context, client *serverscom.Client, id string, flags *featureSetFlags) (*serverscom.DedicatedServerFeature, error) {
+	switch flags.Feature {
 	case "disaggregated_public_ports":
 		return client.Hosts.ActivateDisaggregatedPublicPortsFeature(ctx, id)
 	case "disaggregated_private_ports":
@@ -95,8 +101,17 @@ func activateEBMFeature(ctx context.Context, client *serverscom.Client, id, feat
 		return client.Hosts.ActivateOobPublicAccessFeature(ctx, id)
 	case "no_public_network":
 		return client.Hosts.ActivateNoPublicNetworkFeature(ctx, id)
+	case "host_rescue_mode":
+		return client.Hosts.ActivateHostRescueModeFeature(ctx, id, serverscom.HostRescueModeFeatureInput{
+			AuthMethods:        flags.AuthMethods,
+			SSHKeyFingerprints: flags.SSHKeyFingerprints,
+		})
+	case "private_ipxe_boot":
+		return client.Hosts.ActivatePrivateIpxeBootFeature(ctx, id, serverscom.PrivateIpxeBootFeatureInput{
+			IPXEConfig: flags.IPXEConfig,
+		})
 	default:
-		return nil, fmt.Errorf("unsupported feature: %s", feature)
+		return nil, fmt.Errorf("unsupported feature: %s", flags.Feature)
 	}
 }
 
@@ -114,6 +129,10 @@ func deactivateEBMFeature(ctx context.Context, client *serverscom.Client, id, fe
 		return client.Hosts.DeactivateOobPublicAccessFeature(ctx, id)
 	case "no_public_network":
 		return client.Hosts.DeactivateNoPublicNetworkFeature(ctx, id)
+	case "host_rescue_mode":
+		return client.Hosts.DeactivateHostRescueModeFeature(ctx, id)
+	case "private_ipxe_boot":
+		return client.Hosts.DeactivatePrivateIpxeBootFeature(ctx, id)
 	default:
 		return nil, fmt.Errorf("unsupported feature: %s", feature)
 	}
