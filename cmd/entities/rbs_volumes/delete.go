@@ -1,0 +1,30 @@
+package rbsvolumes
+
+import (
+	"github.com/serverscom/srvctl/cmd/base"
+	"github.com/spf13/cobra"
+)
+
+func newDeleteCmd(cmdContext *base.CmdContext) *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "delete <volume-id>",
+		Short: "Delete a RBS volume",
+		Long:  "Delete a Remote Block Storage volume by ID",
+		Args:  cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			manager := cmdContext.GetManager()
+
+			ctx, cancel := base.SetupContext(cmd, manager)
+			defer cancel()
+
+			base.SetupProxy(cmd, manager)
+
+			scClient := cmdContext.GetClient().SetVerbose(manager.GetVerbose(cmd)).GetScClient()
+
+			volumeID := args[0]
+			return scClient.RemoteBlockStorageVolumes.Delete(ctx, volumeID)
+		},
+	}
+
+	return cmd
+}
