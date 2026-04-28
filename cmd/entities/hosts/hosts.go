@@ -59,6 +59,7 @@ func NewCmd(cmdContext *base.CmdContext) *cobra.Command {
 				newListEBMCmd,
 				newListEBMServicesCmd,
 				newListEBMFeaturesCmd,
+				newEBMFeatureSetCmd,
 				newGetEBMOOBCredsCmd,
 			},
 		},
