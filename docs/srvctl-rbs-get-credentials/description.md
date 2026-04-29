@@ -1,0 +1,1 @@
+This command provides iSCSI credentials for the selected remote block storage volume, including username, password, target IQN, and IP address.

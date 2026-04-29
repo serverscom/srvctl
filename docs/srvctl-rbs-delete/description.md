@@ -1,0 +1,1 @@
+This command deletes the selected remote block storage volume.

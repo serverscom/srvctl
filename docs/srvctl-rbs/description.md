@@ -1,0 +1,1 @@
+You can manage your remote block storage volumes by performing commands listed in `srvctl rbs --help`.

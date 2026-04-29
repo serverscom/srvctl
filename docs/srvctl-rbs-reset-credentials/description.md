@@ -1,0 +1,1 @@
+This command resets iSCSI credentials for the selected remote block storage volume and returns the new credentials.
