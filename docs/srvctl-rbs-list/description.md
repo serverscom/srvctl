@@ -1,0 +1,1 @@
+This command lists remote block storage volumes of the account. Use `--help` to see available flags.
