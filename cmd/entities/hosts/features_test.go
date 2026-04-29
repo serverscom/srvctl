@@ -204,7 +204,7 @@ func TestEBMFeatureSetCmd(t *testing.T) {
 		},
 		{
 			name:           "activate host_rescue_mode with password auth",
-			args:           []string{testServerID, "--feature", "host_rescue_mode", "--state", "activate", "--auth-methods", "password", "--output", "json"},
+			args:           []string{testServerID, "--feature", "host_rescue_mode", "--state", "activate", "--auth-method", "password", "--output", "json"},
 			expectedOutput: testutils.ReadFixture(filepath.Join(featuresFixtureBasePath, "feature_set_host_rescue_mode.json")),
 			configureMock: func(mock *mocks.MockHostsService) {
 				mock.EXPECT().
@@ -216,7 +216,7 @@ func TestEBMFeatureSetCmd(t *testing.T) {
 		},
 		{
 			name:           "activate host_rescue_mode with ssh_key auth",
-			args:           []string{testServerID, "--feature", "host_rescue_mode", "--state", "activate", "--auth-methods", "ssh_key", "--ssh-key-fingerprints", "aa:bb:cc", "--output", "json"},
+			args:           []string{testServerID, "--feature", "host_rescue_mode", "--state", "activate", "--auth-method", "ssh_key", "--ssh-key-fingerprint", "aa:bb:cc", "--output", "json"},
 			expectedOutput: testutils.ReadFixture(filepath.Join(featuresFixtureBasePath, "feature_set_host_rescue_mode.json")),
 			configureMock: func(mock *mocks.MockHostsService) {
 				mock.EXPECT().

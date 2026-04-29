@@ -25,11 +25,11 @@ func newListEBMFeaturesCmd(cmdContext *base.CmdContext) *cobra.Command {
 }
 
 type featureSetFlags struct {
-	Feature            string
-	State              string
-	IPXEConfig         string
-	AuthMethods        []string
-	SSHKeyFingerprints []string
+	Feature           string
+	State             string
+	IPXEConfig        string
+	AuthMethod        []string
+	SSHKeyFingerprint []string
 }
 
 func newEBMFeatureSetCmd(cmdContext *base.CmdContext) *cobra.Command {
@@ -78,8 +78,8 @@ func newEBMFeatureSetCmd(cmdContext *base.CmdContext) *cobra.Command {
 	cmd.Flags().StringVar(&flags.Feature, "feature", "", "feature name (required)")
 	cmd.Flags().StringVar(&flags.State, "state", "", "desired state: activate or deactivate (required)")
 	cmd.Flags().StringVar(&flags.IPXEConfig, "ipxe-config", "", "iPXE config script (for private_ipxe_boot)")
-	cmd.Flags().StringArrayVar(&flags.AuthMethods, "auth-methods", nil, "auth methods: password, ssh_key (for host_rescue_mode)")
-	cmd.Flags().StringArrayVar(&flags.SSHKeyFingerprints, "ssh-key-fingerprints", nil, "SSH key fingerprints (for host_rescue_mode with ssh_key auth)")
+	cmd.Flags().StringArrayVar(&flags.AuthMethod, "auth-method", nil, "auth method: password, ssh_key (for host_rescue_mode)")
+	cmd.Flags().StringArrayVar(&flags.SSHKeyFingerprint, "ssh-key-fingerprint", nil, "SSH key fingerprint (for host_rescue_mode with ssh_key auth)")
 
 	_ = cmd.MarkFlagRequired("feature")
 	_ = cmd.MarkFlagRequired("state")
@@ -103,8 +103,8 @@ func activateEBMFeature(ctx context.Context, client *serverscom.Client, id strin
 		return client.Hosts.ActivateNoPublicNetworkFeature(ctx, id)
 	case "host_rescue_mode":
 		return client.Hosts.ActivateHostRescueModeFeature(ctx, id, serverscom.HostRescueModeFeatureInput{
-			AuthMethods:        flags.AuthMethods,
-			SSHKeyFingerprints: flags.SSHKeyFingerprints,
+			AuthMethods:        flags.AuthMethod,
+			SSHKeyFingerprints: flags.SSHKeyFingerprint,
 		})
 	case "private_ipxe_boot":
 		return client.Hosts.ActivatePrivateIpxeBootFeature(ctx, id, serverscom.PrivateIpxeBootFeatureInput{
