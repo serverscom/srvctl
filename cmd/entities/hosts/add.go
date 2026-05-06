@@ -17,6 +17,7 @@ type AddEBMFlags struct {
 	ServerModelID     int
 	OperatingSystemID int
 	Features          []string
+	IPXEConfig        string
 	RAMSize           int
 	PublicUplinkID    int
 	PublicBandwidthID int
@@ -55,6 +56,9 @@ func (f *AddEBMFlags) FillInput(cmd *cobra.Command, input *serverscom.DedicatedS
 	}
 	if pflags.Changed("feature") {
 		input.Features = f.Features
+	}
+	if pflags.Changed("ipxe-config") {
+		input.IPXEConfig = &f.IPXEConfig
 	}
 	if pflags.Changed("ram-size") {
 		input.RAMSize = f.RAMSize
@@ -233,6 +237,7 @@ func newAddEBMCmd(cmdContext *base.CmdContext) *cobra.Command {
 	cmd.Flags().IntVar(&flags.ServerModelID, "server-model-id", 0, "Use specific server model ID to create the server")
 	cmd.Flags().IntVar(&flags.OperatingSystemID, "operating-system-id", 0, "Install the specific operating system")
 	cmd.Flags().StringSliceVar(&flags.Features, "feature", nil, "Set of features")
+	cmd.Flags().StringVar(&flags.IPXEConfig, "ipxe-config", "", "iPXE script content")
 	cmd.Flags().IntVar(&flags.RAMSize, "ram-size", 0, "Desired amount of RAM in GB")
 	cmd.Flags().IntVar(&flags.PublicUplinkID, "public-uplink-id", 0, "The public uplink ID, can be omitted if do not want public uplink")
 	cmd.Flags().IntVar(&flags.PrivateUplinkID, "private-uplink-id", 0, "The private uplink ID")
