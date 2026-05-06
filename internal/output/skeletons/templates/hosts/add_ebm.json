@@ -44,5 +44,7 @@
             }
         }
     ],
-    "operating_system_id": ""
+    "operating_system_id": "",
+    "features": [],
+    "ipxe_config": ""
 }
