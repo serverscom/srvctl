@@ -96,3 +96,26 @@ srvctl hosts ebm add \
 	--ipv6 \
 	<hostname>
 ```
+
+#### Create server with an iPXE boot script
+
+Pass an inline iPXE script via the `--ipxe-config` flag:
+```
+srvctl hosts ebm add \
+	--location-id 2 \
+	--server-model-id 10515 \
+	--ram-size 32 \
+	--private-uplink-id 10201 \
+	--drive-slots 1=10306 \
+	--layout=slot=0,raid=0 \
+	--partition=slot=0,target=/,fs=ext4,size=1,fill=true \
+	--ipxe-config "#!ipxe\nchain http://boot.example.com/script.ipxe" \
+	<hostname>
+```
+
+The same can be achieved via input file by setting the `ipxe_config` field:
+```json
+{
+  "ipxe_config": "#!ipxe\nchain http://boot.example.com/script.ipxe"
+}
+```
