@@ -17,6 +17,7 @@
 | [srvctl hosts ebm get-oob-credentials](srvctl-hosts-ebm-get-oob-credentials/description.md) | Hosts / Enterprise Bare Metal | This command provides OOB credentials for the selected server. |
 | [srvctl hosts ebm list-connections](srvctl-hosts-ebm-list-connections/description.md) | Hosts / Enterprise Bare Metal | This command lists connections for the selected enterprise bare metal server. |
 | [srvctl hosts ebm list-drive-slots](srvctl-hosts-ebm-list-drive-slots/description.md) | Hosts / Enterprise Bare Metal | This command lists drive slots for the selected enterprise bare metal server. |
+| [srvctl hosts ebm feature-set](srvctl-hosts-ebm-feature-set/description.md) | Hosts / Enterprise Bare Metal | This command activates or deactivates a feature on the selected enterprise bare metal server. |
 | [srvctl hosts ebm list-features](srvctl-hosts-ebm-list-features/description.md) | Hosts / Enterprise Bare Metal | This command lists features for the selected enterprise bare metal server. |
 | [srvctl hosts ebm list-networks](srvctl-hosts-ebm-list-networks/description.md) | Hosts / Enterprise Bare Metal | This command lists networks for the selected enterprise bare metal server. |
 | [srvctl hosts ebm list-power-feeds](srvctl-hosts-ebm-list-power-feeds/description.md) | Hosts / Enterprise Bare Metal | This command lists power feeds for the selected enterprise bare metal server. |
@@ -143,4 +144,12 @@
 | [srvctl server-models](srvctl-server-models/description.md) | Server Models | This command allows to manage server models. |
 | [srvctl server-models list](srvctl-server-models-list/description.md) | Server Models | This command lists server models for the specified location. |
 | [srvctl server-models get](srvctl-server-models-get/description.md) | Server Models | This command provides information for the selected server model. |
+| [srvctl rbs](srvctl-rbs/description.md) | Remote Block Storage | This command allows to manage remote block storage volumes. |
+| [srvctl rbs list](srvctl-rbs-list/description.md) | Remote Block Storage | This command lists remote block storage volumes of the account. |
+| [srvctl rbs get](srvctl-rbs-get/description.md) | Remote Block Storage | This command provides information for the selected remote block storage volume. |
+| [srvctl rbs add](srvctl-rbs-add/description.md) | Remote Block Storage | A command to create a new remote block storage volume. |
+| [srvctl rbs update](srvctl-rbs-update/description.md) | Remote Block Storage | This command updates parameters and labels for the selected remote block storage volume. |
+| [srvctl rbs delete](srvctl-rbs-delete/description.md) | Remote Block Storage | This command deletes the selected remote block storage volume. |
+| [srvctl rbs get-credentials](srvctl-rbs-get-credentials/description.md) | Remote Block Storage | This command provides iSCSI credentials for the selected remote block storage volume. |
+| [srvctl rbs reset-credentials](srvctl-rbs-reset-credentials/description.md) | Remote Block Storage | This command resets iSCSI credentials for the selected remote block storage volume. |
 
