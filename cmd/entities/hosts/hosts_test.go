@@ -353,6 +353,55 @@ func TestAddEBMCmd(t *testing.T) {
 			},
 		},
 		{
+			name:           "create ebm server with public_ipxe_boot feature and ipxe-config",
+			output:         "json",
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "create_ebm_resp.json")),
+			args: []string{
+				"--input", filepath.Join(fixtureBasePath, "create_ebm_input.json"),
+				"--feature", "public_ipxe_boot",
+				"--ipxe-config", "#!ipxe\nboot",
+			},
+			configureMock: func(mock *mocks.MockHostsService) {
+				input := expectedInput
+				input.Features = []string{"public_ipxe_boot"}
+				input.IPXEConfig = testutils.PtrString("#!ipxe\nboot")
+				mock.EXPECT().
+					CreateDedicatedServers(gomock.Any(), input).
+					Return([]serverscom.DedicatedServer{testDS}, nil)
+			},
+		},
+		{
+			name:           "create ebm server with ipxe-config flag",
+			output:         "json",
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "create_ebm_resp.json")),
+			args: []string{
+				"--input", filepath.Join(fixtureBasePath, "create_ebm_input.json"),
+				"--ipxe-config", "#!ipxe\nboot",
+			},
+			configureMock: func(mock *mocks.MockHostsService) {
+				input := expectedInput
+				input.IPXEConfig = testutils.PtrString("#!ipxe\nboot")
+				mock.EXPECT().
+					CreateDedicatedServers(gomock.Any(), input).
+					Return([]serverscom.DedicatedServer{testDS}, nil)
+			},
+		},
+		{
+			name:           "create ebm server with ipxe-config in input file",
+			output:         "json",
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "create_ebm_resp.json")),
+			args: []string{
+				"--input", filepath.Join(fixtureBasePath, "create_ebm_ipxe_input.json"),
+			},
+			configureMock: func(mock *mocks.MockHostsService) {
+				input := expectedInput
+				input.IPXEConfig = testutils.PtrString("#!ipxe\nboot")
+				mock.EXPECT().
+					CreateDedicatedServers(gomock.Any(), input).
+					Return([]serverscom.DedicatedServer{testDS}, nil)
+			},
+		},
+		{
 			name:        "create ebm server with error",
 			expectError: true,
 		},
