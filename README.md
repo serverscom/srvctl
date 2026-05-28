@@ -81,6 +81,44 @@ srvctl context update <context-name> --default
 srvctl context delete <context-name>
 ```
 
+### Shell Completion
+
+`srvctl` can generate completion scripts for `bash`, `zsh`, `fish`, and `powershell`.
+
+**Quick check (current shell only):**
+
+```sh
+source <(srvctl completion bash)   # or: zsh / fish
+```
+
+**Permanent install — bash:**
+
+```sh
+# Linux
+srvctl completion bash | sudo tee /etc/bash_completion.d/srvctl >/dev/null
+
+# macOS (with Homebrew's bash-completion)
+srvctl completion bash > "$(brew --prefix)/etc/bash_completion.d/srvctl"
+```
+
+Requires the `bash-completion` package. Start a new shell after install.
+
+**Permanent install — zsh:**
+
+```sh
+# Ensure compinit is enabled in ~/.zshrc:
+#   autoload -U compinit && compinit
+srvctl completion zsh > "${fpath[1]}/_srvctl"
+```
+
+**Permanent install — fish:**
+
+```sh
+srvctl completion fish > ~/.config/fish/completions/srvctl.fish
+```
+
+For full details on any shell, run `srvctl completion <shell> --help`.
+
 ## Documentation
 
 Documentation is accessible via `man` or via `--help` flag, for example:
