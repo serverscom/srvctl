@@ -1,6 +1,6 @@
 This command activates or deactivates a feature on the selected enterprise bare metal server.
 
-The `--feature` and `--state` flags are required. The `--state` flag accepts `activate` or `deactivate`.
+The `--feature` and `--command` flags are required. The `--command` flag accepts `activate` or `deactivate`.
 
 Supported feature names:
 
