@@ -162,7 +162,7 @@ func TestEBMFeatureSetCmd(t *testing.T) {
 	}{
 		{
 			name:           "activate feature",
-			args:           []string{testServerID, "--feature", "disaggregated_public_ports", "--state", "activate", "--output", "json"},
+			args:           []string{testServerID, "--feature", "disaggregated_public_ports", "--command", "activate", "--output", "json"},
 			expectedOutput: testutils.ReadFixture(filepath.Join(featuresFixtureBasePath, "feature_set.json")),
 			configureMock: func(mock *mocks.MockHostsService) {
 				mock.EXPECT().
@@ -172,7 +172,7 @@ func TestEBMFeatureSetCmd(t *testing.T) {
 		},
 		{
 			name: "deactivate feature",
-			args: []string{testServerID, "--feature", "disaggregated_public_ports", "--state", "deactivate", "--output", "json"},
+			args: []string{testServerID, "--feature", "disaggregated_public_ports", "--command", "deactivate", "--output", "json"},
 			expectedOutput: testutils.ReadFixture(filepath.Join(featuresFixtureBasePath, "feature_set.json")),
 			configureMock: func(mock *mocks.MockHostsService) {
 				mock.EXPECT().
@@ -182,7 +182,7 @@ func TestEBMFeatureSetCmd(t *testing.T) {
 		},
 		{
 			name:           "activate private_ipxe_boot with ipxe-config",
-			args:           []string{testServerID, "--feature", "private_ipxe_boot", "--state", "activate", "--ipxe-config", "#!ipxe\nchain http://boot.example.com", "--output", "json"},
+			args:           []string{testServerID, "--feature", "private_ipxe_boot", "--command", "activate", "--ipxe-config", "#!ipxe\nchain http://boot.example.com", "--output", "json"},
 			expectedOutput: testutils.ReadFixture(filepath.Join(featuresFixtureBasePath, "feature_set_private_ipxe_boot.json")),
 			configureMock: func(mock *mocks.MockHostsService) {
 				mock.EXPECT().
@@ -194,7 +194,7 @@ func TestEBMFeatureSetCmd(t *testing.T) {
 		},
 		{
 			name:           "deactivate private_ipxe_boot",
-			args:           []string{testServerID, "--feature", "private_ipxe_boot", "--state", "deactivate", "--output", "json"},
+			args:           []string{testServerID, "--feature", "private_ipxe_boot", "--command", "deactivate", "--output", "json"},
 			expectedOutput: testutils.ReadFixture(filepath.Join(featuresFixtureBasePath, "feature_set_private_ipxe_boot.json")),
 			configureMock: func(mock *mocks.MockHostsService) {
 				mock.EXPECT().
@@ -204,7 +204,7 @@ func TestEBMFeatureSetCmd(t *testing.T) {
 		},
 		{
 			name:           "activate host_rescue_mode with password auth",
-			args:           []string{testServerID, "--feature", "host_rescue_mode", "--state", "activate", "--auth-method", "password", "--output", "json"},
+			args:           []string{testServerID, "--feature", "host_rescue_mode", "--command", "activate", "--auth-method", "password", "--output", "json"},
 			expectedOutput: testutils.ReadFixture(filepath.Join(featuresFixtureBasePath, "feature_set_host_rescue_mode.json")),
 			configureMock: func(mock *mocks.MockHostsService) {
 				mock.EXPECT().
@@ -216,7 +216,7 @@ func TestEBMFeatureSetCmd(t *testing.T) {
 		},
 		{
 			name:           "activate host_rescue_mode with ssh_key auth",
-			args:           []string{testServerID, "--feature", "host_rescue_mode", "--state", "activate", "--auth-method", "ssh_key", "--ssh-key-fingerprint", "aa:bb:cc", "--output", "json"},
+			args:           []string{testServerID, "--feature", "host_rescue_mode", "--command", "activate", "--auth-method", "ssh_key", "--ssh-key-fingerprint", "aa:bb:cc", "--output", "json"},
 			expectedOutput: testutils.ReadFixture(filepath.Join(featuresFixtureBasePath, "feature_set_host_rescue_mode.json")),
 			configureMock: func(mock *mocks.MockHostsService) {
 				mock.EXPECT().
@@ -229,7 +229,7 @@ func TestEBMFeatureSetCmd(t *testing.T) {
 		},
 		{
 			name:           "deactivate host_rescue_mode",
-			args:           []string{testServerID, "--feature", "host_rescue_mode", "--state", "deactivate", "--output", "json"},
+			args:           []string{testServerID, "--feature", "host_rescue_mode", "--command", "deactivate", "--output", "json"},
 			expectedOutput: testutils.ReadFixture(filepath.Join(featuresFixtureBasePath, "feature_set_host_rescue_mode.json")),
 			configureMock: func(mock *mocks.MockHostsService) {
 				mock.EXPECT().
@@ -239,7 +239,7 @@ func TestEBMFeatureSetCmd(t *testing.T) {
 		},
 		{
 			name:        "api error",
-			args:        []string{testServerID, "--feature", "disaggregated_public_ports", "--state", "activate"},
+			args:        []string{testServerID, "--feature", "disaggregated_public_ports", "--command", "activate"},
 			expectError: true,
 			configureMock: func(mock *mocks.MockHostsService) {
 				mock.EXPECT().
@@ -248,13 +248,13 @@ func TestEBMFeatureSetCmd(t *testing.T) {
 			},
 		},
 		{
-			name:        "invalid state",
-			args:        []string{testServerID, "--feature", "disaggregated_public_ports", "--state", "invalid"},
+			name:        "invalid command",
+			args:        []string{testServerID, "--feature", "disaggregated_public_ports", "--command", "invalid"},
 			expectError: true,
 		},
 		{
 			name:        "unsupported feature",
-			args:        []string{testServerID, "--feature", "unknown_feature", "--state", "activate"},
+			args:        []string{testServerID, "--feature", "unknown_feature", "--command", "activate"},
 			expectError: true,
 		},
 	}
