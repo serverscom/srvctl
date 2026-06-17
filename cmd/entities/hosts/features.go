@@ -26,7 +26,7 @@ func newListEBMFeaturesCmd(cmdContext *base.CmdContext) *cobra.Command {
 
 type featureSetFlags struct {
 	Feature           string
-	State             string
+	Command           string
 	IPXEConfig        string
 	AuthMethod        []string
 	SSHKeyFingerprint []string
@@ -53,13 +53,13 @@ func newEBMFeatureSetCmd(cmdContext *base.CmdContext) *cobra.Command {
 				err    error
 			)
 
-			switch flags.State {
+			switch flags.Command {
 			case "activate":
 				result, err = activateEBMFeature(ctx, scClient, id, flags)
 			case "deactivate":
 				result, err = deactivateEBMFeature(ctx, scClient, id, flags.Feature)
 			default:
-				return fmt.Errorf("invalid state %q: must be activate or deactivate", flags.State)
+				return fmt.Errorf("invalid command %q: must be activate or deactivate", flags.Command)
 			}
 
 			if err != nil {
@@ -76,13 +76,13 @@ func newEBMFeatureSetCmd(cmdContext *base.CmdContext) *cobra.Command {
 	}
 
 	cmd.Flags().StringVar(&flags.Feature, "feature", "", "feature name (required)")
-	cmd.Flags().StringVar(&flags.State, "state", "", "desired state: activate or deactivate (required)")
+	cmd.Flags().StringVar(&flags.Command, "command", "", "command to run: activate or deactivate (required)")
 	cmd.Flags().StringVar(&flags.IPXEConfig, "ipxe-config", "", "iPXE config script (for private_ipxe_boot)")
 	cmd.Flags().StringArrayVar(&flags.AuthMethod, "auth-method", nil, "auth method: password, ssh_key (for host_rescue_mode)")
 	cmd.Flags().StringArrayVar(&flags.SSHKeyFingerprint, "ssh-key-fingerprint", nil, "SSH key fingerprint (for host_rescue_mode with ssh_key auth)")
 
 	_ = cmd.MarkFlagRequired("feature")
-	_ = cmd.MarkFlagRequired("state")
+	_ = cmd.MarkFlagRequired("command")
 
 	return cmd
 }
