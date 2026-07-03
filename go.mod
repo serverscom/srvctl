@@ -1,6 +1,6 @@
 module github.com/serverscom/srvctl
 
-go 1.23.0
+go 1.25.0
 
 require (
 	github.com/cpuguy83/go-md2man/v2 v2.0.7
@@ -13,8 +13,8 @@ require (
 	github.com/spf13/viper v1.20.1
 	github.com/stoewer/go-strcase v1.3.1
 	go.uber.org/mock v0.5.2
-	golang.org/x/term v0.34.0
-	golang.org/x/text v0.28.0
+	golang.org/x/term v0.43.0
+	golang.org/x/text v0.37.0
 	gopkg.in/yaml.v3 v3.0.1
 )
 
@@ -31,6 +31,6 @@ require (
 	github.com/spf13/afero v1.14.0 // indirect
 	github.com/spf13/cast v1.9.2 // indirect
 	github.com/subosito/gotenv v1.6.0 // indirect
-	golang.org/x/net v0.43.0 // indirect
-	golang.org/x/sys v0.35.0 // indirect
+	golang.org/x/net v0.55.0 // indirect
+	golang.org/x/sys v0.45.0 // indirect
 )
