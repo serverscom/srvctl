@@ -4,11 +4,11 @@ jobs:
   test:
     strategy:
       matrix:
-        go: [1.22.x, 1.23.x]
+        go: [1.25.x, 1.26.x]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v6
         with:
           go-version: ${{ matrix.go }}
       - name: Test
