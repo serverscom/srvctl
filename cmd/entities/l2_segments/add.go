@@ -116,9 +116,9 @@ func parseMembers(members []string) ([]serverscom.L2SegmentMemberInput, error) {
 
 	for _, member := range members {
 		m := serverscom.L2SegmentMemberInput{}
-		parts := strings.Split(member, ",")
+		parts := strings.SplitSeq(member, ",")
 
-		for _, p := range parts {
+		for p := range parts {
 			props := strings.SplitN(p, "=", 2)
 			if len(props) != 2 {
 				return nil, fmt.Errorf("invalid member format: %s", p)

@@ -33,16 +33,16 @@ var (
 	}
 	testConfigDetails = serverscom.ConfigurationDetails{
 		RAMSize:                 2,
-		ServerModelID:           testutils.PtrInt64(1),
-		ServerModelName:         testutils.PtrString("server-model-123"),
-		PublicUplinkID:          testutils.PtrInt64(2),
-		PublicUplinkName:        testutils.PtrString("Public 1 Gbps without redundancy"),
-		PrivateUplinkID:         testutils.PtrInt64(3),
-		PrivateUplinkName:       testutils.PtrString("Private 1 Gbps without redundancy"),
-		BandwidthID:             testutils.PtrInt64(4),
-		BandwidthName:           testutils.PtrString("20000 GB"),
-		OperatingSystemID:       testutils.PtrInt64(5),
-		OperatingSystemFullName: testutils.PtrString("CentOS 7 x86_64"),
+		ServerModelID:           new(int64(1)),
+		ServerModelName:         new("server-model-123"),
+		PublicUplinkID:          new(int64(2)),
+		PublicUplinkName:        new("Public 1 Gbps without redundancy"),
+		PrivateUplinkID:         new(int64(3)),
+		PrivateUplinkName:       new("Private 1 Gbps without redundancy"),
+		BandwidthID:             new(int64(4)),
+		BandwidthName:           new("20000 GB"),
+		OperatingSystemID:       new(int64(5)),
+		OperatingSystemFullName: new("CentOS 7 x86_64"),
 	}
 	testDS = serverscom.DedicatedServer{
 		ID:                   testId,
@@ -259,23 +259,23 @@ func TestAddEBMCmd(t *testing.T) {
 			Slots: []serverscom.DedicatedServerSlotInput{
 				{
 					Position:     1,
-					DriveModelID: testutils.PtrInt64(3456),
+					DriveModelID: new(int64(3456)),
 				},
 				{
 					Position:     2,
-					DriveModelID: testutils.PtrInt64(3456),
+					DriveModelID: new(int64(3456)),
 				},
 			},
 			Layout: []serverscom.DedicatedServerLayoutInput{
 				{
 					SlotPositions: []int{1, 2},
-					Raid:          testutils.PtrInt(1),
+					Raid:          new(1),
 					Partitions: []serverscom.DedicatedServerLayoutPartitionInput{
 						{
 							Target: "/boot",
 							Size:   500,
 							Fill:   false,
-							Fs:     testutils.PtrString("ext4"),
+							Fs:     new("ext4"),
 						},
 					},
 				},
@@ -284,8 +284,8 @@ func TestAddEBMCmd(t *testing.T) {
 		Hosts: []serverscom.DedicatedServerHostInput{
 			{
 				Hostname:             "example.aa",
-				PublicIPv4NetworkID:  testutils.PtrString("PublicNet123"),
-				PrivateIPv4NetworkID: testutils.PtrString("PrivateNet456"),
+				PublicIPv4NetworkID:  new("PublicNet123"),
+				PrivateIPv4NetworkID: new("PrivateNet456"),
 				Labels: map[string]string{
 					"environment": "testing",
 				},
@@ -325,13 +325,13 @@ func TestAddEBMCmd(t *testing.T) {
 				input := expectedInput
 				input.Drives.Layout = append(input.Drives.Layout, serverscom.DedicatedServerLayoutInput{
 					SlotPositions: []int{3, 4},
-					Raid:          testutils.PtrInt(0),
+					Raid:          new(0),
 					Partitions: []serverscom.DedicatedServerLayoutPartitionInput{
 						{
 							Target: "/boot",
 							Size:   500,
 							Fill:   false,
-							Fs:     testutils.PtrString("ext4"),
+							Fs:     new("ext4"),
 						},
 					},
 				})
@@ -364,7 +364,7 @@ func TestAddEBMCmd(t *testing.T) {
 			configureMock: func(mock *mocks.MockHostsService) {
 				input := expectedInput
 				input.Features = []string{"public_ipxe_boot"}
-				input.IPXEConfig = testutils.PtrString("#!ipxe\nboot")
+				input.IPXEConfig = new("#!ipxe\nboot")
 				mock.EXPECT().
 					CreateDedicatedServers(gomock.Any(), input).
 					Return([]serverscom.DedicatedServer{testDS}, nil)
@@ -380,7 +380,7 @@ func TestAddEBMCmd(t *testing.T) {
 			},
 			configureMock: func(mock *mocks.MockHostsService) {
 				input := expectedInput
-				input.IPXEConfig = testutils.PtrString("#!ipxe\nboot")
+				input.IPXEConfig = new("#!ipxe\nboot")
 				mock.EXPECT().
 					CreateDedicatedServers(gomock.Any(), input).
 					Return([]serverscom.DedicatedServer{testDS}, nil)
@@ -395,7 +395,7 @@ func TestAddEBMCmd(t *testing.T) {
 			},
 			configureMock: func(mock *mocks.MockHostsService) {
 				input := expectedInput
-				input.IPXEConfig = testutils.PtrString("#!ipxe\nboot")
+				input.IPXEConfig = new("#!ipxe\nboot")
 				mock.EXPECT().
 					CreateDedicatedServers(gomock.Any(), input).
 					Return([]serverscom.DedicatedServer{testDS}, nil)
@@ -474,8 +474,8 @@ func TestAddSBMCmd(t *testing.T) {
 						Hosts: []serverscom.SBMServerHostInput{
 							{
 								Hostname:             "example.aa",
-								PublicIPv4NetworkID:  testutils.PtrString("PublicNetTest123"),
-								PrivateIPv4NetworkID: testutils.PtrString("PrivateNetTest456"),
+								PublicIPv4NetworkID:  new("PublicNetTest123"),
+								PrivateIPv4NetworkID: new("PrivateNetTest456"),
 								Labels: map[string]string{
 									"environment": "testing",
 								},

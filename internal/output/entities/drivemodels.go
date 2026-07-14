@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	DriveModelOptionType = reflect.TypeOf(serverscom.DriveModel{})
+	DriveModelOptionType = reflect.TypeFor[serverscom.DriveModel]()
 )
 
 func RegisterDriveModelOptionDefinition() {

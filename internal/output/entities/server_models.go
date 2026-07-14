@@ -8,8 +8,8 @@ import (
 )
 
 var (
-	ServerModelOptionType       = reflect.TypeOf(serverscom.ServerModelOption{})
-	ServerModelOptionDetailType = reflect.TypeOf(serverscom.ServerModelOptionDetail{})
+	ServerModelOptionType       = reflect.TypeFor[serverscom.ServerModelOption]()
+	ServerModelOptionDetailType = reflect.TypeFor[serverscom.ServerModelOptionDetail]()
 )
 
 func getServerModelDriveSlotsField() Field {

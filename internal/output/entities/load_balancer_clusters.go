@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	LoadBalancerClusterType = reflect.TypeOf(serverscom.LoadBalancerCluster{})
+	LoadBalancerClusterType = reflect.TypeFor[serverscom.LoadBalancerCluster]()
 )
 
 func RegisterLoadBalancerClusterDefinition() {

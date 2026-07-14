@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	RAMOptionType = reflect.TypeOf(serverscom.RAMOption{})
+	RAMOptionType = reflect.TypeFor[serverscom.RAMOption]()
 )
 
 func RegisterRAMOptionDefinition() {

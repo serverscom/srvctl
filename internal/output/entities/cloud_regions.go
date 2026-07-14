@@ -8,15 +8,15 @@ import (
 )
 
 var (
-	CloudComputingRegionType              = reflect.TypeOf(serverscom.CloudComputingRegion{})
+	CloudComputingRegionType              = reflect.TypeFor[serverscom.CloudComputingRegion]()
 	CloudComputingRegionListDefaultFields = []string{"ID", "Name", "Code"}
-	CloudComputingImageType               = reflect.TypeOf(serverscom.CloudComputingImage{})
+	CloudComputingImageType               = reflect.TypeFor[serverscom.CloudComputingImage]()
 	CloudComputingImageListDefaultFields  = []string{"ID", "Name"}
-	CloudComputingFlavorType              = reflect.TypeOf(serverscom.CloudComputingFlavor{})
+	CloudComputingFlavorType              = reflect.TypeFor[serverscom.CloudComputingFlavor]()
 	CloudComputingFlavorListDefaultFields = []string{"ID", "Name"}
-	CloudSnapshotType                     = reflect.TypeOf(serverscom.CloudSnapshot{})
+	CloudSnapshotType                     = reflect.TypeFor[serverscom.CloudSnapshot]()
 	CloudSnapshotListDefaultFields        = []string{"ID", "Name", "ImageSize", "MinDisk", "Status", "IsBackup", "FileURL"}
-	CloudComputingRegionCredentialsType   = reflect.TypeOf(serverscom.CloudComputingRegionCredentials{})
+	CloudComputingRegionCredentialsType   = reflect.TypeFor[serverscom.CloudComputingRegionCredentials]()
 )
 
 func RegisterCloudComputingRegionDefinitions() {

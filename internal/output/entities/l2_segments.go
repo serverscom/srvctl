@@ -8,10 +8,10 @@ import (
 )
 
 var (
-	L2SegmentType                    = reflect.TypeOf(serverscom.L2Segment{})
-	L2SegmentLocationGroupType       = reflect.TypeOf(serverscom.L2LocationGroup{})
-	L2SegmentMemberType              = reflect.TypeOf(serverscom.L2Member{})
-	L2SegmentNetworkType             = reflect.TypeOf(serverscom.Network{})
+	L2SegmentType                    = reflect.TypeFor[serverscom.L2Segment]()
+	L2SegmentLocationGroupType       = reflect.TypeFor[serverscom.L2LocationGroup]()
+	L2SegmentMemberType              = reflect.TypeFor[serverscom.L2Member]()
+	L2SegmentNetworkType             = reflect.TypeFor[serverscom.Network]()
 	L2SegmentListDefaultFields       = []string{"ID", "Name", "Type", "Status", "LocationGroupID", "LocationGroupCode"}
 	L2SegmentMemberListDefaultFields = []string{"ID", "Title", "Mode", "VLAN", "Status"}
 )

@@ -8,10 +8,10 @@ import (
 )
 
 var (
-	NetworkPoolType              = reflect.TypeOf(serverscom.NetworkPool{})
+	NetworkPoolType              = reflect.TypeFor[serverscom.NetworkPool]()
 	NetworkPoolListDefaultFields = []string{"ID", "Title", "CIDR", "Type", "LocationCodes"}
 
-	SubnetworkType              = reflect.TypeOf(serverscom.Subnetwork{})
+	SubnetworkType              = reflect.TypeFor[serverscom.Subnetwork]()
 	SubnetworkListDefaultFields = []string{"ID", "Title", "CIDR", "Attached", "InterfaceType"}
 )
 

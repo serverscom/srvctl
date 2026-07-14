@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	LocationType = reflect.TypeOf(serverscom.Location{})
+	LocationType = reflect.TypeFor[serverscom.Location]()
 )
 
 func RegisterLocationDefinition() {

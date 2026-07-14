@@ -81,9 +81,9 @@ func SetupProxy(cmd *cobra.Command, manager *config.Manager) {
 	}
 	if proxy != "" {
 		if strings.HasPrefix(proxy, "https") {
-			os.Setenv("HTTPS_PROXY", proxy)
+			_ = os.Setenv("HTTPS_PROXY", proxy)
 		} else {
-			os.Setenv("HTTP_PROXY", proxy)
+			_ = os.Setenv("HTTP_PROXY", proxy)
 		}
 	}
 }
@@ -98,7 +98,7 @@ func ReadInputJSON(path string, in io.Reader, input any) error {
 		if err != nil {
 			return fmt.Errorf("failed to open file: %w", err)
 		}
-		defer file.Close()
+		defer file.Close() //nolint:errcheck
 		inputReader = file
 	} else {
 		inputReader = in

@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	SBMFlavorType = reflect.TypeOf(serverscom.SBMFlavor{})
+	SBMFlavorType = reflect.TypeFor[serverscom.SBMFlavor]()
 )
 
 func RegisterSBMModelOptionDefinition() {

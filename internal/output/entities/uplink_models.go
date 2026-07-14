@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	UplinkOptionType = reflect.TypeOf(serverscom.UplinkOption{})
+	UplinkOptionType = reflect.TypeFor[serverscom.UplinkOption]()
 )
 
 func RegisterUplinkOptionDefinition() {

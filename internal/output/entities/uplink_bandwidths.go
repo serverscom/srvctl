@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	BandwidthOptionType = reflect.TypeOf(serverscom.BandwidthOption{})
+	BandwidthOptionType = reflect.TypeFor[serverscom.BandwidthOption]()
 )
 
 func RegisterBandwidthOptionDefinition() {

@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	CloudVolumeType              = reflect.TypeOf(serverscom.CloudBlockStorageVolume{})
+	CloudVolumeType              = reflect.TypeFor[serverscom.CloudBlockStorageVolume]()
 	CloudVolumeListDefaultFields = []string{"ID", "Name", "RegionID", "RegionCode", "Size", "Description"}
 )
 

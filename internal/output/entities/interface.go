@@ -83,7 +83,7 @@ func (r *EntityRegistry) Register(entity EntityInterface) error {
 // GetEntityFromValue returns the entity interface from a given value
 func (r *EntityRegistry) GetEntityFromValue(v any) (EntityInterface, error) {
 	t := reflect.TypeOf(v)
-	for t.Kind() == reflect.Ptr || t.Kind() == reflect.Slice {
+	for t.Kind() == reflect.Pointer || t.Kind() == reflect.Slice {
 		t = t.Elem()
 	}
 

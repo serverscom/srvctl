@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	RBSVolumeCredentialsType = reflect.TypeOf(serverscom.RemoteBlockStorageVolumeCredentials{})
+	RBSVolumeCredentialsType = reflect.TypeFor[serverscom.RemoteBlockStorageVolumeCredentials]()
 )
 
 func RegisterRbsVolumeCredentialsDefinition() {

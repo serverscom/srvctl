@@ -8,18 +8,18 @@ import (
 )
 
 var (
-	HostType                                 = reflect.TypeOf(serverscom.Host{})
-	DedicatedServerType                      = reflect.TypeOf(serverscom.DedicatedServer{})
-	KubernetesBaremetalNodeType              = reflect.TypeOf(serverscom.KubernetesBaremetalNode{})
-	SBMServerType                            = reflect.TypeOf(serverscom.SBMServer{})
-	HostConnectionType                       = reflect.TypeOf(serverscom.HostConnection{})
-	HostPowerFeedType                        = reflect.TypeOf(serverscom.HostPowerFeed{})
-	HostDriveSlotType                        = reflect.TypeOf(serverscom.HostDriveSlot{})
-	HostPTRRecordType                        = reflect.TypeOf(serverscom.PTRRecord{})
-	HostNetworkType                          = reflect.TypeOf(serverscom.Network{})
-	HostFeatureType                          = reflect.TypeOf(serverscom.DedicatedServerFeature{})
-	HostServiceType                          = reflect.TypeOf(serverscom.DedicatedServerService{})
-	HostOOBCredsType                         = reflect.TypeOf(serverscom.DedicatedServerOOBCredentials{})
+	HostType                                 = reflect.TypeFor[serverscom.Host]()
+	DedicatedServerType                      = reflect.TypeFor[serverscom.DedicatedServer]()
+	KubernetesBaremetalNodeType              = reflect.TypeFor[serverscom.KubernetesBaremetalNode]()
+	SBMServerType                            = reflect.TypeFor[serverscom.SBMServer]()
+	HostConnectionType                       = reflect.TypeFor[serverscom.HostConnection]()
+	HostPowerFeedType                        = reflect.TypeFor[serverscom.HostPowerFeed]()
+	HostDriveSlotType                        = reflect.TypeFor[serverscom.HostDriveSlot]()
+	HostPTRRecordType                        = reflect.TypeFor[serverscom.PTRRecord]()
+	HostNetworkType                          = reflect.TypeFor[serverscom.Network]()
+	HostFeatureType                          = reflect.TypeFor[serverscom.DedicatedServerFeature]()
+	HostServiceType                          = reflect.TypeFor[serverscom.DedicatedServerService]()
+	HostOOBCredsType                         = reflect.TypeFor[serverscom.DedicatedServerOOBCredentials]()
 	HostListDefaultFields                    = []string{"ID", "Type", "Title", "LocationCode", "Status", "PublicIPv4Address"}
 	DedicatedServerListDefaultFields         = []string{"ID", "Title", "RackID", "LocationCode", "Status", "PublicIPv4Address"}
 	KubernetesBaremetalNodeListDefaultFields = []string{"ID", "KubernetesClusterNodeNumber", "Title", "LocationCode", "Status", "PublicIPv4Address"}

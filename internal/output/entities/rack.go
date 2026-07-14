@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	RackType = reflect.TypeOf(serverscom.Rack{})
+	RackType = reflect.TypeFor[serverscom.Rack]()
 )
 
 func RegisterRackDefinition() {

@@ -36,11 +36,11 @@ Example: srvctl login context-name`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			// login only if SC_TOKEN env is not set
 			if os.Getenv("SC_TOKEN") != "" {
-				return errors.New("SC_TOKEN env is set. Please unset it before using login command.")
+				return errors.New("SC_TOKEN env is set. Please unset it before using login command")
 			}
 
 			if !term.IsTerminal(int(os.Stdout.Fd())) {
-				return errors.New("TTY required to enter the token.")
+				return errors.New("TTY required to enter the token")
 			}
 			manager := cmdContext.GetManager()
 
