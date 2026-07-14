@@ -8,9 +8,9 @@ import (
 )
 
 var (
-	SSLCertType              = reflect.TypeOf(serverscom.SSLCertificate{})
-	SSLCertCustomType        = reflect.TypeOf(serverscom.SSLCertificateCustom{})
-	SSLCertLeType            = reflect.TypeOf(serverscom.SSLCertificateLE{})
+	SSLCertType              = reflect.TypeFor[serverscom.SSLCertificate]()
+	SSLCertCustomType        = reflect.TypeFor[serverscom.SSLCertificateCustom]()
+	SSLCertLeType            = reflect.TypeFor[serverscom.SSLCertificateLE]()
 	SSLCertListDefaultFields = []string{"ID", "Name", "Type", "Fingerprint"}
 )
 

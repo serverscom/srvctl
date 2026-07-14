@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	RBSVolumeType = reflect.TypeOf(serverscom.RemoteBlockStorageVolume{})
+	RBSVolumeType = reflect.TypeFor[serverscom.RemoteBlockStorageVolume]()
 )
 
 func RegisterRbsVolumeDefinitions() {

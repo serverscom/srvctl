@@ -54,8 +54,8 @@ func newUpdateCmd(cmdContext *base.CmdContext) *cobra.Command {
 
 // fillConfigOptions adds cmd flag to configOptions only if flag exists in KnownConfigFlags
 func fillConfigOptions(cmd *cobra.Command, f *pflag.Flag, configOptions map[string]any) {
-	if strings.HasPrefix(f.Name, "no-") {
-		optionName := strings.TrimPrefix(f.Name, "no-")
+	if after, ok := strings.CutPrefix(f.Name, "no-"); ok {
+		optionName := after
 		configOptions[optionName] = nil
 		return
 	}

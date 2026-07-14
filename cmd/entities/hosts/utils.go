@@ -38,9 +38,9 @@ func parseLayout(layouts []string) ([]serverscom.DedicatedServerLayoutInput, err
 
 	for _, l := range layouts {
 		var lInput serverscom.DedicatedServerLayoutInput
-		parts := strings.Split(l, ",")
+		parts := strings.SplitSeq(l, ",")
 
-		for _, part := range parts {
+		for part := range parts {
 			pair := strings.SplitN(part, "=", 2)
 			if len(pair) != 2 {
 				continue
@@ -80,9 +80,9 @@ func parsePartitions(partitions []string) ([]parsedPartition, error) {
 
 	for _, p := range partitions {
 		var pp parsedPartition
-		parts := strings.Split(p, ",")
+		parts := strings.SplitSeq(p, ",")
 
-		for _, part := range parts {
+		for part := range parts {
 			pair := strings.SplitN(part, "=", 2)
 			if len(pair) != 2 {
 				continue

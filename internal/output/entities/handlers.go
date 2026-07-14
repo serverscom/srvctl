@@ -25,7 +25,7 @@ func stringHandler(w io.Writer, v any, indent string, _ *Field) error {
 	}
 
 	val := reflect.ValueOf(v)
-	if val.Kind() == reflect.Ptr {
+	if val.Kind() == reflect.Pointer {
 		if val.IsNil() {
 			fmt.Fprintf(w, "%s<none>", indent)
 			return nil

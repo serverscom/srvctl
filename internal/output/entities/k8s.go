@@ -8,8 +8,8 @@ import (
 )
 
 var (
-	KubernetesClusterType                  = reflect.TypeOf(serverscom.KubernetesCluster{})
-	KubernetesClusterNodeType              = reflect.TypeOf(serverscom.KubernetesClusterNode{})
+	KubernetesClusterType                  = reflect.TypeFor[serverscom.KubernetesCluster]()
+	KubernetesClusterNodeType              = reflect.TypeFor[serverscom.KubernetesClusterNode]()
 	KubernetesClusterListDefaultFields     = []string{"ID", "Name", "Status", "LocationID", "LocationCode"}
 	KubernetesClusterNodeListDefaultFields = []string{"ID", "Number", "Hostname", "Type", "Role", "Status", "PrivateIPv4Address", "PublicIPv4Address"}
 )

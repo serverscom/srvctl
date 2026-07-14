@@ -114,7 +114,7 @@ func (f *Formatter) formatText(v any) error {
 
 // processValue processes the value of a field and applies any necessary formatting or processing.
 func processValue(value reflect.Value, processor func(any) error) error {
-	if value.Kind() == reflect.Ptr {
+	if value.Kind() == reflect.Pointer {
 		value = value.Elem()
 	}
 
@@ -162,7 +162,7 @@ func (f *Formatter) formatPageView(v any, entity entities.EntityInterface) error
 	orderedFields := f.getOrderedFields(entity)
 	value := reflect.ValueOf(v)
 
-	if value.Kind() == reflect.Ptr {
+	if value.Kind() == reflect.Pointer {
 		value = value.Elem()
 	}
 

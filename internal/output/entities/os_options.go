@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	OperatingSystemOptionType = reflect.TypeOf(serverscom.OperatingSystemOption{})
+	OperatingSystemOptionType = reflect.TypeFor[serverscom.OperatingSystemOption]()
 )
 
 func RegisterOperatingSystemOptionDefinition() {

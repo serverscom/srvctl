@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	SSHKeyType              = reflect.TypeOf(serverscom.SSHKey{})
+	SSHKeyType              = reflect.TypeFor[serverscom.SSHKey]()
 	SSHKeyListDefaultFields = []string{"Name", "Fingerprint"}
 )
 

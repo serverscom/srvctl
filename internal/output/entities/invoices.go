@@ -8,8 +8,8 @@ import (
 )
 
 var (
-	InvoiceType     = reflect.TypeOf(serverscom.Invoice{})
-	InvoiceListType = reflect.TypeOf(serverscom.InvoiceList{})
+	InvoiceType     = reflect.TypeFor[serverscom.Invoice]()
+	InvoiceListType = reflect.TypeFor[serverscom.InvoiceList]()
 )
 
 func RegisterInvoiceDefinition() {

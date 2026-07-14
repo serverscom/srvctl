@@ -26,7 +26,7 @@ var (
 		RegionID:    1,
 		RegionCode:  testRegionCode,
 		Size:        100,
-		Description: testutils.PtrString("Test volume"),
+		Description: new("Test volume"),
 		Labels:      map[string]string{"foo": "bar"},
 		Created:     &fixedTime,
 	}

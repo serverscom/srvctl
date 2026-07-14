@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	CloudBlockStorageBackupType              = reflect.TypeOf(serverscom.CloudBlockStorageBackup{})
+	CloudBlockStorageBackupType              = reflect.TypeFor[serverscom.CloudBlockStorageBackup]()
 	CloudBlockStorageBackupListDefaultFields = []string{"ID", "Name", "Status", "Size", "RegionCode"}
 )
 

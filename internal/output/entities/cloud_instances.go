@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	CloudComputingInstanceType              = reflect.TypeOf(serverscom.CloudComputingInstance{})
+	CloudComputingInstanceType              = reflect.TypeFor[serverscom.CloudComputingInstance]()
 	CloudComputingInstanceListDefaultFields = []string{"ID", "Name", "RegionCode", "Status", "PublicIPv4Address"}
 )
 

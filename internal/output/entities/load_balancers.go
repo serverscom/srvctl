@@ -8,9 +8,9 @@ import (
 )
 
 var (
-	LoadBalancerType              = reflect.TypeOf(serverscom.LoadBalancer{})
-	L4LoadBalancerType            = reflect.TypeOf(serverscom.L4LoadBalancer{})
-	L7LoadBalancerType            = reflect.TypeOf(serverscom.L7LoadBalancer{})
+	LoadBalancerType              = reflect.TypeFor[serverscom.LoadBalancer]()
+	L4LoadBalancerType            = reflect.TypeFor[serverscom.L4LoadBalancer]()
+	L7LoadBalancerType            = reflect.TypeFor[serverscom.L7LoadBalancer]()
 	LoadBalancerListDefaultFields = []string{"ID", "Name", "Type", "Status", "LocationID", "LocationCode", "ClusterID"}
 )
 

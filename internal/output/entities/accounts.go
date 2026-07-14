@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	AccountBalanceType = reflect.TypeOf(serverscom.AccountBalance{})
+	AccountBalanceType = reflect.TypeFor[serverscom.AccountBalance]()
 )
 
 func RegisterAccountDefinition() {

@@ -29,11 +29,11 @@ var (
 		FlavorID:           "flavor-1",
 		FlavorName:         "m1.small",
 		ImageID:            "image-1",
-		ImageName:          stringPtr("Ubuntu 20.04"),
-		PublicIPv4Address:  stringPtr("1.2.3.4"),
-		PrivateIPv4Address: stringPtr("10.0.0.1"),
-		LocalIPv4Address:   stringPtr("192.168.0.1"),
-		PublicIPv6Address:  stringPtr("2001:db8::1"),
+		ImageName:          new("Ubuntu 20.04"),
+		PublicIPv4Address:  new("1.2.3.4"),
+		PrivateIPv4Address: new("10.0.0.1"),
+		LocalIPv4Address:   new("192.168.0.1"),
+		PublicIPv6Address:  new("2001:db8::1"),
 		GPNEnabled:         true,
 		IPv6Enabled:        true,
 		BackupCopies:       2,
@@ -52,11 +52,11 @@ var (
 		FlavorID:           "flavor-1",
 		FlavorName:         "m1.small",
 		ImageID:            "image-1",
-		ImageName:          stringPtr("Ubuntu 20.04"),
-		PublicIPv4Address:  stringPtr("1.2.3.4"),
-		PrivateIPv4Address: stringPtr("10.0.0.1"),
-		LocalIPv4Address:   stringPtr("192.168.0.1"),
-		PublicIPv6Address:  stringPtr("2001:db8::1"),
+		ImageName:          new("Ubuntu 20.04"),
+		PublicIPv4Address:  new("1.2.3.4"),
+		PrivateIPv4Address: new("10.0.0.1"),
+		LocalIPv4Address:   new("192.168.0.1"),
+		PublicIPv6Address:  new("2001:db8::1"),
 		GPNEnabled:         true,
 		IPv6Enabled:        true,
 		BackupCopies:       2,
@@ -66,10 +66,6 @@ var (
 		Updated:            fixedTime,
 	}
 )
-
-func stringPtr(s string) *string {
-	return &s
-}
 
 func TestListCloudInstancesCmd(t *testing.T) {
 	testInstance1 := testCloudInstance
