@@ -109,8 +109,8 @@ func TestLoginCmd(t *testing.T) {
 				if err != nil {
 					t.Fatalf("failed to open pty: %v", err)
 				}
-				defer ptmx.Close()
-				defer tty.Close()
+				defer ptmx.Close() //nolint:errcheck
+				defer tty.Close()  //nolint:errcheck
 
 				oldStdout := os.Stdout
 				defer func() { os.Stdout = oldStdout }()

@@ -18,7 +18,7 @@ func (f *Formatter) ListEntityFields(fields []entities.Field) {
 	for _, field := range fields {
 		f.printField(w, field)
 	}
-	w.Flush()
+	_ = w.Flush()
 }
 
 // printField prints a single field to the writer
@@ -94,7 +94,7 @@ func (f *Formatter) formatText(v any) error {
 	}
 
 	w := tabwriter.NewWriter(f.writer, 0, 0, 3, ' ', 0)
-	defer w.Flush()
+	defer w.Flush() //nolint:errcheck
 
 	orderedFields := f.getOrderedFields(entity)
 
@@ -167,7 +167,7 @@ func (f *Formatter) formatPageView(v any, entity entities.EntityInterface) error
 	}
 
 	w := tabwriter.NewWriter(f.writer, 0, 0, 2, ' ', 0)
-	defer w.Flush()
+	defer w.Flush() //nolint:errcheck
 
 	switch value.Kind() {
 	case reflect.Slice:
@@ -177,7 +177,7 @@ func (f *Formatter) formatPageView(v any, entity entities.EntityInterface) error
 			}
 			if i < value.Len()-1 {
 				fmt.Fprintln(w, "---")
-				w.Flush()
+				_ = w.Flush()
 			}
 		}
 	default:
