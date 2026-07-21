@@ -24,7 +24,6 @@ var (
 		Name:         "test-lb-cluster",
 		LocationID:   1,
 		LocationCode: testLocationCode,
-		Status:       "active",
 		Created:      fixedTime,
 		Updated:      fixedTime,
 	}
