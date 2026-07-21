@@ -54,14 +54,14 @@ func newListMembersCmd(cmdContext *base.CmdContext) *cobra.Command {
 
 func newListNetworksCmd(cmdContext *base.CmdContext) *cobra.Command {
 
-	factory := func(verbose bool, args ...string) serverscom.Collection[serverscom.Network] {
+	factory := func(verbose bool, args ...string) serverscom.Collection[serverscom.L2SegmentNetwork] {
 		scClient := cmdContext.GetClient().SetVerbose(verbose).GetScClient()
 		return scClient.L2Segments.Networks(args[0])
 	}
 
 	opts := base.NewListOptions(
-		&base.BaseListOptions[serverscom.Network]{},
-		&base.L2SegmentGroupTypeOption[serverscom.Network]{},
+		&base.BaseListOptions[serverscom.L2SegmentNetwork]{},
+		&base.L2SegmentGroupTypeOption[serverscom.L2SegmentNetwork]{},
 	)
 
 	cmd := base.NewListCmd("list-networks", "l2 segment networks", factory, cmdContext, opts...)
