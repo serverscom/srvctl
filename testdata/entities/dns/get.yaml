@@ -1,0 +1,10 @@
+id: abc123
+name: example.com
+email: admin@example.com
+ttl: 3600
+delegationstatus: verified
+labels:
+    foo: bar
+unpublishdate: null
+created: 2025-01-01T12:00:00Z
+updated: 2025-01-01T12:00:00Z

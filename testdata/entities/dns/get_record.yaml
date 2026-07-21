@@ -1,0 +1,9 @@
+id: rec1
+domainid: abc123
+name: www
+type: A
+data: 1.2.3.4
+ttl: 3600
+priority: null
+created: 2025-01-01T12:00:00Z
+updated: 2025-01-01T12:00:00Z

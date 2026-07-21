@@ -1,0 +1,2 @@
+ID     DomainID   Type   Name   Data      TTL    Priority   Created                Updated
+rec1   abc123     A      www    1.2.3.4   3600   <none>     2025-01-01T12:00:00Z   2025-01-01T12:00:00Z

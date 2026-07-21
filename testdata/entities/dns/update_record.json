@@ -1,0 +1,11 @@
+{
+    "id": "rec1",
+    "domain_id": "abc123",
+    "name": "www",
+    "type": "A",
+    "data": "5.6.7.8",
+    "ttl": 7200,
+    "priority": null,
+    "created_at": "2025-01-01T12:00:00Z",
+    "updated_at": "2025-01-01T12:00:00Z"
+}

@@ -38,4 +38,5 @@ func init() {
 	RegisterCloudBackupDefinition()
 	RegisterRbsVolumeDefinitions()
 	RegisterRbsVolumeCredentialsDefinition()
+	RegisterDNSDefinitions()
 }

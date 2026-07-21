@@ -530,3 +530,33 @@ func (o *IsBackupOption[T]) ApplyToCollection(collection serverscom.Collection[T
 		collection.SetParam("is_backup", "true")
 	}
 }
+
+// dns domain delegation status option
+type DelegationStatusOption[T any] struct {
+	delegationStatus string
+}
+
+func (o *DelegationStatusOption[T]) AddFlags(cmd *cobra.Command) {
+	cmd.Flags().StringVar(&o.delegationStatus, "delegation-status", "", "Filter results by delegation status (delegated, verified, undelegated)")
+}
+
+func (o *DelegationStatusOption[T]) ApplyToCollection(collection serverscom.Collection[T]) {
+	if o.delegationStatus != "" {
+		collection.SetParam("delegation_status", o.delegationStatus)
+	}
+}
+
+// dns record type option
+type DNSRecordTypeOption[T any] struct {
+	recordType string
+}
+
+func (o *DNSRecordTypeOption[T]) AddFlags(cmd *cobra.Command) {
+	cmd.Flags().StringVar(&o.recordType, "type", "", "Filter results by record type (A, AAAA, CNAME, MX, TXT, NS, SRV, CAA, ALIAS, PTR, SOA)")
+}
+
+func (o *DNSRecordTypeOption[T]) ApplyToCollection(collection serverscom.Collection[T]) {
+	if o.recordType != "" {
+		collection.SetParam("type", strings.ToUpper(o.recordType))
+	}
+}
