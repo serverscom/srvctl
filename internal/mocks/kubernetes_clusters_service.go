@@ -55,6 +55,35 @@ func (mr *MockKubernetesClustersServiceMockRecorder) Collection() *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Collection", reflect.TypeOf((*MockKubernetesClustersService)(nil).Collection))
 }
 
+// CreateNodeGroup mocks base method.
+func (m *MockKubernetesClustersService) CreateNodeGroup(ctx context.Context, clusterID string, input serverscom.KubernetesClusterNodeGroupCreateInput) (*serverscom.KubernetesClusterNodeGroup, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateNodeGroup", ctx, clusterID, input)
+	ret0, _ := ret[0].(*serverscom.KubernetesClusterNodeGroup)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateNodeGroup indicates an expected call of CreateNodeGroup.
+func (mr *MockKubernetesClustersServiceMockRecorder) CreateNodeGroup(ctx, clusterID, input any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateNodeGroup", reflect.TypeOf((*MockKubernetesClustersService)(nil).CreateNodeGroup), ctx, clusterID, input)
+}
+
+// DeleteNodeGroup mocks base method.
+func (m *MockKubernetesClustersService) DeleteNodeGroup(ctx context.Context, clusterID, nodeGroupID string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteNodeGroup", ctx, clusterID, nodeGroupID)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DeleteNodeGroup indicates an expected call of DeleteNodeGroup.
+func (mr *MockKubernetesClustersServiceMockRecorder) DeleteNodeGroup(ctx, clusterID, nodeGroupID any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteNodeGroup", reflect.TypeOf((*MockKubernetesClustersService)(nil).DeleteNodeGroup), ctx, clusterID, nodeGroupID)
+}
+
 // Get mocks base method.
 func (m *MockKubernetesClustersService) Get(ctx context.Context, id string) (*serverscom.KubernetesCluster, error) {
 	m.ctrl.T.Helper()
@@ -85,6 +114,35 @@ func (mr *MockKubernetesClustersServiceMockRecorder) GetNode(ctx, clusterID, nod
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetNode", reflect.TypeOf((*MockKubernetesClustersService)(nil).GetNode), ctx, clusterID, nodeID)
 }
 
+// MoveNodes mocks base method.
+func (m *MockKubernetesClustersService) MoveNodes(ctx context.Context, clusterID string, input serverscom.KubernetesClusterMoveNodesInput) ([]serverscom.KubernetesClusterNode, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "MoveNodes", ctx, clusterID, input)
+	ret0, _ := ret[0].([]serverscom.KubernetesClusterNode)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// MoveNodes indicates an expected call of MoveNodes.
+func (mr *MockKubernetesClustersServiceMockRecorder) MoveNodes(ctx, clusterID, input any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "MoveNodes", reflect.TypeOf((*MockKubernetesClustersService)(nil).MoveNodes), ctx, clusterID, input)
+}
+
+// NodeGroups mocks base method.
+func (m *MockKubernetesClustersService) NodeGroups(id string) serverscom.Collection[serverscom.KubernetesClusterNodeGroup] {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "NodeGroups", id)
+	ret0, _ := ret[0].(serverscom.Collection[serverscom.KubernetesClusterNodeGroup])
+	return ret0
+}
+
+// NodeGroups indicates an expected call of NodeGroups.
+func (mr *MockKubernetesClustersServiceMockRecorder) NodeGroups(id any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "NodeGroups", reflect.TypeOf((*MockKubernetesClustersService)(nil).NodeGroups), id)
+}
+
 // Nodes mocks base method.
 func (m *MockKubernetesClustersService) Nodes(id string) serverscom.Collection[serverscom.KubernetesClusterNode] {
 	m.ctrl.T.Helper()
@@ -112,4 +170,34 @@ func (m *MockKubernetesClustersService) Update(ctx context.Context, id string, i
 func (mr *MockKubernetesClustersServiceMockRecorder) Update(ctx, id, input any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockKubernetesClustersService)(nil).Update), ctx, id, input)
+}
+
+// UpdateNode mocks base method.
+func (m *MockKubernetesClustersService) UpdateNode(ctx context.Context, clusterID, nodeID string, input serverscom.KubernetesClusterNodeUpdateInput) (*serverscom.KubernetesClusterNode, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateNode", ctx, clusterID, nodeID, input)
+	ret0, _ := ret[0].(*serverscom.KubernetesClusterNode)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// UpdateNode indicates an expected call of UpdateNode.
+func (mr *MockKubernetesClustersServiceMockRecorder) UpdateNode(ctx, clusterID, nodeID, input any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateNode", reflect.TypeOf((*MockKubernetesClustersService)(nil).UpdateNode), ctx, clusterID, nodeID, input)
+}
+
+// UpdateNodeGroup mocks base method.
+func (m *MockKubernetesClustersService) UpdateNodeGroup(ctx context.Context, clusterID, nodeGroupID string, input serverscom.KubernetesClusterNodeGroupUpdateInput) (*serverscom.KubernetesClusterNodeGroup, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateNodeGroup", ctx, clusterID, nodeGroupID, input)
+	ret0, _ := ret[0].(*serverscom.KubernetesClusterNodeGroup)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// UpdateNodeGroup indicates an expected call of UpdateNodeGroup.
+func (mr *MockKubernetesClustersServiceMockRecorder) UpdateNodeGroup(ctx, clusterID, nodeGroupID, input any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateNodeGroup", reflect.TypeOf((*MockKubernetesClustersService)(nil).UpdateNodeGroup), ctx, clusterID, nodeGroupID, input)
 }

@@ -86,7 +86,7 @@ func (mr *MockCloudComputingInstancesServiceMockRecorder) Create(ctx, input any)
 }
 
 // CreatePTRRecord mocks base method.
-func (m *MockCloudComputingInstancesService) CreatePTRRecord(ctx context.Context, cloudInstanceID string, input serverscom.PTRRecordCreateInput) (*serverscom.PTRRecord, error) {
+func (m *MockCloudComputingInstancesService) CreatePTRRecord(ctx context.Context, cloudInstanceID string, input serverscom.CloudComputingInstancePTRRecordCreateInput) (*serverscom.PTRRecord, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreatePTRRecord", ctx, cloudInstanceID, input)
 	ret0, _ := ret[0].(*serverscom.PTRRecord)

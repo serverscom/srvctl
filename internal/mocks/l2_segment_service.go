@@ -143,10 +143,10 @@ func (mr *MockL2SegmentsServiceMockRecorder) Members(segmentID any) *gomock.Call
 }
 
 // Networks mocks base method.
-func (m *MockL2SegmentsService) Networks(segmentID string) serverscom.Collection[serverscom.Network] {
+func (m *MockL2SegmentsService) Networks(segmentID string) serverscom.Collection[serverscom.L2SegmentNetwork] {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Networks", segmentID)
-	ret0, _ := ret[0].(serverscom.Collection[serverscom.Network])
+	ret0, _ := ret[0].(serverscom.Collection[serverscom.L2SegmentNetwork])
 	return ret0
 }
 
