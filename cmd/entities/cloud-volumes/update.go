@@ -11,8 +11,6 @@ import (
 func newUpdateCmd(cmdContext *base.CmdContext) *cobra.Command {
 	var name string
 	var description string
-	var imageID string
-	var snapshotID string
 	var labels []string
 
 	cmd := &cobra.Command{
@@ -35,8 +33,6 @@ func newUpdateCmd(cmdContext *base.CmdContext) *cobra.Command {
 			input := serverscom.CloudBlockStorageVolumeUpdateInput{
 				Name:        name,
 				Description: description,
-				ImageID:     imageID,
-				SnapshotID:  snapshotID,
 				Labels:      labelsMap,
 			}
 
@@ -58,8 +54,6 @@ func newUpdateCmd(cmdContext *base.CmdContext) *cobra.Command {
 
 	cmd.Flags().StringVarP(&name, "name", "n", "", "A name of the cloud volume")
 	cmd.Flags().StringVar(&description, "description", "", "Description of the volume")
-	cmd.Flags().StringVar(&imageID, "image-id", "", "ID of the image")
-	cmd.Flags().StringVar(&snapshotID, "snapshot-id", "", "ID of the snapshot")
 	cmd.Flags().StringArrayVarP(&labels, "label", "l", []string{}, "string in key=value format")
 
 	return cmd
