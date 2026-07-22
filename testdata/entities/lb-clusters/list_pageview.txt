@@ -1,6 +1,5 @@
 ID:            testId1
 Name:          test-lb-cluster-1
-Status:        active
 LocationID:    1
 LocationCode:  test
 Created:       2025-01-01T12:00:00Z
@@ -8,7 +7,6 @@ Updated:       2025-01-01T12:00:00Z
 ---
 ID:            testId2
 Name:          test-lb-cluster-2
-Status:        active
 LocationID:    1
 LocationCode:  test
 Created:       2025-01-01T12:00:00Z

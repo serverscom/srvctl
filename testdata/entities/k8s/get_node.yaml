@@ -9,6 +9,15 @@ privateipv4address: 10.0.0.1
 publicipv4address: 127.0.0.1
 refid: "1"
 clusterid: testId
+locationid: 0
+locationcode: ""
+nodegroup:
+    id: ""
+    name: ""
+    description: null
+    nodecount: 0
+    created: 0001-01-01T00:00:00Z
+    updated: 0001-01-01T00:00:00Z
 labels: {}
 created: 2025-01-01T12:00:00Z
 updated: 2025-01-01T12:00:00Z
