@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"io"
 	"reflect"
-	"slices"
 )
 
 // RegistryInterface represents the interface for the EntityRegistry
@@ -20,9 +19,9 @@ type EntityRegistry map[reflect.Type]EntityInterface
 type EntityInterface interface {
 	GetType() reflect.Type
 	GetDefaultFields() []string
+	GetCmdDefaultFields(cmd string) []string
 	GetFields() []Field
 	Validate(fields []string) error
-	SetCmdDefaultFields(cmd string) error
 }
 
 // Entity represents the base entity structure
@@ -134,26 +133,14 @@ func (e *Entity) Validate(fields []string) error {
 	return nil
 }
 
-// SetCmdDefaultFields sets the default fields for an entity based on cmd
-func (e *Entity) SetCmdDefaultFields(cmd string) error {
+// GetCmdDefaultFields returns the default field IDs to show for the given
+// command. If the command has an explicit set in cmdDefaultFields it is returned, otherwise it
+// falls back to the registration-time defaults (fields marked Field.Default).
+func (e *Entity) GetCmdDefaultFields(cmd string) []string {
 	if defaultFields, ok := e.cmdDefaultFields[cmd]; ok {
-		fieldSet := make(map[string]struct{}, len(e.fields))
-		for i, f := range e.fields {
-			e.fields[i].Default = false
-			fieldSet[f.ID] = struct{}{}
-		}
-
-		for _, df := range defaultFields {
-			if _, exists := fieldSet[df]; !exists {
-				return fmt.Errorf("can't find field %s in entity field set", df)
-			}
-		}
-
-		for i := range e.fields {
-			e.fields[i].Default = slices.Contains(defaultFields, e.fields[i].ID)
-		}
+		return defaultFields
 	}
-	return nil
+	return e.GetDefaultFields()
 }
 
 // fieldInChildFields checks if a field is in the list of child fields

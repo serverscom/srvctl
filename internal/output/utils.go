@@ -50,7 +50,7 @@ func (f *Formatter) getOrderedFields(entity entities.EntityInterface) []entities
 		if f.pageView {
 			return entity.GetFields()
 		}
-		fieldsToShow = entity.GetDefaultFields()
+		fieldsToShow = entity.GetCmdDefaultFields(f.cmdName)
 	}
 
 	availableFields := entity.GetFields()
