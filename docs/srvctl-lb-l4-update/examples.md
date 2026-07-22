@@ -18,7 +18,7 @@ JSON structure example:
     "shared_cluster": "",
     "name": "",
     "store_logs": true,
-    "store_logs_region_id": "",
+    "store_logs_region_id": 0,
     "new_external_ips_count": "",
     "delete_external_ips": [],
     "vhost_zones": [
