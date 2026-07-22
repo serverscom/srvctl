@@ -6,6 +6,7 @@ family: ipv4
 interfacetype: public
 distributionmethod: gateway
 additional: false
+firstip: null
+gateway: null
 created: 2025-01-01T12:00:00Z
 updated: 2025-01-01T12:00:00Z
-state: ""

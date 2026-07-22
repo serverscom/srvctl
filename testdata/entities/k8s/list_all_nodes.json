@@ -11,6 +11,16 @@
         "public_ipv4_address": "127.0.0.1",
         "ref_id": "1",
         "cluster_id": "testId",
+        "location_id": 0,
+        "location_code": "",
+        "node_group": {
+            "id": "",
+            "name": "",
+            "description": null,
+            "node_count": 0,
+            "created_at": "0001-01-01T00:00:00Z",
+            "updated_at": "0001-01-01T00:00:00Z"
+        },
         "labels": null,
         "created_at": "2025-01-01T12:00:00Z",
         "updated_at": "2025-01-01T12:00:00Z"
@@ -27,6 +37,16 @@
         "public_ipv4_address": "127.0.0.1",
         "ref_id": "1",
         "cluster_id": "testId",
+        "location_id": 0,
+        "location_code": "",
+        "node_group": {
+            "id": "",
+            "name": "",
+            "description": null,
+            "node_count": 0,
+            "created_at": "0001-01-01T00:00:00Z",
+            "updated_at": "0001-01-01T00:00:00Z"
+        },
         "labels": null,
         "created_at": "2025-01-01T12:00:00Z",
         "updated_at": "2025-01-01T12:00:00Z"

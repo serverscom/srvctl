@@ -10,6 +10,7 @@
         "location_id": 1,
         "location_code": "test",
         "cluster_id": null,
+        "shared_cluster": false,
         "labels": {
             "foo": "bar"
         },

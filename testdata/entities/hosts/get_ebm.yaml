@@ -26,5 +26,7 @@ configurationdetails:
     operatingsystemid: 5
     operatingsystemfullname: CentOS 7 x86_64
 labels: {}
+ipxeconfig: null
+userdatasha256: null
 created: 2025-01-01T12:00:00Z
 updated: 2025-01-01T12:00:00Z

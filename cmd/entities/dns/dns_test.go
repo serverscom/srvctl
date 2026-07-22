@@ -37,8 +37,8 @@ var (
 		DomainID: testDomainID,
 		Name:     "www",
 		Type:     serverscom.DNSRecordTypeA,
-		Data:     strPtr("1.2.3.4"),
-		TTL:      intPtr(3600),
+		Data:     new("1.2.3.4"),
+		TTL:      new(3600),
 		Created:  fixedTime,
 		Updated:  fixedTime,
 	}
@@ -48,9 +48,6 @@ var (
 		RequiredTxt: "sc-verification=abc123",
 	}
 )
-
-func strPtr(s string) *string { return &s }
-func intPtr(i int) *int       { return &i }
 
 func TestAddDNSDomainCmd(t *testing.T) {
 	testCases := []struct {
@@ -568,8 +565,8 @@ func TestListDNSRecordsCmd(t *testing.T) {
 	record2.ID = "rec2"
 	record2.Name = "mail"
 	record2.Type = serverscom.DNSRecordTypeMX
-	record2.Data = strPtr("mail.example.com")
-	record2.Priority = intPtr(10)
+	record2.Data = new("mail.example.com")
+	record2.Priority = new(10)
 
 	testCases := []struct {
 		name           string
@@ -783,7 +780,7 @@ func TestAddDNSRecordCmd(t *testing.T) {
 						Type: serverscom.DNSRecordTypeA,
 						Name: "www",
 						Data: "1.2.3.4",
-						TTL:  intPtr(3600),
+						TTL:  new(3600),
 					}).
 					Return(&testRecord, nil)
 			},
@@ -805,7 +802,7 @@ func TestAddDNSRecordCmd(t *testing.T) {
 						Type: serverscom.DNSRecordTypeA,
 						Name: "www",
 						Data: "1.2.3.4",
-						TTL:  intPtr(3600),
+						TTL:  new(3600),
 					}).
 					Return(&testRecord, nil)
 			},
@@ -873,8 +870,8 @@ func TestAddDNSRecordCmd(t *testing.T) {
 
 func TestUpdateDNSRecordCmd(t *testing.T) {
 	updatedRecord := testRecord
-	updatedRecord.Data = strPtr("5.6.7.8")
-	updatedRecord.TTL = intPtr(7200)
+	updatedRecord.Data = new("5.6.7.8")
+	updatedRecord.TTL = new(7200)
 
 	testCases := []struct {
 		name           string
@@ -893,7 +890,7 @@ func TestUpdateDNSRecordCmd(t *testing.T) {
 				mock.EXPECT().
 					UpdateRecord(gomock.Any(), testDomainID, testRecordID, serverscom.DNSRecordUpdateInput{
 						Data: "5.6.7.8",
-						TTL:  intPtr(7200),
+						TTL:  new(7200),
 					}).
 					Return(&updatedRecord, nil)
 			},
