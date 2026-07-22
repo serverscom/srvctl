@@ -34,8 +34,8 @@ func RegisterCloudComputingInstanceDefinition() {
 			{ID: "BackupCopies", Name: "BackupCopies", Path: "BackupCopies", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
 			{ID: "PublicPortBlocked", Name: "PublicPortBlocked", Path: "PublicPortBlocked", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler},
 			{ID: "Labels", Name: "Labels", Path: "Labels", PageViewHandlerFunc: mapPvHandler},
-			{ID: "Created", Name: "Created", Path: "Created", ListHandlerFunc: timeHandler, PageViewHandlerFunc: timeHandler},
-			{ID: "Updated", Name: "Updated", Path: "Updated", ListHandlerFunc: timeHandler, PageViewHandlerFunc: timeHandler},
+			{ID: "Created", Name: "Created", Path: "Created", ListHandlerFunc: timeHandler, PageViewHandlerFunc: timeHandler, Default: true},
+			{ID: "Updated", Name: "Updated", Path: "Updated", ListHandlerFunc: timeHandler, PageViewHandlerFunc: timeHandler, Default: true},
 		},
 		cmdDefaultFields: map[string][]string{
 			"list": CloudComputingInstanceListDefaultFields,
