@@ -1,6 +1,8 @@
 package hosts
 
 import (
+	"fmt"
+
 	serverscom "github.com/serverscom/serverscom-go-client/pkg"
 	"github.com/serverscom/srvctl/cmd/base"
 	"github.com/spf13/cobra"
@@ -236,18 +238,19 @@ func newGetSBMNetworkCmd(cmdContext *base.CmdContext) *cobra.Command {
 
 func newAddSBMNetworkCmd(cmdContext *base.CmdContext) *cobra.Command {
 	var (
+		networkType        string
 		mask               int
 		distributionMethod string
 	)
 
 	cmd := &cobra.Command{
 		Use:   "add-network <id>",
-		Short: "Add private IPv4 network to scalable baremetal server",
+		Short: "Add private/public IPv4 network to scalable baremetal server",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			id := args[0]
 
-			if err := validateNetworkArgs("private", distributionMethod, mask); err != nil {
+			if err := validateNetworkArgs(networkType, distributionMethod, mask); err != nil {
 				return err
 			}
 
@@ -262,7 +265,14 @@ func newAddSBMNetworkCmd(cmdContext *base.CmdContext) *cobra.Command {
 			base.SetupProxy(cmd, manager)
 			scClient := cmdContext.GetClient().SetVerbose(manager.GetVerbose(cmd)).GetScClient()
 
-			entity, err := scClient.Hosts.AddSBMServerPrivateIPv4Network(ctx, id, input)
+			var entity *serverscom.Network
+			var err error
+			switch networkType {
+			case "public":
+				return fmt.Errorf("public networks currently are not supported for scalable baremetal servers")
+			case "private":
+				entity, err = scClient.Hosts.AddSBMServerPrivateIPv4Network(ctx, id, input)
+			}
 			if err != nil {
 				return err
 			}
@@ -274,8 +284,10 @@ func newAddSBMNetworkCmd(cmdContext *base.CmdContext) *cobra.Command {
 		},
 	}
 
+	cmd.Flags().StringVar(&networkType, "type", "", "Network type: 'private'")
 	cmd.Flags().IntVar(&mask, "mask", 0, "Network mask (required)")
 	cmd.Flags().StringVar(&distributionMethod, "distribution-method", "gateway", "Distribution method ('gateway')")
+	_ = cmd.MarkFlagRequired("type")
 	_ = cmd.MarkFlagRequired("mask")
 
 	return cmd

@@ -2745,6 +2745,7 @@ func TestAddSBMNetworkCmd(t *testing.T) {
 			output: "json",
 			args: []string{
 				testId,
+				"--type", "private",
 				"--mask", "29",
 				"--distribution-method", "gateway",
 			},
@@ -2756,9 +2757,19 @@ func TestAddSBMNetworkCmd(t *testing.T) {
 			},
 		},
 		{
+			name: "add public SBM network is not supported",
+			args: []string{
+				testId,
+				"--type", "public",
+				"--mask", "29",
+			},
+			expectError: true,
+		},
+		{
 			name: "add SBM network with unsupported mask",
 			args: []string{
 				testId,
+				"--type", "private",
 				"--mask", "24",
 			},
 			expectError: true,
@@ -2768,6 +2779,7 @@ func TestAddSBMNetworkCmd(t *testing.T) {
 			output: "json",
 			args: []string{
 				testId,
+				"--type", "private",
 				"--mask", "29",
 			},
 			expectError: true,
