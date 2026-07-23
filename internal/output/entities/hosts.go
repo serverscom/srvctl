@@ -17,6 +17,7 @@ var (
 	HostDriveSlotType                        = reflect.TypeFor[serverscom.HostDriveSlot]()
 	HostPTRRecordType                        = reflect.TypeFor[serverscom.PTRRecord]()
 	HostNetworkType                          = reflect.TypeFor[serverscom.Network]()
+	HostNetworkUsageType                     = reflect.TypeFor[serverscom.NetworkUsage]()
 	HostFeatureType                          = reflect.TypeFor[serverscom.DedicatedServerFeature]()
 	HostServiceType                          = reflect.TypeFor[serverscom.DedicatedServerService]()
 	HostOOBCredsType                         = reflect.TypeFor[serverscom.DedicatedServerOOBCredentials]()
@@ -25,7 +26,7 @@ var (
 	KubernetesBaremetalNodeListDefaultFields = []string{"ID", "KubernetesClusterNodeNumber", "Title", "LocationCode", "Status", "PublicIPv4Address"}
 	SBMServerListDefaultFields               = []string{"ID", "Title", "RackID", "LocationCode", "Status", "PublicIPv4Address"}
 
-	NetworkListDefaultFields = []string{"ID", "Title", "Status", "CIDR", "Family", "InterfaceType", "DistributionMethod", "Additional"}
+	NetworkListDefaultFields = []string{"ID", "Title", "Status", "CIDR", "Family", "InterfaceType", "DistributionMethod", "Additional", "FirstIP", "Gateway"}
 )
 
 func getConfigurationDetailsField() Field {
@@ -267,6 +268,8 @@ func RegisterHostsSubDefinitions() {
 			{ID: "InterfaceType", Name: "InterfaceType", Path: "InterfaceType", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
 			{ID: "DistributionMethod", Name: "DistributionMethod", Path: "DistributionMethod", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
 			{ID: "Additional", Name: "Additional", Path: "Additional", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
+			{ID: "FirstIP", Name: "FirstIP", Path: "FirstIP", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
+			{ID: "Gateway", Name: "Gateway", Path: "Gateway", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
 			{ID: "Created", Name: "Created", Path: "Created", ListHandlerFunc: timeHandler, PageViewHandlerFunc: timeHandler, Default: true},
 			{ID: "Updated", Name: "Updated", Path: "Updated", ListHandlerFunc: timeHandler, PageViewHandlerFunc: timeHandler, Default: true},
 		},
@@ -276,6 +279,19 @@ func RegisterHostsSubDefinitions() {
 		},
 	}
 	if err := Registry.Register(hostNetworkEntity); err != nil {
+		log.Fatal(err)
+	}
+
+	hostNetworkUsageEntity := &Entity{
+		fields: []Field{
+			{ID: "Type", Name: "Type", Path: "Type", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
+			{ID: "Value", Name: "Value", Path: "Utilization.Value", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
+			{ID: "Commit", Name: "Commit", Path: "Utilization.Commit", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
+			{ID: "Unit", Name: "Unit", Path: "Utilization.Unit", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
+		},
+		eType: HostNetworkUsageType,
+	}
+	if err := Registry.Register(hostNetworkUsageEntity); err != nil {
 		log.Fatal(err)
 	}
 
