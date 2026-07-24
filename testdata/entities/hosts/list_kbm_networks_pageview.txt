@@ -6,6 +6,8 @@ Family:              ipv4
 InterfaceType:       public
 DistributionMethod:  gateway
 Additional:          false
+FirstIP:             100.0.8.2
+Gateway:             100.0.8.1
 Created:             2025-01-01T12:00:00Z
 Updated:             2025-01-01T12:00:00Z
 ---
@@ -17,5 +19,7 @@ Family:              ipv4
 InterfaceType:       public
 DistributionMethod:  gateway
 Additional:          false
+FirstIP:             100.0.8.2
+Gateway:             100.0.8.1
 Created:             2025-01-01T12:00:00Z
 Updated:             2025-01-01T12:00:00Z
