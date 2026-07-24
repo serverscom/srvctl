@@ -61,6 +61,9 @@ func NewRootCmd(version string) *cobra.Command {
 	// resources comands
 	cmd.AddCommand(sshkeys.NewCmd(cmdContext))
 	cmd.AddCommand(hosts.NewCmd(cmdContext))
+	cmd.AddCommand(hosts.NewEBMCmd(cmdContext))
+	cmd.AddCommand(hosts.NewKBMCmd(cmdContext))
+	cmd.AddCommand(hosts.NewSBMCmd(cmdContext))
 	cmd.AddCommand(ssl.NewCmd(cmdContext))
 	cmd.AddCommand(loadbalancerclusters.NewCmd(cmdContext))
 	cmd.AddCommand(loadbalancers.NewCmd(cmdContext))
