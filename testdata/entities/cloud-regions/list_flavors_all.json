@@ -1,10 +1,16 @@
 [
     {
         "id": "flavor-123",
-        "name": "Test Flavor"
+        "name": "Test Flavor",
+        "disk": 0,
+        "ram": 0,
+        "vcpus": 0
     },
     {
         "id": "flavor-456",
-        "name": "Test Flavor 2"
+        "name": "Test Flavor 2",
+        "disk": 0,
+        "ram": 0,
+        "vcpus": 0
     }
 ]

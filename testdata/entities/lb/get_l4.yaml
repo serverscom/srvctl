@@ -7,7 +7,11 @@ externaladdresses:
 locationid: 1
 locationcode: test
 storelogs: false
+storelogsregionid: 0
 clusterid: null
+sharedcluster: false
+vhostzones: []
+upstreamzones: []
 labels:
     foo: bar
 created: 2025-01-01T12:00:00Z

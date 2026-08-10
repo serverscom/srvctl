@@ -9,7 +9,11 @@
     "location_id": 1,
     "location_code": "test",
     "store_logs": false,
+    "store_logs_region_id": 0,
     "cluster_id": null,
+    "shared_cluster": false,
+    "vhost_zones": null,
+    "upstream_zones": null,
     "labels": {
         "new": "label"
     },

@@ -1,2 +1,2 @@
-ID                 Name            RegionCode   Status   PublicIPv4Address
-test-instance-id   test-instance   AMS1         active   1.2.3.4
+ID                 Name            RegionCode   Status   PublicIPv4Address   Created                Updated
+test-instance-id   test-instance   AMS1         active   1.2.3.4             2025-01-01T12:00:00Z   2025-01-01T12:00:00Z

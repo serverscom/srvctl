@@ -8,12 +8,13 @@ import (
 )
 
 var (
-	L2SegmentType                    = reflect.TypeFor[serverscom.L2Segment]()
-	L2SegmentLocationGroupType       = reflect.TypeFor[serverscom.L2LocationGroup]()
-	L2SegmentMemberType              = reflect.TypeFor[serverscom.L2Member]()
-	L2SegmentNetworkType             = reflect.TypeFor[serverscom.Network]()
-	L2SegmentListDefaultFields       = []string{"ID", "Name", "Type", "Status", "LocationGroupID", "LocationGroupCode"}
-	L2SegmentMemberListDefaultFields = []string{"ID", "Title", "Mode", "VLAN", "Status"}
+	L2SegmentType                     = reflect.TypeFor[serverscom.L2Segment]()
+	L2SegmentLocationGroupType        = reflect.TypeFor[serverscom.L2LocationGroup]()
+	L2SegmentMemberType               = reflect.TypeFor[serverscom.L2Member]()
+	L2SegmentNetworkType              = reflect.TypeFor[serverscom.L2SegmentNetwork]()
+	L2SegmentListDefaultFields        = []string{"ID", "Name", "Type", "Status", "LocationGroupID", "LocationGroupCode"}
+	L2SegmentMemberListDefaultFields  = []string{"ID", "Title", "Mode", "VLAN", "Status"}
+	L2SegmentNetworkListDefaultFields = []string{"ID", "Title", "Status", "CIDR", "Family", "InterfaceType", "DistributionMethod", "Additional"}
 )
 
 func RegisterL2SegmentDefinitions() {
@@ -73,6 +74,28 @@ func RegisterL2SegmentDefinitions() {
 		eType: L2SegmentMemberType,
 	}
 	if err := Registry.Register(l2SegmentMemberEntity); err != nil {
+		log.Fatal(err)
+	}
+
+	l2SegmentNetworkEntity := &Entity{
+		fields: []Field{
+			{ID: "ID", Name: "ID", Path: "ID", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
+			{ID: "Title", Name: "Title", Path: "Title", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
+			{ID: "Status", Name: "Status", Path: "Status", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
+			{ID: "CIDR", Name: "CIDR", Path: "Cidr", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
+			{ID: "Family", Name: "Family", Path: "Family", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
+			{ID: "InterfaceType", Name: "InterfaceType", Path: "InterfaceType", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
+			{ID: "DistributionMethod", Name: "DistributionMethod", Path: "DistributionMethod", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
+			{ID: "Additional", Name: "Additional", Path: "Additional", ListHandlerFunc: stringHandler, PageViewHandlerFunc: stringHandler, Default: true},
+			{ID: "Created", Name: "Created", Path: "Created", ListHandlerFunc: timeHandler, PageViewHandlerFunc: timeHandler, Default: true},
+			{ID: "Updated", Name: "Updated", Path: "Updated", ListHandlerFunc: timeHandler, PageViewHandlerFunc: timeHandler, Default: true},
+		},
+		cmdDefaultFields: map[string][]string{
+			"list-networks": L2SegmentNetworkListDefaultFields,
+		},
+		eType: L2SegmentNetworkType,
+	}
+	if err := Registry.Register(l2SegmentNetworkEntity); err != nil {
 		log.Fatal(err)
 	}
 }

@@ -25,9 +25,9 @@ func newAddPTRCmd(cmdContext *base.CmdContext) *cobra.Command {
 
 			base.SetupProxy(cmd, manager)
 
-			input := serverscom.PTRRecordCreateInput{
-				Domain: data,
-				IP:     ip,
+			input := serverscom.CloudComputingInstancePTRRecordCreateInput{
+				Data: data,
+				IP:   ip,
 			}
 			if cmd.Flags().Changed("ttl") {
 				input.TTL = &ttl

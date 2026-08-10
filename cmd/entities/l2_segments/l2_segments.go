@@ -14,8 +14,13 @@ func NewCmd(cmdContext *base.CmdContext) *cobra.Command {
 	if err != nil {
 		log.Fatal(err)
 	}
+	l2NetworkEntity, err := entities.Registry.GetEntityFromValue(serverscom.L2SegmentNetwork{})
+	if err != nil {
+		log.Fatal(err)
+	}
 	entitiesMap := make(map[string]entities.EntityInterface)
 	entitiesMap["l2-segments"] = l2Entity
+	entitiesMap["list-networks"] = l2NetworkEntity
 	cmd := &cobra.Command{
 		Use:   "l2-segments",
 		Short: "Manage L2 segments",

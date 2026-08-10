@@ -18,7 +18,7 @@ JSON structure example:
     "cluster_id": "",
     "shared_cluster": "",
     "store_logs": true,
-    "store_logs_region_id": "",
+    "store_logs_region_id": 0,
     "geoip": "true",
     "new_external_ips_count": "",
     "delete_external_ips": [],

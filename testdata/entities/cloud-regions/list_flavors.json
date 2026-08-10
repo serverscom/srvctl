@@ -1,6 +1,9 @@
 [
     {
         "id": "flavor-123",
-        "name": "Test Flavor"
+        "name": "Test Flavor",
+        "disk": 0,
+        "ram": 0,
+        "vcpus": 0
     }
 ]

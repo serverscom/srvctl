@@ -191,6 +191,21 @@ func (mr *MockHostsServiceMockRecorder) ActivatePrivateIpxeBootFeature(ctx, serv
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ActivatePrivateIpxeBootFeature", reflect.TypeOf((*MockHostsService)(nil).ActivatePrivateIpxeBootFeature), ctx, serverID, input)
 }
 
+// ActivatePublicIpxeBootFeature mocks base method.
+func (m *MockHostsService) ActivatePublicIpxeBootFeature(ctx context.Context, serverID string, input serverscom.PublicIpxeBootFeatureInput) (*serverscom.DedicatedServerFeature, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ActivatePublicIpxeBootFeature", ctx, serverID, input)
+	ret0, _ := ret[0].(*serverscom.DedicatedServerFeature)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ActivatePublicIpxeBootFeature indicates an expected call of ActivatePublicIpxeBootFeature.
+func (mr *MockHostsServiceMockRecorder) ActivatePublicIpxeBootFeature(ctx, serverID, input any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ActivatePublicIpxeBootFeature", reflect.TypeOf((*MockHostsService)(nil).ActivatePublicIpxeBootFeature), ctx, serverID, input)
+}
+
 // AddDedicatedServerPrivateIPv4Network mocks base method.
 func (m *MockHostsService) AddDedicatedServerPrivateIPv4Network(ctx context.Context, id string, input serverscom.NetworkInput) (*serverscom.Network, error) {
 	m.ctrl.T.Helper()
@@ -219,6 +234,21 @@ func (m *MockHostsService) AddDedicatedServerPublicIPv4Network(ctx context.Conte
 func (mr *MockHostsServiceMockRecorder) AddDedicatedServerPublicIPv4Network(ctx, id, input any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddDedicatedServerPublicIPv4Network", reflect.TypeOf((*MockHostsService)(nil).AddDedicatedServerPublicIPv4Network), ctx, id, input)
+}
+
+// AddSBMServerPrivateIPv4Network mocks base method.
+func (m *MockHostsService) AddSBMServerPrivateIPv4Network(ctx context.Context, id string, input serverscom.NetworkInput) (*serverscom.Network, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "AddSBMServerPrivateIPv4Network", ctx, id, input)
+	ret0, _ := ret[0].(*serverscom.Network)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// AddSBMServerPrivateIPv4Network indicates an expected call of AddSBMServerPrivateIPv4Network.
+func (mr *MockHostsServiceMockRecorder) AddSBMServerPrivateIPv4Network(ctx, id, input any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddSBMServerPrivateIPv4Network", reflect.TypeOf((*MockHostsService)(nil).AddSBMServerPrivateIPv4Network), ctx, id, input)
 }
 
 // AttachSSHKeysToDedicatedServer mocks base method.
@@ -430,6 +460,21 @@ func (mr *MockHostsServiceMockRecorder) DeactivatePrivateIpxeBootFeature(ctx, se
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeactivatePrivateIpxeBootFeature", reflect.TypeOf((*MockHostsService)(nil).DeactivatePrivateIpxeBootFeature), ctx, serverID)
 }
 
+// DeactivatePublicIpxeBootFeature mocks base method.
+func (m *MockHostsService) DeactivatePublicIpxeBootFeature(ctx context.Context, serverID string) (*serverscom.DedicatedServerFeature, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeactivatePublicIpxeBootFeature", ctx, serverID)
+	ret0, _ := ret[0].(*serverscom.DedicatedServerFeature)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// DeactivatePublicIpxeBootFeature indicates an expected call of DeactivatePublicIpxeBootFeature.
+func (mr *MockHostsServiceMockRecorder) DeactivatePublicIpxeBootFeature(ctx, serverID any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeactivatePublicIpxeBootFeature", reflect.TypeOf((*MockHostsService)(nil).DeactivatePublicIpxeBootFeature), ctx, serverID)
+}
+
 // DedicatedServerConnections mocks base method.
 func (m *MockHostsService) DedicatedServerConnections(id string) serverscom.Collection[serverscom.HostConnection] {
 	m.ctrl.T.Helper()
@@ -572,6 +617,21 @@ func (mr *MockHostsServiceMockRecorder) DeletePTRRecordForSBMServer(ctx, serverI
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeletePTRRecordForSBMServer", reflect.TypeOf((*MockHostsService)(nil).DeletePTRRecordForSBMServer), ctx, serverID, ptrRecordID)
 }
 
+// DeleteSBMServerNetwork mocks base method.
+func (m *MockHostsService) DeleteSBMServerNetwork(ctx context.Context, serverID, networkID string) (*serverscom.Network, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteSBMServerNetwork", ctx, serverID, networkID)
+	ret0, _ := ret[0].(*serverscom.Network)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// DeleteSBMServerNetwork indicates an expected call of DeleteSBMServerNetwork.
+func (mr *MockHostsServiceMockRecorder) DeleteSBMServerNetwork(ctx, serverID, networkID any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteSBMServerNetwork", reflect.TypeOf((*MockHostsService)(nil).DeleteSBMServerNetwork), ctx, serverID, networkID)
+}
+
 // DetachSSHKeyFromDedicatedServer mocks base method.
 func (m *MockHostsService) DetachSSHKeyFromDedicatedServer(ctx context.Context, serverID, fingerprint string) error {
 	m.ctrl.T.Helper()
@@ -646,6 +706,21 @@ func (mr *MockHostsServiceMockRecorder) GetDedicatedServerOOBCredentials(ctx, id
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetDedicatedServerOOBCredentials", reflect.TypeOf((*MockHostsService)(nil).GetDedicatedServerOOBCredentials), ctx, id, params)
 }
 
+// GetDedicatedServerSSHKey mocks base method.
+func (m *MockHostsService) GetDedicatedServerSSHKey(ctx context.Context, serverID, fingerprint string) (*serverscom.SSHKey, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetDedicatedServerSSHKey", ctx, serverID, fingerprint)
+	ret0, _ := ret[0].(*serverscom.SSHKey)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetDedicatedServerSSHKey indicates an expected call of GetDedicatedServerSSHKey.
+func (mr *MockHostsServiceMockRecorder) GetDedicatedServerSSHKey(ctx, serverID, fingerprint any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetDedicatedServerSSHKey", reflect.TypeOf((*MockHostsService)(nil).GetDedicatedServerSSHKey), ctx, serverID, fingerprint)
+}
+
 // GetKubernetesBaremetalNode mocks base method.
 func (m *MockHostsService) GetKubernetesBaremetalNode(ctx context.Context, id string) (*serverscom.KubernetesBaremetalNode, error) {
 	m.ctrl.T.Helper()
@@ -674,6 +749,36 @@ func (m *MockHostsService) GetSBMServer(ctx context.Context, id string) (*server
 func (mr *MockHostsServiceMockRecorder) GetSBMServer(ctx, id any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetSBMServer", reflect.TypeOf((*MockHostsService)(nil).GetSBMServer), ctx, id)
+}
+
+// GetSBMServerNetwork mocks base method.
+func (m *MockHostsService) GetSBMServerNetwork(ctx context.Context, serverID, networkID string) (*serverscom.Network, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetSBMServerNetwork", ctx, serverID, networkID)
+	ret0, _ := ret[0].(*serverscom.Network)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetSBMServerNetwork indicates an expected call of GetSBMServerNetwork.
+func (mr *MockHostsServiceMockRecorder) GetSBMServerNetwork(ctx, serverID, networkID any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetSBMServerNetwork", reflect.TypeOf((*MockHostsService)(nil).GetSBMServerNetwork), ctx, serverID, networkID)
+}
+
+// GetSBMServerNetworkUsage mocks base method.
+func (m *MockHostsService) GetSBMServerNetworkUsage(ctx context.Context, id string) (*serverscom.NetworkUsage, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetSBMServerNetworkUsage", ctx, id)
+	ret0, _ := ret[0].(*serverscom.NetworkUsage)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetSBMServerNetworkUsage indicates an expected call of GetSBMServerNetworkUsage.
+func (mr *MockHostsServiceMockRecorder) GetSBMServerNetworkUsage(ctx, id any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetSBMServerNetworkUsage", reflect.TypeOf((*MockHostsService)(nil).GetSBMServerNetworkUsage), ctx, id)
 }
 
 // KubernetesBaremetalNodeDriveSlots mocks base method.
@@ -954,6 +1059,20 @@ func (m *MockHostsService) ReleaseSBMServer(ctx context.Context, id string) (*se
 func (mr *MockHostsServiceMockRecorder) ReleaseSBMServer(ctx, id any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReleaseSBMServer", reflect.TypeOf((*MockHostsService)(nil).ReleaseSBMServer), ctx, id)
+}
+
+// SBMServerNetworks mocks base method.
+func (m *MockHostsService) SBMServerNetworks(id string) serverscom.Collection[serverscom.Network] {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "SBMServerNetworks", id)
+	ret0, _ := ret[0].(serverscom.Collection[serverscom.Network])
+	return ret0
+}
+
+// SBMServerNetworks indicates an expected call of SBMServerNetworks.
+func (mr *MockHostsServiceMockRecorder) SBMServerNetworks(id any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SBMServerNetworks", reflect.TypeOf((*MockHostsService)(nil).SBMServerNetworks), id)
 }
 
 // SBMServerPTRRecords mocks base method.
