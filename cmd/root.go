@@ -9,7 +9,6 @@ import (
 	cloudinstances "github.com/serverscom/srvctl/cmd/entities/cloud-instances"
 	cloudregions "github.com/serverscom/srvctl/cmd/entities/cloud-regions"
 	cloudvolumes "github.com/serverscom/srvctl/cmd/entities/cloud-volumes"
-	"github.com/serverscom/srvctl/cmd/entities/dns"
 	"github.com/serverscom/srvctl/cmd/entities/drivemodels"
 	"github.com/serverscom/srvctl/cmd/entities/hosts"
 	"github.com/serverscom/srvctl/cmd/entities/invoices"
@@ -35,6 +34,19 @@ import (
 	"github.com/spf13/cobra"
 )
 
+const (
+	groupResources = "resources"
+	groupConfig    = "config"
+	groupOther     = "other"
+)
+
+func addGroupedCommands(parent *cobra.Command, groupID string, cmds ...*cobra.Command) {
+	for _, c := range cmds {
+		c.GroupID = groupID
+		parent.AddCommand(c)
+	}
+}
+
 func NewRootCmd(version string) *cobra.Command {
 	cobra.EnableTraverseRunHooks = true
 
@@ -51,43 +63,55 @@ func NewRootCmd(version string) *cobra.Command {
 	// Global flags
 	base.AddGlobalFlags(cmd)
 
+	cmd.AddGroup(
+		&cobra.Group{ID: groupResources, Title: "Resource Commands:"},
+		&cobra.Group{ID: groupConfig, Title: "Configuration Commands:"},
+		&cobra.Group{ID: groupOther, Title: "Other Commands:"},
+	)
+
 	clientFactory := &client.DefaultClientFactory{}
 
-	// Add commands
-	cmd.AddCommand(login.NewCmd(cmdContext, clientFactory))
-	cmd.AddCommand(context.NewCmd(cmdContext))
-	cmd.AddCommand(config.NewCmd(cmdContext))
+	// Configuration/CLI commands
+	addGroupedCommands(cmd, groupConfig,
+		login.NewCmd(cmdContext, clientFactory),
+		context.NewCmd(cmdContext),
+		config.NewCmd(cmdContext),
+	)
 
-	// resources comands
-	cmd.AddCommand(sshkeys.NewCmd(cmdContext))
-	cmd.AddCommand(hosts.NewCmd(cmdContext))
-	cmd.AddCommand(hosts.NewEBMCmd(cmdContext))
-	cmd.AddCommand(hosts.NewKBMCmd(cmdContext))
-	cmd.AddCommand(hosts.NewSBMCmd(cmdContext))
-	cmd.AddCommand(ssl.NewCmd(cmdContext))
-	cmd.AddCommand(loadbalancerclusters.NewCmd(cmdContext))
-	cmd.AddCommand(loadbalancers.NewCmd(cmdContext))
-	cmd.AddCommand(racks.NewCmd(cmdContext))
-	cmd.AddCommand(invoices.NewCmd(cmdContext))
-	cmd.AddCommand(account.NewCmd(cmdContext))
-	cmd.AddCommand(locations.NewCmd(cmdContext))
-	cmd.AddCommand(k8s.NewCmd(cmdContext))
-	cmd.AddCommand(uplinkmodels.NewCmd(cmdContext))
-	cmd.AddCommand(uplinkbandwidths.NewCmd(cmdContext))
-	cmd.AddCommand(servermodels.NewCmd(cmdContext))
-	cmd.AddCommand(drivemodels.NewCmd(cmdContext))
-	cmd.AddCommand(serverosoptions.NewCmd(cmdContext))
-	cmd.AddCommand(serverramoptions.NewCmd(cmdContext))
-	cmd.AddCommand(sbmosoptions.NewCmd(cmdContext))
-	cmd.AddCommand(sbmmodels.NewCmd(cmdContext))
-	cmd.AddCommand(l2segments.NewCmd(cmdContext))
-	cmd.AddCommand(networkpools.NewCmd(cmdContext))
-	cmd.AddCommand(cloudinstances.NewCmd(cmdContext))
-	cmd.AddCommand(cloudregions.NewCmd(cmdContext))
-	cmd.AddCommand(cloudvolumes.NewCmd(cmdContext))
-	cmd.AddCommand(cloudbackups.NewCmd(cmdContext))
-	cmd.AddCommand(rbsvolumes.NewCmd(cmdContext))
-	cmd.AddCommand(dns.NewCmd(cmdContext))
+	// Resource commands
+	addGroupedCommands(cmd, groupResources,
+		sshkeys.NewCmd(cmdContext),
+		hosts.NewCmd(cmdContext),
+		hosts.NewEBMCmd(cmdContext),
+		hosts.NewKBMCmd(cmdContext),
+		hosts.NewSBMCmd(cmdContext),
+		ssl.NewCmd(cmdContext),
+		loadbalancerclusters.NewCmd(cmdContext),
+		loadbalancers.NewCmd(cmdContext),
+		racks.NewCmd(cmdContext),
+		invoices.NewCmd(cmdContext),
+		account.NewCmd(cmdContext),
+		locations.NewCmd(cmdContext),
+		k8s.NewCmd(cmdContext),
+		uplinkmodels.NewCmd(cmdContext),
+		uplinkbandwidths.NewCmd(cmdContext),
+		servermodels.NewCmd(cmdContext),
+		drivemodels.NewCmd(cmdContext),
+		serverosoptions.NewCmd(cmdContext),
+		serverramoptions.NewCmd(cmdContext),
+		sbmosoptions.NewCmd(cmdContext),
+		sbmmodels.NewCmd(cmdContext),
+		l2segments.NewCmd(cmdContext),
+		networkpools.NewCmd(cmdContext),
+		cloudinstances.NewCmd(cmdContext),
+		cloudregions.NewCmd(cmdContext),
+		cloudvolumes.NewCmd(cmdContext),
+		cloudbackups.NewCmd(cmdContext),
+		rbsvolumes.NewCmd(cmdContext),
+	)
+
+	cmd.SetHelpCommandGroupID(groupOther)
+	cmd.SetCompletionCommandGroupID(groupOther)
 
 	return cmd
 }
