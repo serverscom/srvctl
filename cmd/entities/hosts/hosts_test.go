@@ -85,6 +85,8 @@ var (
 	}
 	netTitle    = "Some Net"
 	cidr        = "100.0.8.0/29"
+	netFirstIP  = "100.0.8.2"
+	netGateway  = "100.0.8.1"
 	testNetwork = serverscom.Network{
 		ID:                 testNetworkId,
 		Title:              &netTitle,
@@ -94,8 +96,18 @@ var (
 		InterfaceType:      "public",
 		DistributionMethod: "gateway",
 		Additional:         false,
+		FirstIP:            &netFirstIP,
+		Gateway:            &netGateway,
 		Created:            fixedTime,
 		Updated:            fixedTime,
+	}
+	testNetworkUsage = serverscom.NetworkUsage{
+		Type: "public",
+		Utilization: &serverscom.Utilization{
+			Value:  100,
+			Commit: 50,
+			Unit:   "GB",
+		},
 	}
 	testDriveModel = serverscom.DriveModel{
 		ID:         int64(10),
@@ -2481,6 +2493,623 @@ func TestListKBMNetworksCmd(t *testing.T) {
 			cmd := builder.Build()
 
 			err := cmd.Execute()
+
+			if tc.expectError {
+				g.Expect(err).To(HaveOccurred())
+			} else {
+				g.Expect(err).To(BeNil())
+				g.Expect(builder.GetOutput()).To(BeEquivalentTo(string(tc.expectedOutput)))
+			}
+		})
+	}
+}
+
+func TestGetSBMNetworkCmd(t *testing.T) {
+	testCases := []struct {
+		name           string
+		id             string
+		networkID      string
+		output         string
+		expectedOutput []byte
+		expectError    bool
+	}{
+		{
+			name:           "get SBM network in default format",
+			id:             testId,
+			networkID:      testNetworkId,
+			output:         "",
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "get_sbm_network.txt")),
+		},
+		{
+			name:           "get SBM network in JSON format",
+			id:             testId,
+			networkID:      testNetworkId,
+			output:         "json",
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "get_sbm_network.json")),
+		},
+		{
+			name:           "get SBM network in YAML format",
+			id:             testId,
+			networkID:      testNetworkId,
+			output:         "yaml",
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "get_sbm_network.yaml")),
+		},
+		{
+			name:        "get SBM network with error",
+			id:          testId,
+			networkID:   testNetworkId,
+			expectError: true,
+		},
+	}
+
+	mockCtrl := gomock.NewController(t)
+	defer mockCtrl.Finish()
+
+	hostsServiceHandler := mocks.NewMockHostsService(mockCtrl)
+	scClient := serverscom.NewClientWithEndpoint("", "")
+	scClient.Hosts = hostsServiceHandler
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			g := NewWithT(t)
+
+			var err error
+			if tc.expectError {
+				err = errors.New("some error")
+			}
+			hostsServiceHandler.EXPECT().
+				GetSBMServerNetwork(gomock.Any(), tc.id, tc.networkID).
+				Return(&testNetwork, err)
+
+			testCmdContext := testutils.NewTestCmdContext(scClient)
+			hostsCmd := NewCmd(testCmdContext)
+
+			args := []string{
+				"hosts", "sbm", "get-network", tc.id,
+				"--network-id", tc.networkID,
+			}
+			if tc.output != "" {
+				args = append(args, "--output", tc.output)
+			}
+
+			builder := testutils.NewTestCommandBuilder().
+				WithCommand(hostsCmd).
+				WithArgs(args)
+
+			cmd := builder.Build()
+			err = cmd.Execute()
+
+			if tc.expectError {
+				g.Expect(err).To(HaveOccurred())
+			} else {
+				g.Expect(err).To(BeNil())
+				g.Expect(builder.GetOutput()).To(BeEquivalentTo(string(tc.expectedOutput)))
+			}
+		})
+	}
+}
+
+func TestListSBMNetworksCmd(t *testing.T) {
+	testNetwork1 := testNetwork
+	testNetwork1.ID = testNetworkId
+	testNetwork2 := testNetwork1
+	testNetwork2.ID = "testNetId2"
+	netTitle2 := "Another Net"
+	testNetwork2.Title = &netTitle2
+
+	testCases := []struct {
+		name           string
+		output         string
+		args           []string
+		expectedOutput []byte
+		expectError    bool
+		configureMock  func(*mocks.MockCollection[serverscom.Network])
+	}{
+		{
+			name:           "list all SBM networks",
+			output:         "json",
+			args:           []string{"testServerId", "-A"},
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_sbm_networks_all.json")),
+			configureMock: func(mock *mocks.MockCollection[serverscom.Network]) {
+				mock.EXPECT().
+					Collect(gomock.Any()).
+					Return([]serverscom.Network{
+						testNetwork1,
+						testNetwork2,
+					}, nil)
+			},
+		},
+		{
+			name:           "list SBM networks",
+			output:         "json",
+			args:           []string{"testServerId"},
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_sbm_networks.json")),
+			configureMock: func(mock *mocks.MockCollection[serverscom.Network]) {
+				mock.EXPECT().
+					List(gomock.Any()).
+					Return([]serverscom.Network{
+						testNetwork1,
+					}, nil)
+			},
+		},
+		{
+			name:           "list SBM networks with template",
+			args:           []string{"testServerId", "--template", "{{range .}}Network: {{.ID}}  Title: {{.Title}}\n{{end}}"},
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_sbm_networks_template.txt")),
+			configureMock: func(mock *mocks.MockCollection[serverscom.Network]) {
+				mock.EXPECT().
+					List(gomock.Any()).
+					Return([]serverscom.Network{
+						testNetwork1,
+						testNetwork2,
+					}, nil)
+			},
+		},
+		{
+			name:           "list SBM networks with pageView",
+			args:           []string{"testServerId", "--page-view"},
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_sbm_networks_pageview.txt")),
+			configureMock: func(mock *mocks.MockCollection[serverscom.Network]) {
+				mock.EXPECT().
+					List(gomock.Any()).
+					Return([]serverscom.Network{
+						testNetwork1,
+						testNetwork2,
+					}, nil)
+			},
+		},
+		{
+			name:        "list SBM networks with error",
+			args:        []string{"testServerId"},
+			expectError: true,
+			configureMock: func(mock *mocks.MockCollection[serverscom.Network]) {
+				mock.EXPECT().
+					List(gomock.Any()).
+					Return(nil, errors.New("some error"))
+			},
+		},
+	}
+
+	mockCtrl := gomock.NewController(t)
+	defer mockCtrl.Finish()
+
+	hostsServiceHandler := mocks.NewMockHostsService(mockCtrl)
+	collectionHandler := mocks.NewMockCollection[serverscom.Network](mockCtrl)
+
+	hostsServiceHandler.EXPECT().
+		SBMServerNetworks(gomock.Any()).
+		Return(collectionHandler).
+		AnyTimes()
+
+	collectionHandler.EXPECT().
+		SetParam(gomock.Any(), gomock.Any()).
+		Return(collectionHandler).
+		AnyTimes()
+
+	scClient := serverscom.NewClientWithEndpoint("", "")
+	scClient.Hosts = hostsServiceHandler
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			g := NewWithT(t)
+
+			if tc.configureMock != nil {
+				tc.configureMock(collectionHandler)
+			}
+
+			testCmdContext := testutils.NewTestCmdContext(scClient)
+			hostsCmd := NewCmd(testCmdContext)
+
+			args := []string{"hosts", "sbm", "list-networks"}
+			if len(tc.args) > 0 {
+				args = append(args, tc.args...)
+			}
+			if tc.output != "" {
+				args = append(args, "--output", tc.output)
+			}
+
+			builder := testutils.NewTestCommandBuilder().
+				WithCommand(hostsCmd).
+				WithArgs(args)
+
+			cmd := builder.Build()
+
+			err := cmd.Execute()
+
+			if tc.expectError {
+				g.Expect(err).To(HaveOccurred())
+			} else {
+				g.Expect(err).To(BeNil())
+				g.Expect(builder.GetOutput()).To(BeEquivalentTo(string(tc.expectedOutput)))
+			}
+		})
+	}
+}
+
+func TestAddSBMNetworkCmd(t *testing.T) {
+	expectedInputPrivate := serverscom.NetworkInput{
+		DistributionMethod: "gateway",
+		Mask:               29,
+	}
+
+	testCases := []struct {
+		name           string
+		output         string
+		args           []string
+		configureMock  func(*mocks.MockHostsService)
+		expectedOutput []byte
+		expectError    bool
+	}{
+		{
+			name:   "add private SBM network",
+			output: "json",
+			args: []string{
+				testId,
+				"--type", "private",
+				"--mask", "29",
+				"--distribution-method", "gateway",
+			},
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "get_sbm_network.json")),
+			configureMock: func(mock *mocks.MockHostsService) {
+				mock.EXPECT().
+					AddSBMServerPrivateIPv4Network(gomock.Any(), testId, expectedInputPrivate).
+					Return(&testNetwork, nil)
+			},
+		},
+		{
+			name: "add public SBM network is not supported",
+			args: []string{
+				testId,
+				"--type", "public",
+				"--mask", "29",
+			},
+			expectError: true,
+		},
+		{
+			name: "add SBM network with unsupported mask",
+			args: []string{
+				testId,
+				"--type", "private",
+				"--mask", "24",
+			},
+			expectError: true,
+		},
+		{
+			name:   "add SBM network with error",
+			output: "json",
+			args: []string{
+				testId,
+				"--type", "private",
+				"--mask", "29",
+			},
+			expectError: true,
+			configureMock: func(mock *mocks.MockHostsService) {
+				mock.EXPECT().
+					AddSBMServerPrivateIPv4Network(gomock.Any(), testId, expectedInputPrivate).
+					Return(nil, errors.New("some error"))
+			},
+		},
+	}
+
+	mockCtrl := gomock.NewController(t)
+	defer mockCtrl.Finish()
+
+	hostsServiceHandler := mocks.NewMockHostsService(mockCtrl)
+
+	scClient := serverscom.NewClientWithEndpoint("", "")
+	scClient.Hosts = hostsServiceHandler
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			g := NewWithT(t)
+
+			if tc.configureMock != nil {
+				tc.configureMock(hostsServiceHandler)
+			}
+
+			testCmdContext := testutils.NewTestCmdContext(scClient)
+			hostsCmd := NewCmd(testCmdContext)
+
+			args := append([]string{"hosts", "sbm", "add-network"}, tc.args...)
+			if tc.output != "" {
+				args = append(args, "--output", tc.output)
+			}
+
+			builder := testutils.NewTestCommandBuilder().
+				WithCommand(hostsCmd).
+				WithArgs(args)
+
+			cmd := builder.Build()
+
+			err := cmd.Execute()
+
+			if tc.expectError {
+				g.Expect(err).To(HaveOccurred())
+			} else {
+				g.Expect(err).To(BeNil())
+				g.Expect(builder.GetOutput()).To(BeEquivalentTo(string(tc.expectedOutput)))
+			}
+		})
+	}
+}
+
+func TestDeleteSBMNetworkCmd(t *testing.T) {
+	testCases := []struct {
+		name           string
+		id             string
+		networkID      string
+		output         string
+		expectedOutput []byte
+		expectError    bool
+	}{
+		{
+			name:           "delete SBM network",
+			id:             testId,
+			networkID:      testNetworkId,
+			output:         "json",
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "get_sbm_network.json")),
+		},
+		{
+			name:        "delete SBM network with error",
+			id:          testId,
+			networkID:   testNetworkId,
+			expectError: true,
+		},
+	}
+
+	mockCtrl := gomock.NewController(t)
+	defer mockCtrl.Finish()
+
+	hostsServiceHandler := mocks.NewMockHostsService(mockCtrl)
+
+	scClient := serverscom.NewClientWithEndpoint("", "")
+	scClient.Hosts = hostsServiceHandler
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			g := NewWithT(t)
+
+			var err error
+			if tc.expectError {
+				err = errors.New("some error")
+			}
+			hostsServiceHandler.EXPECT().
+				DeleteSBMServerNetwork(gomock.Any(), tc.id, tc.networkID).
+				Return(&testNetwork, err)
+
+			testCmdContext := testutils.NewTestCmdContext(scClient)
+			hostsCmd := NewCmd(testCmdContext)
+
+			args := []string{"hosts", "sbm", "delete-network", tc.id, "--network-id", tc.networkID}
+			if tc.output != "" {
+				args = append(args, "--output", tc.output)
+			}
+
+			builder := testutils.NewTestCommandBuilder().
+				WithCommand(hostsCmd).
+				WithArgs(args)
+
+			cmd := builder.Build()
+			err = cmd.Execute()
+
+			if tc.expectError {
+				g.Expect(err).To(HaveOccurred())
+			} else {
+				g.Expect(err).To(BeNil())
+				g.Expect(builder.GetOutput()).To(BeEquivalentTo(string(tc.expectedOutput)))
+			}
+		})
+	}
+}
+
+func TestActivateEBMIPv6NetworkCmd(t *testing.T) {
+	testCases := []struct {
+		name           string
+		id             string
+		output         string
+		expectedOutput []byte
+		expectError    bool
+	}{
+		{
+			name:           "activate DS IPv6 network",
+			id:             testId,
+			output:         "json",
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "get_ebm_network.json")),
+		},
+		{
+			name:        "activate DS IPv6 network with error",
+			id:          testId,
+			expectError: true,
+		},
+	}
+
+	mockCtrl := gomock.NewController(t)
+	defer mockCtrl.Finish()
+
+	hostsServiceHandler := mocks.NewMockHostsService(mockCtrl)
+	scClient := serverscom.NewClientWithEndpoint("", "")
+	scClient.Hosts = hostsServiceHandler
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			g := NewWithT(t)
+
+			var err error
+			if tc.expectError {
+				err = errors.New("some error")
+			}
+			hostsServiceHandler.EXPECT().
+				ActivateDedicatedServerPubliIPv6Network(gomock.Any(), tc.id).
+				Return(&testNetwork, err)
+
+			testCmdContext := testutils.NewTestCmdContext(scClient)
+			hostsCmd := NewCmd(testCmdContext)
+
+			args := []string{"hosts", "ebm", "activate-ipv6-network", tc.id}
+			if tc.output != "" {
+				args = append(args, "--output", tc.output)
+			}
+
+			builder := testutils.NewTestCommandBuilder().
+				WithCommand(hostsCmd).
+				WithArgs(args)
+
+			cmd := builder.Build()
+			err = cmd.Execute()
+
+			if tc.expectError {
+				g.Expect(err).To(HaveOccurred())
+			} else {
+				g.Expect(err).To(BeNil())
+				g.Expect(builder.GetOutput()).To(BeEquivalentTo(string(tc.expectedOutput)))
+			}
+		})
+	}
+}
+
+func TestGetEBMNetworkUsageCmd(t *testing.T) {
+	testCases := []struct {
+		name           string
+		id             string
+		output         string
+		expectedOutput []byte
+		expectError    bool
+	}{
+		{
+			name:           "get DS network usage in default format",
+			id:             testId,
+			output:         "",
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "get_ebm_network_usage.txt")),
+		},
+		{
+			name:           "get DS network usage in JSON format",
+			id:             testId,
+			output:         "json",
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "get_ebm_network_usage.json")),
+		},
+		{
+			name:           "get DS network usage in YAML format",
+			id:             testId,
+			output:         "yaml",
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "get_ebm_network_usage.yaml")),
+		},
+		{
+			name:        "get DS network usage with error",
+			id:          testId,
+			expectError: true,
+		},
+	}
+
+	mockCtrl := gomock.NewController(t)
+	defer mockCtrl.Finish()
+
+	hostsServiceHandler := mocks.NewMockHostsService(mockCtrl)
+	scClient := serverscom.NewClientWithEndpoint("", "")
+	scClient.Hosts = hostsServiceHandler
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			g := NewWithT(t)
+
+			var err error
+			if tc.expectError {
+				err = errors.New("some error")
+			}
+			hostsServiceHandler.EXPECT().
+				GetDedicatedServerNetworkUsage(gomock.Any(), tc.id).
+				Return(&testNetworkUsage, err)
+
+			testCmdContext := testutils.NewTestCmdContext(scClient)
+			hostsCmd := NewCmd(testCmdContext)
+
+			args := []string{"hosts", "ebm", "network-usage", tc.id}
+			if tc.output != "" {
+				args = append(args, "--output", tc.output)
+			}
+
+			builder := testutils.NewTestCommandBuilder().
+				WithCommand(hostsCmd).
+				WithArgs(args)
+
+			cmd := builder.Build()
+			err = cmd.Execute()
+
+			if tc.expectError {
+				g.Expect(err).To(HaveOccurred())
+			} else {
+				g.Expect(err).To(BeNil())
+				g.Expect(builder.GetOutput()).To(BeEquivalentTo(string(tc.expectedOutput)))
+			}
+		})
+	}
+}
+
+func TestGetSBMNetworkUsageCmd(t *testing.T) {
+	testCases := []struct {
+		name           string
+		id             string
+		output         string
+		expectedOutput []byte
+		expectError    bool
+	}{
+		{
+			name:           "get SBM network usage in default format",
+			id:             testId,
+			output:         "",
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "get_sbm_network_usage.txt")),
+		},
+		{
+			name:           "get SBM network usage in JSON format",
+			id:             testId,
+			output:         "json",
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "get_sbm_network_usage.json")),
+		},
+		{
+			name:           "get SBM network usage in YAML format",
+			id:             testId,
+			output:         "yaml",
+			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "get_sbm_network_usage.yaml")),
+		},
+		{
+			name:        "get SBM network usage with error",
+			id:          testId,
+			expectError: true,
+		},
+	}
+
+	mockCtrl := gomock.NewController(t)
+	defer mockCtrl.Finish()
+
+	hostsServiceHandler := mocks.NewMockHostsService(mockCtrl)
+	scClient := serverscom.NewClientWithEndpoint("", "")
+	scClient.Hosts = hostsServiceHandler
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			g := NewWithT(t)
+
+			var err error
+			if tc.expectError {
+				err = errors.New("some error")
+			}
+			hostsServiceHandler.EXPECT().
+				GetSBMServerNetworkUsage(gomock.Any(), tc.id).
+				Return(&testNetworkUsage, err)
+
+			testCmdContext := testutils.NewTestCmdContext(scClient)
+			hostsCmd := NewCmd(testCmdContext)
+
+			args := []string{"hosts", "sbm", "network-usage", tc.id}
+			if tc.output != "" {
+				args = append(args, "--output", tc.output)
+			}
+
+			builder := testutils.NewTestCommandBuilder().
+				WithCommand(hostsCmd).
+				WithArgs(args)
+
+			cmd := builder.Build()
+			err = cmd.Execute()
 
 			if tc.expectError {
 				g.Expect(err).To(HaveOccurred())
