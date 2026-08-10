@@ -25,87 +25,13 @@ type HostManagers struct {
 	reinstallMgr HostReinstaller
 }
 
+// NewCmd builds the slim top-level "hosts" command that only exposes the
+// cross-type list. The per-type commands (ebm/kbm/sbm) are top-level commands
+// of their own, built by NewEBMCmd/NewKBMCmd/NewSBMCmd.
 func NewCmd(cmdContext *base.CmdContext) *cobra.Command {
 	entitiesMap, err := getHostsEntities()
 	if err != nil {
 		log.Fatal(err)
-	}
-
-	hostTypeCmds := []HostTypeCmd{
-		{
-			use:        "ebm",
-			shortDesc:  "Manage enterprise bare metal servers",
-			entityName: "Enterprise Bare Metal",
-			typeFlag:   "dedicated_server",
-			managers: HostManagers{
-				getMgr:       &EBMGetMgr{},
-				powerMgr:     &EBMPowerMgr{},
-				reinstallMgr: &EBMReinstallMgr{},
-			},
-			extraCmds: []func(*base.CmdContext) *cobra.Command{
-				newAddEBMCmd,
-				newUpdateEBMCmd,
-				newListEBMDriveSlotsCmd,
-				newListEBMConnectionsCmd,
-				newListEBMPTRCmd,
-				newCreateEBMPTRCmd,
-				newDeleteEBMPTRCmd,
-				newEBMAbortReleaseCmd,
-				newEBMScheduleReleaseCmd,
-				newListEBMNetworksCmd,
-				newGetEBMNetworkCmd,
-				newAddEBMNetworkCmd,
-				newDeleteEBMNetworkCmd,
-				newActivateEBMIPv6NetworkCmd,
-				newGetEBMNetworkUsageCmd,
-				newListEBMCmd,
-				newListEBMServicesCmd,
-				newListEBMFeaturesCmd,
-				newEBMFeatureSetCmd,
-				newGetEBMOOBCredsCmd,
-			},
-		},
-		{
-			use:        "kbm",
-			shortDesc:  "Manage kubernetes baremetal nodes",
-			entityName: "Kubernetes baremetal nodes",
-			typeFlag:   "kubernetes_baremetal_node",
-			managers: HostManagers{
-				getMgr:   &KBMGetMgr{},
-				powerMgr: &KBMPowerMgr{},
-			},
-			extraCmds: []func(*base.CmdContext) *cobra.Command{
-				newUpdateKBMCmd,
-				newListKBMCmd,
-				newListKBMNetworksCmd,
-				newListKBMDriveSlotsCmd,
-			},
-		},
-		{
-			use:        "sbm",
-			shortDesc:  "Manage scalable baremetal servers",
-			entityName: "Scalable baremetal servers",
-			typeFlag:   "sbm_server",
-			managers: HostManagers{
-				getMgr:       &SBMGetMgr{},
-				powerMgr:     &SBMPowerMgr{},
-				reinstallMgr: &SBMReinstallMgr{},
-			},
-			extraCmds: []func(*base.CmdContext) *cobra.Command{
-				newAddSBMCmd,
-				newUpdateSBMCmd,
-				newSBMReleaseCmd,
-				newListSBMCmd,
-				newListSBMNetworksCmd,
-				newGetSBMNetworkCmd,
-				newAddSBMNetworkCmd,
-				newDeleteSBMNetworkCmd,
-				newGetSBMNetworkUsageCmd,
-				newListSBMPTRCmd,
-				newCreateSBMPTRCmd,
-				newDeleteSBMPTRCmd,
-			},
-		},
 	}
 
 	cmd := &cobra.Command{
@@ -123,21 +49,26 @@ func NewCmd(cmdContext *base.CmdContext) *cobra.Command {
 	// hosts list cmd
 	cmd.AddCommand(newListCmd(cmdContext))
 
-	for _, ht := range hostTypeCmds {
-		cmd.AddCommand(newHostTypeCmd(cmdContext, ht))
-	}
-
 	base.AddFormatFlags(cmd)
 
 	return cmd
 }
 
 func newHostTypeCmd(cmdContext *base.CmdContext, hostTypeCmd HostTypeCmd) *cobra.Command {
+	entitiesMap, err := getHostsEntities()
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	hostCmd := &cobra.Command{
 		Use:   hostTypeCmd.use,
 		Short: hostTypeCmd.shortDesc,
-		Args:  base.NoArgs,
-		Run:   base.UsageRun,
+		PersistentPreRunE: base.CombinePreRunE(
+			base.CheckFormatterFlags(cmdContext, entitiesMap),
+			base.CheckEmptyContexts(cmdContext),
+		),
+		Args: base.NoArgs,
+		Run:  base.UsageRun,
 	}
 
 	hostCmd.AddCommand(newGetCmd(cmdContext, &hostTypeCmd))
@@ -153,6 +84,8 @@ func newHostTypeCmd(cmdContext *base.CmdContext, hostTypeCmd HostTypeCmd) *cobra
 	for _, cmdFunc := range hostTypeCmd.extraCmds {
 		hostCmd.AddCommand(cmdFunc(cmdContext))
 	}
+
+	base.AddFormatFlags(hostCmd)
 
 	return hostCmd
 }
