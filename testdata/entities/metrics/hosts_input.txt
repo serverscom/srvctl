@@ -1,0 +1,16 @@
+# HELP: serverscom_hosts_count Count of the hosts
+# TYPE: serverscom_hosts_count gauge
+serverscom_hosts_count{chassis_name="Dell R440 - Silver 4114 - 2.5\"",host_type="dedicated_server",location_id="52",location_code="LUX3",rack_id="0pEOrzdl",rack_type="shared"} 1
+serverscom_hosts_count{chassis_name="Dell R330 - E3-1230 v6 - 3.5\"",host_type="dedicated_server",location_id="23",location_code="LON1",rack_id="5VmrzVmx",rack_type="shared"} 2
+
+# HELP: serverscom_host_monthly_sent_bytes_total Host monthly sent bytes total
+# TYPE: serverscom_host_monthly_sent_bytes_total counter
+serverscom_host_monthly_sent_bytes_total{host_id="jpAAGYJp",title="lux3test3-reordered",traffic_type="private",chassis_name="Dell R440 - Silver 4114 - 2.5\"",host_type="dedicated_server",location_id="52",location_code="LUX3",rack_id="0pEOrzdl",rack_type="shared"} 145497332
+serverscom_host_monthly_sent_bytes_total{host_id="jpAAGYJp",title="lux3test3-reordered",traffic_type="public",chassis_name="Dell R440 - Silver 4114 - 2.5\"",host_type="dedicated_server",location_id="52",location_code="LUX3",rack_id="0pEOrzdl",rack_type="shared"} 146447194
+serverscom_host_monthly_sent_bytes_total{host_id="5VmrzVmx",title="lon1-web-01",traffic_type="public",chassis_name="Dell R330 - E3-1230 v6 - 3.5\"",host_type="dedicated_server",location_id="23",location_code="LON1",rack_id="5VmrzVmx",rack_type="shared"} 1319413953331
+
+# HELP: serverscom_host_monthly_received_bytes_total Host monthly received bytes total
+# TYPE: serverscom_host_monthly_received_bytes_total counter
+serverscom_host_monthly_received_bytes_total{host_id="jpAAGYJp",title="lux3test3-reordered",traffic_type="private",chassis_name="Dell R440 - Silver 4114 - 2.5\"",host_type="dedicated_server",location_id="52",location_code="LUX3",rack_id="0pEOrzdl",rack_type="shared"} 619636079
+serverscom_host_monthly_received_bytes_total{host_id="jpAAGYJp",title="lux3test3-reordered",traffic_type="public",chassis_name="Dell R440 - Silver 4114 - 2.5\"",host_type="dedicated_server",location_id="52",location_code="LUX3",rack_id="0pEOrzdl",rack_type="shared"} 540736516
+serverscom_host_monthly_received_bytes_total{host_id="5VmrzVmx",title="lon1-web-01",traffic_type="public",chassis_name="Dell R330 - E3-1230 v6 - 3.5\"",host_type="dedicated_server",location_id="23",location_code="LON1",rack_id="5VmrzVmx",rack_type="shared"} 3775348762345

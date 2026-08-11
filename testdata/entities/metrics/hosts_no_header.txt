@@ -1,0 +1,2 @@
+5VmrzVmx   lon1-web-01           LON1   dedicated_server   1.2 TiB     3.4 TiB     0 B         0 B
+jpAAGYJp   lux3test3-reordered   LUX3   dedicated_server   139.7 MiB   515.7 MiB   138.8 MiB   590.9 MiB

@@ -1,0 +1,3 @@
+Rack ID    ATS Watts   ATS Amperes   ATSs
+0pEOrzdl   1240.00     5.60          1
+7xKLmnQp   0.00        0.00          0

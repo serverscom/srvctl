@@ -1,0 +1,29 @@
+Host ID:       5VmrzVmx
+Title:         lon1-web-01
+Location:      LON1
+Location ID:   23
+Type:          dedicated_server
+Chassis:       Dell R330 - E3-1230 v6 - 3.5"
+Rack ID:       5VmrzVmx
+Rack Type:     shared
+Public Sent:   1.2 TiB
+Public Recv:   3.4 TiB
+Private Sent:  0 B
+Private Recv:  0 B
+Total Sent:    1.2 TiB
+Total Recv:    3.4 TiB
+---
+Host ID:       jpAAGYJp
+Title:         lux3test3-reordered
+Location:      LUX3
+Location ID:   52
+Type:          dedicated_server
+Chassis:       Dell R440 - Silver 4114 - 2.5"
+Rack ID:       0pEOrzdl
+Rack Type:     shared
+Public Sent:   139.7 MiB
+Public Recv:   515.7 MiB
+Private Sent:  138.8 MiB
+Private Recv:  590.9 MiB
+Total Sent:    278.4 MiB
+Total Recv:    1.1 GiB
