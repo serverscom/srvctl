@@ -21,6 +21,7 @@ type Formatter struct {
 	fieldsToShow []string
 	fieldList    bool
 	header       bool
+	cmdName      string
 }
 
 // NewFormatter creates new formatter with specified io.Writer
@@ -40,6 +41,7 @@ func NewFormatter(cmd *cobra.Command, manager *config.Manager) *Formatter {
 		fieldsToShow: fields,
 		fieldList:    fieldList,
 		header:       !noHeader,
+		cmdName:      cmd.Name(),
 	}
 }
 

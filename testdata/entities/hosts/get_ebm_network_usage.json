@@ -1,0 +1,8 @@
+{
+    "type": "public",
+    "utilization": {
+        "value": 100,
+        "commit": 50,
+        "unit": "GB"
+    }
+}

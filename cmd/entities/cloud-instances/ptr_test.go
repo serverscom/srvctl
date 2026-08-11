@@ -161,8 +161,8 @@ func TestAddPTRCmd(t *testing.T) {
 			output:         "json",
 			expectedOutput: testutils.ReadFixture(filepath.Join(ptrFixtureBasePath, "get.json")),
 			configureMock: func(mock *mocks.MockCloudComputingInstancesService) {
-				in := serverscom.PTRRecordCreateInput{
-					Domain:   testPTR.Domain,
+				in := serverscom.CloudComputingInstancePTRRecordCreateInput{
+					Data:     testPTR.Domain,
 					IP:       testPTR.IP,
 					TTL:      &testPTR.TTL,
 					Priority: &testPTR.Priority,
@@ -177,9 +177,9 @@ func TestAddPTRCmd(t *testing.T) {
 			args:        []string{testInstanceID, "--data", testPTR.Domain, "--ip", testPTR.IP},
 			expectError: true,
 			configureMock: func(mock *mocks.MockCloudComputingInstancesService) {
-				in := serverscom.PTRRecordCreateInput{
-					Domain: testPTR.Domain,
-					IP:     testPTR.IP,
+				in := serverscom.CloudComputingInstancePTRRecordCreateInput{
+					Data: testPTR.Domain,
+					IP:   testPTR.IP,
 				}
 				mock.EXPECT().
 					CreatePTRRecord(gomock.Any(), testInstanceID, in).

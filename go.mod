@@ -7,7 +7,7 @@ require (
 	github.com/creack/pty v1.1.24
 	github.com/jmespath/go-jmespath v0.4.0
 	github.com/onsi/gomega v1.42.1
-	github.com/serverscom/serverscom-go-client v1.0.33
+	github.com/serverscom/serverscom-go-client v1.1.2
 	github.com/spf13/cobra v1.10.2
 	github.com/spf13/pflag v1.0.10
 	github.com/spf13/viper v1.21.0
@@ -33,5 +33,5 @@ require (
 	go.yaml.in/yaml/v3 v3.0.4 // indirect
 	golang.org/x/net v0.57.0 // indirect
 	golang.org/x/sys v0.47.0 // indirect
-	gopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15 // indirect
+	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
 )

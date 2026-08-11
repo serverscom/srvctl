@@ -59,7 +59,7 @@ var (
 
 	cidr        = "127.1.182.0/24"
 	title       = "testNetwork"
-	testNetwork = serverscom.Network{
+	testNetwork = serverscom.L2SegmentNetwork{
 		ID:                 testID,
 		Title:              &title,
 		Status:             "new",
@@ -882,17 +882,17 @@ func TestListL2NetworksCmd(t *testing.T) {
 		args           []string
 		expectedOutput []byte
 		expectError    bool
-		configureMock  func(*mocks.MockCollection[serverscom.Network])
+		configureMock  func(*mocks.MockCollection[serverscom.L2SegmentNetwork])
 	}{
 		{
 			name:           "list all l2 networks",
 			output:         "json",
 			args:           []string{testID, "-A"},
 			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_networks_all.json")),
-			configureMock: func(mock *mocks.MockCollection[serverscom.Network]) {
+			configureMock: func(mock *mocks.MockCollection[serverscom.L2SegmentNetwork]) {
 				mock.EXPECT().
 					Collect(gomock.Any()).
-					Return([]serverscom.Network{n1, n2}, nil)
+					Return([]serverscom.L2SegmentNetwork{n1, n2}, nil)
 			},
 		},
 		{
@@ -900,37 +900,37 @@ func TestListL2NetworksCmd(t *testing.T) {
 			output:         "json",
 			args:           []string{testID},
 			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_networks.json")),
-			configureMock: func(mock *mocks.MockCollection[serverscom.Network]) {
+			configureMock: func(mock *mocks.MockCollection[serverscom.L2SegmentNetwork]) {
 				mock.EXPECT().
 					List(gomock.Any()).
-					Return([]serverscom.Network{n1}, nil)
+					Return([]serverscom.L2SegmentNetwork{n1}, nil)
 			},
 		},
 		{
 			name:           "list l2 networks with template",
 			args:           []string{testID, "--template", "{{range .}}ID: {{.ID}} Title: {{.Title}}\n{{end}}"},
 			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_networks_template.txt")),
-			configureMock: func(mock *mocks.MockCollection[serverscom.Network]) {
+			configureMock: func(mock *mocks.MockCollection[serverscom.L2SegmentNetwork]) {
 				mock.EXPECT().
 					List(gomock.Any()).
-					Return([]serverscom.Network{n1, n2}, nil)
+					Return([]serverscom.L2SegmentNetwork{n1, n2}, nil)
 			},
 		},
 		{
 			name:           "list l2 networks with pageView",
 			args:           []string{testID, "--page-view"},
 			expectedOutput: testutils.ReadFixture(filepath.Join(fixtureBasePath, "list_networks_pageview.txt")),
-			configureMock: func(mock *mocks.MockCollection[serverscom.Network]) {
+			configureMock: func(mock *mocks.MockCollection[serverscom.L2SegmentNetwork]) {
 				mock.EXPECT().
 					List(gomock.Any()).
-					Return([]serverscom.Network{n1, n2}, nil)
+					Return([]serverscom.L2SegmentNetwork{n1, n2}, nil)
 			},
 		},
 		{
 			name:        "list l2 networks error",
 			args:        []string{testID},
 			expectError: true,
-			configureMock: func(mock *mocks.MockCollection[serverscom.Network]) {
+			configureMock: func(mock *mocks.MockCollection[serverscom.L2SegmentNetwork]) {
 				mock.EXPECT().
 					List(gomock.Any()).
 					Return(nil, errors.New("some error"))
@@ -941,7 +941,7 @@ func TestListL2NetworksCmd(t *testing.T) {
 	mockCtrl := gomock.NewController(t)
 	defer mockCtrl.Finish()
 
-	collectionHandler := mocks.NewMockCollection[serverscom.Network](mockCtrl)
+	collectionHandler := mocks.NewMockCollection[serverscom.L2SegmentNetwork](mockCtrl)
 	l2ServiceHandler := mocks.NewMockL2SegmentsService(mockCtrl)
 	l2ServiceHandler.EXPECT().
 		Networks(testID).

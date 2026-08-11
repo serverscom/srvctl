@@ -18,7 +18,7 @@ JSON structure example:
     "location_id": "",
     "cluster_id": "",
     "store_logs": true,
-    "store_logs_region_id": "",
+    "store_logs_region_id": 0,
     "geoip": "true",
     "vhost_zones": [
         {
