@@ -3,12 +3,12 @@ Title:         rack-a
 Location:      LUX3
 Location ID:   52
 Hosts:         4
-Public Sent:   1.2 TiB
-Public Recv:   3.4 TiB
-Private Sent:  138.8 MiB
-Private Recv:  590.9 MiB
-Total Sent:    1.2 TiB
-Total Recv:    3.4 TiB
+Public Sent:   1.3 TB
+Public Recv:   3.8 TB
+Private Sent:  145.5 MB
+Private Recv:  619.6 MB
+Total Sent:    1.3 TB
+Total Recv:    3.8 TB
 PDU Watts:     1240.00
 PDU Amperes:   5.60
 PDUs:          2

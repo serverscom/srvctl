@@ -90,14 +90,15 @@ func bytesHandler(w io.Writer, v any, indent string, _ *Field) error {
 	return err
 }
 
-// humanBytes formats a number of bytes using binary units
+// humanBytes formats a number of bytes using decimal (SI) units, matching how
+// network traffic is conventionally reported (e.g. by ISPs, vnstat).
 func humanBytes(bytes float64) string {
-	const unit = 1024
+	const unit = 1000
 	if bytes < unit {
 		return fmt.Sprintf("%.0f B", bytes)
 	}
 
-	units := []string{"KiB", "MiB", "GiB", "TiB", "PiB", "EiB"}
+	units := []string{"KB", "MB", "GB", "TB", "PB", "EB"}
 	i := -1
 	for bytes >= unit && i < len(units)-1 {
 		bytes /= unit
