@@ -153,3 +153,6 @@
 | [srvctl rbs get-credentials](srvctl-rbs-get-credentials/description.md) | Remote Block Storage | This command provides iSCSI credentials for the selected remote block storage volume. |
 | [srvctl rbs reset-credentials](srvctl-rbs-reset-credentials/description.md) | Remote Block Storage | This command resets iSCSI credentials for the selected remote block storage volume. |
 
+| [srvctl metrics](srvctl-metrics/description.md) | Metrics | This command allows to get metrics for hosts and private racks. |
+| [srvctl metrics hosts](srvctl-metrics-hosts/description.md) | Metrics | This command provides metrics of all hosts of the account. |
+| [srvctl metrics racks](srvctl-metrics-racks/description.md) | Metrics | This command provides metrics of all private racks of the account. |

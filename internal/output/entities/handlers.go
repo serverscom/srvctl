@@ -62,6 +62,73 @@ func timeHandler(w io.Writer, v any, indent string, _ *Field) error {
 	}
 }
 
+// bytesHandler formats a number of bytes in human readable units
+func bytesHandler(w io.Writer, v any, indent string, _ *Field) error {
+	if indent != "" {
+		indent = "\t"
+	}
+	if v == nil {
+		_, err := fmt.Fprintf(w, "%s<none>", indent)
+		return err
+	}
+
+	var bytes float64
+	switch v := v.(type) {
+	case int:
+		bytes = float64(v)
+	case int64:
+		bytes = float64(v)
+	case uint64:
+		bytes = float64(v)
+	case float64:
+		bytes = v
+	default:
+		return fmt.Errorf("unsupported type: %T", v)
+	}
+
+	_, err := fmt.Fprintf(w, "%s%s", indent, humanBytes(bytes))
+	return err
+}
+
+// humanBytes formats a number of bytes using decimal (SI) units, matching how
+// network traffic is conventionally reported (e.g. by ISPs, vnstat).
+func humanBytes(bytes float64) string {
+	const unit = 1000
+	if bytes < unit {
+		return fmt.Sprintf("%.0f B", bytes)
+	}
+
+	units := []string{"KB", "MB", "GB", "TB", "PB", "EB"}
+	i := -1
+	for bytes >= unit && i < len(units)-1 {
+		bytes /= unit
+		i++
+	}
+	return fmt.Sprintf("%.1f %s", bytes, units[i])
+}
+
+// floatHandler formats a float value with a fixed precision to keep columns aligned
+func floatHandler(w io.Writer, v any, indent string, _ *Field) error {
+	if indent != "" {
+		indent = "\t"
+	}
+	if v == nil {
+		_, err := fmt.Fprintf(w, "%s<none>", indent)
+		return err
+	}
+
+	switch v := v.(type) {
+	case float32:
+		_, err := fmt.Fprintf(w, "%s%.2f", indent, v)
+		return err
+	case float64:
+		_, err := fmt.Fprintf(w, "%s%.2f", indent, v)
+		return err
+	default:
+		return fmt.Errorf("unsupported type: %T", v)
+	}
+}
+
 func mapPvHandler(w io.Writer, v any, indent string, _ *Field) error {
 	if v == nil {
 		_, err := fmt.Fprintf(w, "%s<none>", indent)

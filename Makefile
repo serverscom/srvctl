@@ -26,6 +26,7 @@ generate: deps
 	mockgen --destination ./internal/mocks/cloud_computing_regions_service.go --package=mocks --source ./vendor/github.com/serverscom/serverscom-go-client/pkg/cloud_computing_regions.go
 	mockgen --destination ./internal/mocks/cloud_block_storage_volumes_service.go --package=mocks --source ./vendor/github.com/serverscom/serverscom-go-client/pkg/cloud_block_storage_volumes.go
 	mockgen --destination ./internal/mocks/cloud_block_storage_backups_service.go --package=mocks --source ./vendor/github.com/serverscom/serverscom-go-client/pkg/cloud_block_storage_backups.go
+	mockgen --destination ./internal/mocks/metrics_service.go --package=mocks --source ./vendor/github.com/serverscom/serverscom-go-client/pkg/metrics.go
 	sed -i '' 's|github.com/serverscom/srvctl/vendor/github.com/serverscom/serverscom-go-client/pkg|github.com/serverscom/serverscom-go-client/pkg|g' \
 	./internal/mocks/ssh_service.go \
 	./internal/mocks/hosts_service.go \
@@ -43,7 +44,8 @@ generate: deps
 	./internal/mocks/cloud_instances_service.go \
 	./internal/mocks/cloud_computing_regions_service.go \
 	./internal/mocks/cloud_block_storage_volumes_service.go \
-	./internal/mocks/cloud_block_storage_backups_service.go
+	./internal/mocks/cloud_block_storage_backups_service.go \
+	./internal/mocks/metrics_service.go
 
 docs:
 	go run cmd/gendoc/main.go

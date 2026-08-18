@@ -1,0 +1,36 @@
+# HELP: serverscom_racks_count Count of the racks
+# TYPE: serverscom_racks_count gauge
+serverscom_racks_count{location_id="52",location_code="LUX3"} 2
+
+# HELP: serverscom_rack_hosts_count Count of the hosts in the rack
+# TYPE: serverscom_rack_hosts_count gauge
+serverscom_rack_hosts_count{location_id="52",location_code="LUX3",rack_id="0pEOrzdl",rack_title="rack-a"} 4
+serverscom_rack_hosts_count{location_id="52",location_code="LUX3",rack_id="7xKLmnQp",rack_title="rack-b"} 0
+
+# HELP: serverscom_rack_monthly_sent_bytes_total Rack monthly sent bytes total
+# TYPE: serverscom_rack_monthly_sent_bytes_total counter
+serverscom_rack_monthly_sent_bytes_total{location_id="52",location_code="LUX3",rack_id="0pEOrzdl",rack_title="rack-a",traffic_type="public"} 1319413953331
+serverscom_rack_monthly_sent_bytes_total{location_id="52",location_code="LUX3",rack_id="0pEOrzdl",rack_title="rack-a",traffic_type="private"} 145497332
+
+# HELP: serverscom_rack_monthly_received_bytes_total Rack monthly received bytes total
+# TYPE: serverscom_rack_monthly_received_bytes_total counter
+serverscom_rack_monthly_received_bytes_total{location_id="52",location_code="LUX3",rack_id="0pEOrzdl",rack_title="rack-a",traffic_type="public"} 3775348762345
+serverscom_rack_monthly_received_bytes_total{location_id="52",location_code="LUX3",rack_id="0pEOrzdl",rack_title="rack-a",traffic_type="private"} 619636079
+
+# HELP: serverscom_rack_pdu_power_watts Instantaneous power draw from the rack PDU, measured in watts (W).
+# TYPE: serverscom_rack_pdu_power_watts gauge
+serverscom_rack_pdu_power_watts{location_id="52",location_code="LUX3",rack_id="0pEOrzdl",rack_title="rack-a",pdu_name="pdu-01"} 620.5
+serverscom_rack_pdu_power_watts{location_id="52",location_code="LUX3",rack_id="0pEOrzdl",rack_title="rack-a",pdu_name="pdu-02"} 619.5
+
+# HELP: serverscom_rack_pdu_current_amperes Instantaneous electrical current draw from the rack PDU, measured in amperes (A).
+# TYPE: serverscom_rack_pdu_current_amperes gauge
+serverscom_rack_pdu_current_amperes{location_id="52",location_code="LUX3",rack_id="0pEOrzdl",rack_title="rack-a",pdu_name="pdu-01"} 2.8
+serverscom_rack_pdu_current_amperes{location_id="52",location_code="LUX3",rack_id="0pEOrzdl",rack_title="rack-a",pdu_name="pdu-02"} 2.8
+
+# HELP: serverscom_rack_ats_power_watts Instantaneous power draw from the rack ATS, measured in watts (W).
+# TYPE: serverscom_rack_ats_power_watts gauge
+serverscom_rack_ats_power_watts{location_id="52",location_code="LUX3",rack_id="0pEOrzdl",rack_title="rack-a",ats_name="ats-01"} 1240.0
+
+# HELP: serverscom_rack_ats_current_amperes Instantaneous electrical current draw from the rack ATS, measured in amperes (A).
+# TYPE: serverscom_rack_ats_current_amperes gauge
+serverscom_rack_ats_current_amperes{location_id="52",location_code="LUX3",rack_id="0pEOrzdl",rack_title="rack-a",ats_name="ats-01"} 5.6

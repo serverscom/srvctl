@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"html/template"
 	"os"
+	"slices"
 	"strings"
 
 	"github.com/serverscom/srvctl/internal/client"
@@ -63,8 +64,17 @@ func InitCmdContext(cmdContext *CmdContext) func(cmd *cobra.Command, args []stri
 	}
 }
 
+// defaultPassThroughOutputs are output formats printed as is by most commands
+var defaultPassThroughOutputs = []string{"json", "yaml"}
+
 // CheckFormatterFlags checks flags related to formatter
 func CheckFormatterFlags(cmdContext *CmdContext, entities map[string]entities.EntityInterface) func(cmd *cobra.Command, args []string) error {
+	return CheckFormatterFlagsWithOutputs(cmdContext, entities, defaultPassThroughOutputs)
+}
+
+// CheckFormatterFlagsWithOutputs checks flags related to formatter, allowing the
+// "text" output plus the given pass-through outputs, that need no further checks
+func CheckFormatterFlagsWithOutputs(cmdContext *CmdContext, entities map[string]entities.EntityInterface, passThroughOutputs []string) func(cmd *cobra.Command, args []string) error {
 	return func(cmd *cobra.Command, args []string) error {
 		if entities == nil {
 			return fmt.Errorf("entities is not initialized")
@@ -87,12 +97,13 @@ func CheckFormatterFlags(cmdContext *CmdContext, entities map[string]entities.En
 		}
 
 		output := formatter.GetOutput()
-		switch output {
-		case "json", "yaml":
-			return nil
-		case "text":
-		default:
-			return fmt.Errorf("invalid output %q, allowed values: json, text, yaml", output)
+		if output != "text" {
+			if slices.Contains(passThroughOutputs, output) {
+				return nil
+			}
+			allowed := append(slices.Clone(passThroughOutputs), "text")
+			slices.Sort(allowed)
+			return fmt.Errorf("invalid output %q, allowed values: %s", output, strings.Join(allowed, ", "))
 		}
 
 		tmpl := formatter.GetTemplateStr()

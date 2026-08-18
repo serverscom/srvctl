@@ -1,0 +1,35 @@
+Rack ID:       0pEOrzdl
+Title:         rack-a
+Location:      LUX3
+Location ID:   52
+Hosts:         4
+Public Sent:   1.3 TB
+Public Recv:   3.8 TB
+Private Sent:  145.5 MB
+Private Recv:  619.6 MB
+Total Sent:    1.3 TB
+Total Recv:    3.8 TB
+PDU Watts:     1240.00
+PDU Amperes:   5.60
+PDUs:          2
+ATS Watts:     1240.00
+ATS Amperes:   5.60
+ATSs:          1
+---
+Rack ID:       7xKLmnQp
+Title:         rack-b
+Location:      LUX3
+Location ID:   52
+Hosts:         0
+Public Sent:   0 B
+Public Recv:   0 B
+Private Sent:  0 B
+Private Recv:  0 B
+Total Sent:    0 B
+Total Recv:    0 B
+PDU Watts:     0.00
+PDU Amperes:   0.00
+PDUs:          0
+ATS Watts:     0.00
+ATS Amperes:   0.00
+ATSs:          0

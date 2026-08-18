@@ -1,0 +1,2 @@
+Host ID    Title                 Location   Type               Public Sent   Public Recv   Private Sent   Private Recv
+jpAAGYJp   lux3test3-reordered   LUX3       dedicated_server   146.4 MB      540.7 MB      145.5 MB       619.6 MB

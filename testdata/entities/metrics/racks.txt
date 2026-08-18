@@ -1,0 +1,3 @@
+Rack ID    Title    Location   Hosts   Public Sent   Public Recv   PDU Watts   PDU Amperes
+0pEOrzdl   rack-a   LUX3       4       1.3 TB        3.8 TB        1240.00     5.60
+7xKLmnQp   rack-b   LUX3       0       0 B           0 B           0.00        0.00

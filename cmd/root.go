@@ -17,6 +17,7 @@ import (
 	loadbalancerclusters "github.com/serverscom/srvctl/cmd/entities/load_balancer_clusters"
 	loadbalancers "github.com/serverscom/srvctl/cmd/entities/load_balancers"
 	"github.com/serverscom/srvctl/cmd/entities/locations"
+	"github.com/serverscom/srvctl/cmd/entities/metrics"
 	networkpools "github.com/serverscom/srvctl/cmd/entities/network-pools"
 	"github.com/serverscom/srvctl/cmd/entities/racks"
 	rbsvolumes "github.com/serverscom/srvctl/cmd/entities/rbs_volumes"
@@ -108,6 +109,7 @@ func NewRootCmd(version string) *cobra.Command {
 		cloudvolumes.NewCmd(cmdContext),
 		cloudbackups.NewCmd(cmdContext),
 		rbsvolumes.NewCmd(cmdContext),
+		metrics.NewCmd(cmdContext),
 	)
 
 	cmd.SetHelpCommandGroupID(groupOther)
