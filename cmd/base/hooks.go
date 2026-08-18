@@ -114,6 +114,9 @@ func CheckFormatterFlags(cmdContext *CmdContext, entities map[string]entities.En
 			return err
 		}
 		if len(fields) > 0 {
+			if err := validateFieldPrefixConsistency(fields); err != nil {
+				return err
+			}
 			if err := entity.Validate(fields); err != nil {
 				return err
 			}
@@ -121,6 +124,22 @@ func CheckFormatterFlags(cmdContext *CmdContext, entities map[string]entities.En
 
 		return nil
 	}
+}
+
+// validateFieldPrefixConsistency ensures +/- prefixed field names (add/remove
+// relative to the default set) are not mixed with plain field names
+// (full replacement) in the same --field invocation.
+func validateFieldPrefixConsistency(fields []string) error {
+	prefixed := 0
+	for _, f := range fields {
+		if entities.HasFieldPrefix(f) {
+			prefixed++
+		}
+	}
+	if prefixed > 0 && prefixed != len(fields) {
+		return fmt.Errorf("cannot mix plain field names with +/- prefixed field names in --field")
+	}
+	return nil
 }
 
 // CheckEmptyContexts returns error if no contexts found

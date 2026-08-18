@@ -43,6 +43,9 @@ func (f *Formatter) printField(w *tabwriter.Writer, field entities.Field) {
 // getOrderedFields returns ordered fields based on the configuration.
 // Returns default fields if no fieldsToShow are provided for list mode.
 // Returns all available fields if no fieldsToShow are provided for page-view mode.
+// If fieldsToShow are +/- prefixed, they are applied as additions/removals to
+// the command's default fields instead of replacing them outright; this is a
+// no-op in page-view mode, which always shows all fields.
 func (f *Formatter) getOrderedFields(entity entities.EntityInterface) []entities.Field {
 	fieldsToShow := f.fieldsToShow
 
@@ -51,6 +54,11 @@ func (f *Formatter) getOrderedFields(entity entities.EntityInterface) []entities
 			return entity.GetFields()
 		}
 		fieldsToShow = entity.GetCmdDefaultFields(f.cmdName)
+	} else if entities.HasFieldPrefix(fieldsToShow[0]) {
+		if f.pageView {
+			return entity.GetFields()
+		}
+		fieldsToShow = applyFieldDeltas(entity.GetCmdDefaultFields(f.cmdName), fieldsToShow)
 	}
 
 	availableFields := entity.GetFields()
@@ -63,6 +71,34 @@ func (f *Formatter) getOrderedFields(entity entities.EntityInterface) []entities
 	}
 
 	return orderedFields
+}
+
+// applyFieldDeltas applies +/- prefixed field deltas on top of the base
+// field list, preserving the base order and appending additions at the end
+// in the order they were given.
+func applyFieldDeltas(base []string, deltas []string) []string {
+	result := append([]string{}, base...)
+
+	for _, d := range deltas {
+		id := entities.StripFieldPrefix(d)
+		idx := -1
+		for i, existing := range result {
+			if existing == id {
+				idx = i
+				break
+			}
+		}
+
+		if d[0] == '-' {
+			if idx >= 0 {
+				result = append(result[:idx], result[idx+1:]...)
+			}
+		} else if idx < 0 {
+			result = append(result, id)
+		}
+	}
+
+	return result
 }
 
 // findFieldByID recursively finds a field by its ID in the given fields slice.
