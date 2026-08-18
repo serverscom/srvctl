@@ -113,14 +113,17 @@ func (e *Entity) GetFields() []Field {
 	return e.fields
 }
 
-// Validate checks that all fields match available ones
+// Validate checks that all fields match available ones. A leading +/-
+// prefix (used to add/remove a field relative to the default set) is
+// stripped before matching.
 func (e *Entity) Validate(fields []string) error {
 	availableFields := e.GetFields()
 
 	for _, f := range fields {
+		id := StripFieldPrefix(f)
 		found := false
 		for _, af := range availableFields {
-			if af.ID == f || e.fieldInChildFields(af.ChildFields, f) {
+			if af.ID == id || e.fieldInChildFields(af.ChildFields, id) {
 				found = true
 				break
 			}
@@ -131,6 +134,21 @@ func (e *Entity) Validate(fields []string) error {
 	}
 
 	return nil
+}
+
+// HasFieldPrefix reports whether the field name is prefixed with + or -,
+// meaning it should be added to/removed from the default field set
+// instead of replacing it outright.
+func HasFieldPrefix(name string) bool {
+	return len(name) > 0 && (name[0] == '+' || name[0] == '-')
+}
+
+// StripFieldPrefix removes a leading +/- prefix from a field name, if present.
+func StripFieldPrefix(name string) string {
+	if HasFieldPrefix(name) {
+		return name[1:]
+	}
+	return name
 }
 
 // GetCmdDefaultFields returns the default field IDs to show for the given

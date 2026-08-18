@@ -15,7 +15,7 @@ func AddGlobalFlags(cmd *cobra.Command) {
 }
 
 func AddFormatFlags(cmd *cobra.Command) {
-	cmd.PersistentFlags().StringArrayP("field", "f", []string{}, "output only these fields, can be specified multiple times")
+	cmd.PersistentFlags().StringArrayP("field", "f", []string{}, "output only these fields, can be specified multiple times; prefix with + or - to add/remove from the default fields instead of replacing them")
 	cmd.PersistentFlags().Bool("field-list", false, "list available fields")
 	cmd.PersistentFlags().Bool("page-view", false, "use page view format")
 	cmd.PersistentFlags().StringP("template", "t", "", "go template string to output in specified format")
