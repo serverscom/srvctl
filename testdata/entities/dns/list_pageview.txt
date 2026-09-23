@@ -1,0 +1,19 @@
+ID:                abc123
+Name:              example.com
+Email:             admin@example.com
+TTL:               3600
+DelegationStatus:  verified
+Labels:            foo=bar
+UnpublishDate:     <none>
+Created:           2025-01-01T12:00:00Z
+Updated:           2025-01-01T12:00:00Z
+---
+ID:                def456
+Name:              example2.com
+Email:             admin@example.com
+TTL:               3600
+DelegationStatus:  verified
+Labels:            foo=bar
+UnpublishDate:     <none>
+Created:           2025-01-01T12:00:00Z
+Updated:           2025-01-01T12:00:00Z

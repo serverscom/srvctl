@@ -1,0 +1,2 @@
+ID       Name          Email               TTL    DelegationStatus   Created                Updated
+abc123   example.com   admin@example.com   3600   verified           2025-01-01T12:00:00Z   2025-01-01T12:00:00Z

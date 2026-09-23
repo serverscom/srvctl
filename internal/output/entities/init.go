@@ -40,4 +40,5 @@ func init() {
 	RegisterRbsVolumeCredentialsDefinition()
 	RegisterHostMetricDefinition()
 	RegisterRackMetricDefinition()
+	RegisterDNSDefinitions()
 }

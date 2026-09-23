@@ -9,6 +9,7 @@ import (
 	cloudinstances "github.com/serverscom/srvctl/cmd/entities/cloud-instances"
 	cloudregions "github.com/serverscom/srvctl/cmd/entities/cloud-regions"
 	cloudvolumes "github.com/serverscom/srvctl/cmd/entities/cloud-volumes"
+	"github.com/serverscom/srvctl/cmd/entities/dns"
 	"github.com/serverscom/srvctl/cmd/entities/drivemodels"
 	"github.com/serverscom/srvctl/cmd/entities/hosts"
 	"github.com/serverscom/srvctl/cmd/entities/invoices"
@@ -110,6 +111,7 @@ func NewRootCmd(version string) *cobra.Command {
 		cloudbackups.NewCmd(cmdContext),
 		rbsvolumes.NewCmd(cmdContext),
 		metrics.NewCmd(cmdContext),
+		dns.NewCmd(cmdContext),
 	)
 
 	cmd.SetHelpCommandGroupID(groupOther)
