@@ -1,0 +1,19 @@
+ID:        rec1
+DomainID:  abc123
+Type:      A
+Name:      www
+Data:      1.2.3.4
+TTL:       3600
+Priority:  <none>
+Created:   2025-01-01T12:00:00Z
+Updated:   2025-01-01T12:00:00Z
+---
+ID:        rec2
+DomainID:  abc123
+Type:      MX
+Name:      mail
+Data:      mail.example.com
+TTL:       3600
+Priority:  10
+Created:   2025-01-01T12:00:00Z
+Updated:   2025-01-01T12:00:00Z

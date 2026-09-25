@@ -1,0 +1,28 @@
+[
+    {
+        "id": "abc123",
+        "name": "example.com",
+        "email": "admin@example.com",
+        "ttl": 3600,
+        "delegation_status": "verified",
+        "labels": {
+            "foo": "bar"
+        },
+        "unpublish_date": null,
+        "created_at": "2025-01-01T12:00:00Z",
+        "updated_at": "2025-01-01T12:00:00Z"
+    },
+    {
+        "id": "def456",
+        "name": "example2.com",
+        "email": "admin@example.com",
+        "ttl": 3600,
+        "delegation_status": "verified",
+        "labels": {
+            "foo": "bar"
+        },
+        "unpublish_date": null,
+        "created_at": "2025-01-01T12:00:00Z",
+        "updated_at": "2025-01-01T12:00:00Z"
+    }
+]

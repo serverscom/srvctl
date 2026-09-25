@@ -1,0 +1,4 @@
+nameservers:
+    - ns1.example.com
+    - ns2.example.com
+requiredtxt: sc-verification=abc123
